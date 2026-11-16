@@ -33,6 +33,10 @@ body[data-companion] .toast-root { bottom: 82px; }
   left: calc(100% - var(--companion-space) / 2); transform: translateX(-50%);
   width: max(100%, calc((100dvh - 64px) * var(--companion-art-aspect, 1)));
 }
+.companion-layer.fit-artwork > .spine-player {
+  /* Keep the complete shot, including its props, inside the visible rail. */
+  left: auto; right: 0; transform: none; width: max(75%, var(--companion-space));
+}
 .companion-player .spine-player-error { display: none !important; }
 .companion-caption {
   position: absolute; right: 180px; bottom: 20px; display: flex; align-items: center; gap: 7px;

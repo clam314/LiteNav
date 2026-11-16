@@ -90,10 +90,18 @@ export function isLoopingSkill(animation, presentation) {
     /loop|idle/i.test(animation.name);
 }
 
+export function selectSkillAnimation(animations, savedName, presentation) {
+  // Older menus exposed individual prop layers as selectable skills.
+  const owner = presentation?.skills?.find(action => action.attachmentLayers?.includes(savedName));
+  const name = owner?.animation || savedName;
+  return animations.find(animation => animation.name === name) || animations[0];
+}
+
 export function configureViewports(player, animations, mode, presentation) {
   const definitions = mode === 'portrait' ? [presentation?.portrait] : presentation?.skills || [];
   for (const animation of animations) {
-    const configured = definitions.find(action => action && (!action.animation || action.animation === animation.name))?.viewport;
+    const action = definitions.find(action => action && (!action.animation || action.animation === animation.name));
+    const configured = action?.framing === 'full' ? undefined : action?.viewport;
     let box;
     if (configured && [configured.x, configured.y, configured.width, configured.height].every(Number.isFinite) &&
         configured.width > 0 && configured.height > 0) {

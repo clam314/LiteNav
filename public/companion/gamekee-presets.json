@@ -1,7 +1,7 @@
 {
   "source": "https://www.gamekee.com/zsca2/718485?tab=fzjn&style=style2",
   "sourceIndex": "https://api-cdn.gamekee.com/wiki2.0/pro/50118/bd2roles/data.json?v=20261110174946.028047",
-  "retrievedAt": "2026-11-16",
+  "retrievedAt": "2026-11-17",
   "costumes": {
     "char000101": {
       "name": "拉德尔",
@@ -370,6 +370,40 @@
         }
       ]
     },
+    "char000296": {
+      "name": "悠丝缇亚",
+      "label": "仲夏夜之梦（服装 96）",
+      "source": "https://www.gamekee.com/zsca2/593571?tab=fzjn&style=style5",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -408.39575566498667,
+          "y": -568.9247889192907,
+          "width": 780,
+          "height": 980,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "cut/loop",
+          "viewport": {
+            "x": -353.8163686754547,
+            "y": -1141.6828497861982,
+            "width": 900,
+            "height": 1600,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
     "char000301": {
       "name": "莎赫拉查德",
       "label": "苍蓝魔女",
@@ -540,6 +574,57 @@
             "y": -648.6939570995058,
             "width": 760,
             "height": 1460,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000396": {
+      "name": "莎赫拉查德",
+      "label": "致胜王牌（服装 96）",
+      "source": "https://www.gamekee.com/zsca2/593577?tab=fzjn&style=style4",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -206.01773453388745,
+            "y": -1025.60946348389,
+            "width": 780,
+            "height": 1480,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop_2",
+          "attachmentLayers": [
+            "loop_2_button"
+          ],
+          "viewport": {
+            "x": -583.2478211194008,
+            "y": -265.54595613952955,
+            "width": 1270,
+            "height": 1970,
             "padLeft": "5%",
             "padRight": "5%",
             "padTop": "5%",
@@ -1255,6 +1340,48 @@
         }
       ]
     },
+    "char001092": {
+      "name": "席比雅",
+      "label": "剑后 · 尊爵不凡（服装 92）",
+      "source": "https://www.gamekee.com/zsca2/593588?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -176.08555043116257,
+          "y": -702.323629925471,
+          "width": 420,
+          "height": 1120
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_1",
+          "attachmentLayers": [
+            "loop_1_sword"
+          ],
+          "viewport": {
+            "x": -405.99821677161447,
+            "y": -869.1394783845659,
+            "width": 300,
+            "height": 1000
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop_2",
+          "attachmentLayers": [
+            "loop_2_bg"
+          ],
+          "viewport": {
+            "x": -298.2758876779123,
+            "y": -1337.2148349390043,
+            "width": 500,
+            "height": 1200
+          }
+        }
+      ]
+    },
     "char001101": {
       "name": "泰瑞丝",
       "label": "毁灭天使",
@@ -1359,6 +1486,40 @@
             "y": -692.9337853524962,
             "width": 820,
             "height": 1520,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char001197": {
+      "name": "泰瑞丝",
+      "label": "奶牛比基尼（服装 97）",
+      "source": "https://www.gamekee.com/zsca2/593606?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -383.02105186096935,
+          "y": -575.2641897997072,
+          "width": 780,
+          "height": 980,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -623.7635415115662,
+            "y": -1605.4490583225706,
+            "width": 1300,
+            "height": 2000,
             "padLeft": "5%",
             "padRight": "5%",
             "padTop": "5%",
@@ -1479,6 +1640,46 @@
             "padRight": "5%",
             "padTop": "5%",
             "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char001297": {
+      "name": "莉亚特里斯",
+      "label": "女仆代号R · 尊爵不凡（服装 97）",
+      "source": "https://www.gamekee.com/zsca2/593608?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -205.57630154262094,
+          "y": -612.4994108160301,
+          "width": 340,
+          "height": 1040
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -302.49339824017767,
+            "y": -803.9062494166352,
+            "width": 580,
+            "height": 1280
+          }
+        },
+        {
+          "label": "技能动作 2 · 搅拌",
+          "animation": "loop",
+          "attachmentLayers": [
+            "loop_bowl"
+          ],
+          "framing": "full",
+          "viewport": {
+            "x": -288.8621225344325,
+            "y": -890.4521515132594,
+            "width": 660,
+            "height": 1360
           }
         }
       ]
@@ -1873,6 +2074,36 @@
             "padRight": "5%",
             "padTop": "5%",
             "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char003392": {
+      "name": "内布利斯",
+      "label": "松散的救生员 · 尊爵不凡（服装 92）",
+      "source": "https://www.gamekee.com/zsca2/625800?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -188.89873098327092,
+          "y": -642.1060281804704,
+          "width": 340,
+          "height": 1040
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_1_ch",
+          "attachmentLayers": [
+            "loop_1_light",
+            "loop_1_slot"
+          ],
+          "viewport": {
+            "x": -113.89671996511377,
+            "y": -734.0991489613504,
+            "width": 300,
+            "height": 1000
           }
         }
       ]
@@ -2307,6 +2538,32 @@
         }
       ]
     },
+    "char003793": {
+      "name": "布莱德",
+      "label": "小公主 · 尊爵不凡（服装 93）",
+      "source": "https://www.gamekee.com/zsca2/648133?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -118.93517927759964,
+          "y": -667.1237562490743,
+          "width": 340,
+          "height": 1040
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -427.77657921416,
+            "y": -527.3249028068127,
+            "width": 780,
+            "height": 1480
+          }
+        }
+      ]
+    },
     "char003801": {
       "name": "黎维塔",
       "label": "暗黑圣女",
@@ -2420,6 +2677,40 @@
           "padBottom": "5%"
         }
       }
+    },
+    "char003892": {
+      "name": "黎维塔",
+      "label": "温泉管理员 · 尊爵不凡（服装 92）",
+      "source": "https://www.gamekee.com/zsca2/646889?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -323.0479806946967,
+          "y": -575.1885319021812,
+          "width": 820,
+          "height": 1020,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -176.72542438067092,
+            "y": -811.6415281004428,
+            "width": 730,
+            "height": 1430,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
     },
     "char003901": {
       "name": "索尼娅",
@@ -2585,6 +2876,36 @@
         }
       ]
     },
+    "char004091": {
+      "name": "达丽安",
+      "label": "启示之梦 · 尊爵不凡（服装 91）",
+      "source": "https://www.gamekee.com/zsca2/678559?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -165.41221863872212,
+          "y": -699.2984898361414,
+          "width": 420,
+          "height": 1120
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "B_loop",
+          "viewport": {
+            "x": -533.8486537004661,
+            "y": -1037.924563544747,
+            "width": 1170,
+            "height": 1870,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
     "char004101": {
       "name": "提尔",
       "label": "星光守护者",
@@ -2649,6 +2970,42 @@
             "padRight": "5%",
             "padTop": "5%",
             "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char004192": {
+      "name": "提尔",
+      "label": "澄心无邪兔女郎 · 尊爵不凡（服装 92）",
+      "source": "https://www.gamekee.com/zsca2/678097?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -156.61610445266768,
+          "y": -621.8127929505517,
+          "width": 340,
+          "height": 1040
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -673.2675474030647,
+            "y": -1525.5679007832437,
+            "width": 1300,
+            "height": 2000
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop2",
+          "viewport": {
+            "x": -820.2914130303217,
+            "y": -1456.206668475169,
+            "width": 1500,
+            "height": 2200
           }
         }
       ]
@@ -3372,6 +3729,42 @@
         }
       ]
     },
+    "char021291": {
+      "name": "出云天花",
+      "label": "天御鸟命 · 尊爵不凡（服装 91）",
+      "source": "https://www.gamekee.com/zsca2/720262?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -201.73943910676124,
+          "y": -696.6360016151865,
+          "width": 420,
+          "height": 1120
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop2",
+          "viewport": {
+            "x": -358.9889783782205,
+            "y": -1080.5722121748274,
+            "width": 820,
+            "height": 1520
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop",
+          "viewport": {
+            "x": -493.89826063964534,
+            "y": -1206.2935431525257,
+            "width": 1020,
+            "height": 1720
+          }
+        }
+      ]
+    },
     "char021301": {
       "name": "山城恋",
       "label": "无限宇宙之全一",
@@ -3404,6 +3797,42 @@
             "y": -1021.3744769920684,
             "width": 1580,
             "height": 2280
+          }
+        }
+      ]
+    },
+    "char021391": {
+      "name": "山城恋",
+      "label": "无限宇宙之全一 · 尊爵不凡（服装 91）",
+      "source": "https://www.gamekee.com/zsca2/721512?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -190.72936935040897,
+          "y": -768.4538989959632,
+          "width": 460,
+          "height": 1160
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -958.2980476487173,
+            "y": -851.5031814023531,
+            "width": 1860,
+            "height": 2560
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -978.410976923753,
+            "y": -1563.526680411405,
+            "width": 1720,
+            "height": 2420
           }
         }
       ]
@@ -3971,6 +4400,20 @@
         }
       ]
     },
+    "char061092": {
+      "name": "海伦娜",
+      "label": "B级偶像 · 尊爵不凡（服装 92）",
+      "source": "https://www.gamekee.com/zsca2/593630?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -416.43977100505157,
+          "y": -596.3787294259299,
+          "width": 820,
+          "height": 1020
+        }
+      }
+    },
     "char061101": {
       "name": "艾尼尔",
       "label": "穿透魔弓",
@@ -4219,6 +4662,32 @@
         }
       ]
     },
+    "char061392": {
+      "name": "达非",
+      "label": "明月 · 尊爵不凡（服装 92）",
+      "source": "https://www.gamekee.com/zsca2/607173?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -154.24648232752938,
+          "y": -605.110631602021,
+          "width": 340,
+          "height": 1040
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_1",
+          "viewport": {
+            "x": -457.0265186453147,
+            "y": -1055.5034550171372,
+            "width": 860,
+            "height": 1560
+          }
+        }
+      ]
+    },
     "char061402": {
       "name": "杰尼斯",
       "label": "罗宾汉",
@@ -4285,6 +4754,24 @@
           }
         }
       ]
+    },
+    "char061492": {
+      "name": "杰尼斯",
+      "label": "罗宾汉 · 尊爵不凡（服装 92）",
+      "source": "https://www.gamekee.com/zsca2/603226?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -481.5690622725582,
+          "y": -669.0290803125774,
+          "width": 940,
+          "height": 1140,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      }
     },
     "char065102": {
       "name": "尤里",
@@ -4364,6 +4851,48 @@
             "padRight": "5%",
             "padTop": "5%",
             "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char065193": {
+      "name": "尤里",
+      "label": "回归偶像 · 尊爵不凡（服装 93）",
+      "source": "https://www.gamekee.com/zsca2/606610?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -99.2775449147809,
+          "y": -571.9012162744473,
+          "width": 300,
+          "height": 1000
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "attachmentLayers": [
+            "loop_Hair_back"
+          ],
+          "viewport": {
+            "x": -393.7424105533843,
+            "y": -950.2783736639199,
+            "width": 820,
+            "height": 1520
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop_2",
+          "attachmentLayers": [
+            "loop_2_Joystick"
+          ],
+          "viewport": {
+            "x": -417.89537669818117,
+            "y": -932.60554985069,
+            "width": 900,
+            "height": 1600
           }
         }
       ]
@@ -5363,6 +5892,40 @@
             "y": -1300,
             "width": 1400,
             "height": 1800,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067491": {
+      "name": "米卡艾拉",
+      "label": "海滨正义 · 尊爵不凡（服装 91）",
+      "source": "https://www.gamekee.com/zsca2/633685?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop2",
+          "viewport": {
+            "x": -996.1159348448118,
+            "y": -721.1191936940988,
+            "width": 1130,
+            "height": 1830,
             "padLeft": "5%",
             "padRight": "5%",
             "padTop": "5%",

@@ -9,6 +9,7 @@ import {
   atlasPages,
   presentationForCostume,
   playableAnimations,
+  selectSkillAnimation,
   isLoopingSkill,
   configureViewports,
 } from '../public/companion-model.js';
@@ -252,4 +253,38 @@ test('bundled GameKee profile retains the reported costume actions and exact cam
   assert.deepEqual(profile.skills.map(action => action.viewport), gamekeePresentation.skills.map(action => action.viewport));
   assert.deepEqual(playableAnimations(animations(['cut_A', 'cut_B', 'cut_charm', 'loop', 'loop_2']), 'skill', profile)
     .map(animation => animation.name), ['loop_2', 'loop']);
+});
+
+test('all numbered prestige costumes have their own portrait camera and compatible skill presets', () => {
+  const presets = JSON.parse(readFileSync(new URL('../public/companion/gamekee-presets.json', import.meta.url)));
+  const roster = JSON.parse(readFileSync(new URL('../public/companion/catalog.json', import.meta.url)));
+  const variants = roster.characters.flatMap(character => character.costumes).filter(costume => /^服装 9\d$/.test(costume.label));
+  assert.equal(variants.length, 17);
+  for (const costume of variants) {
+    const preset = presentationForCostume(presets, costume);
+    assert.ok(preset.label.includes(costume.label));
+    assert.equal(preset.portrait.animation, 'idle');
+    assert.ok(preset.portrait.viewport.height > 0);
+    if (preset.skills) assert.ok(costume.cutscene);
+  }
+  const sylvia = presets.costumes.char001092;
+  assert.deepEqual(sylvia.portrait.viewport, { x: -176.08555043116257, y: -702.323629925471, width: 420, height: 1120 });
+  assert.notDeepEqual(sylvia.portrait.viewport, presets.costumes.char001002.portrait.viewport);
+  assert.deepEqual(sylvia.skills.map(action => action.animation), ['loop_1', 'loop_2']);
+});
+
+test('Liatris 97 restores a saved prop selection to the complete shot and frames its combined bounds', () => {
+  const presets = JSON.parse(readFileSync(new URL('../public/companion/gamekee-presets.json', import.meta.url)));
+  const liatris = presets.costumes.char001297;
+  const options = playableAnimations(animations(['cut_A', 'cut_A_bowl', 'cut_B', 'loop', 'loop_2', 'loop_bowl']), 'skill', liatris);
+  assert.deepEqual(options.map(action => action.name), ['loop_2', 'loop']);
+  for (const saved of ['loop', 'loop_bowl']) assert.equal(selectSkillAnimation(options, saved, liatris), options[1]);
+  for (const saved of ['', 'loop_2', 'missing']) assert.equal(selectSkillAnimation(options, saved, liatris), options[0]);
+  const viewport = { animations: {} };
+  const full = { x: -776, y: -1209, width: 2216, height: 1842 };
+  configureViewports({ config: { viewport }, skeleton: { setToSetupPose() {} },
+    calculateAnimationViewport(animation, box) { assert.equal(animation, options[1]); Object.assign(box, full); },
+  }, options, 'skill', liatris);
+  assert.deepEqual(viewport.animations.loop, full);
+  assert.deepEqual(viewport.animations.loop_2, liatris.skills[0].viewport);
 });

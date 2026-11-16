@@ -1,7 +1,9 @@
 import { PREFERENCES_KEY, LEGACY_KEY, normalizePreferences, costumeKey, availableCharacters,
   chooseCharacter, atlasPages, playableAnimations, configureViewports, presentationForCostume,
-  isLoopingSkill } from './companion-model.js';
+  isLoopingSkill, selectSkillAnimation } from './companion-model.js';
 import { createCompanionStage } from './companion-stage.js';
+import { composeSkillAttachments } from './companion-composition.js';
+import { queuePortraitMotion } from './companion-portrait.js';
 const RUNTIME_JS = '/vendor/spine/spine-player-4.1.56.js';
 const RUNTIME_CSS = '/vendor/spine/spine-player-4.1.56.css';
 const CATALOG_URL = '/companion/catalog.json';
@@ -103,8 +105,8 @@ function supportsWebGL() {
   } catch { return false; }
 }
 
-async function fetchResource(url, signal) {
-  const response = await fetch(url, { signal, credentials: 'same-origin' });
+async function fetchResource(url, signal, cache = 'default') {
+  const response = await fetch(url, { signal, credentials: 'same-origin', cache });
   if (!response.ok) throw new Error('角色素材未能载入，请重试');
   return response;
 }
@@ -493,15 +495,23 @@ export function initCompanion() {
             try {
               record.player = loadedPlayer;
               const presentation = presentationForCostume(presentations, record.selection.costume);
-              record.animations = playableAnimations(loadedPlayer.skeleton.data.animations, record.mode, presentation);
+              const data = loadedPlayer.skeleton.data;
+              record.animations = playableAnimations(data.animations, record.mode, presentation);
               if (!record.animations.length) throw new Error('这套服装暂无可播放动画');
-              configureViewports(loadedPlayer, record.animations, record.mode, presentation);
-              record.animation = record.mode === 'skill'
-                ? record.animations.find(animation => animation.name === record.skillAction) || record.animations[0]
-                : record.animations[0];
+              record.animation = record.animations[0];
+              if (record.mode === 'skill') {
+                record.animation = selectSkillAnimation(record.animations, record.skillAction, presentation);
+                const action = presentation?.skills?.find(action => action.animation === record.animation.name);
+                record.animation = composeSkillAttachments(spine, data, record.animation, action?.attachmentLayers);
+                if (action?.framing === 'full') layer.classList.add('fit-artwork');
+              }
+              configureViewports(loadedPlayer, [record.animation], record.mode, presentation);
               loadedPlayer.animationState.clearTracks();
               loadedPlayer.skeleton.setToSetupPose();
-              loadedPlayer.setAnimation(record.animation.name, record.mode === 'portrait' || isLoopingSkill(record.animation, presentation));
+              loadedPlayer.setAnimation(record.animation, record.mode === 'portrait' || isLoopingSkill(record.animation, presentation));
+              if (record.mode === 'portrait') {
+                record.portraitMotion = queuePortraitMotion(loadedPlayer.animationState, record.animation);
+              }
               const view = loadedPlayer.currentViewport;
               const aspect = (view.width + view.padLeft + view.padRight) / (view.height + view.padTop + view.padBottom);
               if (Number.isFinite(aspect) && aspect > 0) layer.style.setProperty('--companion-art-aspect', String(aspect));
@@ -537,7 +547,8 @@ export function initCompanion() {
             if (stage.active !== record || stage.pending || record.advancing || delta <= 0) return;
             record.elapsed += delta;
             if (record.mode === 'portrait') {
-              if (preferences.skills && record.elapsed >= 16) {
+              const playingMotion = record.portraitMotion && loadedPlayer.animationState.getCurrent(0)?.animation === record.portraitMotion;
+              if (preferences.skills && record.elapsed >= 16 && !playingMotion) {
                 record.advancing = true;
                 queueMicrotask(() => { if (stage.active === record) void start('skill'); });
               }
@@ -651,7 +662,7 @@ export function initCompanion() {
   const catalogTimeout = setTimeout(() => catalogController.abort(), 15000);
   Promise.all([
     fetchResource(CATALOG_URL, catalogController.signal).then(response => response.json()),
-    fetchResource(PRESENTATIONS_URL, catalogController.signal).then(response => response.json()).catch(() => ({})),
+    fetchResource(PRESENTATIONS_URL, catalogController.signal, 'no-cache').then(response => response.json()).catch(() => ({})),
   ]).then(([data, reference]) => {
     if (disposed) return;
     if (!/^[a-f0-9]{12,40}$/.test(data.commit) || !Array.isArray(data.characters) || !data.characters.length) {
