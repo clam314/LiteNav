@@ -1,0 +1,28 @@
+{
+  "name": "拉德尔",
+  "label": "草药猎人",
+  "characterId": "char000101",
+  "skelUrl": "/companion/assets/char000101.skel",
+  "atlasUrl": "/companion/assets/char000101.atlas",
+  "textureUrls": [
+    "/companion/assets/char000101.png"
+  ],
+  "animation": "idle",
+  "animationDuration": 4,
+  "runtimeVersion": "4.1.56",
+  "skeletonVersion": "4.1.11",
+  "premultipliedAlpha": false,
+  "source": "https://clam314.github.io/bd2web/characters.html",
+  "assetSource": "https://github.com/myssal/Brown-Dust-2-Asset/tree/bc29e143fcdd/spine/char/char000101",
+  "assetCommit": "bc29e143fcdd",
+  "viewport": {
+    "x": -450,
+    "y": -770,
+    "width": 820,
+    "height": 1230,
+    "padLeft": 0,
+    "padRight": 0,
+    "padTop": 0,
+    "padBottom": 0
+  }
+}

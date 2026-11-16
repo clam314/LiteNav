@@ -1,0 +1,103 @@
+import { faviconByName } from './icon-cache.js';
+
+const paths = {
+  compass: '<circle cx="12" cy="12" r="9"/><path d="m16 8-2.5 5.5L8 16l2.5-5.5Z"/>',
+  home: '<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/>',
+  star: '<path d="m12 3 2.8 5.7 6.2.9-4.5 4.4 1.1 6.2L12 17.3l-5.6 2.9 1.1-6.2L3 9.6l6.2-.9Z"/>',
+  sparkles: '<path d="m12 3 2.4 6.6L21 12l-6.6 2.4L12 21l-2.4-6.6L3 12l6.6-2.4Z"/><path d="M20 2v4m-2-2h4M4 18v4m-2-2h4"/>',
+  code: '<path d="m8 6-6 6 6 6m8-12 6 6-6 6m-3-15-2 18"/>',
+  layers: '<path d="m12 3 10 5-10 5L2 8Zm-10 9 10 5 10-5M2 16l10 5 10-5"/>',
+  book: '<path d="M12 5v16M3 3h5a4 4 0 0 1 4 4 4 4 0 0 1 4-4h5v16h-5a4 4 0 0 0-4 2 4 4 0 0 0-4-2H3Z"/>',
+  play: '<path d="m9 5 11 7-11 7Z"/>',
+  grid: '<rect x="3" y="3" width="7" height="7" rx="1.3"/><rect x="14" y="3" width="7" height="7" rx="1.3"/><rect x="3" y="14" width="7" height="7" rx="1.3"/><rect x="14" y="14" width="7" height="7" rx="1.3"/>',
+  server: '<rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><path d="M7 6.5h.01M7 17.5h.01M11 6.5h6M11 17.5h6"/>',
+  settings: '<path d="m9 3-.6 2.5-2 .9L4 5.7 2.5 8.3l1.8 1.8v2.3l-1.8 1.8L4 16.8l2.4-.7 2 .9L9 20h3l.6-3 2-.9 2.4.7 1.5-2.6-1.8-1.8v-2.3l1.8-1.8L17 5.7l-2.4.7-2-.9L12 3Z" transform="translate(1 0)"/><circle cx="11.5" cy="11.5" r="3"/>',
+  plus: '<path d="M12 5v14M5 12h14"/>',
+  'arrow-up-right': '<path d="M7 17 17 7M7 7h10v10"/>',
+  'chevron-right': '<path d="m9 5 7 7-7 7"/>',
+  'external-link': '<path d="M14 3h7v7m0-7L10 14M10 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5"/>',
+  edit: '<path d="m15 5 4 4M4 20l4-1 12-12a2.8 2.8 0 0 0-4-4L4 15Z"/>',
+  trash: '<path d="M3 6h18M9 6V3h6v3M5 6l1 14h12l1-14M10 10v6m4-6v6"/>',
+  check: '<path d="m5 12 4 4L19 6"/>',
+  x: '<path d="m6 6 12 12M6 18 18 6"/>',
+  alert: '<path d="m10.3 4-8 14a2 2 0 0 0 1.7 3h16a2 2 0 0 0 1.7-3l-8-14a2 2 0 0 0-3.4 0ZM12 9v4m0 4h.01"/>',
+  refresh: '<path d="M20 7a8.5 8.5 0 0 0-14-2L3 8m0-5v5h5m-4 9a8.5 8.5 0 0 0 14 2l3-3m0 5v-5h-5"/>',
+  upload: '<path d="M12 16V3m-5 5 5-5 5 5M3 15v5a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-5"/>',
+  download: '<path d="M12 3v13m-5-5 5 5 5-5M3 15v5a1 1 0 0 0 1 1h16a1 1 0 0 0 1-1v-5"/>',
+  grip: '<circle cx="9" cy="5" r=".7"/><circle cx="15" cy="5" r=".7"/><circle cx="9" cy="12" r=".7"/><circle cx="15" cy="12" r=".7"/><circle cx="9" cy="19" r=".7"/><circle cx="15" cy="19" r=".7"/>',
+  folder: '<path d="M3 7V5a2 2 0 0 1 2-2h5l2 3h7a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7Z"/>',
+  'arrow-left': '<path d="m12 5-7 7 7 7M5 12h14"/>',
+  link: '<path d="m10 13 4-4m-5 7-2 2a4 4 0 0 1-6-6l4-4a4 4 0 0 1 6 0m2-1 2-2a4 4 0 0 1 6 6l-4 4a4 4 0 0 1-6 0" transform="translate(1 1)"/>',
+  'check-circle': '<circle cx="12" cy="12" r="9"/><path d="m8 12 3 3 5-6"/>',
+  more: '<circle cx="5" cy="12" r="1"/><circle cx="12" cy="12" r="1"/><circle cx="19" cy="12" r="1"/>',
+  network: '<rect x="9" y="2" width="6" height="6" rx="1"/><rect x="2" y="16" width="6" height="6" rx="1"/><rect x="16" y="16" width="6" height="6" rx="1"/><path d="M12 8v5M5 16v-3h14v3"/>',
+  cart: '<path d="M2 3h3l3 12h11l3-9H6M9 20h.01M18 20h.01"/><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/>',
+  mail: '<rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 6 9 7 9-7"/>',
+  forum: '<path d="M21 11a8 8 0 0 1-8 8H6l-4 3V11a8 8 0 0 1 8-8h3a8 8 0 0 1 8 8Z"/><path d="M7 8h9M7 12h6"/>',
+};
+
+/** A compact local set of consistent, stroke-based interface icons. */
+export function icon(name, size = 20) {
+  const requestedSize = Number(size);
+  const safeSize = Number.isFinite(requestedSize) ? Math.min(96, Math.max(8, requestedSize)) : 20;
+  const shape = Object.prototype.hasOwnProperty.call(paths, name) ? paths[name] : paths.link;
+  return `<svg class="icon" width="${safeSize}" height="${safeSize}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${shape}</svg>`;
+}
+
+function escapeAttribute(value) {
+  return String(value).replace(/[&<>"']/g, (character) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[character]);
+}
+
+const brands = new Set([
+  'github', 'chatgpt', 'nas', 'notion', 'figma', 'gmail', 'jellyfin', 'cloudflare',
+  'claude', 'mdn', 'home-assistant', 'vercel', 'sspai', 'bilibili', 'spotify',
+  'portainer', 'immich', 'adguard-home', 'deepseek', 'google-gemini', 'perplexity',
+  'doubao', 'kimi', 'tongyi', 'cursor', 'copilot', 'poe', 'midjourney', 'hacker-news',
+  'ruanyifeng', 'docker', 'stackoverflow', 'gitlab', 'npm', 'feishu', 'linear',
+  'obsidian', 'amap', 'douban', 'taobao', 'google', 'zhihu', 'youtube', 'link',
+  'router', 'zashboard', 'mdi-book-open-page-variant', 'mdi-cart', 'mdi-shopping',
+  'mdi-email', 'mdi-newspaper', 'mdi-forum', 'linux-do', 'openmediavault',
+  'openlist', 'mdi-magnify', 'mdi-database-search', 'kdocs',
+]);
+
+const aliases = {
+  gemini: 'google-gemini',
+  'docker-hub': 'docker',
+  homeassistant: 'home-assistant',
+  adguardhome: 'adguard-home',
+  'stack-overflow': 'stackoverflow',
+};
+
+/** Known brands are local; optional custom favicons accept only HTTP(S) URLs. */
+export function brandIcon(slug, name = '', className = '') {
+  const source = String(slug ?? '').trim();
+  const key = source.toLowerCase();
+  const candidate = Object.prototype.hasOwnProperty.call(aliases, key) ? aliases[key] : key;
+  let url = brands.has(candidate) ? `/icons/${candidate}.svg` : '/icons/link.svg';
+  const cacheKey = String(name ?? '').trim().toLowerCase();
+  if (Object.prototype.hasOwnProperty.call(faviconByName, cacheKey)) url = faviconByName[cacheKey];
+  if (/^\/icons\/(?:[a-z0-9_-]+\/)*[a-z0-9_-]+\.(?:svg|png|ico|webp)$/i.test(source)) {
+    url = source;
+  }
+  if (/^https?:\/\//i.test(source)) {
+    try {
+      const parsed = new URL(source);
+      if (['http:', 'https:'].includes(parsed.protocol) && !parsed.username && !parsed.password) url = parsed.href;
+    } catch {
+      // Invalid custom URLs use the same local fallback as unknown brands.
+    }
+  }
+  const lightBackplate = ['github', 'midjourney', 'docker hub'].includes(String(name).trim().toLowerCase()) ? 'on-light' : '';
+  const classes = escapeAttribute(`brand-icon ${className} ${lightBackplate}`.trim());
+  return `<img src="${escapeAttribute(url)}" alt="" class="${classes}" loading="lazy">`;
+}
+
+// Capture resource failures; one local fallback attempt per image prevents loops.
+if (typeof document !== 'undefined') {
+  document.addEventListener('error', (event) => {
+    const target = event.target;
+    if (target?.tagName !== 'IMG' || !target.classList.contains('brand-icon') || target.dataset.iconFallback) return;
+    target.dataset.iconFallback = 'true';
+    if (target.getAttribute('src') !== '/icons/link.svg') target.src = '/icons/link.svg';
+  }, true);
+}

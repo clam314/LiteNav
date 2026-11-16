@@ -1,0 +1,140 @@
+{
+  "categories": [
+    {
+      "id": "ai",
+      "name": "AI 工具",
+      "icon": "sparkles",
+      "column": 0,
+      "order": 0
+    },
+    {
+      "id": "development",
+      "name": "开发工具",
+      "icon": "code",
+      "column": 1,
+      "order": 1
+    },
+    {
+      "id": "work",
+      "name": "效率办公",
+      "icon": "layers",
+      "column": 2,
+      "order": 2
+    }
+  ],
+  "links": [
+    {
+      "id": "chatgpt",
+      "name": "ChatGPT",
+      "url": "https://chatgpt.com",
+      "icon": "chatgpt",
+      "kind": "website",
+      "categoryId": "ai",
+      "pinned": true,
+      "order": 0,
+      "pinnedOrder": 0,
+      "monitorEnabled": false
+    },
+    {
+      "id": "claude",
+      "name": "Claude",
+      "url": "https://claude.ai",
+      "icon": "claude",
+      "kind": "website",
+      "categoryId": "ai",
+      "pinned": false,
+      "order": 1,
+      "pinnedOrder": 1,
+      "monitorEnabled": false
+    },
+    {
+      "id": "deepseek",
+      "name": "DeepSeek",
+      "url": "https://chat.deepseek.com",
+      "icon": "deepseek",
+      "kind": "website",
+      "categoryId": "ai",
+      "pinned": false,
+      "order": 2,
+      "pinnedOrder": 2,
+      "monitorEnabled": false
+    },
+    {
+      "id": "github",
+      "name": "GitHub",
+      "url": "https://github.com",
+      "icon": "github",
+      "kind": "website",
+      "categoryId": "development",
+      "pinned": true,
+      "order": 3,
+      "pinnedOrder": 1,
+      "monitorEnabled": false
+    },
+    {
+      "id": "mdn",
+      "name": "MDN",
+      "url": "https://developer.mozilla.org",
+      "icon": "mdn",
+      "kind": "website",
+      "categoryId": "development",
+      "pinned": true,
+      "order": 4,
+      "pinnedOrder": 2,
+      "monitorEnabled": false
+    },
+    {
+      "id": "stackoverflow",
+      "name": "Stack Overflow",
+      "url": "https://stackoverflow.com",
+      "icon": "stackoverflow",
+      "kind": "website",
+      "categoryId": "development",
+      "pinned": false,
+      "order": 5,
+      "pinnedOrder": 5,
+      "monitorEnabled": false
+    },
+    {
+      "id": "notion",
+      "name": "Notion",
+      "url": "https://www.notion.so",
+      "icon": "notion",
+      "kind": "website",
+      "categoryId": "work",
+      "pinned": true,
+      "order": 6,
+      "pinnedOrder": 3,
+      "monitorEnabled": false
+    },
+    {
+      "id": "figma",
+      "name": "Figma",
+      "url": "https://www.figma.com",
+      "icon": "figma",
+      "kind": "website",
+      "categoryId": "work",
+      "pinned": true,
+      "order": 7,
+      "pinnedOrder": 4,
+      "monitorEnabled": false
+    },
+    {
+      "id": "gmail",
+      "name": "Gmail",
+      "url": "https://mail.google.com",
+      "icon": "gmail",
+      "kind": "website",
+      "categoryId": "work",
+      "pinned": true,
+      "order": 8,
+      "pinnedOrder": 5,
+      "monitorEnabled": false
+    }
+  ],
+  "settings": {
+    "checkInterval": 60,
+    "failureThreshold": 3,
+    "timeout": 5
+  }
+}

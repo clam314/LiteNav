@@ -1,0 +1,207 @@
+{
+  "claude": {
+    "path": "/icons/web/claude.ico",
+    "source": "https://claude.ai/favicon.ico",
+    "format": "ico"
+  },
+  "deepseek": {
+    "path": "/icons/web/deepseek.png",
+    "source": "https://fe-static.deepseek.com/chat/icon-180.png",
+    "format": "png"
+  },
+  "komiic": {
+    "path": "/icons/web/komiic.ico",
+    "source": "https://komiic.cc/favicon.ico",
+    "format": "ico"
+  },
+  "mangacopy": {
+    "path": "/icons/web/mangacopy.ico",
+    "source": "https://s3.mangafunb.fun/static/free.ico",
+    "format": "ico"
+  },
+  "taobao": {
+    "path": "/icons/web/taobao.png",
+    "source": "https://img.alicdn.com/tps/i3/T1OjaVFl4dXXa.JOZB-114-114.png",
+    "format": "png"
+  },
+  "jd": {
+    "path": "/icons/web/jd.ico",
+    "source": "https://storage.360buyimg.com/retail-mall/mall-common-component/favicon.ico",
+    "format": "ico"
+  },
+  "gmail": {
+    "path": "/icons/web/gmail.ico",
+    "source": "https://ssl.gstatic.com/ui/v1/icons/mail/images/favicon_gmail_2026_v2.ico",
+    "format": "ico"
+  },
+  "mail-163": {
+    "path": "/icons/web/mail-163.png",
+    "source": "https://mail.163.com/favicon.ico",
+    "format": "png"
+  },
+  "mail-139": {
+    "path": "/icons/web/mail-139.ico",
+    "source": "https://mail.10086.cn/favicon.ico",
+    "format": "ico"
+  },
+  "ithome": {
+    "path": "/icons/web/ithome.png",
+    "source": "https://www.ithome.com/favicon.ico",
+    "format": "png"
+  },
+  "v2ex": {
+    "path": "/icons/web/v2ex.png",
+    "source": "https://www.v2ex.com/static/icon-192.png",
+    "format": "png"
+  },
+  "perplexity": {
+    "path": "/icons/web/perplexity.ico",
+    "source": "https://www.perplexity.ai/favicon.ico",
+    "format": "ico"
+  },
+  "kimi": {
+    "path": "/icons/web/kimi.ico",
+    "source": "https://www.kimi.com/favicon.ico",
+    "format": "ico"
+  },
+  "tongyi": {
+    "path": "/icons/web/tongyi.png",
+    "source": "https://img.alicdn.com/imgextra/i2/O1CN01taBbMS1CfyJoOt0lB_!!6000000000109-2-tps-80-80.png",
+    "format": "png"
+  },
+  "cursor": {
+    "path": "/icons/web/cursor.ico",
+    "source": "https://cursor.com/favicon.ico",
+    "format": "ico"
+  },
+  "poe": {
+    "path": "/icons/web/poe.ico",
+    "source": "https://poe.com/favicon.ico",
+    "format": "ico"
+  },
+  "grok": {
+    "path": "/icons/web/grok.ico",
+    "source": "https://grok.com/images/favicon.ico",
+    "format": "ico"
+  },
+  "github": {
+    "path": "/icons/web/github.ico",
+    "source": "https://github.com/favicon.ico",
+    "format": "ico"
+  },
+  "mdn": {
+    "path": "/icons/web/mdn.png",
+    "source": "https://developer.mozilla.org/favicon.ico",
+    "format": "png"
+  },
+  "cloudflare": {
+    "path": "/icons/web/cloudflare.png",
+    "source": "https://dash.cloudflare.com/favicon.ico",
+    "format": "png"
+  },
+  "docker": {
+    "path": "/icons/web/docker.png",
+    "source": "https://hub.docker.com/favicon.ico",
+    "format": "png"
+  },
+  "stackoverflow": {
+    "path": "/icons/web/stackoverflow.ico",
+    "source": "https://stackoverflow.com/Content/Sites/stackoverflow/Img/favicon.ico?v=562fb39d93c8",
+    "format": "ico"
+  },
+  "vercel": {
+    "path": "/icons/web/vercel.ico",
+    "source": "https://vercel.com/favicon.ico",
+    "format": "ico"
+  },
+  "gitlab": {
+    "path": "/icons/web/gitlab.ico",
+    "source": "https://about.gitlab.com/images/ico/favicon.ico",
+    "format": "ico"
+  },
+  "sspai": {
+    "path": "/icons/web/sspai.ico",
+    "source": "https://cdn-static.sspai.com/favicon/sspai.ico",
+    "format": "ico"
+  },
+  "ruanyifeng": {
+    "path": "/icons/web/ruanyifeng.ico",
+    "source": "https://www.ruanyifeng.com/favicon.ico",
+    "format": "ico"
+  },
+  "hacker-news": {
+    "path": "/icons/web/hacker-news.svg",
+    "source": "https://news.ycombinator.com/y18.svg",
+    "format": "svg"
+  },
+  "bilibili": {
+    "path": "/icons/web/bilibili.png",
+    "source": "https://i0.hdslb.com/bfs/static/jinkela/long/images/512.png",
+    "format": "png"
+  },
+  "youtube": {
+    "path": "/icons/web/youtube.ico",
+    "source": "https://www.youtube.com/favicon.ico",
+    "format": "ico"
+  },
+  "spotify": {
+    "path": "/icons/web/spotify.ico",
+    "source": "https://open.spotify.com/favicon.ico",
+    "format": "ico"
+  },
+  "notion": {
+    "path": "/icons/web/notion.ico",
+    "source": "https://www.notion.com/front-static/favicon.ico",
+    "format": "ico"
+  },
+  "figma": {
+    "path": "/icons/web/figma.ico",
+    "source": "https://www.figma.com/favicon.ico",
+    "format": "ico"
+  },
+  "feishu": {
+    "path": "/icons/web/feishu.ico",
+    "source": "https://www.feishu.cn/favicon.ico",
+    "format": "ico"
+  },
+  "tencent-docs": {
+    "path": "/icons/web/tencent-docs.ico",
+    "source": "https://docs.idqqimg.com/tim/docs/desktop/favicon.ico",
+    "format": "ico"
+  },
+  "deepl": {
+    "path": "/icons/web/deepl.ico",
+    "source": "https://www.deepl.com/favicon.ico",
+    "format": "ico"
+  },
+  "doubao": {
+    "path": "/icons/web/doubao.png",
+    "source": "https://lf-flow-web-cdn.doubao.com/obj/flow-doubao/doubao/chat/favicon-doubao.png",
+    "format": "png"
+  },
+  "copilot": {
+    "path": "/icons/web/copilot.ico",
+    "source": "https://res.cdn.office.net/officehub/images/content/images/unauth-copilotcom/favicon-copilot-brand-refresh-23392c1f66.ico",
+    "format": "ico"
+  },
+  "chatgpt": {
+    "path": "/icons/web/chatgpt.svg",
+    "source": "https://raw.githubusercontent.com/selfhst/icons/main/svg/chatgpt.svg",
+    "format": "svg"
+  },
+  "gemini": {
+    "path": "/icons/web/gemini.svg",
+    "source": "https://raw.githubusercontent.com/selfhst/icons/main/svg/google-gemini.svg",
+    "format": "svg"
+  },
+  "midjourney": {
+    "path": "/icons/web/midjourney.svg",
+    "source": "https://raw.githubusercontent.com/selfhst/icons/main/svg/midjourney.svg",
+    "format": "svg"
+  },
+  "npm": {
+    "path": "/icons/web/npm.svg",
+    "source": "https://raw.githubusercontent.com/simple-icons/simple-icons/develop/icons/npm.svg",
+    "format": "svg"
+  }
+}

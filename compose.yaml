@@ -1,0 +1,11 @@
+services:
+  guihang:
+    build: .
+    ports:
+      - "8765:8765"
+    volumes:
+      - guihang-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  guihang-data:

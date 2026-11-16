@@ -1,0 +1,8 @@
+.git
+.playwright-mcp
+__pycache__
+**/__pycache__
+*.pyc
+data
+tests
+.DS_Store
