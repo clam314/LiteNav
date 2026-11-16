@@ -1,7 +1,11 @@
-const STORAGE_KEY = 'guihang.companion.enabled';
+import { PREFERENCES_KEY, LEGACY_KEY, normalizePreferences, costumeKey, availableCharacters,
+  chooseCharacter, atlasPages, playableAnimations, configureViewports, presentationForCostume,
+  isLoopingSkill } from './companion-model.js';
 const RUNTIME_JS = '/vendor/spine/spine-player-4.1.56.js';
 const RUNTIME_CSS = '/vendor/spine/spine-player-4.1.56.css';
-const CHARACTER_URL = '/companion/character.json';
+const CATALOG_URL = '/companion/catalog.json';
+const PRESENTATIONS_URL = '/companion/gamekee-presets.json';
+const ASSET_BASE = 'https://raw.githubusercontent.com/myssal/Brown-Dust-2-Asset/';
 
 let runtimePromise;
 let currentCompanion;
@@ -61,26 +65,30 @@ function loadRuntimeFile(tag, url) {
   });
 }
 
-function readPreference() {
-  try { return localStorage.getItem(STORAGE_KEY) === 'true'; }
-  catch { return false; }
+function readPreferences() {
+  try {
+    let value;
+    try { value = JSON.parse(localStorage.getItem(PREFERENCES_KEY)); } catch { /* Recover invalid preferences. */ }
+    return normalizePreferences(value, localStorage.getItem(LEGACY_KEY) === 'true');
+  } catch { return normalizePreferences(); }
 }
 
-function writePreference(enabled) {
-  try { localStorage.setItem(STORAGE_KEY, JSON.stringify(enabled)); }
-  catch { /* Private browsing and blocked storage still allow this page's switch. */ }
+function writePreferences(preferences) {
+  try {
+    const value = JSON.stringify(preferences);
+    if (localStorage.getItem(PREFERENCES_KEY) !== value) localStorage.setItem(PREFERENCES_KEY, value);
+  }
+  catch { /* The controls still work when browser storage is blocked. */ }
 }
 
 function disposePlayer(player) {
   if (!player || disposedPlayers.has(player)) return;
   disposedPlayers.add(player);
   const gl = player.context?.gl;
-  try { player.stopRendering(); } catch { /* A partially initialized player. */ }
-  try { player.pause(); } catch { /* A partially initialized player. */ }
-  try { player.dispose(); } catch { /* The parent may already have been detached. */ }
+  try { player.stopRendering(); } catch { /* Partially initialized player. */ }
+  try { player.pause(); } catch { /* Partially initialized player. */ }
+  try { player.dispose(); } catch { /* Already detached. */ }
   player.dom?.remove();
-  // Spine dispose releases its textures and listeners; explicitly release the
-  // WebGL context too, so repeated toggles do not exhaust the browser's limit.
   try { gl?.getExtension('WEBGL_lose_context')?.loseContext(); } catch { /* Optional extension. */ }
 }
 
@@ -119,81 +127,188 @@ function readDataURI(blob, signal) {
   });
 }
 
-async function loadCharacter(signal) {
-  const response = await fetchResource(CHARACTER_URL, signal);
-  const character = await response.json();
-  if (!character.skelUrl || !character.atlasUrl || !character.animation ||
-      !Array.isArray(character.textureUrls) || !character.textureUrls.length) {
-    throw new Error('角色素材配置不完整');
+async function loadCharacter(catalog, selection, mode, signal) {
+  const part = mode === 'skill' ? selection.costume.cutscene : selection.costume.idle;
+  if (!part) throw new Error('这套服装没有对应的动画');
+  const local = mode === 'portrait' && part.skeleton === 'spine/char/char000101/char000101.skel';
+  const skelUrl = local ? '/companion/assets/char000101.skel' : ASSET_BASE + catalog.commit + '/' + part.skeleton;
+  const atlasUrl = local ? '/companion/assets/char000101.atlas' : ASSET_BASE + catalog.commit + '/' + part.atlas;
+  const [skeleton, atlas] = await Promise.all([
+    fetchResource(skelUrl, signal).then(response => response.blob()),
+    fetchResource(atlasUrl, signal).then(response => response.text()),
+  ]);
+  const baseUrl = new URL(atlasUrl, location.href);
+  const textureUrls = atlasPages(atlas).map(page => new URL(page, baseUrl).href);
+  const rawDataURIs = Object.fromEntries(await Promise.all([
+    [skelUrl, skeleton], [atlasUrl, new Blob([atlas], { type: 'text/plain' })],
+    ...await Promise.all(textureUrls.map(async url => [url, await (await fetchResource(url, signal)).blob()])),
+  ].map(async ([url, blob]) => [url, await readDataURI(blob, signal)])));
+  // Runtime joins relative local atlas paths without expanding them to location.origin.
+  if (local) {
+    for (const url of textureUrls) rawDataURIs[new URL(url).pathname] = rawDataURIs[url];
   }
-  const urls = [character.skelUrl, character.atlasUrl, ...character.textureUrls];
-  const rawDataURIs = Object.fromEntries(await Promise.all(urls.map(async url => {
-    const resource = await fetchResource(url, signal);
-    const data = await readDataURI(await resource.blob(), signal);
-    return [url, data];
-  })));
-  return { character, rawDataURIs };
+  return { skelUrl, atlasUrl, rawDataURIs, premultipliedAlpha: /^pma:\s*true\s*$/m.test(atlas) };
 }
 
 export function initCompanion() {
   if (currentCompanion) return currentCompanion;
   const root = document.getElementById('companion-root');
   if (!root) return undefined;
-
+  const option = (key, title, description) => `
+    <label class="companion-option"><span><strong>${title}</strong><small>${description}</small></span>
+      <input type="checkbox" role="switch" data-option="${key}" aria-label="${title}"></label>`;
   root.innerHTML = `
     <aside class="companion-rail" aria-label="角色陪伴" hidden>
       <div class="companion-player" aria-hidden="true"></div>
-      <div class="companion-status" role="status" aria-live="polite">
+      <div class="companion-status" role="status" aria-live="polite" hidden>
         <span class="companion-status-text"></span>
         <button class="companion-retry" type="button" hidden>重试</button>
+        <button class="companion-fallback" type="button" hidden>使用本地立绘</button>
       </div>
       <div class="companion-caption" hidden>
-        <span class="companion-name"></span><span class="companion-label"></span>
-      </div>
-      <div class="companion-motion" hidden>
-        <span>已按系统偏好暂停</span>
-        <button type="button">播放动画</button>
+        <span class="companion-name"></span><span class="companion-label"></span><span class="companion-caption-mode"></span>
       </div>
     </aside>
-    <button class="companion-toggle" type="button" role="switch" aria-checked="false"
-      aria-label="角色动画" aria-describedby="companion-toggle-hint" title="角色动画 · 仅在此浏览器记住开关">
+    <button class="companion-toggle" type="button" aria-expanded="false" aria-controls="companion-menu" aria-label="角色设置">
       <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <path d="m12 3 2.5 5.5 6 1-4.4 4.3 1 6.2-5.1-2.8-5.1 2.8 1-6.2L3.5 9.5l6-1L12 3Z"/>
-      </svg>
-      <span>角色动画</span><span class="companion-toggle-track" aria-hidden="true"></span>
+      </svg><span>角色设置</span><span class="companion-indicator" aria-hidden="true"></span>
     </button>
-    <span id="companion-toggle-hint" class="companion-toggle-hint" role="tooltip">仅在此浏览器记住开关</span>`;
+    <section id="companion-menu" class="companion-menu" role="region" aria-label="角色设置" hidden>
+      <header class="companion-menu-header"><strong>角色陪伴</strong><button class="companion-menu-close" type="button" aria-label="关闭角色设置">×</button></header>
+      <div class="companion-menu-current"><strong class="companion-current-name">正在读取角色…</strong><span class="companion-current-label"></span></div>
+      ${option('random', '随机人物', '每次打开页面，更换一位人物与服装')}
+      ${option('portraits', '展示立绘', '播放人物的待机动画')}
+      ${option('skills', '展示技能', '与立绘同时开启时轮流展示')}
+      ${option('info', '人物信息', '在画面下方显示姓名与服装')}
+      <label class="companion-character-picker"><span>指定人物与服装 · 选择后关闭随机</span><select aria-label="指定人物与服装" disabled><option>正在读取角色…</option></select></label>
+      <label class="companion-character-picker companion-skill-picker" hidden><span>技能动作</span><select aria-label="技能动作" disabled><option>载入技能后可选择</option></select></label>
+      <div class="companion-menu-actions"><button class="companion-shuffle" type="button" disabled>换一位</button><button class="companion-pause" type="button" disabled>暂停动画</button></div>
+      <small class="companion-menu-note" role="status" aria-live="polite"></small>
+      <small class="companion-menu-note">仅在此浏览器记住设置；新角色首次加载需要联网。</small>
+    </section>`;
 
   const rail = root.querySelector('.companion-rail');
   const host = root.querySelector('.companion-player');
   const toggle = root.querySelector('.companion-toggle');
+  const menu = root.querySelector('.companion-menu');
+  const close = root.querySelector('.companion-menu-close');
   const status = root.querySelector('.companion-status');
   const statusText = root.querySelector('.companion-status-text');
   const retry = root.querySelector('.companion-retry');
+  const fallback = root.querySelector('.companion-fallback');
   const caption = root.querySelector('.companion-caption');
-  const motion = root.querySelector('.companion-motion');
-  const motionText = motion.querySelector('span');
-  const motionButton = motion.querySelector('button');
-  const hint = root.querySelector('.companion-toggle-hint');
+  const currentName = root.querySelector('.companion-current-name');
+  const currentLabel = root.querySelector('.companion-current-label');
+  const picker = root.querySelector('[aria-label="指定人物与服装"]');
+  const skillPickerLabel = root.querySelector('.companion-skill-picker');
+  const skillPicker = root.querySelector('[aria-label="技能动作"]');
+  const shuffle = root.querySelector('.companion-shuffle');
+  const pause = root.querySelector('.companion-pause');
+  const note = root.querySelector('.companion-menu-note');
+  const switches = [...root.querySelectorAll('[data-option]')];
   const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
   const desktop = window.matchMedia('(min-width: 1280px)');
-  let enabled = readPreference();
+  let preferences = readPreferences();
   let motionAllowed = !reducedMotion.matches;
+  let catalog;
+  let presentations;
+  let selection;
+  let skillAnimations = [];
+  let skillPickerSignature;
   let generation = 0;
   let controller;
   let player;
   let ready = false;
   let disposed = false;
+  let mode = 'portrait';
+  let pickerSignature;
+  const assetCache = new Map();
+  const enabled = () => preferences.portraits || preferences.skills;
+  const initialMode = () => preferences.portraits ? 'portrait' : 'skill';
+
+  function updateUI() {
+    const visible = enabled() && desktop.matches;
+    document.body.dataset.companion = visible ? 'on' : 'off';
+    root.dataset.enabled = String(enabled());
+    rail.hidden = !visible;
+    caption.hidden = !ready || !preferences.info;
+    switches.forEach(input => { input.checked = preferences[input.dataset.option]; });
+    shuffle.disabled = !catalog;
+    pause.disabled = !ready;
+    pause.textContent = motionAllowed ? '暂停动画' : '播放动画';
+    pause.setAttribute('aria-pressed', String(!motionAllowed));
+    skillPickerLabel.hidden = !preferences.skills;
+    skillPicker.disabled = !skillAnimations.length;
+    const skillSignature = skillAnimations.map(animation => animation.name).join('|');
+    if (skillSignature !== skillPickerSignature) {
+      skillPickerSignature = skillSignature;
+      skillPicker.replaceChildren();
+      const configured = presentationForCostume(presentations, selection?.costume || {})?.skills || [];
+      if (!skillAnimations.length) {
+        const placeholder = document.createElement('option');
+        placeholder.textContent = '载入技能后可选择';
+        skillPicker.append(placeholder);
+      }
+      skillAnimations.forEach((animation, index) => {
+        const option = document.createElement('option');
+        option.value = animation.name;
+        option.textContent = configured.find(action => action.animation === animation.name)?.label || `动作${index + 1}`;
+        skillPicker.append(option);
+      });
+    }
+    if (skillAnimations.length) skillPicker.value = preferences.skillAction;
+    if (selection) {
+      currentName.textContent = selection.character.name;
+      currentLabel.textContent = selection.costume.label;
+      caption.querySelector('.companion-name').textContent = selection.character.name;
+      caption.querySelector('.companion-label').textContent = selection.costume.label;
+      caption.querySelector('.companion-caption-mode').textContent = mode === 'skill' ? '技能' : '立绘';
+    }
+    if (catalog) {
+      const signature = `${preferences.portraits}:${preferences.skills}`;
+      if (signature !== pickerSignature) {
+        pickerSignature = signature;
+        picker.replaceChildren();
+        for (const character of availableCharacters(catalog, preferences)) {
+          const group = document.createElement('optgroup');
+          group.label = character.name;
+          for (const costume of character.costumes) {
+            const option = document.createElement('option');
+            option.value = costumeKey(costume);
+            option.textContent = `${character.name} · ${costume.label}`;
+            group.append(option);
+          }
+          picker.append(group);
+        }
+      }
+      picker.disabled = false;
+      if (selection) picker.value = costumeKey(selection.costume);
+    }
+    if (!enabled()) {
+      root.dataset.state = 'off';
+      note.textContent = '立绘和技能均已关闭，导航使用完整宽度。';
+    } else if (!desktop.matches) {
+      root.dataset.state = 'compact';
+      note.textContent = '设置已记住，窗口宽度达到 1280px 时展示角色。';
+    } else if (root.dataset.state === 'loading' || root.dataset.state === 'error') {
+      note.textContent = statusText.textContent;
+    } else if (!motionAllowed) {
+      note.textContent = reducedMotion.matches ? '已按系统偏好暂停，可点击播放动画。' : '动画已暂停。';
+    } else {
+      note.textContent = preferences.portraits && preferences.skills ? '立绘与技能轮流展示。' :
+        (preferences.random ? '刷新页面时随机换人，也可以随时点「换一位」。' : '已固定当前人物与服装，刷新后保持。');
+    }
+  }
 
   function updatePlayback() {
-    if (!ready || !player) return;
-    const paused = document.hidden || !motionAllowed;
-    if (paused) player.pause();
-    else player.play();
-    root.dataset.paused = String(paused);
-    motion.hidden = !reducedMotion.matches;
-    motionText.textContent = motionAllowed ? '动画正在播放' : '已按系统偏好暂停';
-    motionButton.textContent = motionAllowed ? '暂停动画' : '播放动画';
+    if (ready && player) {
+      const paused = document.hidden || !motionAllowed;
+      if (paused) player.pause();
+      else player.play();
+      root.dataset.paused = String(paused);
+    }
+    updateUI();
   }
 
   function stop() {
@@ -205,156 +320,289 @@ export function initCompanion() {
     player = undefined;
     host.replaceChildren();
     caption.hidden = true;
-    motion.hidden = true;
+    status.hidden = true;
     delete root.dataset.paused;
   }
 
   function showError(run, message) {
-    if (run !== generation || !enabled || disposed) return;
+    if (run !== generation || !enabled() || disposed) return;
     stop();
     root.dataset.state = 'error';
     status.hidden = false;
     statusText.textContent = message;
     retry.hidden = false;
+    fallback.hidden = false;
+    updateUI();
   }
 
-  async function start() {
+  function selectCharacter(redraw = false, preserveSkillAction = false) {
+    if (!catalog) return;
+    const previous = selection ? costumeKey(selection.costume) : preferences.costumeKey;
+    selection = chooseCharacter(catalog, preferences, redraw);
+    if (previous !== costumeKey(selection.costume)) {
+      if (!preserveSkillAction) preferences.skillAction = '';
+      skillAnimations = [];
+      skillPickerSignature = undefined;
+    }
+    preferences.characterId = selection.character.id;
+    preferences.costumeKey = costumeKey(selection.costume);
+    assetCache.clear();
+    writePreferences(preferences);
+    updateUI();
+  }
+
+  async function start(nextMode = initialMode()) {
     stop();
-    if (!enabled || !desktop.matches || disposed) return;
+    updateUI();
+    if (!enabled() || !desktop.matches || disposed || !selection) return;
+    mode = nextMode;
+    root.dataset.mode = mode;
     const run = generation;
     const loadController = new AbortController();
     controller = loadController;
     const signal = loadController.signal;
     root.dataset.state = 'loading';
     status.hidden = false;
-    statusText.textContent = '正在唤醒角色…';
+    statusText.textContent = `正在载入${selection.character.name}的${mode === 'skill' ? '技能' : '立绘'}…`;
     retry.hidden = true;
+    fallback.hidden = true;
+    updateUI();
     if (!supportsWebGL()) {
       showError(run, '此浏览器暂不支持角色动画');
       return;
     }
     let timedOut = false;
-    const timeout = setTimeout(() => {
-      timedOut = true;
-      loadController.abort();
-    }, 25000);
+    const timeout = setTimeout(() => { timedOut = true; loadController.abort(); }, 45000);
     try {
-      const [spine, { character, rawDataURIs }] = await Promise.all([
-        loadRuntime(), loadCharacter(signal),
+      const key = costumeKey(selection.costume) + ':' + mode;
+      const [spine, assets] = await Promise.all([
+        loadRuntime(), assetCache.get(key) || loadCharacter(catalog, selection, mode, signal),
       ]);
-      if (signal.aborted || run !== generation || !enabled || disposed) return;
-      const instance = new spine.SpinePlayer(host, {
-        binaryUrl: character.skelUrl,
-        atlasUrl: character.atlasUrl,
-        rawDataURIs,
-        animation: character.animation,
-        viewport: character.viewport || { padLeft: '4%', padRight: '4%', padTop: '4%', padBottom: '4%' },
-        premultipliedAlpha: character.premultipliedAlpha ?? false,
-        alpha: true,
-        backgroundColor: '#00000000',
-        showControls: false,
-        showLoading: false,
-        preserveDrawingBuffer: false,
-        success(loadedPlayer) {
-          if (run !== generation || signal.aborted || !enabled || disposed) {
-            disposePlayer(loadedPlayer);
-            return;
-          }
-          player = loadedPlayer;
-          loadedPlayer.setAnimation(character.animation, true);
-          // Pose once before pausing for reduced motion, so the character stays visible.
-          loadedPlayer.animationState.apply(loadedPlayer.skeleton);
-          loadedPlayer.skeleton.updateWorldTransform();
-          ready = true;
-          root.dataset.state = 'ready';
-          status.hidden = true;
-          caption.querySelector('.companion-name').textContent = character.name || '陪伴角色';
-          caption.querySelector('.companion-label').textContent = character.label || '';
-          caption.hidden = false;
-          updatePlayback();
-        },
-        error(failedPlayer) {
-          // The runtime throws after calling error; defer cleanup until its frame returns.
-          queueMicrotask(() => {
-            disposePlayer(failedPlayer);
-            showError(run, '角色暂时没能出现，请重试');
-          });
-        },
+      if (signal.aborted || run !== generation || disposed) return;
+      assetCache.set(key, assets);
+      let elapsed = 0;
+      let animations = [];
+      let activeAnimation;
+      let advancing = false;
+      await new Promise((resolve, reject) => {
+        const abort = () => reject(new DOMException('Aborted', 'AbortError'));
+        signal.addEventListener('abort', abort, { once: true });
+        const finish = callback => { signal.removeEventListener('abort', abort); callback(); };
+        const instance = new spine.SpinePlayer(host, {
+          binaryUrl: assets.skelUrl, atlasUrl: assets.atlasUrl, rawDataURIs: assets.rawDataURIs,
+          viewport: { padLeft: '5%', padRight: '5%', padTop: '5%', padBottom: '5%', transitionTime: 0 },
+          premultipliedAlpha: assets.premultipliedAlpha,
+          alpha: true, backgroundColor: '#00000000', showControls: false, showLoading: false,
+          preserveDrawingBuffer: false, defaultMix: 0,
+          success(loadedPlayer) {
+            if (run !== generation || signal.aborted || disposed) {
+              disposePlayer(loadedPlayer);
+              finish(resolve);
+              return;
+            }
+            try {
+              player = loadedPlayer;
+              const presentation = presentationForCostume(presentations, selection.costume);
+              animations = playableAnimations(loadedPlayer.skeleton.data.animations, mode, presentation);
+              if (!animations.length) throw new Error('这套服装暂无可播放动画');
+              configureViewports(loadedPlayer, animations, mode, presentation);
+              activeAnimation = animations[0];
+              if (mode === 'skill') {
+                skillAnimations = animations;
+                activeAnimation = animations.find(animation => animation.name === preferences.skillAction) || animations[0];
+                preferences.skillAction = activeAnimation.name;
+                writePreferences(preferences);
+              }
+              loadedPlayer.animationState.clearTracks();
+              loadedPlayer.skeleton.setToSetupPose();
+              loadedPlayer.setAnimation(activeAnimation.name, mode === 'portrait' || isLoopingSkill(activeAnimation, presentation));
+              const view = loadedPlayer.currentViewport;
+              const aspect = (view.width + view.padLeft + view.padRight) / (view.height + view.padTop + view.padBottom);
+              if (Number.isFinite(aspect) && aspect > 0) host.style.setProperty('--companion-art-aspect', String(aspect));
+              if (!motionAllowed && mode === 'skill') loadedPlayer.animationState.update(activeAnimation.duration * .35);
+              loadedPlayer.animationState.apply(loadedPlayer.skeleton);
+              loadedPlayer.skeleton.updateWorldTransform();
+              ready = true;
+              root.dataset.state = 'ready';
+              status.hidden = true;
+              updatePlayback();
+              finish(resolve);
+            } catch (error) { finish(() => reject(error)); }
+          },
+          frame(loadedPlayer, delta) {
+            if (!ready || run !== generation || advancing || delta <= 0) return;
+            elapsed += delta;
+            if (mode === 'portrait') {
+              if (preferences.skills && elapsed >= 16) {
+                advancing = true;
+                queueMicrotask(() => { if (run === generation) void start('skill'); });
+              }
+            } else if (preferences.portraits && elapsed >= Math.max(activeAnimation.duration + 2, 12)) {
+              // Each action is an independent showcase, not a chain of camera cuts.
+              advancing = true;
+              queueMicrotask(() => { if (run === generation) void start('portrait'); });
+            }
+          },
+          error(failedPlayer) {
+            queueMicrotask(() => {
+              disposePlayer(failedPlayer);
+              if (ready) showError(run, '角色动画暂时无法播放，请重试');
+              finish(() => reject(new Error('角色动画暂时无法播放，请重试')));
+            });
+          },
+        });
+        if (run !== generation || signal.aborted) disposePlayer(instance);
+        else player = instance;
       });
-      if (run !== generation || signal.aborted) disposePlayer(instance);
-      else player = instance;
     } catch (error) {
       if (run !== generation || disposed || (!timedOut && signal.aborted)) return;
-      showError(run, timedOut ? '角色载入较慢，请重试' : (error.message || '角色暂时没能出现，请重试'));
-    } finally {
-      clearTimeout(timeout);
+      showError(run, timedOut ? '角色载入较慢，请重试或使用本地立绘' :
+        (error instanceof TypeError ? '无法连接角色素材，请重试或使用本地立绘' : error.message));
+    } finally { clearTimeout(timeout); }
+  }
+
+  function setMenu(open, restoreFocus = false) {
+    menu.hidden = !open;
+    toggle.setAttribute('aria-expanded', String(open));
+    if (open) close.focus();
+    else if (restoreFocus) toggle.focus();
+  }
+  const onToggle = () => setMenu(menu.hidden);
+  const onClose = () => setMenu(false, true);
+  const onOutside = event => {
+    if (!menu.hidden && !menu.contains(event.target) && !toggle.contains(event.target)) setMenu(false);
+  };
+  const onKeydown = event => {
+    if (menu.hidden) return;
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      setMenu(false, true);
     }
-  }
-
-  function updateUI() {
-    document.body.dataset.companion = enabled ? 'on' : 'off';
-    toggle.setAttribute('aria-checked', String(enabled));
-    rail.hidden = !enabled || !desktop.matches;
-    hint.textContent = enabled && !desktop.matches ? '扩大窗口即可显示角色' : '角色动画 · 仅在此浏览器记住开关';
-    if (!enabled) root.dataset.state = 'off';
-    else if (!desktop.matches) root.dataset.state = 'compact';
-  }
-
-  function setEnabled(next, persist = true) {
-    if (disposed) return;
-    const changed = enabled !== next;
-    enabled = next;
-    if (persist) writePreference(enabled);
-    updateUI();
-    if (!changed) return;
-    if (enabled) void start();
-    else stop();
-  }
-
-  const onToggle = () => setEnabled(!enabled);
-  const onRetry = () => { void start(); };
-  const onMotionClick = () => {
-    motionAllowed = !motionAllowed;
-    updatePlayback();
   };
-  const onMotionChange = () => {
-    motionAllowed = !reducedMotion.matches;
-    updatePlayback();
+  const onFocus = event => {
+    if (!menu.hidden && !root.contains(event.target)) setMenu(false);
   };
-  const onDesktopChange = () => {
-    updateUI();
-    if (enabled && desktop.matches) void start();
-    else stop();
+  const onOption = event => {
+    const key = event.target.dataset.option;
+    preferences[key] = event.target.checked;
+    writePreferences(preferences);
+    if (key === 'portraits' || key === 'skills') {
+      if (catalog) selectCharacter();
+      void start(key === 'skills' && preferences.skills ? 'skill' : initialMode());
+    } else updateUI();
   };
+  const onShuffle = () => { selectCharacter(true); void start(); };
+  const onPick = () => {
+    const character = catalog.characters.find(item => item.costumes.some(costume => costumeKey(costume) === picker.value));
+    if (!character) return;
+    preferences.characterId = character.id;
+    preferences.costumeKey = picker.value;
+    preferences.random = false;
+    selectCharacter();
+    void start();
+  };
+  const onRetry = () => { void start(mode); };
+  const onSkillPick = () => {
+    preferences.skillAction = skillPicker.value;
+    writePreferences(preferences);
+    void start('skill');
+  };
+  const onFallback = () => {
+    preferences = { ...preferences, random: false, portraits: true, skills: false,
+      characterId: '0001', costumeKey: 'spine/char/char000101/char000101.skel' };
+    selectCharacter();
+    void start();
+  };
+  const onPause = () => { motionAllowed = !motionAllowed; updatePlayback(); };
+  const onMotionChange = () => { motionAllowed = !reducedMotion.matches; updatePlayback(); };
+  const onDesktopChange = () => { if (desktop.matches) void start(); else { stop(); updateUI(); } };
   const onStorage = event => {
-    if (event.key === STORAGE_KEY || event.key === null) setEnabled(event.key === null ? false : event.newValue === 'true', false);
+    if (![PREFERENCES_KEY, LEGACY_KEY, null].includes(event.key)) return;
+    preferences = readPreferences();
+    if (catalog) selectCharacter(false, true);
+    void start();
   };
   toggle.addEventListener('click', onToggle);
+  close.addEventListener('click', onClose);
   retry.addEventListener('click', onRetry);
-  motionButton.addEventListener('click', onMotionClick);
+  fallback.addEventListener('click', onFallback);
+  shuffle.addEventListener('click', onShuffle);
+  pause.addEventListener('click', onPause);
+  picker.addEventListener('change', onPick);
+  skillPicker.addEventListener('change', onSkillPick);
+  switches.forEach(input => input.addEventListener('change', onOption));
+  document.addEventListener('pointerdown', onOutside);
+  document.addEventListener('keydown', onKeydown, true);
+  document.addEventListener('focusin', onFocus);
+  document.addEventListener('visibilitychange', updatePlayback);
   reducedMotion.addEventListener('change', onMotionChange);
   desktop.addEventListener('change', onDesktopChange);
-  document.addEventListener('visibilitychange', updatePlayback);
   window.addEventListener('storage', onStorage);
+
+  const catalogController = new AbortController();
+  const catalogTimeout = setTimeout(() => catalogController.abort(), 15000);
+  Promise.all([
+    fetchResource(CATALOG_URL, catalogController.signal).then(response => response.json()),
+    fetchResource(PRESENTATIONS_URL, catalogController.signal).then(response => response.json()).catch(() => ({})),
+  ]).then(([data, reference]) => {
+    if (disposed) return;
+    if (!/^[a-f0-9]{12,40}$/.test(data.commit) || !Array.isArray(data.characters) || !data.characters.length) {
+      throw new Error('角色索引不完整');
+    }
+    presentations = reference;
+    catalog = { ...data, characters: data.characters.map(character => {
+      const costumes = character.costumes.map(costume => {
+        const presentation = presentationForCostume(presentations, costume);
+        return { ...costume, label: presentation?.label || costume.label };
+      });
+      const named = character.costumes.map(costume => presentationForCostume(presentations, costume)).find(preset => preset?.name);
+      return { ...character, name: named?.name || character.name, costumes };
+    }) };
+    selectCharacter(preferences.random);
+    void start();
+  }).catch(() => {
+    if (disposed) return;
+    // Keep the original offline character available even if the catalog is unavailable.
+    catalog = { commit: '424622b8c4fd', characters: [{ id: '0001', name: '拉德尔', costumes: [{ label: '草药猎人',
+      idle: { skeleton: 'spine/char/char000101/char000101.skel', atlas: 'spine/char/char000101/char000101.atlas' } }] }] };
+    preferences.portraits ||= preferences.skills;
+    preferences.skills = false;
+    selectCharacter();
+    void start();
+  }).finally(() => clearTimeout(catalogTimeout));
 
   currentCompanion = {
     destroy() {
       disposed = true;
+      catalogController.abort();
+      clearTimeout(catalogTimeout);
       stop();
+      assetCache.clear();
       toggle.removeEventListener('click', onToggle);
+      close.removeEventListener('click', onClose);
       retry.removeEventListener('click', onRetry);
-      motionButton.removeEventListener('click', onMotionClick);
+      fallback.removeEventListener('click', onFallback);
+      shuffle.removeEventListener('click', onShuffle);
+      pause.removeEventListener('click', onPause);
+      picker.removeEventListener('change', onPick);
+      skillPicker.removeEventListener('change', onSkillPick);
+      switches.forEach(input => input.removeEventListener('change', onOption));
+      document.removeEventListener('pointerdown', onOutside);
+      document.removeEventListener('keydown', onKeydown, true);
+      document.removeEventListener('focusin', onFocus);
+      document.removeEventListener('visibilitychange', updatePlayback);
       reducedMotion.removeEventListener('change', onMotionChange);
       desktop.removeEventListener('change', onDesktopChange);
-      document.removeEventListener('visibilitychange', updatePlayback);
       window.removeEventListener('storage', onStorage);
       root.replaceChildren();
       delete document.body.dataset.companion;
       delete root.dataset.state;
+      delete root.dataset.enabled;
+      delete root.dataset.mode;
       currentCompanion = undefined;
     },
   };
   updateUI();
-  if (enabled) void start();
   return currentCompanion;
 }

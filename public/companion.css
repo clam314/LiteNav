@@ -11,7 +11,7 @@ body[data-companion] .toast-root { bottom: 82px; }
   overflow: hidden; pointer-events: none; isolation: isolate;
 }
 .companion-player {
-  position: absolute; inset: 0 -8vw 0 8vw;
+  position: absolute; inset: 0;
   overflow: hidden; pointer-events: none;
   /* Fade only the artwork; controls and labels stay sharp and readable. */
   -webkit-mask-image: linear-gradient(90deg, transparent, rgb(0 0 0 / 12%) 22%, rgb(0 0 0 / 85%) 48%, #000 65%), linear-gradient(0deg, transparent, #000 10%, #000 96%, transparent);
@@ -21,6 +21,13 @@ body[data-companion] .toast-root { bottom: 82px; }
 }
 .companion-player .spine-player,
 .companion-player .spine-player-canvas { width: 100%; height: 100%; background: transparent !important; pointer-events: none; }
+.companion-player > .spine-player {
+  /* Center the camera in the space left by the navigation. Keep the fade on
+     the outer rail, and give wide actions enough canvas to retain their scale. */
+  position: absolute !important; top: 0;
+  left: calc(100% - var(--companion-space) / 2); transform: translateX(-50%);
+  width: max(100%, calc((100dvh - 64px) * var(--companion-art-aspect, 1)));
+}
 .companion-player .spine-player-error { display: none !important; }
 .companion-caption {
   position: absolute; right: 180px; bottom: 20px; display: flex; align-items: center; gap: 7px;
@@ -29,6 +36,7 @@ body[data-companion] .toast-root { bottom: 82px; }
 }
 .companion-name { color: #d6ddeb; font-size: 12px; }
 .companion-label { padding-left: 7px; border-left: 1px solid #3b4557; }
+.companion-caption-mode { color: #8496b8; white-space: nowrap; }
 .companion-status {
   position: absolute; top: 50%; left: 50%; right: 24px; transform: translateY(-50%);
   display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 18px 12px;
@@ -55,34 +63,79 @@ body[data-companion] .toast-root { bottom: 82px; }
 }
 .companion-toggle > svg { color: #8495b8; }
 .companion-toggle:hover { color: #d9e2f5; border-color: #586b8e; background: #202c42; }
-.companion-toggle[aria-checked="true"] { color: #c7d7ff; background: #1d2b46; border-color: #415a8a; }
-.companion-toggle[aria-checked="true"] > svg { color: #94b5ff; }
-.companion-toggle-track {
-  position: relative; width: 25px; height: 14px; border-radius: 8px; background: #3e485b;
-  transition: background-color .15s;
+.companion-toggle[aria-expanded="true"] { color: #d6e2ff; background: #202e48; border-color: #5873a3; }
+.companion-indicator {
+  width: 6px; height: 6px; margin-left: 1px; border-radius: 50%; background: #566078;
+  transition: background-color .15s, box-shadow .15s;
 }
-.companion-toggle-track::after {
-  content: ''; position: absolute; left: 3px; top: 3px; width: 8px; height: 8px;
-  border-radius: 50%; background: #bbc3d2; transition: transform .15s, background-color .15s;
+#companion-root[data-enabled="true"] .companion-indicator { background: #91b5ff; box-shadow: 0 0 8px #78a4ff50; }
+.companion-menu {
+  position: fixed; z-index: 41; right: 20px; bottom: 74px;
+  width: min(304px, calc(100vw - 28px)); max-height: calc(100dvh - 96px);
+  padding: 16px; overflow-y: auto; overscroll-behavior: contain; pointer-events: auto;
+  color: #b9c5dc; background: #161e2c; border: 1px solid #344158; border-radius: 14px;
+  box-shadow: 0 16px 48px #03060d80, 0 3px 12px #03060d40;
+  font-size: 12px; line-height: 1.5;
 }
-.companion-toggle[aria-checked="true"] .companion-toggle-track { background: #527ed4; }
-.companion-toggle[aria-checked="true"] .companion-toggle-track::after { transform: translateX(11px); background: #f4f7ff; }
-.companion-toggle-hint {
-  position: fixed; z-index: 40; right: 20px; bottom: 71px; padding: 7px 10px; border: 1px solid #344058; border-radius: 7px;
-  color: #b9c6dd; background: #1b2538; font-size: 11px; line-height: 16px;
-  opacity: 0; visibility: hidden; transition: opacity .15s, visibility .15s;
+.companion-menu-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 12px; }
+.companion-menu-header > strong { color: #e0e7f4; font-size: 13px; font-weight: 600; }
+.companion-menu-close {
+  display: grid; place-items: center; width: 28px; height: 28px; margin: -5px -5px -5px 0; padding: 0;
+  border: 0; border-radius: 7px; color: #94a2bb; background: transparent; font-size: 20px; line-height: 1;
 }
-.companion-toggle:hover + .companion-toggle-hint,
-.companion-toggle:focus-within + .companion-toggle-hint { opacity: 1; visibility: visible; }
-#companion-root:has(.companion-motion:not([hidden])) .companion-toggle-hint { bottom: 150px; }
+.companion-menu-close:hover { color: #e2eaff; background: #263248; }
+.companion-menu-current {
+  display: flex; flex-direction: column; gap: 3px; margin-bottom: 10px; padding: 11px 12px;
+  border: 1px solid #2d3a50; border-radius: 9px; background: #1c283c;
+}
+.companion-current-name { color: #d3e0ff; font-size: 13px; font-weight: 500; overflow-wrap: anywhere; }
+.companion-current-label { color: #8e9eb9; font-size: 11px; overflow-wrap: anywhere; }
+.companion-option {
+  display: flex; align-items: center; justify-content: space-between; gap: 18px; min-height: 54px;
+  padding: 9px 2px; cursor: pointer; border-bottom: 1px solid #ffffff08;
+}
+.companion-option > span { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.companion-option strong { color: #c5cfe1; font-size: 12px; font-weight: 500; }
+.companion-option small { color: #7f8da6; font-size: 11px; line-height: 1.5; }
+.companion-option input[type="checkbox"] {
+  appearance: none; position: relative; flex: 0 0 31px; width: 31px; height: 18px; margin: 0;
+  border: 1px solid #49546a; border-radius: 12px; background: #333f53; cursor: pointer;
+  transition: background-color .15s, border-color .15s;
+}
+.companion-option input[type="checkbox"]::after {
+  content: ''; position: absolute; top: 3px; left: 3px; width: 10px; height: 10px;
+  border-radius: 50%; background: #b7c0d0; transition: transform .15s, background-color .15s;
+}
+.companion-option input[type="checkbox"]:checked { border-color: #638de0; background: #5078c3; }
+.companion-option input[type="checkbox"]:checked::after { transform: translateX(13px); background: #f5f8ff; }
+.companion-option:has(input:disabled) { cursor: default; }
+.companion-option input:disabled { opacity: .4; cursor: not-allowed; }
+.companion-option:has(input:disabled) strong,
+.companion-option:has(input:disabled) small { opacity: .5; }
+.companion-character-picker { display: flex; flex-direction: column; gap: 7px; margin-top: 13px; color: #9baac2; font-size: 11px; }
+.companion-character-picker select {
+  width: 100%; height: 35px; padding: 6px 9px; border: 1px solid #36435a; border-radius: 7px;
+  color: #c3cfe4; background: #101925; font-size: 12px;
+}
+.companion-character-picker select:hover:not(:disabled) { border-color: #5a7196; }
+.companion-character-picker select:disabled { color: #77869f; opacity: .55; cursor: not-allowed; }
+.companion-menu-actions { display: flex; gap: 8px; margin-top: 13px; }
+.companion-menu-actions button {
+  flex: 1; min-width: 0; min-height: 35px; padding: 7px 10px; border: 1px solid #3b4d6e; border-radius: 7px;
+  color: #bbcff8; background: #22314b; font-size: 12px; line-height: 1.5;
+}
+.companion-menu-actions button:hover:not(:disabled) { color: #e1eaff; border-color: #627cae; background: #293d5c; }
+.companion-menu-actions .companion-pause { color: #a3b2cc; background: #1b2739; border-color: #35435a; }
+.companion-menu-note { display: block; margin-top: 12px; color: #7f8da6; font-size: 11px; line-height: 1.65; overflow-wrap: anywhere; }
 .companion-toggle:focus-visible,
+.companion-menu :is(button, input, select):focus-visible,
 .companion-status button:focus-visible,
 .companion-motion button:focus-visible { outline: 2px solid #93b3ff; outline-offset: 4px; }
 
 @media (max-width: 1279px) {
   .companion-rail { display: none; }
   .companion-toggle { right: 14px; bottom: 14px; }
-  .companion-toggle-hint { right: 14px; bottom: 67px; }
+  .companion-menu { right: 14px; bottom: 68px; max-height: calc(100dvh - 88px); }
 }
 @media (prefers-reduced-motion: reduce) {
   #companion-root *, #companion-root *::after { transition: none; }

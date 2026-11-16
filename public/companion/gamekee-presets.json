@@ -1,0 +1,6018 @@
+{
+  "source": "https://www.gamekee.com/zsca2/718485?tab=fzjn&style=style2",
+  "sourceIndex": "https://api-cdn.gamekee.com/wiki2.0/pro/50118/bd2roles/data.json?v=20261110174946.028047",
+  "retrievedAt": "2026-11-16",
+  "costumes": {
+    "char000101": {
+      "name": "拉德尔",
+      "label": "草药猎人",
+      "source": "https://www.gamekee.com/zsca2/593531?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -472.58565189572255,
+          "y": -694.7332446535389,
+          "width": 940,
+          "height": 1140,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -291.4721992059308,
+            "y": -703.9526989813593,
+            "width": 560,
+            "height": 1260,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_1",
+          "viewport": {
+            "x": -420.0288872204523,
+            "y": -840.0431484768449,
+            "width": 800,
+            "height": 1500,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000102": {
+      "name": "拉德尔",
+      "label": "孤独生还者",
+      "source": "https://www.gamekee.com/zsca2/593531?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      }
+    },
+    "char000103": {
+      "name": "拉德尔",
+      "label": "霍尔蒙克斯",
+      "source": "https://www.gamekee.com/zsca2/593531?tab=fzjn&style=style6",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -471.39318323840956,
+          "y": -722.2387403962276,
+          "width": 940,
+          "height": 1140,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -480,
+            "y": -1210,
+            "width": 900,
+            "height": 1600,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000104": {
+      "name": "拉德尔",
+      "label": "暗黑骑士",
+      "source": "https://www.gamekee.com/zsca2/593531?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      }
+    },
+    "char000105": {
+      "name": "拉德尔",
+      "label": "复仇的誓言",
+      "source": "https://www.gamekee.com/zsca2/593531?tab=fzjn&style=style4",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      }
+    },
+    "char000106": {
+      "name": "拉德尔",
+      "label": "泳池派对",
+      "source": "https://www.gamekee.com/zsca2/593531?tab=fzjn&style=style5",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -436.2261092983662,
+          "y": -578.8600230308299,
+          "width": 820,
+          "height": 1020,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      }
+    },
+    "char000201": {
+      "name": "悠丝缇亚",
+      "label": "血骑士",
+      "source": "https://www.gamekee.com/zsca2/593571?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -449.5153575336905,
+          "y": -582.167319089905,
+          "width": 820,
+          "height": 1020,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -508.09294016342926,
+            "y": -1196.2280672355466,
+            "width": 1030,
+            "height": 1730,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -649.3466946260273,
+            "y": -1550.297505434168,
+            "width": 1320,
+            "height": 2020,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000202": {
+      "name": "悠丝缇亚",
+      "label": "皎洁死神",
+      "source": "https://www.gamekee.com/zsca2/593571?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -414.70222241781033,
+          "y": -580.7213656326124,
+          "width": 820,
+          "height": 1020,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -298.4807034642674,
+            "y": -747.4706338022914,
+            "width": 420,
+            "height": 1120,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_3",
+          "viewport": {
+            "x": -165.34998466973016,
+            "y": -578.1714303047557,
+            "width": 300,
+            "height": 1000,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000203": {
+      "name": "悠丝缇亚",
+      "label": "血之贪食者",
+      "source": "https://www.gamekee.com/zsca2/593571?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "cut",
+        "viewport": {
+          "x": -372.67649619652013,
+          "y": -494.79831129862055,
+          "width": 740,
+          "height": 940,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -230.97433989629295,
+            "y": -686.4039447480868,
+            "width": 290,
+            "height": 990,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000204": {
+      "name": "悠丝缇亚",
+      "label": "剑道社",
+      "source": "https://www.gamekee.com/zsca2/593571?tab=fzjn&style=style4",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -381.46213819071266,
+          "y": -529.6876176336433,
+          "width": 740,
+          "height": 940,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -280.5899120413787,
+            "y": -751.8890194100607,
+            "width": 430,
+            "height": 1130,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_2",
+          "viewport": {
+            "x": -401.4336658662162,
+            "y": -818.9202845038445,
+            "width": 880,
+            "height": 1580,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000206": {
+      "name": "悠丝缇亚",
+      "label": "泳池派对",
+      "source": "https://www.gamekee.com/zsca2/593571?tab=fzjn&style=style5",
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -120,
+            "y": -1090,
+            "width": 690,
+            "height": 1390,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "1_cut",
+          "viewport": {
+            "x": -160,
+            "y": -1050,
+            "width": 600,
+            "height": 1300,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000301": {
+      "name": "莎赫拉查德",
+      "label": "苍蓝魔女",
+      "source": "https://www.gamekee.com/zsca2/593577?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -126.8326378216889,
+            "y": -605.8179276862762,
+            "width": 270,
+            "height": 970,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "Cut_all",
+          "viewport": {
+            "x": -265.1167988427458,
+            "y": -743.6594841327103,
+            "width": 510,
+            "height": 1210,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000303": {
+      "name": "莎赫拉查德",
+      "label": "魔法学校教授",
+      "source": "https://www.gamekee.com/zsca2/593577?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -524.5446492559913,
+            "y": -505.9564069773828,
+            "width": 890,
+            "height": 1590,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000304": {
+      "name": "莎赫拉查德",
+      "label": "代号S",
+      "source": "https://www.gamekee.com/zsca2/593577?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -169.6952607619431,
+            "y": -574.7512729973286,
+            "width": 300,
+            "height": 1000,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_1",
+          "viewport": {
+            "x": -233.83841736157,
+            "y": -608.9507289872872,
+            "width": 540,
+            "height": 1240,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000306": {
+      "name": "莎赫拉查德",
+      "label": "泳池派对",
+      "source": "https://www.gamekee.com/zsca2/593577?tab=fzjn&style=style4",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -175.9304171300435,
+          "y": -585.5121968604607,
+          "width": 340,
+          "height": 1040,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -523.6626122475034,
+            "y": -735.5755443692078,
+            "width": 1010,
+            "height": 1710,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_2",
+          "viewport": {
+            "x": -336.7550756153018,
+            "y": -648.6939570995058,
+            "width": 760,
+            "height": 1460,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000401": {
+      "name": "格雷",
+      "label": "迷雾神射手",
+      "source": "https://www.gamekee.com/zsca2/593582?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -488.080777878339,
+          "y": -735.4800419711131,
+          "width": 980,
+          "height": 1180,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -878.7360076732028,
+            "y": -1818.860943373653,
+            "width": 1690,
+            "height": 2390,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000402": {
+      "name": "格雷",
+      "label": "B级老板",
+      "source": "https://www.gamekee.com/zsca2/593582?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -436.985131881154,
+          "y": -690.1670644376206,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      }
+    },
+    "char000403": {
+      "name": "格雷",
+      "label": "先锋大将",
+      "source": "https://www.gamekee.com/zsca2/593582?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      }
+    },
+    "char000406": {
+      "name": "格雷",
+      "label": "泳池派对",
+      "source": "https://www.gamekee.com/zsca2/593582?tab=fzjn&style=style4",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      }
+    },
+    "char000501": {
+      "name": "鲁",
+      "label": "白色猫咪",
+      "source": "https://www.gamekee.com/zsca2/593586?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -320.9593242856218,
+          "y": -417.35857094203135,
+          "width": 700,
+          "height": 900,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -368.0989493585026,
+            "y": -925.2673122784716,
+            "width": 960,
+            "height": 1660,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000502": {
+      "name": "鲁",
+      "label": "小红帽",
+      "source": "https://www.gamekee.com/zsca2/593586?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -369.0150853558998,
+          "y": -474.36417029963934,
+          "width": 740,
+          "height": 940,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -371.41890656351575,
+            "y": -848.0489185658115,
+            "width": 870,
+            "height": 1570,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_3",
+          "viewport": {
+            "x": -427.4408709018054,
+            "y": -846.9137991045792,
+            "width": 850,
+            "height": 1550,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000504": {
+      "name": "鲁",
+      "label": "自然之爪",
+      "source": "https://www.gamekee.com/zsca2/593586?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -335.5777358110905,
+          "y": -426.18242255357353,
+          "width": 700,
+          "height": 900,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -499.284171099219,
+            "y": -953.0331918094325,
+            "width": 1020,
+            "height": 1720,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_B",
+          "viewport": {
+            "x": -536.7248399275738,
+            "y": -986.7140482310172,
+            "width": 1020,
+            "height": 1720,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000506": {
+      "name": "鲁",
+      "label": "流浪猫",
+      "source": "https://www.gamekee.com/zsca2/593586?tab=fzjn&style=style4",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -411.2457881728439,
+          "y": -549.2336722417996,
+          "width": 820,
+          "height": 1020,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "D_cut",
+          "viewport": {
+            "x": -773.377502962474,
+            "y": -1001.251224023209,
+            "width": 1260,
+            "height": 1960,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "B_cut",
+          "viewport": {
+            "x": -956.6407768716142,
+            "y": -1182.3340977773855,
+            "width": 1620,
+            "height": 2320,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000604": {
+      "name": "奥尔施塔因",
+      "label": "青云道士",
+      "source": "https://www.gamekee.com/zsca2/593587?tab=fzjn&style=style2",
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -850,
+            "y": -2030,
+            "width": 1800,
+            "height": 2500,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_3_idle_dragon_head",
+          "viewport": {
+            "x": -850,
+            "y": -2030,
+            "width": 1800,
+            "height": 2500,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000701": {
+      "name": "伊柯利普斯",
+      "label": "空间魔女",
+      "source": "https://www.gamekee.com/zsca2/593603?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -475.3552266166658,
+          "y": -694.3023638447596,
+          "width": 940,
+          "height": 1140,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -1141.048700664649,
+            "y": -1414.530128719297,
+            "width": 2000,
+            "height": 2700,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000706": {
+      "name": "伊柯利普斯",
+      "label": "恶梦兔女郎",
+      "source": "https://www.gamekee.com/zsca2/593603?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -448.45960770914274,
+          "y": -613.0309628045192,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -340.39601833950144,
+            "y": -555.1882420898971,
+            "width": 550,
+            "height": 1250,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000707": {
+      "name": "伊柯利普斯",
+      "label": "海滨度假",
+      "source": "https://www.gamekee.com/zsca2/593603?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -475.61008365999965,
+          "y": -703.5826390637804,
+          "width": 940,
+          "height": 1140,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "cut_B",
+          "viewport": {
+            "x": -398.7218309474597,
+            "y": -720.2780455255897,
+            "width": 610,
+            "height": 1310,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000708": {
+      "name": "伊柯利普斯",
+      "label": "梦中的新娘",
+      "source": "https://www.gamekee.com/zsca2/593603?tab=fzjn&style=style4",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -474.3391631173371,
+          "y": -693.5602557830828,
+          "width": 940,
+          "height": 1140,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -647.2165529707537,
+            "y": -930.3102283888783,
+            "width": 1220,
+            "height": 1920,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000801": {
+      "name": "露比雅",
+      "label": "沙漠之刺",
+      "source": "https://www.gamekee.com/zsca2/593601?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -1500.2511381654456,
+            "y": -1025.6897451807313,
+            "width": 2980.316576558202,
+            "height": 2187.950236011775,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000804": {
+      "name": "露比雅",
+      "label": "大海女帝",
+      "source": "https://www.gamekee.com/zsca2/593601?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -139.12613552633402,
+            "y": -503.16519614400323,
+            "width": 260,
+            "height": 960,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000806": {
+      "name": "露比雅",
+      "label": "女仆代号C",
+      "source": "https://www.gamekee.com/zsca2/593601?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "all",
+        "viewport": {
+          "x": -426.62972274352893,
+          "y": -634.9445841152933,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": 118.35216353176466,
+            "y": -671.9220857945495,
+            "width": 420,
+            "height": 1120,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "E_idle",
+          "viewport": {
+            "x": -1117.140646815517,
+            "y": -676.3478125195567,
+            "width": 2035.4178519494585,
+            "height": 970.4767311893766,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char000807": {
+      "name": "露比雅",
+      "label": "女仆比基尼",
+      "source": "https://www.gamekee.com/zsca2/593601?tab=fzjn&style=style4",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -455.22276732576546,
+            "y": -1037.0635486620633,
+            "width": 830,
+            "height": 1530,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char001001": {
+      "name": "席比雅",
+      "label": "沙漠之花",
+      "source": "https://www.gamekee.com/zsca2/593588?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -473.2293119202114,
+          "y": -608.2566726164639,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -244.02985819115312,
+            "y": -674.9038676084466,
+            "width": 440,
+            "height": 1140,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char001002": {
+      "name": "席比雅",
+      "label": "剑后",
+      "source": "https://www.gamekee.com/zsca2/593588?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      }
+    },
+    "char001004": {
+      "name": "席比雅",
+      "label": "海军队长",
+      "source": "https://www.gamekee.com/zsca2/593588?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -429.52506853840083,
+          "y": -626.8623419750609,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "All",
+          "viewport": {
+            "x": -475.1002792416619,
+            "y": -644.9325064859513,
+            "width": 750,
+            "height": 1450,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char001006": {
+      "name": "席比雅",
+      "label": "比基尼特工",
+      "source": "https://www.gamekee.com/zsca2/593588?tab=fzjn&style=style4",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -407.5411903715362,
+            "y": -749.1036807281986,
+            "width": 770,
+            "height": 1470,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char001101": {
+      "name": "泰瑞丝",
+      "label": "毁灭天使",
+      "source": "https://www.gamekee.com/zsca2/593606?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -433.0006643416968,
+          "y": -582.1467747390313,
+          "width": 820,
+          "height": 1020,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -523.4562957697017,
+            "y": -1103.6114916956935,
+            "width": 860,
+            "height": 1560,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_A",
+          "viewport": {
+            "x": -444.2845467031255,
+            "y": -859.6829673347767,
+            "width": 820,
+            "height": 1520,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char001106": {
+      "name": "泰瑞丝",
+      "label": "保健部",
+      "source": "https://www.gamekee.com/zsca2/593606?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -442.1512051404815,
+          "y": -613.127010019738,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -123.23848640930073,
+            "y": -636.1376694366015,
+            "width": 660,
+            "height": 1360,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char001107": {
+      "name": "泰瑞丝",
+      "label": "海滨天使",
+      "source": "https://www.gamekee.com/zsca2/593606?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -119.34387613705576,
+          "y": -562.3308951696592,
+          "width": 280,
+          "height": 980
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "cut_B",
+          "viewport": {
+            "x": -432.8874015681175,
+            "y": -692.9337853524962,
+            "width": 820,
+            "height": 1520,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char001201": {
+      "name": "莉亚特里斯",
+      "label": "罗戴夫之星",
+      "source": "https://www.gamekee.com/zsca2/593608?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -445.63716914514384,
+          "y": -574.1051539314493,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -476.98313122412117,
+            "y": -417.4044462172298,
+            "width": 950,
+            "height": 1650,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char001206": {
+      "name": "莉亚特里斯",
+      "label": "霓虹跟踪狂",
+      "source": "https://www.gamekee.com/zsca2/593608?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -451.33347041509876,
+          "y": -535.8774574617005,
+          "width": 820,
+          "height": 1020,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -282.842995569551,
+            "y": -632.3493916854355,
+            "width": 370,
+            "height": 1070,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char001207": {
+      "name": "莉亚特里斯",
+      "label": "女仆代号R",
+      "source": "https://www.gamekee.com/zsca2/593608?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -442.13071290238094,
+          "y": -600.6387594881436,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -182.53501974606863,
+            "y": -794.1826168953472,
+            "width": 570,
+            "height": 1270,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_A",
+          "viewport": {
+            "x": -363.5663494735369,
+            "y": -948.2861744023746,
+            "width": 660,
+            "height": 1360,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char002401": {
+      "name": "黛安娜",
+      "label": "未知探究者",
+      "source": "https://www.gamekee.com/zsca2/603227?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "cut",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -577.1877997369553,
+            "y": -946.3454802916823,
+            "width": 960,
+            "height": 1660,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_3",
+          "viewport": {
+            "x": -274.0536746311212,
+            "y": -744.4011613577533,
+            "width": 570,
+            "height": 1270,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char002403": {
+      "name": "黛安娜",
+      "label": "魔法匠心",
+      "source": "https://www.gamekee.com/zsca2/603227?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -514.9174368235308,
+          "y": -692.0719285200006,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -622.2638781655671,
+            "y": -1751.7507610158996,
+            "width": 1230,
+            "height": 1930,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -1065.1660443272597,
+            "y": -2412.1324264161312,
+            "width": 2110,
+            "height": 2810,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char002406": {
+      "name": "黛安娜",
+      "label": "反乌托邦",
+      "source": "https://www.gamekee.com/zsca2/603227?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -420.9713149117345,
+          "y": -575.6789253206488,
+          "width": 780,
+          "height": 980,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -232.7079267121898,
+            "y": -719.1709164297787,
+            "width": 490,
+            "height": 1190,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char003001": {
+      "name": "蕾拉",
+      "label": "创造铁砧",
+      "source": "https://www.gamekee.com/zsca2/593657?tab=fzjn&style=style1",
+      "portrait": {
+        "viewport": {
+          "x": -590,
+          "y": -1060,
+          "width": 900,
+          "height": 1600,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      }
+    },
+    "char003201": {
+      "name": "罗安",
+      "label": "最后的希望",
+      "source": "https://www.gamekee.com/zsca2/621763?tab=fzjn&style=style1",
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -469.71558857329137,
+            "y": -966.0002616958504,
+            "width": 780,
+            "height": 1480,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_b",
+          "viewport": {
+            "x": -145.68242608194393,
+            "y": -663.892368341605,
+            "width": 180,
+            "height": 880,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char003202": {
+      "name": "罗安",
+      "label": "田径社社员",
+      "source": "https://www.gamekee.com/zsca2/621763?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -394.4033173496391,
+          "y": -569.7384505474264,
+          "width": 820,
+          "height": 1020,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -563.8123136358649,
+            "y": -1216.933509371573,
+            "width": 1230,
+            "height": 1930,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_A",
+          "viewport": {
+            "x": -628.3042758151527,
+            "y": -552.1397044618363,
+            "width": 1130,
+            "height": 1830,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char003203": {
+      "name": "罗安",
+      "label": "名人兔女郎",
+      "source": "https://www.gamekee.com/zsca2/621763?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -467.1045227225452,
+          "y": -581.9659080695275,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -430.52238324253705,
+            "y": -827.9355021482287,
+            "width": 810,
+            "height": 1510,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char003301": {
+      "name": "内布利斯",
+      "label": "迷宫的门卫",
+      "source": "https://www.gamekee.com/zsca2/625800?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -447.0618901988727,
+          "y": -594.1516996481461,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_a",
+          "viewport": {
+            "x": -449.16731106956223,
+            "y": -764.0806980890438,
+            "width": 620,
+            "height": 1320,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_b",
+          "viewport": {
+            "x": -134.6598795565829,
+            "y": -656.8864965173057,
+            "width": 380,
+            "height": 1080,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char003302": {
+      "name": "内布利斯",
+      "label": "松散的救生员",
+      "source": "https://www.gamekee.com/zsca2/625800?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -186.5204308014161,
+          "y": -588.4700030005777,
+          "width": 340,
+          "height": 1040,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -328.6994118440111,
+            "y": -601.7063294024887,
+            "width": 640,
+            "height": 1340,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char003303": {
+      "name": "内布利斯",
+      "label": "新进员工",
+      "source": "https://www.gamekee.com/zsca2/625800?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -425.5719211316236,
+          "y": -618.7116372098748,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -261.87557092983604,
+            "y": -586.2735183466385,
+            "width": 480,
+            "height": 1180,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "B_cut",
+          "viewport": {
+            "x": -273.7469798008075,
+            "y": -743.5591330813164,
+            "width": 440,
+            "height": 1140,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char003401": {
+      "name": "墨菲亚",
+      "label": "海滨度假",
+      "source": "https://www.gamekee.com/zsca2/632282?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -349.5573350588944,
+          "y": -615.3842664385767,
+          "width": 820,
+          "height": 1020,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -470,
+            "y": -800,
+            "width": 770,
+            "height": 1470,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char003402": {
+      "name": "墨菲亚",
+      "label": "白日梦兔女郎",
+      "source": "https://www.gamekee.com/zsca2/632282?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -400,
+            "y": -1280,
+            "width": 840,
+            "height": 1540,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char003403": {
+      "name": "墨菲亚",
+      "label": "使徒",
+      "source": "https://www.gamekee.com/zsca2/632282?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -527.2940457899354,
+            "y": -1460.0764318352492,
+            "width": 1210,
+            "height": 1810,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char003501": {
+      "name": "神圣悠丝缇亚",
+      "label": "找回的命运",
+      "source": "https://www.gamekee.com/zsca2/626508?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "all",
+        "viewport": {
+          "x": -432.71587708825143,
+          "y": -569.2389498109587,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -725.109838805102,
+            "y": -1373.3333223393129,
+            "width": 1380,
+            "height": 2080,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_A",
+          "viewport": {
+            "x": -69.64529291506582,
+            "y": -584.311500778251,
+            "width": 220,
+            "height": 920,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char003601": {
+      "name": "奥利维耶",
+      "label": "信实之翼",
+      "source": "https://www.gamekee.com/zsca2/670435?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -496.7405545129422,
+          "y": -712.8455083035303,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -834.9870836782154,
+            "y": -735.6301332673577,
+            "width": 1600,
+            "height": 2300,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -547.6228725543479,
+            "y": -1220.7208788282255,
+            "width": 1340,
+            "height": 2040,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char003602": {
+      "name": "奥利维耶",
+      "label": "使徒",
+      "source": "https://www.gamekee.com/zsca2/670435?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -459.08844115529433,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -682.1566748063359,
+            "y": -975.5328923483156,
+            "width": 1070,
+            "height": 1770,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop",
+          "viewport": {
+            "x": -525.043124208731,
+            "y": -1027.4698374899874,
+            "width": 1360,
+            "height": 2060,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char003603": {
+      "name": "奥利维耶",
+      "label": "堕落之翼",
+      "source": "https://www.gamekee.com/zsca2/670435?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -493.91447068877824,
+          "y": -693.5753297779264,
+          "width": 940,
+          "height": 1140,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -280.5173744579248,
+            "y": -770.1932760471971,
+            "width": 700,
+            "height": 1400,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char003604": {
+      "name": "奥利维耶",
+      "label": "传奇退役",
+      "source": "https://www.gamekee.com/zsca2/670435?tab=fzjn&style=style4",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -469.51449272192883,
+          "y": -649.9083330931944,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_3",
+          "viewport": {
+            "x": -93.1604885259984,
+            "y": -711.6365175715152,
+            "width": 550,
+            "height": 1250,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char003701": {
+      "name": "布莱德",
+      "label": "使徒",
+      "source": "https://www.gamekee.com/zsca2/648133?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -473.37027725647107,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -424.2880131178549,
+            "y": -163.12159801826868,
+            "width": 1060,
+            "height": 1760,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop",
+          "viewport": {
+            "x": -866.9620952709312,
+            "y": -608.4070748723858,
+            "width": 1350,
+            "height": 2050,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char003702": {
+      "name": "布莱德",
+      "label": "温泉剑客",
+      "source": "https://www.gamekee.com/zsca2/648133?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -376.5572486171145,
+            "y": -759.3424986944772,
+            "width": 700,
+            "height": 1400,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char003703": {
+      "name": "布莱德",
+      "label": "小公主",
+      "source": "https://www.gamekee.com/zsca2/648133?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -328.3688420264352,
+            "y": -1070.8449324944763,
+            "width": 810,
+            "height": 1510,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char003801": {
+      "name": "黎维塔",
+      "label": "暗黑圣女",
+      "source": "https://www.gamekee.com/zsca2/646889?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -354.6535195255881,
+          "y": -636.8559631645351,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -360.0539783384862,
+            "y": -1125.0503208993628,
+            "width": 820,
+            "height": 1520,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop",
+          "viewport": {
+            "x": -98.72105130258221,
+            "y": -376.6724651113434,
+            "width": 650,
+            "height": 1350,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char003802": {
+      "name": "黎维塔",
+      "label": "温泉管理员",
+      "source": "https://www.gamekee.com/zsca2/646889?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -129.3607402948432,
+          "y": -655.4584941515291,
+          "width": 420,
+          "height": 1120,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -364.9943361692242,
+            "y": -646.7068515951221,
+            "width": 750,
+            "height": 1450,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "a_cut",
+          "viewport": {
+            "x": -189.727763157957,
+            "y": -503.7293133420652,
+            "width": 430,
+            "height": 1130,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char003803": {
+      "name": "黎维塔",
+      "label": "奇迹玫瑰",
+      "source": "https://www.gamekee.com/zsca2/646889?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "motion",
+        "viewport": {
+          "x": -341.7654133314862,
+          "y": -584.1433167997442,
+          "width": 820,
+          "height": 1020,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      }
+    },
+    "char003901": {
+      "name": "索尼娅",
+      "label": "潜藏的梦",
+      "source": "https://www.gamekee.com/zsca2/676671?tab=fzjn&style=style1",
+      "portrait": {
+        "viewport": {
+          "x": -390,
+          "y": -1000,
+          "width": 700,
+          "height": 1400,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -530,
+            "y": -2060,
+            "width": 1390,
+            "height": 2090,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop",
+          "viewport": {
+            "x": -450,
+            "y": -1180,
+            "width": 900,
+            "height": 1600,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char003902": {
+      "name": "索尼娅",
+      "label": "卖南瓜的少女",
+      "source": "https://www.gamekee.com/zsca2/676671?tab=fzjn&style=style2",
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -280,
+            "y": -1990,
+            "width": 2400,
+            "height": 3100,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop",
+          "viewport": {
+            "x": -450,
+            "y": -1180,
+            "width": 900,
+            "height": 1600,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char004001": {
+      "name": "达丽安",
+      "label": "启示之梦",
+      "source": "https://www.gamekee.com/zsca2/678559?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -196.76624062125464,
+          "y": -697.6994314758462,
+          "width": 420,
+          "height": 1120,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -744.872651806046,
+            "y": -980.3338963552794,
+            "width": 1430,
+            "height": 2130,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop",
+          "viewport": {
+            "x": -515.9536112739644,
+            "y": -1024.4616054006722,
+            "width": 1260,
+            "height": 1960,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char004002": {
+      "name": "达丽安",
+      "label": "半糖余韵兔女郎",
+      "source": "https://www.gamekee.com/zsca2/678559?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -465.5801848376474,
+          "y": -684.2818361011767,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -383.2318238077975,
+            "y": -796.5318088819079,
+            "width": 640,
+            "height": 1340,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char004101": {
+      "name": "提尔",
+      "label": "星光守护者",
+      "source": "https://www.gamekee.com/zsca2/678097?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -455.9467811026076,
+          "y": -595.5640498691249,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -980.6063609320821,
+            "y": -885.9208234858112,
+            "width": 1880,
+            "height": 2580,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char004102": {
+      "name": "提尔",
+      "label": "澄心无邪兔女郎",
+      "source": "https://www.gamekee.com/zsca2/678097?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -460.701270140882,
+          "y": -567.5392932832154,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -74.57113725665349,
+            "y": -410.073170475492,
+            "width": 140,
+            "height": 840,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char004201": {
+      "name": "帕莱特",
+      "label": "惊悚之梦",
+      "source": "https://www.gamekee.com/zsca2/697006?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "motion",
+        "viewport": {
+          "x": -276.08603086948995,
+          "y": -561.3797719664396,
+          "width": 820,
+          "height": 1020,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_3",
+          "viewport": {
+            "x": -628.0649501532062,
+            "y": -655.5554848294089,
+            "width": 800,
+            "height": 1500,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop",
+          "viewport": {
+            "x": -611.6795225093695,
+            "y": -1389.1599538240755,
+            "width": 1240,
+            "height": 1940,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char004202": {
+      "name": "帕莱特",
+      "label": "奇迹紫罗兰",
+      "source": "https://www.gamekee.com/zsca2/697006?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -144.22679578134117,
+          "y": -677.3244152432576,
+          "width": 380,
+          "height": 1080
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -726.5598579470127,
+            "y": -1043.6058334247805,
+            "width": 1680,
+            "height": 1700,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char004301": {
+      "name": "内肯达莉亚",
+      "label": "神枪手",
+      "source": "https://www.gamekee.com/zsca2/707171?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -176.68596179951072,
+          "y": -694.6831383378062,
+          "width": 420,
+          "height": 1120
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -311.7791911933863,
+            "y": -969.1823803624293,
+            "width": 500,
+            "height": 1200
+          }
+        }
+      ]
+    },
+    "char004302": {
+      "name": "内肯达莉亚",
+      "label": "白缕轻缠木乃伊",
+      "source": "https://www.gamekee.com/zsca2/707171?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -188.2289352843759,
+          "y": -646.3637316717976,
+          "width": 340,
+          "height": 1040
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -301.42829884444166,
+            "y": -1058.9958029977047,
+            "width": 780,
+            "height": 1480
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -261.713896566927,
+            "y": -874.6556197871846,
+            "width": 840,
+            "height": 1540
+          }
+        }
+      ]
+    },
+    "char020001": {
+      "name": "艾莉丝",
+      "label": "受祝福的冒险家",
+      "source": "https://www.gamekee.com/zsca2/624137?tab=fzjn&style=style1",
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -200,
+            "y": -1730,
+            "width": 1650,
+            "height": 2350
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "A_cut",
+          "viewport": {
+            "x": -970,
+            "y": -1960,
+            "width": 1930,
+            "height": 2630,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char020002": {
+      "name": "艾莉丝",
+      "label": "只属于你的猫咪",
+      "source": "https://www.gamekee.com/zsca2/624137?tab=fzjn&style=style2",
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -500,
+            "y": -1310,
+            "width": 1070,
+            "height": 1770,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_B",
+          "viewport": {
+            "x": -650,
+            "y": -1200,
+            "width": 1420,
+            "height": 2120,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char020101": {
+      "name": "洛琪希",
+      "label": "受尊敬的师傅",
+      "source": "https://www.gamekee.com/zsca2/622875?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -374.25879303933556,
+          "y": -501.0409349584562,
+          "width": 780,
+          "height": 980,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -386.3511292592404,
+            "y": -803.6757122254771,
+            "width": 650,
+            "height": 1350,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_C",
+          "viewport": {
+            "x": -376.9170982832236,
+            "y": -623.1070783569753,
+            "width": 560,
+            "height": 1260,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char020102": {
+      "name": "洛琪希",
+      "label": "泄露的欲望",
+      "source": "https://www.gamekee.com/zsca2/622875?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "all",
+        "viewport": {
+          "x": -353.6407264146052,
+          "y": -497.2712707581136,
+          "width": 740,
+          "height": 940,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -643.7275358791303,
+            "y": -1513.4844945204964,
+            "width": 1260,
+            "height": 1960,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "B_cut",
+          "viewport": {
+            "x": -812.3822823448957,
+            "y": -1615.6341987258565,
+            "width": 1430,
+            "height": 2130,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char020201": {
+      "name": "咏",
+      "label": "温和的破坏者",
+      "source": "https://www.gamekee.com/zsca2/637919?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -415.8561021079728,
+          "y": -570.585319885485,
+          "width": 820,
+          "height": 1020,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -307.4699485801302,
+            "y": -730.2015719689064,
+            "width": 580,
+            "height": 1280,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "A_cut",
+          "viewport": {
+            "x": -315.17785346051585,
+            "y": -812.0429999196426,
+            "width": 510,
+            "height": 1210,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char020301": {
+      "name": "夜樱",
+      "label": "信念之拳",
+      "source": "https://www.gamekee.com/zsca2/637922?tab=fzjn&style=style1",
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -700,
+            "y": -1710,
+            "width": 1550,
+            "height": 2250,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_A",
+          "viewport": {
+            "x": -700,
+            "y": -1730,
+            "width": 1550,
+            "height": 2250,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char020401": {
+      "name": "雪泉",
+      "label": "雪花之舞",
+      "source": "https://www.gamekee.com/zsca2/638795?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -333.67771322007746,
+          "y": -565.5290341744065,
+          "width": 780,
+          "height": 980,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -244.09638912635415,
+            "y": -754.4948406671916,
+            "width": 760,
+            "height": 1460,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_A",
+          "viewport": {
+            "x": -405.9262945870512,
+            "y": -798.51212911895,
+            "width": 680,
+            "height": 1380,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char020501": {
+      "name": "日影",
+      "label": "和蔼的无情",
+      "source": "https://www.gamekee.com/zsca2/637920?tab=fzjn&style=style1",
+      "portrait": {
+        "viewport": {
+          "x": -450,
+          "y": -1180,
+          "width": 900,
+          "height": 1600,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "cut_A",
+          "viewport": {
+            "x": -550,
+            "y": -1580,
+            "width": 1300,
+            "height": 2000,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char020601": {
+      "name": "哥布林杀手",
+      "label": "小鬼杀手",
+      "source": "https://www.gamekee.com/zsca2/660204?tab=fzjn&style=style1",
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "viewport": {
+            "x": -550,
+            "y": -1380,
+            "width": 1000,
+            "height": 1700
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -350,
+            "y": -1380,
+            "width": 1000,
+            "height": 1700,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char020701": {
+      "name": "女神官",
+      "label": "地母神的祭司",
+      "source": "https://www.gamekee.com/zsca2/660218?tab=fzjn&style=style1",
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -840,
+            "y": -2180,
+            "width": 1830,
+            "height": 2530,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop",
+          "viewport": {
+            "x": -690,
+            "y": -1580,
+            "width": 1400,
+            "height": 2100,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char020801": {
+      "name": "妖精弓手",
+      "label": "星风之女",
+      "source": "https://www.gamekee.com/zsca2/660211?tab=fzjn&style=style1",
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -580,
+            "y": -1630,
+            "width": 1320,
+            "height": 2020,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -700,
+            "y": -1510,
+            "width": 1300,
+            "height": 2000,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char020901": {
+      "name": "剑之圣女",
+      "label": "至高神的大主教",
+      "source": "https://www.gamekee.com/zsca2/662553?tab=fzjn&style=style1",
+      "portrait": {
+        "viewport": {
+          "x": -450,
+          "y": -1230,
+          "width": 900,
+          "height": 1600
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -1000,
+            "y": -2430,
+            "width": 1900,
+            "height": 2600,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -1000,
+            "y": -2060,
+            "width": 1900,
+            "height": 2600,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char021001": {
+      "name": "斑鸠",
+      "label": "纯净之焰",
+      "source": "https://www.gamekee.com/zsca2/701014?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -383.6766007165798,
+          "y": -589.6791361381509,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -354.2782577569042,
+            "y": -1070.2277931704284,
+            "width": 920,
+            "height": 1620,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop",
+          "viewport": {
+            "x": -382.4598398971314,
+            "y": -809.2747888668098,
+            "width": 500,
+            "height": 1200,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char021101": {
+      "name": "羽前京香",
+      "label": "无穷之锁",
+      "source": "https://www.gamekee.com/zsca2/720274?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -186.5595473922907,
+          "y": -694.0245691654802,
+          "width": 420,
+          "height": 1120
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -276.5210087556939,
+            "y": -792.0633794257882,
+            "width": 540,
+            "height": 1240
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop",
+          "viewport": {
+            "x": -334.422779304207,
+            "y": -901.2731712524665,
+            "width": 700,
+            "height": 1400
+          }
+        }
+      ]
+    },
+    "char021201": {
+      "name": "出云天花",
+      "label": "天御鸟命",
+      "source": "https://www.gamekee.com/zsca2/720262?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -202.07547949029595,
+          "y": -737.7799680277084,
+          "width": 460,
+          "height": 1160
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -496.8921759816226,
+            "y": -1065.7314518521978,
+            "width": 1180,
+            "height": 1880
+          }
+        }
+      ]
+    },
+    "char021301": {
+      "name": "山城恋",
+      "label": "无限宇宙之全一",
+      "source": "https://www.gamekee.com/zsca2/721512?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -199.90498925864986,
+          "y": -752.6305829556976,
+          "width": 460,
+          "height": 1160
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -581.779017985631,
+            "y": -552.7089537172712,
+            "width": 1140,
+            "height": 1840
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -759.8309764410986,
+            "y": -1021.3744769920684,
+            "width": 1580,
+            "height": 2280
+          }
+        }
+      ]
+    },
+    "char060401": {
+      "name": "西利亚",
+      "label": "诅咒之星",
+      "source": "https://www.gamekee.com/zsca2/593569?tab=fzjn&style=style1",
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -873.4212030927581,
+            "y": -1139.6262156045093,
+            "width": 1510,
+            "height": 2210,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char060402": {
+      "name": "西利亚",
+      "label": "大魔女后裔",
+      "source": "https://www.gamekee.com/zsca2/593569?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -327.2512684183114,
+            "y": -605.266198827819,
+            "width": 1130,
+            "height": 1830,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char060403": {
+      "name": "西利亚",
+      "label": "化妆舞会兔女郎",
+      "source": "https://www.gamekee.com/zsca2/593569?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "cut_A",
+          "viewport": {
+            "x": -409.510466900418,
+            "y": -640.6145750641031,
+            "width": 810,
+            "height": 1510,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char060501": {
+      "name": "安娜塔西亚",
+      "label": "和善女仆",
+      "source": "https://www.gamekee.com/zsca2/593623?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -426.0522119658483,
+          "y": -595.6056868608911,
+          "width": 820,
+          "height": 1020,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -42.39293680207536,
+            "y": -203.07719740752043,
+            "width": 520,
+            "height": 1220,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char060502": {
+      "name": "安娜塔西亚",
+      "label": "热火涂鸦",
+      "source": "https://www.gamekee.com/zsca2/593623?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -372.3948931313642,
+          "y": -556.0645179601767,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -175.7670579234412,
+            "y": -585.2775888161418,
+            "width": 340,
+            "height": 1040,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char060601": {
+      "name": "莱克莉斯",
+      "label": "杀人娃娃",
+      "source": "https://www.gamekee.com/zsca2/593624?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -931.0171800323236,
+            "y": -729.5367012373348,
+            "width": 1230,
+            "height": 1930,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char060602": {
+      "name": "莱克莉斯",
+      "label": "机械人女王",
+      "source": "https://www.gamekee.com/zsca2/593624?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -446.7689995459245,
+          "y": -582.0489750506736,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -333.4612769055303,
+            "y": -772.4928745616673,
+            "width": 460,
+            "height": 1160,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char060701": {
+      "name": "拉菲娜",
+      "label": "钢铁引擎",
+      "source": "https://www.gamekee.com/zsca2/593625?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -452.7543089942227,
+          "y": -622.4538465660905,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop"
+        }
+      ]
+    },
+    "char060702": {
+      "name": "拉菲娜",
+      "label": "代号A",
+      "source": "https://www.gamekee.com/zsca2/593625?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -498.20216593242384,
+          "y": -648.8160837585646,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -1432.4964984494845,
+            "y": -1652.0214756322705,
+            "width": 3090,
+            "height": 3640,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char060706": {
+      "name": "拉菲娜",
+      "label": "游戏社",
+      "source": "https://www.gamekee.com/zsca2/593625?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -425.8384701059024,
+          "y": -579.7530337572206,
+          "width": 820,
+          "height": 1020,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -496.5314412518999,
+            "y": -677.9796548777932,
+            "width": 850,
+            "height": 1550,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_B",
+          "viewport": {
+            "x": -320.1415806111171,
+            "y": -680.1078373733753,
+            "width": 570,
+            "height": 1270,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char060801": {
+      "name": "爱丽洁",
+      "label": "可爱小姐",
+      "source": "https://www.gamekee.com/zsca2/593626?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -444.8693665623972,
+          "y": -645.3313740070583,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -464.9110910194788,
+            "y": -1131.8539911016303,
+            "width": 880,
+            "height": 1580,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char060802": {
+      "name": "爱丽洁",
+      "label": "代号O",
+      "source": "https://www.gamekee.com/zsca2/593626?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -470.1107270505853,
+          "y": -638.6900868762931,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "cut_a",
+          "viewport": {
+            "x": -350.9787626967518,
+            "y": -638.2051115624472,
+            "width": 620,
+            "height": 1320,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char060804": {
+      "name": "爱丽洁",
+      "label": "稚心佳人",
+      "source": "https://www.gamekee.com/zsca2/593626?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -185.85287754644872,
+          "y": -671.0351019050712,
+          "width": 380,
+          "height": 1080
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "A_loop",
+          "viewport": {
+            "x": -769.7556855738733,
+            "y": -874.8105249372351,
+            "width": 1020,
+            "height": 1720
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "B_loop",
+          "viewport": {
+            "x": -394.41300398572207,
+            "y": -930.7246279830638,
+            "width": 940,
+            "height": 1640
+          }
+        }
+      ]
+    },
+    "char061001": {
+      "name": "海伦娜",
+      "label": "顶尖偶像",
+      "source": "https://www.gamekee.com/zsca2/593630?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -377.62448509915725,
+          "y": -609.5273825239103,
+          "width": 820,
+          "height": 1020
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -372.25257902619586,
+            "y": -1017.1002348090013,
+            "width": 910,
+            "height": 1610,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "B_cut",
+          "viewport": {
+            "x": -383.47895968765283,
+            "y": -977.4533318637793,
+            "width": 870,
+            "height": 1570,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char061002": {
+      "name": "海伦娜",
+      "label": "B级偶像",
+      "source": "https://www.gamekee.com/zsca2/593630?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -229.78163450392057,
+          "y": -565.1427561952099,
+          "width": 300,
+          "height": 1000,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "2_cut",
+          "viewport": {
+            "x": -417.19124313416256,
+            "y": -502.6155747411478,
+            "width": 580,
+            "height": 1280,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop",
+          "viewport": {
+            "x": -348.9849951266467,
+            "y": -676.548556717403,
+            "width": 650,
+            "height": 1350,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char061003": {
+      "name": "海伦娜",
+      "label": "客栈晴晖",
+      "source": "https://www.gamekee.com/zsca2/593630?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -125.00043801075358,
+          "y": -604.3551911915557,
+          "width": 300,
+          "height": 1000
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -213.39960664120963,
+            "y": -689.515204073317,
+            "width": 980,
+            "height": 1680
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -293.89472006792863,
+            "y": -268.7386803128212,
+            "width": 460,
+            "height": 1160
+          }
+        }
+      ]
+    },
+    "char061101": {
+      "name": "艾尼尔",
+      "label": "穿透魔弓",
+      "source": "https://www.gamekee.com/zsca2/593632?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -504.70653177507734,
+          "y": -679.5349487880434,
+          "width": 940,
+          "height": 1140,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -550.7608212606407,
+            "y": -703.0463446607596,
+            "width": 570,
+            "height": 1270,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char061102": {
+      "name": "艾尼尔",
+      "label": "B级偶像",
+      "source": "https://www.gamekee.com/zsca2/593632?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -433.3297834956085,
+          "y": -606.9834734218554,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -344.6460853039537,
+            "y": -681.8728067679472,
+            "width": 580,
+            "height": 1280,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "3_cut",
+          "viewport": {
+            "x": -154.41602302817788,
+            "y": -643.6286528155464,
+            "width": 300,
+            "height": 1000,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char061103": {
+      "name": "艾尼尔",
+      "label": "夜色流影兔女郎",
+      "source": "https://www.gamekee.com/zsca2/593632?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -431.8231176894114,
+          "y": -632.347886642352,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -466.9903313883999,
+            "y": -873.0234982032815,
+            "width": 880,
+            "height": 1580,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char061302": {
+      "name": "达非",
+      "label": "明月",
+      "source": "https://www.gamekee.com/zsca2/607173?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -512.2151073288014,
+          "y": -570.1463022572773,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -269.1257111079993,
+            "y": -907.9408545947782,
+            "width": 600,
+            "height": 1300,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_B",
+          "viewport": {
+            "x": -380.84074479837193,
+            "y": -925.8588802316876,
+            "width": 680,
+            "height": 1380,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char061305": {
+      "name": "达非",
+      "label": "暑假",
+      "source": "https://www.gamekee.com/zsca2/607173?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "all",
+        "viewport": {
+          "x": -360.9597637996387,
+          "y": -572.6424481184339,
+          "width": 820,
+          "height": 1020,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -836.5059281983519,
+            "y": -1476.2569143128158,
+            "width": 1640,
+            "height": 2340,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_A",
+          "viewport": {
+            "x": -964.7419114081185,
+            "y": -689.5358747322136,
+            "width": 1610,
+            "height": 2310,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char061306": {
+      "name": "达非",
+      "label": "机智恋人",
+      "source": "https://www.gamekee.com/zsca2/607173?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -188.4802014384257,
+          "y": -652.8315810901806,
+          "width": 380,
+          "height": 1080
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -657.2812008911441,
+            "y": -673.4919276232304,
+            "width": 1300,
+            "height": 2000
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop",
+          "viewport": {
+            "x": -510.7086911958192,
+            "y": -681.3072621745573,
+            "width": 1020,
+            "height": 1720
+          }
+        }
+      ]
+    },
+    "char061402": {
+      "name": "杰尼斯",
+      "label": "罗宾汉",
+      "source": "https://www.gamekee.com/zsca2/603226?tab=fzjn&style=style1",
+      "portrait": {
+        "viewport": {
+          "x": -450,
+          "y": -1180,
+          "width": 900,
+          "height": 1600,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -700,
+            "y": -1580,
+            "width": 1150,
+            "height": 1850,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char061404": {
+      "name": "杰尼斯",
+      "label": "水上守护者",
+      "source": "https://www.gamekee.com/zsca2/603226?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -460.3867898917649,
+          "y": -636.242932851764,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -377.7548202323207,
+            "y": -1030.4468045776316,
+            "width": 1020,
+            "height": 1720,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char065102": {
+      "name": "尤里",
+      "label": "白雷",
+      "source": "https://www.gamekee.com/zsca2/606610?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -339.82835256374244,
+          "y": -454.6832575201849,
+          "width": 700,
+          "height": 900,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -804.8175669753538,
+            "y": -1194.7264192168823,
+            "width": 1630,
+            "height": 2330,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char065103": {
+      "name": "尤里",
+      "label": "回归偶像",
+      "source": "https://www.gamekee.com/zsca2/606610?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -408.7988671862475,
+          "y": -579.6056939422168,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -231.24458686297893,
+            "y": -781.0505766281947,
+            "width": 410,
+            "height": 1110,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_A_1",
+          "viewport": {
+            "x": -88.78224022864619,
+            "y": -858.1694391001928,
+            "width": 710,
+            "height": 1410,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char065802": {
+      "name": "纳罗达斯",
+      "label": "无名道士",
+      "source": "https://www.gamekee.com/zsca2/607899?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -620.3108702253198,
+            "y": -1056.03380568429,
+            "width": 820,
+            "height": 1520,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "A_cut_1_idle",
+          "viewport": {
+            "x": -469.97046995017746,
+            "y": -710.4814934635579,
+            "width": 820,
+            "height": 1520,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char066401": {
+      "name": "安洁莉卡",
+      "label": "堕落之星",
+      "source": "https://www.gamekee.com/zsca2/597740?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -34.41274797731666,
+            "y": -757.2855116647395,
+            "width": 340,
+            "height": 1040,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char066402": {
+      "name": "安洁莉卡",
+      "label": "泳池派对",
+      "source": "https://www.gamekee.com/zsca2/597740?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -477.4656639505564,
+          "y": -607.1636390377136,
+          "width": 940,
+          "height": 1140,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -284.5844763204375,
+            "y": -527.2567156971467,
+            "width": 410,
+            "height": 1110,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop2",
+          "viewport": {
+            "x": -438.3783222791531,
+            "y": -1286.3043869097246,
+            "width": 890,
+            "height": 1590,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char066403": {
+      "name": "安洁莉卡",
+      "label": "霓虹救星",
+      "source": "https://www.gamekee.com/zsca2/597740?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -246.32511308588295,
+            "y": -795.6432358466773,
+            "width": 410,
+            "height": 1110,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_3",
+          "viewport": {
+            "x": -240.0906082332764,
+            "y": -757.9090512934981,
+            "width": 390,
+            "height": 1090,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char066801": {
+      "name": "芮彼泰雅",
+      "label": "贪婪之星",
+      "source": "https://www.gamekee.com/zsca2/620949?tab=fzjn&style=style2",
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -700,
+            "y": -1930,
+            "width": 1700,
+            "height": 2400,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_a",
+          "viewport": {
+            "x": -290,
+            "y": -850,
+            "width": 630,
+            "height": 1330,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char066802": {
+      "name": "芮彼泰雅",
+      "label": "纯白祝福",
+      "source": "https://www.gamekee.com/zsca2/620949?tab=fzjn&style=style1",
+      "portrait": {
+        "viewport": {
+          "x": -450,
+          "y": -1180,
+          "width": 900,
+          "height": 1600,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -950,
+            "y": -1870,
+            "width": 1800,
+            "height": 2500,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_A",
+          "viewport": {
+            "x": -900,
+            "y": -1830,
+            "width": 1800,
+            "height": 2500,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char066803": {
+      "name": "芮彼泰雅",
+      "label": "水上精灵",
+      "source": "https://www.gamekee.com/zsca2/620949?tab=fzjn&style=style3",
+      "portrait": {
+        "viewport": {
+          "x": -450,
+          "y": -1180,
+          "width": 900,
+          "height": 1600,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -1350,
+            "y": -2380,
+            "width": 2700,
+            "height": 3400
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -1230,
+            "y": -2490,
+            "width": 2610,
+            "height": 3310,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char066902": {
+      "name": "克蕾西亚",
+      "label": "爱丽丝",
+      "source": "https://www.gamekee.com/zsca2/600786?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -455.19339494588246,
+          "y": -636.242932851764,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "C-cut",
+          "viewport": {
+            "x": -111.6079925669633,
+            "y": -714.7655107788464,
+            "width": 220,
+            "height": 920,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop",
+          "viewport": {
+            "x": -135.29323396569808,
+            "y": -695.8167977694349,
+            "width": 260,
+            "height": 960,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char066906": {
+      "name": "克蕾西亚",
+      "label": "纪律部",
+      "source": "https://www.gamekee.com/zsca2/600786?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -427.9270455863207,
+          "y": -628.89636018816,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -132.8662533085158,
+            "y": -436.9445179456769,
+            "width": 200,
+            "height": 900,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char066907": {
+      "name": "克蕾西亚",
+      "label": "天守传人",
+      "source": "https://www.gamekee.com/zsca2/600786?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -144.22035456141705,
+          "y": -640.8282970326986,
+          "width": 340,
+          "height": 1040
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -297.9528714671822,
+            "y": -1002.9358684521277,
+            "width": 660,
+            "height": 1360
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -279.01897060203396,
+            "y": -683.3313991001354,
+            "width": 620,
+            "height": 1320
+          }
+        }
+      ]
+    },
+    "char067002": {
+      "name": "班塔纳",
+      "label": "白雪公主",
+      "source": "https://www.gamekee.com/zsca2/602076?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -790,
+            "y": -1580,
+            "width": 1500,
+            "height": 2200,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_1",
+          "viewport": {
+            "x": -760,
+            "y": -1580,
+            "width": 1570,
+            "height": 2270,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067003": {
+      "name": "班塔纳",
+      "label": "回归偶像",
+      "source": "https://www.gamekee.com/zsca2/602076?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -450,
+            "y": -1280,
+            "width": 1200,
+            "height": 1900
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_A",
+          "viewport": {
+            "x": -20,
+            "y": -470,
+            "width": 230,
+            "height": 930,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067004": {
+      "name": "班塔纳",
+      "label": "温泉修行者",
+      "source": "https://www.gamekee.com/zsca2/602076?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "B_cut",
+          "viewport": {
+            "x": -440,
+            "y": -1610,
+            "width": 1400,
+            "height": 2100,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067101": {
+      "name": "格兰希特",
+      "label": "虚无之星",
+      "source": "https://www.gamekee.com/zsca2/611786?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -509.04113102121966,
+          "y": -700.8006537152447,
+          "width": 1020,
+          "height": 1220,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -91.78091728567559,
+            "y": -582.9985091270208,
+            "width": 240,
+            "height": 940,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_A_1",
+          "viewport": {
+            "x": -497.19535431736233,
+            "y": -943.0690571102298,
+            "width": 670,
+            "height": 1370,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067102": {
+      "name": "格兰希特",
+      "label": "回归偶像",
+      "source": "https://www.gamekee.com/zsca2/611786?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -407.9803604337183,
+          "y": -589.8946529243542,
+          "width": 820,
+          "height": 1020,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -567.5064601444542,
+            "y": -930.0994202243047,
+            "width": 1260,
+            "height": 1960,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067103": {
+      "name": "格兰希特",
+      "label": "恶作剧幽灵",
+      "source": "https://www.gamekee.com/zsca2/611786?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -486.3537646211772,
+          "y": -685.5801848376474,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -618.9945542635952,
+            "y": -1031.6505156259473,
+            "width": 1150,
+            "height": 1850,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067104": {
+      "name": "格兰希特",
+      "label": "战地医疗兵",
+      "source": "https://www.gamekee.com/zsca2/611786?tab=fzjn&style=style4",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -190.66123874940692,
+          "y": -716.2917815822921,
+          "width": 420,
+          "height": 1120,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "cut_A",
+          "viewport": {
+            "x": -363.35487349535094,
+            "y": -1079.8071329176546,
+            "width": 1020,
+            "height": 1720
+          }
+        }
+      ]
+    },
+    "char067201": {
+      "name": "贝那卡",
+      "label": "DJ",
+      "source": "https://www.gamekee.com/zsca2/625113?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "all",
+        "viewport": {
+          "x": -358.8044959364683,
+          "y": -525.5561555362187,
+          "width": 780,
+          "height": 980,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -250,
+            "y": -800,
+            "width": 500,
+            "height": 1200,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067202": {
+      "name": "贝那卡",
+      "label": "风之舞姬",
+      "source": "https://www.gamekee.com/zsca2/625113?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -422.05009265488707,
+          "y": -653.8645427165769,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -380,
+            "y": -1270,
+            "width": 1110,
+            "height": 1810,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067301": {
+      "name": "莱维亚",
+      "label": "田径社社长",
+      "source": "https://www.gamekee.com/zsca2/629234?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop2",
+          "viewport": {
+            "x": -380.7992510623003,
+            "y": -825.0973547519718,
+            "width": 690,
+            "height": 1390,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "A_cut",
+          "viewport": {
+            "x": -450,
+            "y": -1180,
+            "width": 900,
+            "height": 1600,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067302": {
+      "name": "莱维亚",
+      "label": "猜忌之夜",
+      "source": "https://www.gamekee.com/zsca2/629234?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "00",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -310.9940352456641,
+            "y": -901.9522452929821,
+            "width": 670,
+            "height": 1370
+          }
+        }
+      ]
+    },
+    "char067303": {
+      "name": "莱维亚",
+      "label": "过热",
+      "source": "https://www.gamekee.com/zsca2/629234?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "cut_A",
+          "viewport": {
+            "x": -453.83241449736846,
+            "y": -988.3083866855073,
+            "width": 920,
+            "height": 1620,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067401": {
+      "name": "米卡艾拉",
+      "label": "海滨正义",
+      "source": "https://www.gamekee.com/zsca2/633685?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -169.7002751180849,
+          "y": -555.1339436091785,
+          "width": 420,
+          "height": 1120,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -782.0316206101202,
+            "y": -1426.5774560401192,
+            "width": 1580,
+            "height": 2280,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_A",
+          "viewport": {
+            "x": -448.8808280775625,
+            "y": -1121.5445478402514,
+            "width": 1100,
+            "height": 1800,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067402": {
+      "name": "米卡艾拉",
+      "label": "签名女王",
+      "source": "https://www.gamekee.com/zsca2/633685?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -660,
+            "y": -900,
+            "width": 1400,
+            "height": 1800,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "b_cut",
+          "viewport": {
+            "x": -733.5232778356061,
+            "y": -463.10365310939835,
+            "width": 1580,
+            "height": 1980,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067403": {
+      "name": "米卡艾拉",
+      "label": "神圣者",
+      "source": "https://www.gamekee.com/zsca2/633685?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -700,
+            "y": -1300,
+            "width": 1400,
+            "height": 1800,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067502": {
+      "name": "卢班希亚",
+      "label": "印鉴掠夺者",
+      "source": "https://www.gamekee.com/zsca2/640139?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -437.8152362789675,
+          "y": -658.7617554526894,
+          "width": 820,
+          "height": 1120,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -658.3019702408844,
+            "y": -554.2757316035912,
+            "width": 1480,
+            "height": 2180,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_b",
+          "viewport": {
+            "x": 22.76553042589726,
+            "y": -839.1982529331683,
+            "width": 540,
+            "height": 1240,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067503": {
+      "name": "卢班希亚",
+      "label": "野犬",
+      "source": "https://www.gamekee.com/zsca2/640139?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -370.48707581967767,
+          "y": -627.2175336650441,
+          "width": 780,
+          "height": 1080,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -203.22636236936097,
+            "y": -494.26990015002275,
+            "width": 940,
+            "height": 1640,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067504": {
+      "name": "卢班希亚",
+      "label": "海洋先锋",
+      "source": "https://www.gamekee.com/zsca2/640139?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -179.64363833495025,
+          "y": -632.0575592245964,
+          "width": 380,
+          "height": 1080
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -440.05729111404446,
+            "y": -640.2978867579612,
+            "width": 820,
+            "height": 1520
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -130.21801742238893,
+            "y": -683.7604229448829,
+            "width": 300,
+            "height": 1000,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067601": {
+      "name": "威廉明娜",
+      "label": "钢铁君主",
+      "source": "https://www.gamekee.com/zsca2/655252?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -436.3143631846163,
+          "y": -664.0089069984762,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -296.4572872533633,
+            "y": -733.0332028998398,
+            "width": 470,
+            "height": 1170,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067603": {
+      "name": "威廉明娜",
+      "label": "水上乐园女王",
+      "source": "https://www.gamekee.com/zsca2/655252?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -261.7162322731144,
+            "y": -757.6144002356231,
+            "width": 540,
+            "height": 1240
+          }
+        }
+      ]
+    },
+    "char067604": {
+      "name": "威廉明娜",
+      "label": "银雪凝光女王",
+      "source": "https://www.gamekee.com/zsca2/655252?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -546.5458897186936,
+            "y": -538.9780391503398,
+            "width": 990,
+            "height": 1690,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067701": {
+      "name": "葛拉娜德",
+      "label": "净化巫女",
+      "source": "https://www.gamekee.com/zsca2/689646?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -370.5644884543441,
+          "y": -486.27131853788535,
+          "width": 700,
+          "height": 900,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -386.9434321820364,
+            "y": -1062.8566476989297,
+            "width": 900,
+            "height": 1600,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067702": {
+      "name": "葛拉娜德",
+      "label": "葛洛堤的女王",
+      "source": "https://www.gamekee.com/zsca2/689646?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -337.2673506094192,
+          "y": -419.7554014702277,
+          "width": 660,
+          "height": 860,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -660.2966721648256,
+            "y": -859.2682616330294,
+            "width": 1190,
+            "height": 1890,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop",
+          "viewport": {
+            "x": -850,
+            "y": -1900,
+            "width": 1900,
+            "height": 2600,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067801": {
+      "name": "马莫尼勒",
+      "label": "玄夜",
+      "source": "https://www.gamekee.com/zsca2/698749?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -442.1551941223394,
+          "y": -503.5647716178421,
+          "width": 740,
+          "height": 940,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -1284.568228906768,
+            "y": -1270.5025452902414,
+            "width": 2290,
+            "height": 2990,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067803": {
+      "name": "马莫尼勒",
+      "label": "奇迹海洋",
+      "source": "https://www.gamekee.com/zsca2/698749?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "motion",
+        "viewport": {
+          "x": -438.65845757315776,
+          "y": -634.9059015102326,
+          "width": 860,
+          "height": 1060,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -411.111479921922,
+            "y": -734.2602488823776,
+            "width": 560,
+            "height": 1260,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char067901": {
+      "name": "阿奇拉",
+      "label": "战场猛兽",
+      "source": "https://www.gamekee.com/zsca2/718485?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -207.4387461724873,
+          "y": -710.7657819633004,
+          "width": 460,
+          "height": 1160
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_1",
+          "viewport": {
+            "x": -343.0231753110601,
+            "y": -749.1297586845066,
+            "width": 500,
+            "height": 1200
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -259.1562405153374,
+            "y": -769.1979159590798,
+            "width": 500,
+            "height": 1200
+          }
+        }
+      ]
+    },
+    "char067902": {
+      "name": "阿奇拉",
+      "label": "被封印的欲望",
+      "source": "https://www.gamekee.com/zsca2/718485?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -215.89507823946832,
+          "y": -710.2356888855369,
+          "width": 460,
+          "height": 1160
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -729.0915898106048,
+            "y": -1566.0148388283296,
+            "width": 1700,
+            "height": 2400
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop",
+          "viewport": {
+            "x": -403.38524885026754,
+            "y": -1379.2721238174113,
+            "width": 1220,
+            "height": 1920
+          }
+        }
+      ]
+    },
+    "char068001": {
+      "name": "斐杰",
+      "label": "背叛之夜",
+      "source": "https://www.gamekee.com/zsca2/727096?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -229.11373306463838,
+          "y": -619.8896889451285,
+          "width": 420,
+          "height": 1120
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -613.5379898839202,
+            "y": -1345.1823642664833,
+            "width": 1100,
+            "height": 1800
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "loop_2",
+          "viewport": {
+            "x": -626.0248460573202,
+            "y": -1076.1664039771908,
+            "width": 660,
+            "height": 1360
+          }
+        }
+      ]
+    },
+    "char100501": {
+      "name": "威格",
+      "label": "炸弹狂",
+      "source": "https://www.gamekee.com/zsca2/593602?tab=fzjn&style=style1",
+      "portrait": {
+        "viewport": {
+          "x": -450,
+          "y": -980,
+          "width": 900,
+          "height": 1600,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      }
+    },
+    "char101101": {
+      "name": "赛尔",
+      "label": "恶魔之女",
+      "source": "https://www.gamekee.com/zsca2/593621?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -317.1556366007557,
+          "y": -361.7085551849136,
+          "width": 580,
+          "height": 780,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -380.95745505416824,
+            "y": -1203.9931886133131,
+            "width": 750,
+            "height": 1450,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char101102": {
+      "name": "赛尔",
+      "label": "B级偶像",
+      "source": "https://www.gamekee.com/zsca2/593621?tab=fzjn&style=style2",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -330.5163248652144,
+          "y": -384.74054360119794,
+          "width": 580,
+          "height": 780,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -348.42694508211525,
+            "y": -674.4903581692363,
+            "width": 370,
+            "height": 1070,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "2_cut",
+          "viewport": {
+            "x": -285.54140766644815,
+            "y": -699.6732163458776,
+            "width": 760,
+            "height": 1460,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char101103": {
+      "name": "赛尔",
+      "label": "新进员工",
+      "source": "https://www.gamekee.com/zsca2/593621?tab=fzjn&style=style3",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -373.13339232592523,
+          "y": -490.34147767657106,
+          "width": 780,
+          "height": 980,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      },
+      "skills": [
+        {
+          "label": "技能动作 1",
+          "animation": "loop",
+          "viewport": {
+            "x": -822.2721184000529,
+            "y": -972.9932734839929,
+            "width": 1260,
+            "height": 1960,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        },
+        {
+          "label": "技能动作 2",
+          "animation": "cut_A",
+          "viewport": {
+            "x": -624.6617989803078,
+            "y": -1345.1203033284423,
+            "width": 1020,
+            "height": 1720,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          }
+        }
+      ]
+    },
+    "char101601": {
+      "name": "西利亚",
+      "label": "诅咒之星",
+      "source": "https://www.gamekee.com/zsca2/593569?tab=fzjn&style=style1",
+      "portrait": {
+        "animation": "idle",
+        "viewport": {
+          "x": -450,
+          "y": -670,
+          "width": 900,
+          "height": 1100,
+          "padLeft": "5%",
+          "padRight": "5%",
+          "padTop": "5%",
+          "padBottom": "5%"
+        }
+      }
+    }
+  }
+}

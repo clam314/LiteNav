@@ -1,0 +1,3246 @@
+{
+ "generatedAt": "2026-11-14T01:15:41+00:00",
+ "source": "Brown-Dust-2-Asset@424622b8c4fd",
+ "commit": "424622b8c4fd",
+ "characters": [
+  {
+   "id": "0001",
+   "name": "拉德尔",
+   "aka": "Lathel",
+   "costumes": [
+    {
+     "label": "草药猎人",
+     "idle": {
+      "skeleton": "spine/char/char000101/char000101.skel",
+      "atlas": "spine/char/char000101/char000101.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000101/cutscene_char000101.skel",
+      "atlas": "spine/cutscenes/cutscene_char000101/cutscene_char000101.atlas"
+     },
+     "bg": [
+      "bg/000101_1.png"
+     ]
+    },
+    {
+     "label": "孤独生还者",
+     "idle": {
+      "skeleton": "spine/char/char000102/char000102.skel",
+      "atlas": "spine/char/char000102/char000102.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    },
+    {
+     "label": "霍尔蒙克斯",
+     "idle": {
+      "skeleton": "spine/char/char000103/char000103.skel",
+      "atlas": "spine/char/char000103/char000103.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000103/cutscene_char000103.skel",
+      "atlas": "spine/cutscenes/cutscene_char000103/cutscene_char000103.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "暗黑骑士",
+     "idle": {
+      "skeleton": "spine/char/char000104/char000104.skel",
+      "atlas": "spine/char/char000104/char000104.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    },
+    {
+     "label": "复仇的誓言",
+     "idle": {
+      "skeleton": "spine/char/char000105/char000105.skel",
+      "atlas": "spine/char/char000105/char000105.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    },
+    {
+     "label": "泳池派对",
+     "idle": {
+      "skeleton": "spine/char/char000106/char000106.skel",
+      "atlas": "spine/char/char000106/char000106.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0002",
+   "name": "悠丝缇亚",
+   "aka": "Justia",
+   "costumes": [
+    {
+     "label": "血骑士",
+     "idle": {
+      "skeleton": "spine/char/char000201/char000201.skel",
+      "atlas": "spine/char/char000201/char000201.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000201/cutscene_char000201.skel",
+      "atlas": "spine/cutscenes/cutscene_char000201/cutscene_char000201.atlas"
+     },
+     "bg": [
+      "bg/000201_1.png",
+      "bg/000201_2.png"
+     ]
+    },
+    {
+     "label": "皎洁死神",
+     "idle": {
+      "skeleton": "spine/char/char000202/char000202.skel",
+      "atlas": "spine/char/char000202/char000202.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000202/cutscene_char000202.skel",
+      "atlas": "spine/cutscenes/cutscene_char000202/cutscene_char000202.atlas"
+     },
+     "bg": [
+      "bg/000202_1.png",
+      "bg/000202_10.png",
+      "bg/000202_11.png",
+      "bg/000202_12.png",
+      "bg/000202_15.png",
+      "bg/000202_2.png",
+      "bg/000202_3.png",
+      "bg/000202_4.png",
+      "bg/000202_5.png",
+      "bg/000202_6.png",
+      "bg/000202_7.png",
+      "bg/000202_8.png",
+      "bg/000202_9.png"
+     ]
+    },
+    {
+     "label": "血之贪食者",
+     "idle": {
+      "skeleton": "spine/char/char000203/char000203.skel",
+      "atlas": "spine/char/char000203/char000203.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000203/CutScene_Char000203.skel",
+      "atlas": "spine/cutscenes/cutscene_char000203/CutScene_Char000203.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "剑道社",
+     "idle": {
+      "skeleton": "spine/char/char000204/char000204.skel",
+      "atlas": "spine/char/char000204/char000204.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000204/cutscene_char000204.skel",
+      "atlas": "spine/cutscenes/cutscene_char000204/cutscene_char000204.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "泳池派对",
+     "idle": {
+      "skeleton": "spine/char/char000206/char000206.skel",
+      "atlas": "spine/char/char000206/char000206.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000206/cutscene_char000206.skel",
+      "atlas": "spine/cutscenes/cutscene_char000206/cutscene_char000206.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "服装 96",
+     "idle": {
+      "skeleton": "spine/char/char000296/char000296.skel",
+      "atlas": "spine/char/char000296/char000296.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000296/cutscene_char000296.skel",
+      "atlas": "spine/cutscenes/cutscene_char000296/cutscene_char000296.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0003",
+   "name": "莎赫拉查德",
+   "aka": "Scheherazade",
+   "costumes": [
+    {
+     "label": "苍蓝魔女",
+     "idle": {
+      "skeleton": "spine/char/char000301/char000301.skel",
+      "atlas": "spine/char/char000301/char000301.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000301/cutscene_char000301.skel",
+      "atlas": "spine/cutscenes/cutscene_char000301/cutscene_char000301.atlas"
+     },
+     "bg": [
+      "bg/000301_1.png"
+     ]
+    },
+    {
+     "label": "魔法学校教授",
+     "idle": {
+      "skeleton": "spine/char/char000303/char000303.skel",
+      "atlas": "spine/char/char000303/char000303.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000303/cutscene_char000303.skel",
+      "atlas": "spine/cutscenes/cutscene_char000303/cutscene_char000303.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "代号S",
+     "idle": {
+      "skeleton": "spine/char/char000304/char000304.skel",
+      "atlas": "spine/char/char000304/char000304.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000304/cutscene_char000304.skel",
+      "atlas": "spine/cutscenes/cutscene_char000304/cutscene_char000304.atlas"
+     },
+     "bg": [
+      "bg/000304_2.png",
+      "bg/000304_3.png",
+      "bg/000304_4.png"
+     ]
+    },
+    {
+     "label": "泳池派对",
+     "idle": {
+      "skeleton": "spine/char/char000306/char000306.skel",
+      "atlas": "spine/char/char000306/char000306.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000306/cutscene_char000306.skel",
+      "atlas": "spine/cutscenes/cutscene_char000306/cutscene_char000306.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "服装 96",
+     "idle": {
+      "skeleton": "spine/char/char000396/char000396.skel",
+      "atlas": "spine/char/char000396/char000396.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000396/cutscene_char000396.skel",
+      "atlas": "spine/cutscenes/cutscene_char000396/cutscene_char000396.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0004",
+   "name": "格雷",
+   "aka": "Gray",
+   "costumes": [
+    {
+     "label": "迷雾神射手",
+     "idle": {
+      "skeleton": "spine/char/char000401/char000401.skel",
+      "atlas": "spine/char/char000401/char000401.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000401/cutscene_char000401.skel",
+      "atlas": "spine/cutscenes/cutscene_char000401/cutscene_char000401.atlas"
+     },
+     "bg": [
+      "bg/000401_1.png",
+      "bg/000401_3.png"
+     ]
+    },
+    {
+     "label": "B级老板",
+     "idle": {
+      "skeleton": "spine/char/char000402/char000402.skel",
+      "atlas": "spine/char/char000402/char000402.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    },
+    {
+     "label": "先锋大将",
+     "idle": {
+      "skeleton": "spine/char/char000403/char000403.skel",
+      "atlas": "spine/char/char000403/char000403.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    },
+    {
+     "label": "泳池派对",
+     "idle": {
+      "skeleton": "spine/char/char000406/char000406.skel",
+      "atlas": "spine/char/char000406/char000406.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0005",
+   "name": "鲁",
+   "aka": "Rou",
+   "costumes": [
+    {
+     "label": "白色猫咪",
+     "idle": {
+      "skeleton": "spine/char/char000501/char000501.skel",
+      "atlas": "spine/char/char000501/char000501.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000501/cutscene_char000501.skel",
+      "atlas": "spine/cutscenes/cutscene_char000501/cutscene_char000501.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "小红帽",
+     "idle": {
+      "skeleton": "spine/char/char000502/char000502.skel",
+      "atlas": "spine/char/char000502/char000502.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000502/cutscene_char000502.skel",
+      "atlas": "spine/cutscenes/cutscene_char000502/cutscene_char000502.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "自然之爪",
+     "idle": {
+      "skeleton": "spine/char/char000504/char000504.skel",
+      "atlas": "spine/char/char000504/char000504.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000504/cutscene_char000504.skel",
+      "atlas": "spine/cutscenes/cutscene_char000504/cutscene_char000504.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "流浪猫",
+     "idle": {
+      "skeleton": "spine/char/char000506/char000506.skel",
+      "atlas": "spine/char/char000506/char000506.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000506/cutscene_char000506.skel",
+      "atlas": "spine/cutscenes/cutscene_char000506/cutscene_char000506.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0006",
+   "name": "奥尔施塔因",
+   "aka": "Olstein",
+   "costumes": [
+    {
+     "label": "魔物学家",
+     "idle": {
+      "skeleton": "spine/char/char000601/char000601.skel",
+      "atlas": "spine/char/char000601/char000601.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    },
+    {
+     "label": "青云道士",
+     "idle": {
+      "skeleton": "spine/char/char000604/char000604.skel",
+      "atlas": "spine/char/char000604/char000604.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000604/cutscene_char000604.skel",
+      "atlas": "spine/cutscenes/cutscene_char000604/cutscene_char000604.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0007",
+   "name": "伊柯利普斯",
+   "aka": "Eclipse",
+   "costumes": [
+    {
+     "label": "空间魔女",
+     "idle": {
+      "skeleton": "spine/char/char000701/char000701.skel",
+      "atlas": "spine/char/char000701/char000701.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000701/cutscene_char000701.skel",
+      "atlas": "spine/cutscenes/cutscene_char000701/cutscene_char000701.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "恶梦兔女郎",
+     "idle": {
+      "skeleton": "spine/char/char000706/char000706.skel",
+      "atlas": "spine/char/char000706/char000706.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000706/cutscene_char000706.skel",
+      "atlas": "spine/cutscenes/cutscene_char000706/cutscene_char000706.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "海滨度假",
+     "idle": {
+      "skeleton": "spine/char/char000707/char000707.skel",
+      "atlas": "spine/char/char000707/char000707.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000707/cutscene_char000707.skel",
+      "atlas": "spine/cutscenes/cutscene_char000707/cutscene_char000707.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "梦中的新娘",
+     "idle": {
+      "skeleton": "spine/char/char000708/char000708.skel",
+      "atlas": "spine/char/char000708/char000708.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000708/cutscene_char000708.skel",
+      "atlas": "spine/cutscenes/cutscene_char000708/cutscene_char000708.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0008",
+   "name": "露比雅",
+   "aka": "Rubia",
+   "costumes": [
+    {
+     "label": "沙漠之刺",
+     "idle": {
+      "skeleton": "spine/char/char000801/char000801.skel",
+      "atlas": "spine/char/char000801/char000801.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000801/cutscene_char000801.skel",
+      "atlas": "spine/cutscenes/cutscene_char000801/cutscene_char000801.atlas"
+     },
+     "bg": [
+      "bg/000801_1.png"
+     ]
+    },
+    {
+     "label": "大海女帝",
+     "idle": {
+      "skeleton": "spine/char/char000804/char000804.skel",
+      "atlas": "spine/char/char000804/char000804.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000804/cutscene_char000804.skel",
+      "atlas": "spine/cutscenes/cutscene_char000804/cutscene_char000804.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "女仆代号C",
+     "idle": {
+      "skeleton": "spine/char/char000806/char000806.skel",
+      "atlas": "spine/char/char000806/char000806.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000806/cutscene_char000806.skel",
+      "atlas": "spine/cutscenes/cutscene_char000806/cutscene_char000806.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "女仆比基尼",
+     "idle": {
+      "skeleton": "spine/char/char000807/char000807.skel",
+      "atlas": "spine/char/char000807/char000807.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char000807/cutscene_char000807.skel",
+      "atlas": "spine/cutscenes/cutscene_char000807/cutscene_char000807.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0010",
+   "name": "席比雅",
+   "aka": "Sylvia",
+   "costumes": [
+    {
+     "label": "沙漠之花",
+     "idle": {
+      "skeleton": "spine/char/char001001/char001001.skel",
+      "atlas": "spine/char/char001001/char001001.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char001001/cutscene_char001001.skel",
+      "atlas": "spine/cutscenes/cutscene_char001001/cutscene_char001001.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "剑后",
+     "idle": {
+      "skeleton": "spine/char/char001002/char001002.skel",
+      "atlas": "spine/char/char001002/char001002.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char001002/cutscene_char001002.skel",
+      "atlas": "spine/cutscenes/cutscene_char001002/cutscene_char001002.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "海军队长",
+     "idle": {
+      "skeleton": "spine/char/char001004/char001004.skel",
+      "atlas": "spine/char/char001004/char001004.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char001004/cutscene_char001004.skel",
+      "atlas": "spine/cutscenes/cutscene_char001004/cutscene_char001004.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "比基尼特工",
+     "idle": {
+      "skeleton": "spine/char/char001006/char001006.skel",
+      "atlas": "spine/char/char001006/char001006.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char001006/cutscene_char001006.skel",
+      "atlas": "spine/cutscenes/cutscene_char001006/cutscene_char001006.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "服装 92",
+     "idle": {
+      "skeleton": "spine/char/char001092/char001092.skel",
+      "atlas": "spine/char/char001092/char001092.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char001092/cutscene_char001092.skel",
+      "atlas": "spine/cutscenes/cutscene_char001092/cutscene_char001092.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0011",
+   "name": "泰瑞丝",
+   "aka": "Teresse",
+   "costumes": [
+    {
+     "label": "毁灭天使",
+     "idle": {
+      "skeleton": "spine/char/char001101/char001101.skel",
+      "atlas": "spine/char/char001101/char001101.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char001101/cutscene_char001101.skel",
+      "atlas": "spine/cutscenes/cutscene_char001101/cutscene_char001101.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "保健部",
+     "idle": {
+      "skeleton": "spine/char/char001106/char001106.skel",
+      "atlas": "spine/char/char001106/char001106.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char001106/cutscene_char001106.skel",
+      "atlas": "spine/cutscenes/cutscene_char001106/cutscene_char001106.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "海滨天使",
+     "idle": {
+      "skeleton": "spine/char/char001107/char001107.skel",
+      "atlas": "spine/char/char001107/char001107.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char001107/cutscene_char001107.skel",
+      "atlas": "spine/cutscenes/cutscene_char001107/cutscene_char001107.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "服装 97",
+     "idle": {
+      "skeleton": "spine/char/char001197/char001197.skel",
+      "atlas": "spine/char/char001197/char001197.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char001197/cutscene_char001197.skel",
+      "atlas": "spine/cutscenes/cutscene_char001197/cutscene_char001197.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0012",
+   "name": "莉亚特里斯",
+   "aka": "Liatris",
+   "costumes": [
+    {
+     "label": "罗戴夫之星",
+     "idle": {
+      "skeleton": "spine/char/char001201/char001201.skel",
+      "atlas": "spine/char/char001201/char001201.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char001201/CutScene_Char001201.skel",
+      "atlas": "spine/cutscenes/cutscene_char001201/CutScene_Char001201.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "霓虹跟踪狂",
+     "idle": {
+      "skeleton": "spine/char/char001206/char001206.skel",
+      "atlas": "spine/char/char001206/char001206.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char001206/cutscene_char001206.skel",
+      "atlas": "spine/cutscenes/cutscene_char001206/cutscene_char001206.atlas"
+     },
+     "bg": [
+      "bg/001206_5.png"
+     ]
+    },
+    {
+     "label": "女仆代号R",
+     "idle": {
+      "skeleton": "spine/char/char001207/char001207.skel",
+      "atlas": "spine/char/char001207/char001207.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char001207/cutscene_char001207.skel",
+      "atlas": "spine/cutscenes/cutscene_char001207/cutscene_char001207.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "服装 97",
+     "idle": {
+      "skeleton": "spine/char/char001297/char001297.skel",
+      "atlas": "spine/char/char001297/char001297.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char001297/cutscene_char001297.skel",
+      "atlas": "spine/cutscenes/cutscene_char001297/cutscene_char001297.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0024",
+   "name": "黛安娜",
+   "aka": "Diana",
+   "costumes": [
+    {
+     "label": "未知探究者",
+     "idle": {
+      "skeleton": "spine/char/char002401/char002401.skel",
+      "atlas": "spine/char/char002401/char002401.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char002401/cutscene_char002401.skel",
+      "atlas": "spine/cutscenes/cutscene_char002401/cutscene_char002401.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "魔法匠心",
+     "idle": {
+      "skeleton": "spine/char/char002403/char002403.skel",
+      "atlas": "spine/char/char002403/char002403.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char002403/cutscene_char002403.skel",
+      "atlas": "spine/cutscenes/cutscene_char002403/cutscene_char002403.atlas"
+     },
+     "bg": [
+      "bg/002403_1.png"
+     ]
+    },
+    {
+     "label": "反乌托邦",
+     "idle": {
+      "skeleton": "spine/char/char002406/char002406.skel",
+      "atlas": "spine/char/char002406/char002406.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char002406/cutscene_char002406.skel",
+      "atlas": "spine/cutscenes/cutscene_char002406/cutscene_char002406.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0030",
+   "name": "蕾拉",
+   "aka": "Layla",
+   "costumes": [
+    {
+     "label": "创造铁砧",
+     "idle": {
+      "skeleton": "spine/char/char003001/char003001.skel",
+      "atlas": "spine/char/char003001/char003001.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0031",
+   "name": "厄尔比斯",
+   "aka": "Elpis",
+   "costumes": [
+    {
+     "label": "救赎之手",
+     "idle": {
+      "skeleton": "spine/char/char003101/char003101.skel",
+      "atlas": "spine/char/char003101/char003101.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003101/cutscene_char003101.skel",
+      "atlas": "spine/cutscenes/cutscene_char003101/cutscene_char003101.atlas"
+     },
+     "bg": [
+      "bg/003101_1.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "0032",
+   "name": "罗安",
+   "aka": "Loen",
+   "costumes": [
+    {
+     "label": "最后的希望",
+     "idle": {
+      "skeleton": "spine/char/char003201/char003201.skel",
+      "atlas": "spine/char/char003201/char003201.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003201/cutscene_char003201.skel",
+      "atlas": "spine/cutscenes/cutscene_char003201/cutscene_char003201.atlas"
+     },
+     "bg": [
+      "bg/003201_1.png",
+      "bg/003201_2.png"
+     ]
+    },
+    {
+     "label": "田径社社员",
+     "idle": {
+      "skeleton": "spine/char/char003202/char003202.skel",
+      "atlas": "spine/char/char003202/char003202.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003202/cutscene_char003202.skel",
+      "atlas": "spine/cutscenes/cutscene_char003202/cutscene_char003202.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "名人兔女郎",
+     "idle": {
+      "skeleton": "spine/char/char003203/char003203.skel",
+      "atlas": "spine/char/char003203/char003203.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003203/cutscene_char003203.skel",
+      "atlas": "spine/cutscenes/cutscene_char003203/cutscene_char003203.atlas"
+     },
+     "bg": [
+      "bg/003203_1.png",
+      "bg/003203_2.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "0033",
+   "name": "内布利斯",
+   "aka": "Nebris",
+   "costumes": [
+    {
+     "label": "迷宫的门卫",
+     "idle": {
+      "skeleton": "spine/char/char003301/char003301.skel",
+      "atlas": "spine/char/char003301/char003301.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003301/cutscene_char003301.skel",
+      "atlas": "spine/cutscenes/cutscene_char003301/cutscene_char003301.atlas"
+     },
+     "bg": [
+      "bg/003301_1.png",
+      "bg/003301_2.png"
+     ]
+    },
+    {
+     "label": "松散的救生员",
+     "idle": {
+      "skeleton": "spine/char/char003302/char003302.skel",
+      "atlas": "spine/char/char003302/char003302.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003302/cutscene_char003302.skel",
+      "atlas": "spine/cutscenes/cutscene_char003302/cutscene_char003302.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "新进员工",
+     "idle": {
+      "skeleton": "spine/char/char003303/char003303.skel",
+      "atlas": "spine/char/char003303/char003303.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003303/cutscene_char003303.skel",
+      "atlas": "spine/cutscenes/cutscene_char003303/cutscene_char003303.atlas"
+     },
+     "bg": [
+      "bg/003303_1.png",
+      "bg/003303_2.png"
+     ]
+    },
+    {
+     "label": "服装 92",
+     "idle": {
+      "skeleton": "spine/char/char003392/char003392.skel",
+      "atlas": "spine/char/char003392/char003392.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003392/cutscene_char003392.skel",
+      "atlas": "spine/cutscenes/cutscene_char003392/cutscene_char003392.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0034",
+   "name": "墨菲亚",
+   "aka": "Morpeah",
+   "costumes": [
+    {
+     "label": "海滨度假",
+     "idle": {
+      "skeleton": "spine/char/char003401/char003401.skel",
+      "atlas": "spine/char/char003401/char003401.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003401/cutscene_char003401.skel",
+      "atlas": "spine/cutscenes/cutscene_char003401/cutscene_char003401.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "白日梦兔女郎",
+     "idle": {
+      "skeleton": "spine/char/char003402/char003402.skel",
+      "atlas": "spine/char/char003402/char003402.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003402/cutscene_char003402.skel",
+      "atlas": "spine/cutscenes/cutscene_char003402/cutscene_char003402.atlas"
+     },
+     "bg": [
+      "bg/003402_1.png",
+      "bg/003402_2.png"
+     ]
+    },
+    {
+     "label": "使徒",
+     "idle": {
+      "skeleton": "spine/char/char003403/char003403.skel",
+      "atlas": "spine/char/char003403/char003403.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003403/cutscene_char003403.skel",
+      "atlas": "spine/cutscenes/cutscene_char003403/cutscene_char003403.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0035",
+   "name": "神圣悠丝缇亚",
+   "aka": "Sacred Justia",
+   "costumes": [
+    {
+     "label": "找回的命运",
+     "idle": {
+      "skeleton": "spine/char/char003501/char003501.skel",
+      "atlas": "spine/char/char003501/char003501.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003501/cutscene_char003501.skel",
+      "atlas": "spine/cutscenes/cutscene_char003501/cutscene_char003501.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0036",
+   "name": "奥利维尔",
+   "aka": "Olivier",
+   "costumes": [
+    {
+     "label": "信实之翼",
+     "idle": {
+      "skeleton": "spine/char/char003601/char003601.skel",
+      "atlas": "spine/char/char003601/char003601.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003601/cutscene_char003601.skel",
+      "atlas": "spine/cutscenes/cutscene_char003601/cutscene_char003601.atlas"
+     },
+     "bg": [
+      "bg/003601_1.png",
+      "bg/003601_2.png"
+     ]
+    },
+    {
+     "label": "使徒",
+     "idle": {
+      "skeleton": "spine/char/char003602/char003602.skel",
+      "atlas": "spine/char/char003602/char003602.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003602/cutscene_char003602.skel",
+      "atlas": "spine/cutscenes/cutscene_char003602/cutscene_char003602.atlas"
+     },
+     "bg": [
+      "bg/003602_1.png",
+      "bg/003602_2.png"
+     ]
+    },
+    {
+     "label": "堕落之翼",
+     "idle": {
+      "skeleton": "spine/char/char003603/char003603.skel",
+      "atlas": "spine/char/char003603/char003603.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003603/cutscene_char003603.skel",
+      "atlas": "spine/cutscenes/cutscene_char003603/cutscene_char003603.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "传奇退役",
+     "idle": {
+      "skeleton": "spine/char/char003604/char003604.skel",
+      "atlas": "spine/char/char003604/char003604.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003604/cutscene_char003604.skel",
+      "atlas": "spine/cutscenes/cutscene_char003604/cutscene_char003604.atlas"
+     },
+     "bg": [
+      "bg/003604_1.png",
+      "bg/003604_2.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "0037",
+   "name": "布莱德",
+   "aka": "Blade",
+   "costumes": [
+    {
+     "label": "使徒",
+     "idle": {
+      "skeleton": "spine/char/char003701/char003701.skel",
+      "atlas": "spine/char/char003701/char003701.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003701/cutscene_char003701.skel",
+      "atlas": "spine/cutscenes/cutscene_char003701/cutscene_char003701.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "温泉剑客",
+     "idle": {
+      "skeleton": "spine/char/char003702/char003702.skel",
+      "atlas": "spine/char/char003702/char003702.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003702/cutscene_char003702.skel",
+      "atlas": "spine/cutscenes/cutscene_char003702/cutscene_char003702.atlas"
+     },
+     "bg": [
+      "bg/003702_1.png"
+     ]
+    },
+    {
+     "label": "小公主",
+     "idle": {
+      "skeleton": "spine/char/char003703/char003703.skel",
+      "atlas": "spine/char/char003703/char003703.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003703/cutscene_char003703.skel",
+      "atlas": "spine/cutscenes/cutscene_char003703/cutscene_char003703.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "服装 93",
+     "idle": {
+      "skeleton": "spine/char/char003793/char003793.skel",
+      "atlas": "spine/char/char003793/char003793.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003793/cutscene_char003793.skel",
+      "atlas": "spine/cutscenes/cutscene_char003793/cutscene_char003793.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0038",
+   "name": "黎维塔",
+   "aka": "Liberta",
+   "costumes": [
+    {
+     "label": "暗黑圣女",
+     "idle": {
+      "skeleton": "spine/char/char003801/char003801.skel",
+      "atlas": "spine/char/char003801/char003801.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003801/cutscene_char003801.skel",
+      "atlas": "spine/cutscenes/cutscene_char003801/cutscene_char003801.atlas"
+     },
+     "bg": [
+      "bg/003801_1.png",
+      "bg/003801_2.png"
+     ]
+    },
+    {
+     "label": "温泉管理员",
+     "idle": {
+      "skeleton": "spine/char/char003802/char003802.skel",
+      "atlas": "spine/char/char003802/char003802.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003802/cutscene_char003802.skel",
+      "atlas": "spine/cutscenes/cutscene_char003802/cutscene_char003802.atlas"
+     },
+     "bg": [
+      "bg/003802_10.png",
+      "bg/003802_2.png",
+      "bg/003802_3.png",
+      "bg/003802_4.png",
+      "bg/003802_6.png",
+      "bg/003802_7.png",
+      "bg/003802_8.png",
+      "bg/003802_9.png"
+     ]
+    },
+    {
+     "label": "奇迹玫瑰",
+     "idle": {
+      "skeleton": "spine/char/char003803/char003803.skel",
+      "atlas": "spine/char/char003803/char003803.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003803/cutscene_char003803.skel",
+      "atlas": "spine/cutscenes/cutscene_char003803/cutscene_char003803.atlas"
+     },
+     "bg": [
+      "bg/003803_1.png",
+      "bg/003803_2.png"
+     ]
+    },
+    {
+     "label": "服装 92",
+     "idle": {
+      "skeleton": "spine/char/char003892/char003892.skel",
+      "atlas": "spine/char/char003892/char003892.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003892/cutscene_char003892.skel",
+      "atlas": "spine/cutscenes/cutscene_char003892/cutscene_char003892.atlas"
+     },
+     "bg": [
+      "bg/003892_1.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "0039",
+   "name": "索妮亚",
+   "aka": "Sonya",
+   "costumes": [
+    {
+     "label": "潜藏的梦",
+     "idle": {
+      "skeleton": "spine/char/char003901/char003901.skel",
+      "atlas": "spine/char/char003901/char003901.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003901/cutscene_char003901.skel",
+      "atlas": "spine/cutscenes/cutscene_char003901/cutscene_char003901.atlas"
+     },
+     "bg": [
+      "bg/003901_1.png",
+      "bg/003901_2.png"
+     ]
+    },
+    {
+     "label": "卖南瓜的少女",
+     "idle": {
+      "skeleton": "spine/char/char003902/char003902.skel",
+      "atlas": "spine/char/char003902/char003902.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char003902/cutscene_char003902.skel",
+      "atlas": "spine/cutscenes/cutscene_char003902/cutscene_char003902.atlas"
+     },
+     "bg": [
+      "bg/003902_2.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "0040",
+   "name": "达丽安",
+   "aka": "Darian",
+   "costumes": [
+    {
+     "label": "启示之梦",
+     "idle": {
+      "skeleton": "spine/char/char004001/char004001.skel",
+      "atlas": "spine/char/char004001/char004001.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char004001/cutscene_char004001.skel",
+      "atlas": "spine/cutscenes/cutscene_char004001/cutscene_char004001.atlas"
+     },
+     "bg": [
+      "bg/004001_1.png",
+      "bg/004001_2.png"
+     ]
+    },
+    {
+     "label": "半糖余韵兔女郎",
+     "idle": {
+      "skeleton": "spine/char/char004002/char004002.skel",
+      "atlas": "spine/char/char004002/char004002.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char004002/cutscene_char004002.skel",
+      "atlas": "spine/cutscenes/cutscene_char004002/cutscene_char004002.atlas"
+     },
+     "bg": [
+      "bg/004002_1.png",
+      "bg/004002_2.png"
+     ]
+    },
+    {
+     "label": "服装 91",
+     "idle": {
+      "skeleton": "spine/char/char004091/char004091.skel",
+      "atlas": "spine/char/char004091/char004091.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char004091/cutscene_char004091.skel",
+      "atlas": "spine/cutscenes/cutscene_char004091/cutscene_char004091.atlas"
+     },
+     "bg": [
+      "bg/004091_2.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "0041",
+   "name": "提尔",
+   "aka": "Tyr",
+   "costumes": [
+    {
+     "label": "星光守护者",
+     "idle": {
+      "skeleton": "spine/char/char004101/char004101.skel",
+      "atlas": "spine/char/char004101/char004101.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char004101/cutscene_char004101.skel",
+      "atlas": "spine/cutscenes/cutscene_char004101/cutscene_char004101.atlas"
+     },
+     "bg": [
+      "bg/004101_1.png",
+      "bg/004101_2.png",
+      "bg/004101_3.png"
+     ]
+    },
+    {
+     "label": "澄心无邪兔女郎",
+     "idle": {
+      "skeleton": "spine/char/char004102/char004102.skel",
+      "atlas": "spine/char/char004102/char004102.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char004102/cutscene_char004102.skel",
+      "atlas": "spine/cutscenes/cutscene_char004102/cutscene_char004102.atlas"
+     },
+     "bg": [
+      "bg/004102_1.png",
+      "bg/004102_2.png"
+     ]
+    },
+    {
+     "label": "服装 92",
+     "idle": {
+      "skeleton": "spine/char/char004192/char004192.skel",
+      "atlas": "spine/char/char004192/char004192.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char004192/cutscene_char004192.skel",
+      "atlas": "spine/cutscenes/cutscene_char004192/cutscene_char004192.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0042",
+   "name": "英格利得",
+   "aka": "Palette",
+   "costumes": [
+    {
+     "label": "惊悚之梦",
+     "idle": {
+      "skeleton": "spine/char/char004201/char004201.skel",
+      "atlas": "spine/char/char004201/char004201.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char004201/cutscene_char004201.skel",
+      "atlas": "spine/cutscenes/cutscene_char004201/cutscene_char004201.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "卡迪斯的子弹",
+     "idle": {
+      "skeleton": "spine/char/char004202/char004202.skel",
+      "atlas": "spine/char/char004202/char004202.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char004202/cutscene_char004202.skel",
+      "atlas": "spine/cutscenes/cutscene_char004202/cutscene_char004202.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0043",
+   "name": "内肯达莉亚",
+   "aka": "",
+   "costumes": [
+    {
+     "label": "神枪手",
+     "idle": {
+      "skeleton": "spine/char/char004301/char004301.skel",
+      "atlas": "spine/char/char004301/char004301.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char004301/cutscene_char004301.skel",
+      "atlas": "spine/cutscenes/cutscene_char004301/cutscene_char004301.atlas"
+     },
+     "bg": [
+      "bg/004301_1.png",
+      "bg/004301_2.png"
+     ]
+    },
+    {
+     "label": "服装 02",
+     "idle": {
+      "skeleton": "spine/char/char004302/char004302.skel",
+      "atlas": "spine/char/char004302/char004302.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char004302/cutscene_char004302.skel",
+      "atlas": "spine/cutscenes/cutscene_char004302/cutscene_char004302.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0200",
+   "name": "艾莉丝",
+   "aka": "Eris",
+   "costumes": [
+    {
+     "label": "受祝福的冒险家",
+     "idle": {
+      "skeleton": "spine/char/char020001/char020001.skel",
+      "atlas": "spine/char/char020001/char020001.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char020001/cutscene_char020001.skel",
+      "atlas": "spine/cutscenes/cutscene_char020001/cutscene_char020001.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "只属于你的猫咪",
+     "idle": {
+      "skeleton": "spine/char/char020002/char020002.skel",
+      "atlas": "spine/char/char020002/char020002.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char020002/cutscene_char020002.skel",
+      "atlas": "spine/cutscenes/cutscene_char020002/cutscene_char020002.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0201",
+   "name": "洛琪希",
+   "aka": "Roxy",
+   "costumes": [
+    {
+     "label": "受尊敬的师傅",
+     "idle": {
+      "skeleton": "spine/char/char020101/char020101.skel",
+      "atlas": "spine/char/char020101/char020101.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char020101/cutscene_char020101.skel",
+      "atlas": "spine/cutscenes/cutscene_char020101/cutscene_char020101.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "泄露的欲望",
+     "idle": {
+      "skeleton": "spine/char/char020102/char020102.skel",
+      "atlas": "spine/char/char020102/char020102.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char020102/cutscene_char020102.skel",
+      "atlas": "spine/cutscenes/cutscene_char020102/cutscene_char020102.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0202",
+   "name": "咏",
+   "aka": "Yomi",
+   "costumes": [
+    {
+     "label": "温和的破坏者",
+     "idle": {
+      "skeleton": "spine/char/char020201/char020201.skel",
+      "atlas": "spine/char/char020201/char020201.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char020201/cutscene_char020201.skel",
+      "atlas": "spine/cutscenes/cutscene_char020201/cutscene_char020201.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0203",
+   "name": "夜樱",
+   "aka": "Yozakura",
+   "costumes": [
+    {
+     "label": "信念之拳",
+     "idle": {
+      "skeleton": "spine/char/char020301/char020301.skel",
+      "atlas": "spine/char/char020301/char020301.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char020301/cutscene_char020301.skel",
+      "atlas": "spine/cutscenes/cutscene_char020301/cutscene_char020301.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0204",
+   "name": "雪泉",
+   "aka": "Yumi",
+   "costumes": [
+    {
+     "label": "雪花之舞",
+     "idle": {
+      "skeleton": "spine/char/char020401/char020401.skel",
+      "atlas": "spine/char/char020401/char020401.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char020401/cutscene_char020401.skel",
+      "atlas": "spine/cutscenes/cutscene_char020401/cutscene_char020401.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0205",
+   "name": "日影",
+   "aka": "Hikage",
+   "costumes": [
+    {
+     "label": "和蔼的无情",
+     "idle": {
+      "skeleton": "spine/char/char020501/char020501.skel",
+      "atlas": "spine/char/char020501/char020501.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char020501/cutscene_char020501.skel",
+      "atlas": "spine/cutscenes/cutscene_char020501/cutscene_char020501.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0206",
+   "name": "哥布林杀手",
+   "aka": "Goblin Slayer",
+   "costumes": [
+    {
+     "label": "小鬼杀手",
+     "idle": {
+      "skeleton": "spine/char/char020601/char020601.skel",
+      "atlas": "spine/char/char020601/char020601.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char020601/cutscene_char020601.skel",
+      "atlas": "spine/cutscenes/cutscene_char020601/cutscene_char020601.atlas"
+     },
+     "bg": [
+      "bg/020601_1.png",
+      "bg/020601_2.png",
+      "bg/020601_3.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "0207",
+   "name": "女神官",
+   "aka": "Priestess",
+   "costumes": [
+    {
+     "label": "地母神的祭司",
+     "idle": {
+      "skeleton": "spine/char/char020701/char020701.skel",
+      "atlas": "spine/char/char020701/char020701.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char020701/cutscene_char020701.skel",
+      "atlas": "spine/cutscenes/cutscene_char020701/cutscene_char020701.atlas"
+     },
+     "bg": [
+      "bg/020701_1.png",
+      "bg/020701_2.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "0208",
+   "name": "妖精弓手",
+   "aka": "High Elf Archer",
+   "costumes": [
+    {
+     "label": "星风之女",
+     "idle": {
+      "skeleton": "spine/char/char020801/char020801.skel",
+      "atlas": "spine/char/char020801/char020801.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char020801/cutscene_char020801.skel",
+      "atlas": "spine/cutscenes/cutscene_char020801/cutscene_char020801.atlas"
+     },
+     "bg": [
+      "bg/020801_1.png",
+      "bg/020801_2.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "0209",
+   "name": "剑之圣女",
+   "aka": "Sword Maiden",
+   "costumes": [
+    {
+     "label": "至高神的大主教",
+     "idle": {
+      "skeleton": "spine/char/char020901/char020901.skel",
+      "atlas": "spine/char/char020901/char020901.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char020901/cutscene_char020901.skel",
+      "atlas": "spine/cutscenes/cutscene_char020901/cutscene_char020901.atlas"
+     },
+     "bg": [
+      "bg/020901_1.png",
+      "bg/020901_2.png",
+      "bg/020901_3.png",
+      "bg/020901_4.png",
+      "bg/020901_5.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "0210",
+   "name": "斑鸠",
+   "aka": "Karuga",
+   "costumes": [
+    {
+     "label": "纯净之焰",
+     "idle": {
+      "skeleton": "spine/char/char021001/char021001.skel",
+      "atlas": "spine/char/char021001/char021001.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char021001/cutscene_char021001.skel",
+      "atlas": "spine/cutscenes/cutscene_char021001/cutscene_char021001.atlas"
+     },
+     "bg": [
+      "bg/021001_1.png",
+      "bg/021001_2.png",
+      "bg/021001_4.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "0211",
+   "name": "Char 0211",
+   "aka": "",
+   "costumes": [
+    {
+     "label": "服装 01",
+     "idle": {
+      "skeleton": "spine/char/char021101/char021101.skel",
+      "atlas": "spine/char/char021101/char021101.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char021101/cutscene_char021101.skel",
+      "atlas": "spine/cutscenes/cutscene_char021101/cutscene_char021101.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0212",
+   "name": "Char 0212",
+   "aka": "",
+   "costumes": [
+    {
+     "label": "服装 01",
+     "idle": {
+      "skeleton": "spine/char/char021201/char021201.skel",
+      "atlas": "spine/char/char021201/char021201.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char021201/cutscene_char021201.skel",
+      "atlas": "spine/cutscenes/cutscene_char021201/cutscene_char021201.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "服装 91",
+     "idle": {
+      "skeleton": "spine/char/char021291/char021291.skel",
+      "atlas": "spine/char/char021291/char021291.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char021291/cutscene_char021291.skel",
+      "atlas": "spine/cutscenes/cutscene_char021291/cutscene_char021291.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0213",
+   "name": "Char 0213",
+   "aka": "",
+   "costumes": [
+    {
+     "label": "服装 01",
+     "idle": {
+      "skeleton": "spine/char/char021301/char021301.skel",
+      "atlas": "spine/char/char021301/char021301.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char021301/cutscene_char021301.skel",
+      "atlas": "spine/cutscenes/cutscene_char021301/cutscene_char021301.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "服装 91",
+     "idle": {
+      "skeleton": "spine/char/char021391/char021391.skel",
+      "atlas": "spine/char/char021391/char021391.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char021391/cutscene_char021391.skel",
+      "atlas": "spine/cutscenes/cutscene_char021391/cutscene_char021391.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0603",
+   "name": "艾瑞克",
+   "aka": "Alec",
+   "costumes": [
+    {
+     "label": "毁灭之星",
+     "idle": {
+      "skeleton": "spine/char/char060301/char060301.skel",
+      "atlas": "spine/char/char060301/char060301.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    },
+    {
+     "label": "破剑士",
+     "idle": {
+      "skeleton": "spine/char/char060302/char060302.skel",
+      "atlas": "spine/char/char060302/char060302.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0604",
+   "name": "Celia",
+   "aka": "Celia",
+   "costumes": [
+    {
+     "label": "The Curse",
+     "idle": null,
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char060401/cutscene_char060401.skel",
+      "atlas": "spine/cutscenes/cutscene_char060401/cutscene_char060401.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "大魔女后裔",
+     "idle": {
+      "skeleton": "spine/char/char060402/char060402.skel",
+      "atlas": "spine/char/char060402/char060402.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char060402/cutscene_char060402.skel",
+      "atlas": "spine/cutscenes/cutscene_char060402/cutscene_char060402.atlas"
+     },
+     "bg": [
+      "bg/060402_1.png"
+     ]
+    },
+    {
+     "label": "化妆舞会兔女郎",
+     "idle": {
+      "skeleton": "spine/char/char060403/char060403.skel",
+      "atlas": "spine/char/char060403/char060403.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char060403/cutscene_char060403.skel",
+      "atlas": "spine/cutscenes/cutscene_char060403/cutscene_char060403.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0605",
+   "name": "安娜塔西亚",
+   "aka": "Anastasia",
+   "costumes": [
+    {
+     "label": "和善女仆",
+     "idle": {
+      "skeleton": "spine/char/char060501/char060501.skel",
+      "atlas": "spine/char/char060501/char060501.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char060501/cutscene_char060501.skel",
+      "atlas": "spine/cutscenes/cutscene_char060501/cutscene_char060501.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "热火涂鸦",
+     "idle": {
+      "skeleton": "spine/char/char060502/char060502.skel",
+      "atlas": "spine/char/char060502/char060502.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char060502/cutscene_char060502.skel",
+      "atlas": "spine/cutscenes/cutscene_char060502/cutscene_char060502.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0606",
+   "name": "莱克莉丝",
+   "aka": "Lecliss",
+   "costumes": [
+    {
+     "label": "杀人娃娃",
+     "idle": {
+      "skeleton": "spine/char/char060601/char060601.skel",
+      "atlas": "spine/char/char060601/char060601.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char060601/cutscene_char060601.skel",
+      "atlas": "spine/cutscenes/cutscene_char060601/cutscene_char060601.atlas"
+     },
+     "bg": [
+      "bg/060601_1.png",
+      "bg/060601_2.png",
+      "bg/060601_3.png"
+     ]
+    },
+    {
+     "label": "机械人女王",
+     "idle": {
+      "skeleton": "spine/char/char060602/char060602.skel",
+      "atlas": "spine/char/char060602/char060602.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char060602/cutscene_char060602.skel",
+      "atlas": "spine/cutscenes/cutscene_char060602/cutscene_char060602.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0607",
+   "name": "拉菲娜",
+   "aka": "Rafina",
+   "costumes": [
+    {
+     "label": "钢铁引擎",
+     "idle": {
+      "skeleton": "spine/char/char060701/char060701.skel",
+      "atlas": "spine/char/char060701/char060701.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char060701/cutscene_char060701.skel",
+      "atlas": "spine/cutscenes/cutscene_char060701/cutscene_char060701.atlas"
+     },
+     "bg": [
+      "bg/060701_3.png"
+     ]
+    },
+    {
+     "label": "代号A",
+     "idle": {
+      "skeleton": "spine/char/char060702/char060702.skel",
+      "atlas": "spine/char/char060702/char060702.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char060702/cutscene_char060702.skel",
+      "atlas": "spine/cutscenes/cutscene_char060702/cutscene_char060702.atlas"
+     },
+     "bg": [
+      "bg/060702_1.png"
+     ]
+    },
+    {
+     "label": "游戏社",
+     "idle": {
+      "skeleton": "spine/char/char060706/char060706.skel",
+      "atlas": "spine/char/char060706/char060706.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char060706/cutscene_char060706.skel",
+      "atlas": "spine/cutscenes/cutscene_char060706/cutscene_char060706.atlas"
+     },
+     "bg": [
+      "bg/060706_1.png",
+      "bg/060706_2.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "0608",
+   "name": "爱丽洁",
+   "aka": "Elise",
+   "costumes": [
+    {
+     "label": "可爱小姐",
+     "idle": {
+      "skeleton": "spine/char/char060801/char060801.skel",
+      "atlas": "spine/char/char060801/char060801.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char060801/cutscene_char060801.skel",
+      "atlas": "spine/cutscenes/cutscene_char060801/cutscene_char060801.atlas"
+     },
+     "bg": [
+      "bg/060801_2.png",
+      "bg/060801_3.png"
+     ]
+    },
+    {
+     "label": "代号O",
+     "idle": {
+      "skeleton": "spine/char/char060802/char060802.skel",
+      "atlas": "spine/char/char060802/char060802.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char060802/cutscene_char060802.skel",
+      "atlas": "spine/cutscenes/cutscene_char060802/cutscene_char060802.atlas"
+     },
+     "bg": [
+      "bg/060802_1.png"
+     ]
+    },
+    {
+     "label": "服装 04",
+     "idle": {
+      "skeleton": "spine/char/char060804/char060804.skel",
+      "atlas": "spine/char/char060804/char060804.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char060804/cutscene_char060804.skel",
+      "atlas": "spine/cutscenes/cutscene_char060804/cutscene_char060804.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0610",
+   "name": "海伦娜",
+   "aka": "Helena",
+   "costumes": [
+    {
+     "label": "顶尖偶像",
+     "idle": {
+      "skeleton": "spine/char/char061001/char061001.skel",
+      "atlas": "spine/char/char061001/char061001.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char061001/cutscene_char061001.skel",
+      "atlas": "spine/cutscenes/cutscene_char061001/cutscene_char061001.atlas"
+     },
+     "bg": [
+      "bg/061001_1.png",
+      "bg/061001_2.png"
+     ]
+    },
+    {
+     "label": "B级偶像",
+     "idle": {
+      "skeleton": "spine/char/char061002/char061002.skel",
+      "atlas": "spine/char/char061002/char061002.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char061002/cutscene_Char061002.skel",
+      "atlas": "spine/cutscenes/cutscene_char061002/cutscene_Char061002.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "服装 03",
+     "idle": {
+      "skeleton": "spine/char/char061003/char061003.skel",
+      "atlas": "spine/char/char061003/char061003.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char061003/cutscene_char061003.skel",
+      "atlas": "spine/cutscenes/cutscene_char061003/cutscene_char061003.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "服装 92",
+     "idle": {
+      "skeleton": "spine/char/char061092/char061092.skel",
+      "atlas": "spine/char/char061092/char061092.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0611",
+   "name": "艾尼尔",
+   "aka": "Eleaneer",
+   "costumes": [
+    {
+     "label": "穿透魔弓",
+     "idle": {
+      "skeleton": "spine/char/char061101/char061101.skel",
+      "atlas": "spine/char/char061101/char061101.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char061101/cutscene_char061101.skel",
+      "atlas": "spine/cutscenes/cutscene_char061101/cutscene_char061101.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "B级偶像",
+     "idle": {
+      "skeleton": "spine/char/char061102/char061102.skel",
+      "atlas": "spine/char/char061102/char061102.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char061102/cutscene_char061102.skel",
+      "atlas": "spine/cutscenes/cutscene_char061102/cutscene_char061102.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "夜色流影兔女郎",
+     "idle": {
+      "skeleton": "spine/char/char061103/char061103.skel",
+      "atlas": "spine/char/char061103/char061103.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char061103/cutscene_char061103.skel",
+      "atlas": "spine/cutscenes/cutscene_char061103/cutscene_char061103.atlas"
+     },
+     "bg": [
+      "bg/061103_1.png",
+      "bg/061103_2.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "0613",
+   "name": "达菲",
+   "aka": "Dalvi",
+   "costumes": [
+    {
+     "label": "明月",
+     "idle": {
+      "skeleton": "spine/char/char061302/char061302.skel",
+      "atlas": "spine/char/char061302/char061302.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char061302/cutscene_char061302.skel",
+      "atlas": "spine/cutscenes/cutscene_char061302/cutscene_char061302.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "服装 03",
+     "idle": null,
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char061303/cutscene_char061303.skel",
+      "atlas": "spine/cutscenes/cutscene_char061303/cutscene_char061303.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "暑假",
+     "idle": {
+      "skeleton": "spine/char/char061305/char061305.skel",
+      "atlas": "spine/char/char061305/char061305.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char061305/cutscene_char061305.skel",
+      "atlas": "spine/cutscenes/cutscene_char061305/cutscene_char061305.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "服装 06",
+     "idle": {
+      "skeleton": "spine/char/char061306/char061306.skel",
+      "atlas": "spine/char/char061306/char061306.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char061306/cutscene_char061306.skel",
+      "atlas": "spine/cutscenes/cutscene_char061306/cutscene_char061306.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "服装 92",
+     "idle": {
+      "skeleton": "spine/char/char061392/char061392.skel",
+      "atlas": "spine/char/char061392/char061392.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char061392/cutscene_char061392.skel",
+      "atlas": "spine/cutscenes/cutscene_char061392/cutscene_char061392.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0614",
+   "name": "杰尼斯",
+   "aka": "Zenith",
+   "costumes": [
+    {
+     "label": "罗宾汉",
+     "idle": {
+      "skeleton": "spine/char/char061402/char061402.skel",
+      "atlas": "spine/char/char061402/char061402.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char061402/cutscene_char061402.skel",
+      "atlas": "spine/cutscenes/cutscene_char061402/cutscene_char061402.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "水上守护者",
+     "idle": {
+      "skeleton": "spine/char/char061404/char061404.skel",
+      "atlas": "spine/char/char061404/char061404.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char061404/cutscene_char061404.skel",
+      "atlas": "spine/cutscenes/cutscene_char061404/cutscene_char061404.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "服装 92",
+     "idle": {
+      "skeleton": "spine/char/char061492/char061492.skel",
+      "atlas": "spine/char/char061492/char061492.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char061492/cutscene_char061492.skel",
+      "atlas": "spine/cutscenes/cutscene_char061492/cutscene_char061492.atlas"
+     },
+     "bg": [
+      "bg/061492_1.png",
+      "bg/061492_2.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "0620",
+   "name": "安德鲁",
+   "aka": "Andrew",
+   "costumes": [
+    {
+     "label": "忠直管家",
+     "idle": {
+      "skeleton": "spine/char/char062001/char062001.skel",
+      "atlas": "spine/char/char062001/char062001.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    },
+    {
+     "label": "专家",
+     "idle": {
+      "skeleton": "spine/char/char062002/char062002.skel",
+      "atlas": "spine/char/char062002/char062002.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0630",
+   "name": "Ingrid",
+   "aka": "Ingrid",
+   "costumes": [
+    {
+     "label": "Kardis' Bullet",
+     "idle": {
+      "skeleton": "spine/char/char063001/char063001.skel",
+      "atlas": "spine/char/char063001/char063001.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0633",
+   "name": "辛西亚",
+   "aka": "Cynthia",
+   "costumes": [
+    {
+     "label": "寒日温暖",
+     "idle": {
+      "skeleton": "spine/char/char063301/char063301.skel",
+      "atlas": "spine/char/char063301/char063301.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0634",
+   "name": "朱莉",
+   "aka": "Julie",
+   "costumes": [
+    {
+     "label": "恢复师",
+     "idle": {
+      "skeleton": "spine/char/char063401/char063401.skel",
+      "atlas": "spine/char/char063401/char063401.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0651",
+   "name": "尤里",
+   "aka": "Yuri",
+   "costumes": [
+    {
+     "label": "白雷",
+     "idle": {
+      "skeleton": "spine/char/char065102/char065102.skel",
+      "atlas": "spine/char/char065102/char065102.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char065102/cutscene_char065102.skel",
+      "atlas": "spine/cutscenes/cutscene_char065102/cutscene_char065102.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "回归偶像",
+     "idle": {
+      "skeleton": "spine/char/char065103/Char065103.skel",
+      "atlas": "spine/char/char065103/Char065103.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char065103/cutscene_char065103.skel",
+      "atlas": "spine/cutscenes/cutscene_char065103/cutscene_char065103.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "服装 93",
+     "idle": {
+      "skeleton": "spine/char/char065193/char065193.skel",
+      "atlas": "spine/char/char065193/char065193.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char065193/cutscene_char065193.skel",
+      "atlas": "spine/cutscenes/cutscene_char065193/cutscene_char065193.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0658",
+   "name": "纳罗达斯",
+   "aka": "Nartas",
+   "costumes": [
+    {
+     "label": "无名道士",
+     "idle": {
+      "skeleton": "spine/char/char065802/char065802.skel",
+      "atlas": "spine/char/char065802/char065802.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char065802/cutscene_char065802.skel",
+      "atlas": "spine/cutscenes/cutscene_char065802/cutscene_char065802.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0664",
+   "name": "安洁莉卡",
+   "aka": "Angelica",
+   "costumes": [
+    {
+     "label": "堕落之星",
+     "idle": {
+      "skeleton": "spine/char/char066401/char066401.skel",
+      "atlas": "spine/char/char066401/char066401.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char066401/cutscene_char066401.skel",
+      "atlas": "spine/cutscenes/cutscene_char066401/cutscene_char066401.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "泳池派对",
+     "idle": {
+      "skeleton": "spine/char/char066402/char066402.skel",
+      "atlas": "spine/char/char066402/char066402.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char066402/cutscene_char066402.skel",
+      "atlas": "spine/cutscenes/cutscene_char066402/cutscene_char066402.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "霓虹救星",
+     "idle": {
+      "skeleton": "spine/char/char066403/char066403.skel",
+      "atlas": "spine/char/char066403/char066403.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char066403/cutscene_char066403.skel",
+      "atlas": "spine/cutscenes/cutscene_char066403/cutscene_char066403.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0668",
+   "name": "芮彼泰雅",
+   "aka": "Refithea",
+   "costumes": [
+    {
+     "label": "贪婪之星",
+     "idle": {
+      "skeleton": "spine/char/char066801/char066801.skel",
+      "atlas": "spine/char/char066801/char066801.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char066801/cutscene_char066801.skel",
+      "atlas": "spine/cutscenes/cutscene_char066801/cutscene_char066801.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "纯白祝福",
+     "idle": {
+      "skeleton": "spine/char/char066802/char066802.skel",
+      "atlas": "spine/char/char066802/char066802.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char066802/cutscene_char066802.skel",
+      "atlas": "spine/cutscenes/cutscene_char066802/cutscene_char066802.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "水上精灵",
+     "idle": {
+      "skeleton": "spine/char/char066803/char066803.skel",
+      "atlas": "spine/char/char066803/char066803.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char066803/cutscene_char066803.skel",
+      "atlas": "spine/cutscenes/cutscene_char066803/cutscene_char066803.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0669",
+   "name": "克蕾西亚",
+   "aka": "Glacia",
+   "costumes": [
+    {
+     "label": "爱丽丝",
+     "idle": {
+      "skeleton": "spine/char/char066902/char066902.skel",
+      "atlas": "spine/char/char066902/char066902.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char066902/cutscene_char066902.skel",
+      "atlas": "spine/cutscenes/cutscene_char066902/cutscene_char066902.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "纪律部",
+     "idle": {
+      "skeleton": "spine/char/char066906/char066906.skel",
+      "atlas": "spine/char/char066906/char066906.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char066906/cutscene_char066906.skel",
+      "atlas": "spine/cutscenes/cutscene_char066906/cutscene_char066906.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "服装 07",
+     "idle": {
+      "skeleton": "spine/char/char066907/char066907.skel",
+      "atlas": "spine/char/char066907/char066907.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char066907/cutscene_char066907.skel",
+      "atlas": "spine/cutscenes/cutscene_char066907/cutscene_char066907.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0670",
+   "name": "班塔纳",
+   "aka": "Ventana",
+   "costumes": [
+    {
+     "label": "白雪公主",
+     "idle": {
+      "skeleton": "spine/char/char067002/char067002.skel",
+      "atlas": "spine/char/char067002/char067002.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067002/cutscene_char067002.skel",
+      "atlas": "spine/cutscenes/cutscene_char067002/cutscene_char067002.atlas"
+     },
+     "bg": [
+      "bg/067002_1.png"
+     ]
+    },
+    {
+     "label": "回归偶像",
+     "idle": {
+      "skeleton": "spine/char/char067003/Char067003.skel",
+      "atlas": "spine/char/char067003/Char067003.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067003/cutscene_char067003.skel",
+      "atlas": "spine/cutscenes/cutscene_char067003/cutscene_char067003.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "温泉修行者",
+     "idle": {
+      "skeleton": "spine/char/char067004/char067004.skel",
+      "atlas": "spine/char/char067004/char067004.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067004/cutscene_char067004.skel",
+      "atlas": "spine/cutscenes/cutscene_char067004/cutscene_char067004.atlas"
+     },
+     "bg": [
+      "bg/067004_1.png",
+      "bg/067004_2.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "0671",
+   "name": "格兰希特",
+   "aka": "Granhildr",
+   "costumes": [
+    {
+     "label": "虚无之星",
+     "idle": {
+      "skeleton": "spine/char/char067101/char067101.skel",
+      "atlas": "spine/char/char067101/char067101.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067101/cutscene_char067101.skel",
+      "atlas": "spine/cutscenes/cutscene_char067101/cutscene_char067101.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "回归偶像",
+     "idle": {
+      "skeleton": "spine/char/char067102/char067102.skel",
+      "atlas": "spine/char/char067102/char067102.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067102/cutscene_char067102.skel",
+      "atlas": "spine/cutscenes/cutscene_char067102/cutscene_char067102.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "恶作剧幽灵",
+     "idle": {
+      "skeleton": "spine/char/char067103/char067103.skel",
+      "atlas": "spine/char/char067103/char067103.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067103/cutscene_char067103.skel",
+      "atlas": "spine/cutscenes/cutscene_char067103/cutscene_char067103.atlas"
+     },
+     "bg": [
+      "bg/067103_1.png",
+      "bg/067103_2.png"
+     ]
+    },
+    {
+     "label": "战地医疗兵",
+     "idle": {
+      "skeleton": "spine/char/char067104/char067104.skel",
+      "atlas": "spine/char/char067104/char067104.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067104/cutscene_char067104.skel",
+      "atlas": "spine/cutscenes/cutscene_char067104/cutscene_char067104.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0672",
+   "name": "贝那卡",
+   "aka": "Venaka",
+   "costumes": [
+    {
+     "label": "DJ",
+     "idle": {
+      "skeleton": "spine/char/char067201/char067201.skel",
+      "atlas": "spine/char/char067201/char067201.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067201/cutscene_char067201.skel",
+      "atlas": "spine/cutscenes/cutscene_char067201/cutscene_char067201.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "风之舞姬",
+     "idle": {
+      "skeleton": "spine/char/char067202/char067202.skel",
+      "atlas": "spine/char/char067202/char067202.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067202/cutscene_char067202.skel",
+      "atlas": "spine/cutscenes/cutscene_char067202/cutscene_char067202.atlas"
+     },
+     "bg": [
+      "bg/067202_1.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "0673",
+   "name": "莱维亚",
+   "aka": "Levia",
+   "costumes": [
+    {
+     "label": "田径社社长",
+     "idle": {
+      "skeleton": "spine/char/char067301/char067301.skel",
+      "atlas": "spine/char/char067301/char067301.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067301/cutscene_char067301.skel",
+      "atlas": "spine/cutscenes/cutscene_char067301/cutscene_char067301.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "猜忌之夜",
+     "idle": {
+      "skeleton": "spine/char/char067302/char067302.skel",
+      "atlas": "spine/char/char067302/char067302.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067302/cutscene_char067302.skel",
+      "atlas": "spine/cutscenes/cutscene_char067302/cutscene_char067302.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "过热",
+     "idle": {
+      "skeleton": "spine/char/char067303/char067303.skel",
+      "atlas": "spine/char/char067303/char067303.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067303/cutscene_char067303.skel",
+      "atlas": "spine/cutscenes/cutscene_char067303/cutscene_char067303.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0674",
+   "name": "米卡艾拉",
+   "aka": "Michaela",
+   "costumes": [
+    {
+     "label": "海滨正义",
+     "idle": {
+      "skeleton": "spine/char/char067401/char067401.skel",
+      "atlas": "spine/char/char067401/char067401.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067401/cutscene_char067401.skel",
+      "atlas": "spine/cutscenes/cutscene_char067401/cutscene_char067401.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "签名女王",
+     "idle": {
+      "skeleton": "spine/char/char067402/char067402.skel",
+      "atlas": "spine/char/char067402/char067402.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067402/cutscene_char067402.skel",
+      "atlas": "spine/cutscenes/cutscene_char067402/cutscene_char067402.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "神圣者",
+     "idle": {
+      "skeleton": "spine/char/char067403/char067403.skel",
+      "atlas": "spine/char/char067403/char067403.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067403/cutscene_char067403.skel",
+      "atlas": "spine/cutscenes/cutscene_char067403/cutscene_char067403.atlas"
+     },
+     "bg": [
+      "bg/067403_1.png",
+      "bg/067403_3.png",
+      "bg/067403_4.png"
+     ]
+    },
+    {
+     "label": "服装 91",
+     "idle": {
+      "skeleton": "spine/char/char067491/char067491.skel",
+      "atlas": "spine/char/char067491/char067491.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067491/cutscene_char067491.skel",
+      "atlas": "spine/cutscenes/cutscene_char067491/cutscene_char067491.atlas"
+     },
+     "bg": [
+      "bg/067491_2.png",
+      "bg/067491_3.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "0675",
+   "name": "卢班希亚",
+   "aka": "Luvencia",
+   "costumes": [
+    {
+     "label": "印鉴掠夺者",
+     "idle": {
+      "skeleton": "spine/char/char067502/char067502.skel",
+      "atlas": "spine/char/char067502/char067502.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067502/cutscene_char067502.skel",
+      "atlas": "spine/cutscenes/cutscene_char067502/cutscene_char067502.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "野犬",
+     "idle": {
+      "skeleton": "spine/char/char067503/char067503.skel",
+      "atlas": "spine/char/char067503/char067503.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067503/cutscene_char067503.skel",
+      "atlas": "spine/cutscenes/cutscene_char067503/cutscene_char067503.atlas"
+     },
+     "bg": [
+      "bg/067503_1.png",
+      "bg/067503_2.png"
+     ]
+    },
+    {
+     "label": "海洋先锋",
+     "idle": {
+      "skeleton": "spine/char/char067504/char067504.skel",
+      "atlas": "spine/char/char067504/char067504.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067504/cutscene_char067504.skel",
+      "atlas": "spine/cutscenes/cutscene_char067504/cutscene_char067504.atlas"
+     },
+     "bg": [
+      "bg/067504_1.png",
+      "bg/067504_2.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "0676",
+   "name": "威廉明娜",
+   "aka": "Wilhelmina",
+   "costumes": [
+    {
+     "label": "钢铁君主",
+     "idle": {
+      "skeleton": "spine/char/char067601/char067601.skel",
+      "atlas": "spine/char/char067601/char067601.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067601/cutscene_char067601.skel",
+      "atlas": "spine/cutscenes/cutscene_char067601/cutscene_char067601.atlas"
+     },
+     "bg": [
+      "bg/067601_2.png"
+     ]
+    },
+    {
+     "label": "水上乐园女王",
+     "idle": {
+      "skeleton": "spine/char/char067603/char067603.skel",
+      "atlas": "spine/char/char067603/char067603.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067603/cutscene_char067603.skel",
+      "atlas": "spine/cutscenes/cutscene_char067603/cutscene_char067603.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "银雪凝光女王",
+     "idle": {
+      "skeleton": "spine/char/char067604/char067604.skel",
+      "atlas": "spine/char/char067604/char067604.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067604/cutscene_char067604.skel",
+      "atlas": "spine/cutscenes/cutscene_char067604/cutscene_char067604.atlas"
+     },
+     "bg": [
+      "bg/067604_1.png",
+      "bg/067604_2.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "0677",
+   "name": "葛拉娜德",
+   "aka": "Granadair",
+   "costumes": [
+    {
+     "label": "净化巫女",
+     "idle": {
+      "skeleton": "spine/char/char067701/char067701.skel",
+      "atlas": "spine/char/char067701/char067701.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067701/cutscene_char067701.skel",
+      "atlas": "spine/cutscenes/cutscene_char067701/cutscene_char067701.atlas"
+     },
+     "bg": [
+      "bg/067701_1.png",
+      "bg/067701_2.png"
+     ]
+    },
+    {
+     "label": "葛洛堤的女王",
+     "idle": {
+      "skeleton": "spine/char/char067702/char067702.skel",
+      "atlas": "spine/char/char067702/char067702.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067702/cutscene_char067702.skel",
+      "atlas": "spine/cutscenes/cutscene_char067702/cutscene_char067702.atlas"
+     },
+     "bg": [
+      "bg/067702_2.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "0678",
+   "name": "马莫尼勒",
+   "aka": "Mamonir",
+   "costumes": [
+    {
+     "label": "玄夜",
+     "idle": {
+      "skeleton": "spine/char/char067801/char067801.skel",
+      "atlas": "spine/char/char067801/char067801.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067801/cutscene_char067801.skel",
+      "atlas": "spine/cutscenes/cutscene_char067801/cutscene_char067801.atlas"
+     },
+     "bg": [
+      "bg/067801_1.png",
+      "bg/067801_2.png"
+     ]
+    },
+    {
+     "label": "奇迹海洋",
+     "idle": {
+      "skeleton": "spine/char/char067803/char067803.skel",
+      "atlas": "spine/char/char067803/char067803.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067803/cutscene_char067803.skel",
+      "atlas": "spine/cutscenes/cutscene_char067803/cutscene_char067803.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0679",
+   "name": "Char 0679",
+   "aka": "",
+   "costumes": [
+    {
+     "label": "服装 01",
+     "idle": {
+      "skeleton": "spine/char/char067901/char067901.skel",
+      "atlas": "spine/char/char067901/char067901.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067901/cutscene_char067901.skel",
+      "atlas": "spine/cutscenes/cutscene_char067901/cutscene_char067901.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "服装 02",
+     "idle": {
+      "skeleton": "spine/char/char067902/char067902.skel",
+      "atlas": "spine/char/char067902/char067902.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char067902/cutscene_char067902.skel",
+      "atlas": "spine/cutscenes/cutscene_char067902/cutscene_char067902.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "0680",
+   "name": "Char 0680",
+   "aka": "",
+   "costumes": [
+    {
+     "label": "服装 01",
+     "idle": {
+      "skeleton": "spine/char/char068001/char068001.skel",
+      "atlas": "spine/char/char068001/char068001.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char068001/cutscene_char068001.skel",
+      "atlas": "spine/cutscenes/cutscene_char068001/cutscene_char068001.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "1001",
+   "name": "君特",
+   "aka": "Gynt",
+   "costumes": [
+    {
+     "label": "卢戈猎人",
+     "idle": {
+      "skeleton": "spine/char/char100101/char100101.skel",
+      "atlas": "spine/char/char100101/char100101.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "1002",
+   "name": "弗雷德",
+   "aka": "Fred",
+   "costumes": [
+    {
+     "label": "卢戈卫队",
+     "idle": {
+      "skeleton": "spine/char/char100201/char100201.skel",
+      "atlas": "spine/char/char100201/char100201.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "1003",
+   "name": "莉西安",
+   "aka": "Lisianne",
+   "costumes": [
+    {
+     "label": "流浪神职者",
+     "idle": {
+      "skeleton": "spine/char/char100301/char100301.skel",
+      "atlas": "spine/char/char100301/char100301.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "1004",
+   "name": "雷南特",
+   "aka": "Remnunt",
+   "costumes": [
+    {
+     "label": "战斗医生",
+     "idle": {
+      "skeleton": "spine/char/char100401/char100401.skel",
+      "atlas": "spine/char/char100401/char100401.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "1005",
+   "name": "威格",
+   "aka": "Wiggle",
+   "costumes": [
+    {
+     "label": "炸弹狂",
+     "idle": {
+      "skeleton": "spine/char/char100501/char100501.skel",
+      "atlas": "spine/char/char100501/char100501.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char100501/cutscene_char100501.skel",
+      "atlas": "spine/cutscenes/cutscene_char100501/cutscene_char100501.atlas"
+     },
+     "bg": [
+      "bg/100501_1.png",
+      "bg/100501_10.png",
+      "bg/100501_11.png",
+      "bg/100501_12.png",
+      "bg/100501_2.png",
+      "bg/100501_3.png",
+      "bg/100501_4.png",
+      "bg/100501_5.png",
+      "bg/100501_6.png",
+      "bg/100501_7.png",
+      "bg/100501_8.png",
+      "bg/100501_9.png"
+     ]
+    },
+    {
+     "label": "炸弹帽衫",
+     "idle": {
+      "skeleton": "spine/char/char100502/char100502.skel",
+      "atlas": "spine/char/char100502/char100502.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "1006",
+   "name": "卢克雷齐亚",
+   "aka": "Lucrezia",
+   "costumes": [
+    {
+     "label": "诱惑之翼",
+     "idle": {
+      "skeleton": "spine/char/char100601/char100601.skel",
+      "atlas": "spine/char/char100601/char100601.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "1008",
+   "name": "维尔尼",
+   "aka": "Bernie",
+   "costumes": [
+    {
+     "label": "侠盗少女",
+     "idle": {
+      "skeleton": "spine/char/char100801/char100801.skel",
+      "atlas": "spine/char/char100801/char100801.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "1011",
+   "name": "赛尔",
+   "aka": "Seir",
+   "costumes": [
+    {
+     "label": "恶魔之女",
+     "idle": {
+      "skeleton": "spine/char/char101101/char101101.skel",
+      "atlas": "spine/char/char101101/char101101.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char101101/cutscene_char101101.skel",
+      "atlas": "spine/cutscenes/cutscene_char101101/cutscene_char101101.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "B级偶像",
+     "idle": {
+      "skeleton": "spine/char/char101102/char101102.skel",
+      "atlas": "spine/char/char101102/char101102.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char101102/cutscene_char101102.skel",
+      "atlas": "spine/cutscenes/cutscene_char101102/cutscene_char101102.atlas"
+     },
+     "bg": null
+    },
+    {
+     "label": "新进员工",
+     "idle": {
+      "skeleton": "spine/char/char101103/char101103.skel",
+      "atlas": "spine/char/char101103/char101103.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char101103/cutscene_char101103.skel",
+      "atlas": "spine/cutscenes/cutscene_char101103/cutscene_char101103.atlas"
+     },
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "1012",
+   "name": "杰登",
+   "aka": "Jayden",
+   "costumes": [
+    {
+     "label": "美少女信奉者",
+     "idle": {
+      "skeleton": "spine/char/char101201/char101201.skel",
+      "atlas": "spine/char/char101201/char101201.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    },
+    {
+     "label": "漫画研究社",
+     "idle": {
+      "skeleton": "spine/char/char101202/char101202.skel",
+      "atlas": "spine/char/char101202/char101202.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "1013",
+   "name": "艾玛",
+   "aka": "Emma",
+   "costumes": [
+    {
+     "label": "麻烦问题儿童",
+     "idle": {
+      "skeleton": "spine/char/char101301/char101301.skel",
+      "atlas": "spine/char/char101301/char101301.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    },
+    {
+     "label": "校园女王",
+     "idle": {
+      "skeleton": "spine/char/char101302/char101302.skel",
+      "atlas": "spine/char/char101302/char101302.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "1014",
+   "name": "莎美",
+   "aka": "Samay",
+   "costumes": [
+    {
+     "label": "深情解放者",
+     "idle": {
+      "skeleton": "spine/char/char101401/char101401.skel",
+      "atlas": "spine/char/char101401/char101401.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    },
+    {
+     "label": "和善学生",
+     "idle": {
+      "skeleton": "spine/char/char101402/char101402.skel",
+      "atlas": "spine/char/char101402/char101402.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "1015",
+   "name": "克莱",
+   "aka": "Kry",
+   "costumes": [
+    {
+     "label": "解放掠夺者",
+     "idle": {
+      "skeleton": "spine/char/char101501/char101501.skel",
+      "atlas": "spine/char/char101501/char101501.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    },
+    {
+     "label": "粗暴学生",
+     "idle": {
+      "skeleton": "spine/char/char101502/char101502.skel",
+      "atlas": "spine/char/char101502/char101502.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "1016",
+   "name": "西利亚",
+   "aka": "Celia",
+   "costumes": [
+    {
+     "label": "诅咒之星",
+     "idle": {
+      "skeleton": "spine/char/char101601/char101601.skel",
+      "atlas": "spine/char/char101601/char101601.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "1032",
+   "name": "卡森",
+   "aka": "Carlson",
+   "costumes": [
+    {
+     "label": "佣兵骑士",
+     "idle": {
+      "skeleton": "spine/char/char103201/char103201.skel",
+      "atlas": "spine/char/char103201/char103201.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char103201/cutscene_char103201.skel",
+      "atlas": "spine/cutscenes/cutscene_char103201/cutscene_char103201.atlas"
+     },
+     "bg": [
+      "bg/103201_1.png",
+      "bg/103201_2.png",
+      "bg/103201_3.png",
+      "bg/103201_4.png",
+      "bg/103201_5.png",
+      "bg/103201_6.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "1033",
+   "name": "黎迪雅",
+   "aka": "Lydia",
+   "costumes": [
+    {
+     "label": "见习枪兵",
+     "idle": {
+      "skeleton": "spine/char/char103301/char103301.skel",
+      "atlas": "spine/char/char103301/char103301.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char103301/cutscene_char103301.skel",
+      "atlas": "spine/cutscenes/cutscene_char103301/cutscene_char103301.atlas"
+     },
+     "bg": [
+      "bg/103301_1.png",
+      "bg/103301_2.png",
+      "bg/103301_4.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "1034",
+   "name": "莉兹内",
+   "aka": "Rigenette",
+   "costumes": [
+    {
+     "label": "小猎人",
+     "idle": {
+      "skeleton": "spine/char/char103401/char103401.skel",
+      "atlas": "spine/char/char103401/char103401.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char103401/cutscene_char103401.skel",
+      "atlas": "spine/cutscenes/cutscene_char103401/cutscene_char103401.atlas"
+     },
+     "bg": [
+      "bg/103401_1.png",
+      "bg/103401_2.png",
+      "bg/103401_3.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "1035",
+   "name": "比阿特丽丝",
+   "aka": "Beatrice",
+   "costumes": [
+    {
+     "label": "部族大战士",
+     "idle": {
+      "skeleton": "spine/char/char103501/char103501.skel",
+      "atlas": "spine/char/char103501/char103501.atlas"
+     },
+     "cutscene": {
+      "skeleton": "spine/cutscenes/cutscene_char103501/cutscene_char103501.skel",
+      "atlas": "spine/cutscenes/cutscene_char103501/cutscene_char103501.atlas"
+     },
+     "bg": [
+      "bg/103501_1.png",
+      "bg/103501_2.png",
+      "bg/103501_4.png",
+      "bg/103501_5.png",
+      "bg/103501_8.png"
+     ]
+    }
+   ]
+  },
+  {
+   "id": "1036",
+   "name": "玛丽亚",
+   "aka": "Maria",
+   "costumes": [
+    {
+     "label": "大魔法师",
+     "idle": {
+      "skeleton": "spine/char/char103601/char103601.skel",
+      "atlas": "spine/char/char103601/char103601.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  },
+  {
+   "id": "1037",
+   "name": "阿里内斯",
+   "aka": "Arines",
+   "costumes": [
+    {
+     "label": "活力祭司",
+     "idle": {
+      "skeleton": "spine/char/char103701/char103701.skel",
+      "atlas": "spine/char/char103701/char103701.atlas"
+     },
+     "cutscene": null,
+     "bg": null
+    }
+   ]
+  }
+ ]
+}
