@@ -21,7 +21,12 @@ body[data-companion] .toast-root { bottom: 82px; }
 }
 .companion-player .spine-player,
 .companion-player .spine-player-canvas { width: 100%; height: 100%; background: transparent !important; pointer-events: none; }
-.companion-player > .spine-player {
+.companion-layer {
+  position: absolute; inset: 0; opacity: 0; pointer-events: none;
+  transition: opacity 420ms ease-in-out;
+}
+.companion-layer.is-visible { opacity: 1; }
+.companion-layer > .spine-player {
   /* Center the camera in the space left by the navigation. Keep the fade on
      the outer rail, and give wide actions enough canvas to retain their scale. */
   position: absolute !important; top: 0;
