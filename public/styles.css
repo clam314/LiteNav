@@ -327,7 +327,10 @@ input, select, textarea { min-width: 0; }
 @keyframes toast-enter { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
 @media (min-width: 1280px) {
-  body[data-companion="on"] .workspace { padding-right: calc(var(--companion-width, 260px) + 20px); }
+  body[data-companion="on"] .page-content {
+    position: relative; z-index: 1;
+    width: calc(100% - var(--companion-space, 300px));
+  }
 }
 @media (min-width: 1800px) {
   :root { --sidebar-width: 200px; }
