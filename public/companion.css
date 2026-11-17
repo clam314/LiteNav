@@ -1,3 +1,5 @@
+/* Registered so scripts read the resolved width in pixels. */
+@property --companion-space { syntax: '<length>'; inherits: true; initial-value: 0px; }
 :root {
   --companion-width: 52vw;
   /* Overlap the faded artwork with the content instead of reserving its full width. */
@@ -17,8 +19,8 @@ body[data-companion] .toast-root { bottom: 82px; }
   position: absolute; inset: 0;
   overflow: hidden; pointer-events: none;
   /* Fade only the artwork; controls and labels stay sharp and readable. */
-  -webkit-mask-image: linear-gradient(90deg, transparent, rgb(0 0 0 / 12%) 22%, rgb(0 0 0 / 85%) 48%, #000 65%), linear-gradient(0deg, transparent, #000 10%, #000 96%, transparent);
-  mask-image: linear-gradient(90deg, transparent, rgb(0 0 0 / 12%) 22%, rgb(0 0 0 / 85%) 48%, #000 65%), linear-gradient(0deg, transparent, #000 10%, #000 96%, transparent);
+  -webkit-mask-image: linear-gradient(90deg, transparent, rgb(0 0 0 / 12%) 22%, rgb(0 0 0 / 85%) 48%, #000 65%), linear-gradient(0deg, transparent, #000 3%, #000 96%, transparent);
+  mask-image: linear-gradient(90deg, transparent, rgb(0 0 0 / 12%) 22%, rgb(0 0 0 / 85%) 48%, #000 65%), linear-gradient(0deg, transparent, #000 3%, #000 96%, transparent);
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
 }
@@ -30,20 +32,8 @@ body[data-companion] .toast-root { bottom: 82px; }
 }
 .companion-layer.is-visible { opacity: 1; }
 .companion-layer > .spine-player {
-  /* Center the camera in the space left by the navigation. Keep the fade on
-     the outer rail, and give wide actions enough canvas to retain their scale. */
-  position: absolute !important; top: 0;
-  left: calc(100% - var(--companion-space) / 2); transform: translateX(-50%);
-  width: max(100%, calc((100dvh - 64px) * var(--companion-art-aspect, 1)));
-}
-.companion-layer.fit-artwork > .spine-player {
-  /* Keep the complete shot, including its props, inside the visible rail. */
-  left: auto; right: 0; transform: none; width: max(75%, var(--companion-space));
-  /* Size the canvas to the shot and sit it on the bottom edge. A full-height
-     canvas would letterbox wide shots and leave the cropped base floating.
-     The Spine player sets an inline height:100%, hence !important. */
-  top: auto; bottom: 0; height: auto !important; max-height: 100%;
-  aspect-ratio: var(--companion-art-aspect, 1);
+  /* The canvas fills the rail; layoutCamera() places the shot inside it. */
+  position: absolute !important; inset: 0;
 }
 .companion-player .spine-player-error { display: none !important; }
 .companion-caption {

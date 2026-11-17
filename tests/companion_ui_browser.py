@@ -50,14 +50,16 @@ CATALOG["characters"].append({"id": "0001", "name": "拉德尔", "costumes": [{
 # keeping this test independent of GPU availability and external model servers.
 RENDERER = """(() => {
   HTMLCanvasElement.prototype.getContext = () => ({ getExtension: () => ({ loseContext() {} }) });
-  const idle = { name: 'idle', duration: 4 };
+  const idle = { name: 'idle', duration: 4, apply() {} };
   window.spine = { SpinePlayer: class {
     constructor(parent, config) {
       this.config = config;
       this.dom = document.createElement('div'); this.dom.className = 'spine-player';
       this.dom.append(document.createElement('canvas')); parent.append(this.dom);
       this.context = { gl: { getExtension: () => ({ loseContext() {} }) } };
-      this.skeleton = { data: { animations: [idle] }, setToSetupPose() {}, updateWorldTransform() {} };
+      this.canvas = this.dom.firstChild;
+      this.skeleton = { data: { animations: [idle], findAnimation: () => null }, drawOrder: [], color: { a: 1 },
+        setToSetupPose() {}, updateWorldTransform() {} };
       this.animationState = { data: { skeletonData: { findAnimation: () => null } },
         clearTracks() {}, apply() {}, update() {}, getCurrent: () => ({ animation: idle }) };
       requestAnimationFrame(() => {
@@ -197,7 +199,7 @@ def run_cases(browser, origin, case_filter=None):
 
     def saved_male(page):
         page.wait_for_function("document.querySelector('#companion-root').dataset.state === 'ready'")
-        open_mEnu(page)
+        open_menu(page)
         values = page.get_by_label("指定人物与服装", exact=True).locator("option").evaluate_all("items => items.map(item => item.value)")
         assert values and all("char000101" not in value for value in values)
         saved = page.evaluate(f"JSON.parse(localStorage.getItem({json.dumps(PREFERENCE_KEY)}))")

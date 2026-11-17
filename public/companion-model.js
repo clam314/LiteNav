@@ -99,11 +99,11 @@ export function selectSkillAnimation(animations, savedName, presentation) {
   return animations.find(animation => animation.name === name) || animations[0];
 }
 
-// Lowest point drawn by a visible region or mesh while the animations play.
+// Extent drawn by visible regions and meshes while the animations play.
 // Skeleton bounds also count transparent attachments, and reference viewports
 // often reserve floor space for a backdrop this page does not draw.
-export function visibleArtBottom(skeleton, animations, steps = 60) {
-  let bottom = Infinity;
+export function visibleArtBounds(skeleton, animations, steps = 60) {
+  const bounds = { minX: Infinity, maxX: -Infinity, minY: Infinity };
   let vertices = new Float32Array(1024);
   for (const animation of animations) {
     if (!animation) continue;
@@ -127,21 +127,31 @@ export function visibleArtBottom(skeleton, animations, steps = 60) {
         } else {
           attachment.computeWorldVertices(slot, vertices, 0, 2);
         }
-        for (let v = 1; v < count; v += 2) if (vertices[v] < bottom) bottom = vertices[v];
+        for (let v = 0; v < count; v += 2) {
+          bounds.minX = Math.min(bounds.minX, vertices[v]);
+          bounds.maxX = Math.max(bounds.maxX, vertices[v]);
+          bounds.minY = Math.min(bounds.minY, vertices[v + 1]);
+        }
       }
     }
   }
   skeleton.setToSetupPose();
-  return bottom;
+  return bounds;
 }
 
-// Raise an empty viewport floor to the artwork so the figure meets the rail's
-// bottom edge. The top and sides keep the preset's intended crop.
-export function trimViewportFloor(box, artBottom) {
-  if (!Number.isFinite(artBottom) || artBottom <= box.y) return box;
-  const height = box.y + box.height - artBottom;
-  if (height < box.height * .3) return box;
-  return { ...box, y: artBottom, height };
+// Drop empty floor and side margins so the figure meets the rail's bottom
+// edge and keeps its size when the view must fit a narrower rail. Edges that
+// already cut through the artwork, and the top headroom, keep the preset crop.
+export function trimViewportToArt(box, art) {
+  const left = Number.isFinite(art?.minX) ? Math.max(box.x, art.minX) : box.x;
+  const right = Number.isFinite(art?.maxX) ? Math.min(box.x + box.width, art.maxX) : box.x + box.width;
+  const bottom = Number.isFinite(art?.minY) ? Math.max(box.y, art.minY) : box.y;
+  const top = box.y + box.height;
+  // A nearly empty view is not shrunk around a stray detail.
+  const width = right - left >= box.width * .3 ? right - left : box.width;
+  const height = top - bottom >= box.height * .3 ? top - bottom : box.height;
+  if (width === box.width && height === box.height) return box;
+  return { ...box, x: width === box.width ? box.x : left, y: height === box.height ? box.y : bottom, width, height };
 }
 
 export function configureViewports(player, animations, mode, presentation) {
@@ -161,9 +171,35 @@ export function configureViewports(player, animations, mode, presentation) {
       box = {};
       player.calculateAnimationViewport(animation, box);
     }
-    box = trimViewportFloor(box, visibleArtBottom(player.skeleton, [animation, motion]));
+    box = trimViewportToArt(box, visibleArtBounds(player.skeleton, [animation, motion]));
+    // The floor is now the artwork (or cuts through it); padding would lift it off the edge.
+    box.padBottom = 0;
     if (mode === 'portrait') Object.assign(player.config.viewport, box);
     else player.config.viewport.animations[animation.name] = { ...box };
   }
   player.skeleton.setToSetupPose();
+}
+
+// The camera box Spine fits to the canvas, padding included.
+export function paddedView(viewport) {
+  return {
+    x: viewport.x - viewport.padLeft, y: viewport.y - viewport.padBottom,
+    width: viewport.width + viewport.padLeft + viewport.padRight,
+    height: viewport.height + viewport.padBottom + viewport.padTop,
+  };
+}
+
+// Fit the view inside the rail, stand it on the bottom edge and center it in
+// the space left by the navigation without passing the right edge. Returns the
+// camera covering the whole rail canvas at that scale.
+export function placeView(view, rail, space, maxWidth = rail.width) {
+  const scale = Math.min(maxWidth / view.width, rail.height / view.height);
+  const width = view.width * scale;
+  const right = Math.max(0, space / 2 - width / 2);
+  const left = rail.width - right - width;
+  return {
+    x: view.x - left / scale, y: view.y,
+    width: rail.width / scale, height: rail.height / scale,
+    padLeft: 0, padRight: 0, padTop: 0, padBottom: 0,
+  };
 }

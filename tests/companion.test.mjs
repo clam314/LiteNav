@@ -14,8 +14,10 @@ import {
   selectSkillAnimation,
   isLoopingSkill,
   configureViewports,
-  visibleArtBottom,
-  trimViewportFloor,
+  visibleArtBounds,
+  trimViewportToArt,
+  paddedView,
+  placeView,
 } from '../public/companion-model.js';
 
 const idle = skeleton => ({ skeleton });
@@ -114,6 +116,8 @@ test('atlas page parsing supports BOM, CRLF, multiple pages and region names end
 });
 
 const animations = names => names.map(name => ({ name, duration: 2, apply() {} }));
+// Configured views stand on the rail's bottom edge without extra padding.
+const floored = box => ({ ...box, padBottom: 0 });
 // A skeleton without drawn attachments leaves every viewport floor unchanged.
 const stillSkeleton = (overrides = {}) => ({
   data: { findAnimation() { return null; } }, drawOrder: [], color: { a: 1 },
@@ -192,7 +196,7 @@ test('portrait framing uses the runtime animation bounds', () => {
     },
   };
   configureViewports(player, [animation], 'portrait');
-  assert.deepEqual(viewport, { padLeft: 0, x: -80, y: -200, width: 160, height: 400 });
+  assert.deepEqual(viewport, { padLeft: 0, x: -80, y: -200, width: 160, height: 400, padBottom: 0 });
 });
 
 test('reference skill viewports keep their exact per-action camera coordinates', () => {
@@ -204,8 +208,8 @@ test('reference skill viewports keep their exact per-action camera coordinates',
     calculateAnimationViewport() { assert.fail('an exact reference camera must not be replaced with sampled bounds'); },
   };
   configureViewports(player, animations(['loop_2', 'loop']), 'skill', gamekeePresentation);
-  assert.deepEqual(viewport.animations.loop_2, gamekeePresentation.skills[0].viewport);
-  assert.deepEqual(viewport.animations.loop, gamekeePresentation.skills[1].viewport);
+  assert.deepEqual(viewport.animations.loop_2, floored(gamekeePresentation.skills[0].viewport));
+  assert.deepEqual(viewport.animations.loop, floored(gamekeePresentation.skills[1].viewport));
   assert.notEqual(viewport.animations.loop_2.width, viewport.animations.loop.width,
     'reference actions intentionally use distinct scales, not a shared median');
   viewport.animations.loop_2.x = 0;
@@ -229,7 +233,7 @@ test('unconfigured skills use complete per-animation bounds without pooling unre
   };
   configureViewports(player, animations(['cut_A', 'cut_B']), 'skill');
   assert.deepEqual(calls, ['cut_A', 'cut_B']);
-  assert.deepEqual(player.config.viewport.animations, bounds);
+  assert.deepEqual(player.config.viewport.animations, { cut_A: floored(bounds.cut_A), cut_B: floored(bounds.cut_B) });
 });
 
 test('invalid reference bounds fall back to the selected animation bounds', () => {
@@ -248,7 +252,7 @@ test('invalid reference bounds fall back to the selected animation bounds', () =
     skills: [{ animation: 'loop_2', viewport: { x: 0, y: 0, width: 0, height: Infinity } }],
   });
   assert.equal(calculated, true);
-  assert.deepEqual(player.config.viewport.animations.loop_2, fallback);
+  assert.deepEqual(player.config.viewport.animations.loop_2, floored(fallback));
 });
 
 test('bundled GameKee profile retains the reported costume actions and exact cameras', () => {
@@ -294,8 +298,8 @@ test('Liatris 97 restores a saved prop selection to the complete shot and frames
   configureViewports({ config: { viewport }, skeleton: stillSkeleton(),
     calculateAnimationViewport(animation, box) { assert.equal(animation, options[1]); Object.assign(box, full); },
   }, options, 'skill', liatris);
-  assert.deepEqual(viewport.animations.loop, full);
-  assert.deepEqual(viewport.animations.loop_2, liatris.skills[0].viewport);
+  assert.deepEqual(viewport.animations.loop, floored(full));
+  assert.deepEqual(viewport.animations.loop_2, floored(liatris.skills[0].viewport));
 });
 
 
@@ -367,15 +371,20 @@ test('visible artwork bounds ignore transparent and non-drawing attachments acro
     ],
   });
   const animation = { duration: 2, apply(target, time) { clock.value = -100 - time * 50; } };
-  assert.equal(visibleArtBottom(skeleton, [animation, null]), -240);
+  assert.deepEqual(visibleArtBounds(skeleton, [animation, null]), { minX: 0, maxX: 20, minY: -240 });
 });
 
-test('empty viewport floors rise to the artwork without moving the top or sides', () => {
+test('empty floor and side margins shrink to the artwork while the top keeps its headroom', () => {
   const box = { x: -100, y: -1000, width: 400, height: 1200, padTop: '5%' };
-  assert.deepEqual(trimViewportFloor(box, -600), { x: -100, y: -600, width: 400, height: 800, padTop: '5%' });
-  assert.equal(trimViewportFloor(box, -1100), box, 'artwork cropped by the floor keeps the reference crop');
-  assert.equal(trimViewportFloor(box, Infinity), box);
-  assert.equal(trimViewportFloor(box, 150), box, 'a nearly empty view is not shrunk around a stray detail');
+  const art = (minX, maxX, minY) => ({ minX, maxX, minY });
+  assert.deepEqual(trimViewportToArt(box, art(-500, 500, -600)), { x: -100, y: -600, width: 400, height: 800, padTop: '5%' },
+    'artwork wider than the view keeps the reference side crop');
+  assert.deepEqual(trimViewportToArt(box, art(-50, 250, -1100)), { x: -50, y: -1000, width: 300, height: 1200, padTop: '5%' },
+    'artwork cropped by the floor keeps the reference floor');
+  assert.deepEqual(trimViewportToArt(box, art(0, 500, -2000)), { x: 0, y: -1000, width: 300, height: 1200, padTop: '5%' });
+  assert.equal(trimViewportToArt(box, art(Infinity, -Infinity, Infinity)), box);
+  assert.equal(trimViewportToArt(box, art(-100, 300, 150)), box, 'a nearly empty view is not shrunk around a stray detail');
+  assert.equal(trimViewportToArt(box, art(0, 20, -1000)), box);
 });
 
 test('portrait framing includes the motion reaction before raising the floor', () => {
@@ -388,5 +397,24 @@ test('portrait framing includes the motion reaction before raising the floor', (
     skeleton: stillSkeleton({ drawOrder: [drawnSlot(clock)], data: { findAnimation: name => name === 'motion' ? motion : null } }),
   };
   configureViewports(player, [idle], 'portrait', { portrait: { animation: 'idle', viewport: { x: -80, y: -400, width: 160, height: 500 } } });
-  assert.deepEqual(viewport, { x: -80, y: -150, width: 160, height: 250 });
+  assert.deepEqual(viewport, { x: -80, y: -150, width: 160, height: 250, padBottom: 0 });
+});
+
+test('the rail camera stands the padded view on the bottom edge beside the navigation', () => {
+  const view = paddedView({ x: 0, y: 100, width: 180, height: 400, padLeft: 10, padRight: 10, padTop: 0, padBottom: 0 });
+  assert.deepEqual(view, { x: -10, y: 100, width: 200, height: 400 });
+  const rail = { width: 800, height: 800 };
+  // Height binds: 2 px per unit, the 400 px wide view is centered 300 px from the right edge.
+  let camera = placeView(view, rail, 600);
+  assert.equal(camera.width / rail.width, camera.height / rail.height, 'the camera keeps the canvas ratio');
+  assert.deepEqual([camera.x, camera.y, camera.width, camera.height], [-160, 100, 400, 400]);
+  // A narrower space than the view keeps it against the right edge instead of past it.
+  camera = placeView(view, rail, 300);
+  assert.equal(camera.x + camera.width, view.x + view.width);
+  // Width binds in a narrow rail: the whole view still fits and stays on the floor.
+  camera = placeView(view, { width: 300, height: 900 }, 300);
+  assert.deepEqual([camera.x, camera.y, camera.width, camera.height], [-10, 100, 200, 600]);
+  // A capped width shrinks the view instead of spanning the whole rail.
+  camera = placeView(view, rail, 600, 200);
+  assert.equal(rail.width / camera.width, 1);
 });

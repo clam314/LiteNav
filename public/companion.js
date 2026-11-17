@@ -1,4 +1,4 @@
-import { PREFERENCES_KEY, LEGACY_KEY, normalizePreferences, costumeKey, availableCharacters,
+import { PREFERENCES_KEY, LEGACY_KEY, normalizePreferences, costumeKey, availableCharacters, paddedView, placeView,
   chooseCharacter, atlasPages, playableAnimations, configureViewports, presentationForCostume,
   isLoopingSkill, selectSkillAnimation } from './companion-model.js';
 import { createCompanionStage } from './companion-stage.js';
@@ -207,6 +207,21 @@ async function loadCharacter(catalog, selection, mode, signal) {
     for (const url of textureUrls) rawDataURIs[new URL(url).pathname] = rawDataURIs[url];
   }
   return { skelUrl, atlasUrl, rawDataURIs, premultipliedAlpha: /^pma:\s*true\s*$/m.test(atlas) };
+}
+
+// Spine fits its whole canvas to the camera. The canvas fills the rail, and the
+// camera is widened around the preset view so that view stands on the bottom
+// edge while artwork beyond it keeps drawing toward the faded rail edges.
+function layoutCamera(record, player) {
+  const width = player.canvas.clientWidth;
+  const height = player.canvas.clientHeight;
+  const key = width + 'x' + height;
+  if (!width || !height || key === record.railKey) return;
+  record.railKey = key;
+  const space = parseFloat(getComputedStyle(record.layer).getPropertyValue('--companion-space')) || width / 2;
+  // Wide full shots stay out of the strongest left fade.
+  const maxWidth = record.layer.classList.contains('fit-artwork') ? Math.max(width * .75, space) : width;
+  Object.assign(player.currentViewport, placeView(record.view, { width, height }, space, maxWidth));
 }
 
 export function initCompanion() {
@@ -589,9 +604,9 @@ export function initCompanion() {
               if (record.mode === 'portrait') {
                 record.portraitMotion = queuePortraitMotion(loadedPlayer.animationState, record.animation);
               }
-              const view = loadedPlayer.currentViewport;
-              const aspect = (view.width + view.padLeft + view.padRight) / (view.height + view.padTop + view.padBottom);
-              if (Number.isFinite(aspect) && aspect > 0) layer.style.setProperty('--companion-art-aspect', String(aspect));
+              // The camera is laid out against the rail on every frame from here on.
+              record.view = paddedView(loadedPlayer.currentViewport);
+              record.railKey = '';
               if (!motionAllowed && record.mode === 'skill') loadedPlayer.animationState.update(record.animation.duration * .35);
               loadedPlayer.animationState.apply(loadedPlayer.skeleton);
               loadedPlayer.skeleton.updateWorldTransform();
@@ -621,6 +636,8 @@ export function initCompanion() {
             finish(resolve);
           },
           frame(loadedPlayer, delta) {
+            // Runs before the camera is set for this frame, paused or not.
+            if (record.view) layoutCamera(record, loadedPlayer);
             if (stage.active !== record || stage.pending || record.advancing || delta <= 0) return;
             record.elapsed += delta;
             if (record.mode === 'portrait') {
