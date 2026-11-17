@@ -5,6 +5,9 @@
 }
 
 #companion-root { pointer-events: none; }
+.companion-controls {
+  position: fixed; inset: 0; z-index: 40; isolation: isolate; pointer-events: none;
+}
 body[data-companion] .toast-root { bottom: 82px; }
 .companion-rail {
   position: fixed; z-index: 0; top: 64px; right: 0; bottom: 0; width: var(--companion-width);
@@ -135,6 +138,11 @@ body[data-companion] .toast-root { bottom: 82px; }
 }
 .companion-menu-actions button:hover:not(:disabled) { color: #e1eaff; border-color: #627cae; background: #293d5c; }
 .companion-menu-actions .companion-pause { color: #a3b2cc; background: #1b2739; border-color: #35435a; }
+.companion-hide {
+  width: 100%; min-height: 44px; margin-top: 10px; padding: 9px 12px;
+  border: 1px solid #48556c; border-radius: 8px; color: #c5cfe1; background: #263044; font-size: 12px;
+}
+.companion-hide:hover:not(:disabled) { color: #eff4ff; border-color: #7787a5; background: #34415a; }
 .companion-menu-note { display: block; margin-top: 12px; color: #7f8da6; font-size: 11px; line-height: 1.65; overflow-wrap: anywhere; }
 .companion-toggle:focus-visible,
 .companion-menu :is(button, input, select):focus-visible,

@@ -47,6 +47,22 @@ class DataFixture(unittest.TestCase):
 
 
 class StoreCase(DataFixture):
+    def test_existing_state_and_health_ignore_replaced_default_seed(self):
+        service = self.enable_service()
+        self.store.record_check(service, {"ok": False, "message": "测试异常"}, 1)
+        state_before = self.store.state()
+        health_before = self.store.health()
+        self.seed.write_text((server.ROOT / "seed.json").read_text("utf-8"), "utf-8")
+        reopened = server.Store(self.directory / "data", self.seed)
+        self.assertEqual(reopened.state(), state_before)
+        self.assertEqual(reopened.health(), health_before)
+
+    def test_existing_state_does_not_read_invalid_replacement_seed(self):
+        state_before = self.store.state()
+        self.seed.write_text("not valid json", "utf-8")
+        reopened = server.Store(self.directory / "data", self.seed)
+        self.assertEqual(reopened.state(), state_before)
+
     def test_saved_config_survives_reopen(self):
         state = self.store.state()
         state["links"][0]["name"] = "我的代码"
@@ -180,6 +196,30 @@ class StoreCase(DataFixture):
             check.assert_called_once_with("nas")
         finally:
             monitor.close()
+
+
+class DefaultSeedCase(unittest.TestCase):
+    def test_fresh_install_uses_generic_public_defaults_without_services(self):
+        with tempfile.TemporaryDirectory() as directory:
+            store = server.Store(directory)
+            shipped = server.validate_state(json.loads((server.ROOT / "seed.json").read_text("utf-8")))
+            self.assertEqual(store.state(), {"revision": 1, **shipped})
+            self.assertTrue(shipped["links"])
+            self.assertEqual(store.health(), {"services": {}})
+            for item in shipped["links"]:
+                with self.subTest(resource=item["id"]):
+                    parsed = server.urlsplit(item["url"])
+                    self.assertEqual(item["kind"], "website")
+                    self.assertFalse(item["monitorEnabled"])
+                    self.assertEqual(parsed.scheme, "https")
+                    self.assertFalse(server.local_hostname(parsed.hostname or ""))
+                    self.assertIsNone(parsed.username)
+                    self.assertIsNone(parsed.password)
+                    self.assertIn(parsed.path, ("", "/"))
+                    self.assertEqual(parsed.query, "")
+                    self.assertEqual(parsed.fragment, "")
+                    for field in ("server", "container", "serviceGroup", "description"):
+                        self.assertNotIn(field, item)
 
 
 class MetadataCase(unittest.TestCase):

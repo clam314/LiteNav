@@ -1,5 +1,6 @@
 services:
   guihang:
+    image: ${GUIHANG_IMAGE:-ghcr.io/clam314/guihang:latest}
     build: .
     ports:
       - "8765:8765"

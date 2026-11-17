@@ -84,6 +84,45 @@ function writePreferences(preferences) {
   catch { /* The controls still work when browser storage is blocked. */ }
 }
 
+function mediaQuery(query, fallback) {
+  try {
+    const media = window.matchMedia(query);
+    return {
+      get matches() { return media.matches; },
+      addEventListener(_type, listener) {
+        if (media.addEventListener) media.addEventListener('change', listener);
+        else media.addListener?.(listener);
+      },
+      removeEventListener(_type, listener) {
+        if (media.removeEventListener) media.removeEventListener('change', listener);
+        else media.removeListener?.(listener);
+      },
+    };
+  } catch {
+    // Media-query support must not prevent the independent settings controls
+    // from initializing. Keep desktop sizing responsive in this fallback too.
+    const listeners = new Set();
+    let previous = fallback();
+    const resize = () => {
+      const matches = fallback();
+      if (matches === previous) return;
+      previous = matches;
+      listeners.forEach(listener => listener({ matches }));
+    };
+    return {
+      get matches() { return fallback(); },
+      addEventListener(_type, listener) {
+        listeners.add(listener);
+        if (listeners.size === 1) window.addEventListener('resize', resize);
+      },
+      removeEventListener(_type, listener) {
+        listeners.delete(listener);
+        if (!listeners.size) window.removeEventListener('resize', resize);
+      },
+    };
+  }
+}
+
 function disposePlayer(player) {
   if (!player || disposedPlayers.has(player)) return;
   disposedPlayers.add(player);
@@ -187,6 +226,7 @@ export function initCompanion() {
         <span class="companion-name"></span><span class="companion-label"></span><span class="companion-caption-mode"></span>
       </div>
     </aside>
+    <div class="companion-controls">
     <button class="companion-toggle" type="button" aria-expanded="false" aria-controls="companion-menu" aria-label="角色设置">
       <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
         <path d="m12 3 2.5 5.5 6 1-4.4 4.3 1 6.2-5.1-2.8-5.1 2.8 1-6.2L3.5 9.5l6-1L12 3Z"/>
@@ -202,10 +242,11 @@ export function initCompanion() {
       <label class="companion-character-picker"><span>指定人物与服装 · 选择后关闭随机</span><select aria-label="指定人物与服装" disabled><option>正在读取角色…</option></select></label>
       <label class="companion-character-picker companion-skill-picker" hidden><span>技能动作</span><select aria-label="技能动作" disabled><option>载入技能后可选择</option></select></label>
       <div class="companion-menu-actions"><button class="companion-shuffle" type="button" disabled>换一位</button><button class="companion-pause" type="button" disabled>暂停动画</button></div>
+      <button class="companion-hide" type="button">关闭角色</button>
       <small class="companion-menu-note" role="status" aria-live="polite"></small>
       <div class="companion-menu-recovery companion-menu-actions" hidden><button class="companion-menu-retry" type="button">重试切换</button><button class="companion-menu-fallback" type="button">使用本地立绘</button></div>
       <small class="companion-menu-note">仅在此浏览器记住设置；新角色首次加载需要联网。</small>
-    </section>`;
+    </section></div>`;
 
   const rail = root.querySelector('.companion-rail');
   const host = root.querySelector('.companion-player');
@@ -224,13 +265,43 @@ export function initCompanion() {
   const skillPicker = root.querySelector('[aria-label="技能动作"]');
   const shuffle = root.querySelector('.companion-shuffle');
   const pause = root.querySelector('.companion-pause');
+  const hide = root.querySelector('.companion-hide');
   const note = root.querySelector('.companion-menu-note');
   const recovery = root.querySelector('.companion-menu-recovery');
   const menuRetry = root.querySelector('.companion-menu-retry');
   const menuFallback = root.querySelector('.companion-menu-fallback');
   const switches = [...root.querySelectorAll('[data-option]')];
-  const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
-  const desktop = window.matchMedia('(min-width: 1280px)');
+
+  // Bind the menu before setting up rendering, media queries or asset loading.
+  // A renderer setup failure must never leave a visible, unresponsive button.
+  function setMenu(open, restoreFocus = false) {
+    menu.hidden = !open;
+    toggle.setAttribute('aria-expanded', String(open));
+    if (open) close.focus();
+    else if (restoreFocus) toggle.focus();
+  }
+  const onToggle = () => setMenu(menu.hidden);
+  const onClose = () => setMenu(false, true);
+  const onOutside = event => {
+    if (!menu.hidden && !menu.contains(event.target) && !toggle.contains(event.target)) setMenu(false);
+  };
+  const onKeydown = event => {
+    if (menu.hidden || event.key !== 'Escape') return;
+    event.preventDefault();
+    event.stopImmediatePropagation();
+    setMenu(false, true);
+  };
+  const onFocus = event => {
+    if (!menu.hidden && !root.contains(event.target)) setMenu(false);
+  };
+  toggle.addEventListener('click', onToggle);
+  close.addEventListener('click', onClose);
+  document.addEventListener('pointerdown', onOutside);
+  document.addEventListener('keydown', onKeydown, true);
+  document.addEventListener('focusin', onFocus);
+
+  const reducedMotion = mediaQuery('(prefers-reduced-motion: reduce)', () => true);
+  const desktop = mediaQuery('(min-width: 1280px)', () => window.innerWidth >= 1280);
   let preferences = readPreferences();
   let motionAllowed = !reducedMotion.matches;
   let catalog;
@@ -290,6 +361,7 @@ export function initCompanion() {
     switches.forEach(input => { input.checked = preferences[input.dataset.option]; });
     shuffle.disabled = !catalog;
     pause.disabled = !active;
+    hide.disabled = !enabled();
     pause.textContent = motionAllowed ? '暂停动画' : '播放动画';
     pause.setAttribute('aria-pressed', String(!motionAllowed));
     skillPickerLabel.hidden = !preferences.skills;
@@ -577,36 +649,33 @@ export function initCompanion() {
     }
   }
 
-  function setMenu(open, restoreFocus = false) {
-    menu.hidden = !open;
-    toggle.setAttribute('aria-expanded', String(open));
-    if (open) close.focus();
-    else if (restoreFocus) toggle.focus();
-  }
-  const onToggle = () => setMenu(menu.hidden);
-  const onClose = () => setMenu(false, true);
-  const onOutside = event => {
-    if (!menu.hidden && !menu.contains(event.target) && !toggle.contains(event.target)) setMenu(false);
-  };
-  const onKeydown = event => {
-    if (menu.hidden) return;
-    if (event.key === 'Escape') {
-      event.preventDefault();
-      event.stopImmediatePropagation();
-      setMenu(false, true);
-    }
-  };
-  const onFocus = event => {
-    if (!menu.hidden && !root.contains(event.target)) setMenu(false);
+  const onHide = () => {
+    preferences = { ...preferences, portraits: false, skills: false };
+    writePreferences(preferences);
+    stop();
+    updateUI();
   };
   const onOption = event => {
     const key = event.target.dataset.option;
-    preferences[key] = event.target.checked;
-    writePreferences(preferences);
+    const previous = preferences;
+    preferences = { ...preferences, [key]: event.target.checked };
     if (key === 'portraits' || key === 'skills') {
-      if (catalog) selectCharacter();
+      // Closing must work even if the catalog has no compatible selection.
+      if (!enabled()) { onHide(); return; }
+      try {
+        if (catalog) selectCharacter();
+      } catch (error) {
+        preferences = previous;
+        updateUI();
+        note.textContent = `${error.message}，已保留原设置。`;
+        return;
+      }
+      writePreferences(preferences);
       void start(key === 'skills' && preferences.skills ? 'skill' : initialMode());
-    } else updateUI();
+    } else {
+      writePreferences(preferences);
+      updateUI();
+    }
   };
   const onShuffle = () => { selectCharacter(true); void start(); };
   const onPick = () => {
@@ -639,20 +708,16 @@ export function initCompanion() {
     if (catalog) selectCharacter(false, true);
     void start();
   };
-  toggle.addEventListener('click', onToggle);
-  close.addEventListener('click', onClose);
   retry.addEventListener('click', onRetry);
   fallback.addEventListener('click', onFallback);
   menuRetry.addEventListener('click', onRetry);
   menuFallback.addEventListener('click', onFallback);
   shuffle.addEventListener('click', onShuffle);
   pause.addEventListener('click', onPause);
+  hide.addEventListener('click', onHide);
   picker.addEventListener('change', onPick);
   skillPicker.addEventListener('change', onSkillPick);
   switches.forEach(input => input.addEventListener('change', onOption));
-  document.addEventListener('pointerdown', onOutside);
-  document.addEventListener('keydown', onKeydown, true);
-  document.addEventListener('focusin', onFocus);
   document.addEventListener('visibilitychange', updatePlayback);
   reducedMotion.addEventListener('change', onMotionChange);
   desktop.addEventListener('change', onDesktopChange);
@@ -705,6 +770,7 @@ export function initCompanion() {
       menuFallback.removeEventListener('click', onFallback);
       shuffle.removeEventListener('click', onShuffle);
       pause.removeEventListener('click', onPause);
+      hide.removeEventListener('click', onHide);
       picker.removeEventListener('change', onPick);
       skillPicker.removeEventListener('change', onSkillPick);
       switches.forEach(input => input.removeEventListener('change', onOption));

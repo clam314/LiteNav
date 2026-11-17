@@ -173,6 +173,8 @@ def validate_state(value: object) -> dict:
 
 
 class Store:
+    """Keep user data authoritative; shipped seeds initialize empty stores only."""
+
     def __init__(self, data_dir: Path | str, seed_path: Path | str | None = None):
         self.path = Path(data_dir) / "guihang.sqlite3"
         self.path.parent.mkdir(parents=True, exist_ok=True)
