@@ -337,6 +337,35 @@ input, select, textarea { min-width: 0; }
     width: calc(100% - var(--companion-space, 300px));
   }
 }
+/* Over the companion, cards turn to light frosted glass so the artwork's
+   silhouette shows through. Away from the artwork they look as solid as before.
+   A light blur keeps the figure's shape (heavier blur only leaves a glow).
+   Brighter text and a soft shadow carry legibility over the brightest artwork.
+   Without blur the sharp artwork would sit directly behind text, so those
+   browsers and viewers who reduce transparency keep the opaque cards. */
+@supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
+  @media (min-width: 1280px) {
+    body[data-companion="on"] :is(.favorites-grid, .category-card, .service-card, .settings-card, .empty-state:not(.category-card .empty-state)) {
+      --ink: #f2f4f8;
+      --muted: #bfc4cf;
+      background: rgb(18 21 28 / 58%);
+      text-shadow: 0 1px 3px rgb(0 0 0 / 55%);
+      -webkit-backdrop-filter: blur(5px) saturate(1.1);
+      backdrop-filter: blur(5px) saturate(1.1);
+    }
+  }
+  /* Browsers without this media feature simply keep the glass. */
+  @media (prefers-reduced-transparency: reduce) {
+    body[data-companion="on"] :is(.favorites-grid, .category-card, .service-card, .settings-card, .empty-state:not(.category-card .empty-state)) {
+      --ink: inherit;
+      --muted: inherit;
+      text-shadow: none;
+      background: var(--surface);
+      -webkit-backdrop-filter: none;
+      backdrop-filter: none;
+    }
+  }
+}
 @media (min-width: 1800px) {
   :root { --sidebar-width: 200px; }
   .page-content { padding-left: 30px; padding-right: 30px; }
