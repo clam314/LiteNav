@@ -6,6 +6,7 @@ import { LOCAL_FALLBACK_CHARACTER, LOCAL_FALLBACK_COMMIT } from './companion-fal
 import { isExcludedCharacter } from './companion-exclusions.js';
 import { composeSkillAttachments } from './companion-composition.js';
 import { queuePortraitMotion } from './companion-portrait.js';
+import { createAssetFetcher } from './companion-assets.js';
 const RUNTIME_JS = '/vendor/spine/spine-player-4.1.56.js';
 const RUNTIME_CSS = '/vendor/spine/spine-player-4.1.56.css';
 const CATALOG_URL = '/companion/catalog.json';
@@ -152,6 +153,8 @@ async function fetchResource(url, signal, cache = 'default') {
   return response;
 }
 
+const fetchAsset = createAssetFetcher({ base: ASSET_BASE, fetchResource });
+
 function readDataURI(blob, signal) {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -193,20 +196,26 @@ async function loadCharacter(catalog, selection, mode, signal) {
   const skelUrl = local ? '/companion/assets/' + part.skeleton.split('/').pop() : ASSET_BASE + catalog.commit + '/' + part.skeleton;
   const atlasUrl = local ? '/companion/assets/' + part.atlas.split('/').pop() : ASSET_BASE + catalog.commit + '/' + part.atlas;
   const [skeleton, atlas] = await Promise.all([
-    fetchResource(skelUrl, signal).then(response => response.blob()),
-    fetchResource(atlasUrl, signal).then(response => response.text()),
+    fetchAsset(skelUrl, signal).then(response => response.blob()),
+    fetchAsset(atlasUrl, signal).then(response => response.text()),
   ]);
   const baseUrl = new URL(atlasUrl, location.href);
   const textureUrls = atlasPages(atlas).map(page => new URL(page, baseUrl).href);
-  const rawDataURIs = Object.fromEntries(await Promise.all([
-    [skelUrl, skeleton], [atlasUrl, new Blob([atlas], { type: 'text/plain' })],
-    ...await Promise.all(textureUrls.map(async url => [url, await (await fetchResource(url, signal)).blob()])),
-  ].map(async ([url, blob]) => [url, await readDataURI(blob, signal)])));
+  const [textures, skeletonData, atlasData] = await Promise.all([
+    Promise.all(textureUrls.map(async url => [url, await (await fetchAsset(url, signal)).blob()])),
+    readDataURI(skeleton, signal),
+    readDataURI(new Blob([atlas], { type: 'text/plain' }), signal),
+  ]);
+  // Spine reads the skeleton and atlas only from data URIs, but textures load
+  // through <img>. Blob URLs skip base64 for the largest files; the owner of
+  // these assets revokes them once no new player can use them.
+  const rawDataURIs = { [skelUrl]: skeletonData, [atlasUrl]: atlasData };
+  const objectUrls = textures.map(([url, blob]) => (rawDataURIs[url] = URL.createObjectURL(blob)));
   // Runtime joins relative local atlas paths without expanding them to location.origin.
   if (local) {
     for (const url of textureUrls) rawDataURIs[new URL(url).pathname] = rawDataURIs[url];
   }
-  return { skelUrl, atlasUrl, rawDataURIs, premultipliedAlpha: /^pma:\s*true\s*$/m.test(atlas) };
+  return { skelUrl, atlasUrl, rawDataURIs, objectUrls, premultipliedAlpha: /^pma:\s*true\s*$/m.test(atlas) };
 }
 
 // Spine fits its whole canvas to the camera. The canvas fills the rail, and the
@@ -466,7 +475,11 @@ export function initCompanion() {
   }
 
   function clearAssets() {
-    for (const task of assetCache.values()) task.controller.abort();
+    for (const task of assetCache.values()) {
+      task.controller.abort();
+      // Players that already loaded keep their decoded textures.
+      task.promise.then(assets => assets.objectUrls.forEach(url => URL.revokeObjectURL(url)), () => {});
+    }
     assetCache.clear();
   }
 
@@ -787,7 +800,7 @@ export function initCompanion() {
       catalogController.abort();
       clearTimeout(catalogTimeout);
       stop();
-      assetCache.clear();
+      clearAssets();
       toggle.removeEventListener('click', onToggle);
       close.removeEventListener('click', onClose);
       retry.removeEventListener('click', onRetry);
