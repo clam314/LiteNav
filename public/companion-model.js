@@ -1,4 +1,5 @@
 // Keep the stored keys to preserve existing browser preferences after rebranding.
+import { isExcludedCharacter } from './companion-exclusions.js';
 export const PREFERENCES_KEY = 'guihang.companion.preferences';
 export const LEGACY_KEY = 'guihang.companion.enabled';
 
@@ -19,7 +20,7 @@ export function normalizePreferences(value, legacyEnabled = false) {
 export const costumeKey = costume => costume.idle?.skeleton || costume.cutscene?.skeleton || '';
 
 export function availableCharacters(catalog, preferences) {
-  return catalog.characters.map(character => ({
+  return catalog.characters.filter(character => !isExcludedCharacter(character)).map(character => ({
     ...character,
     costumes: character.costumes.filter(costume =>
       (!preferences.portraits || costume.idle) && (!preferences.skills || costume.cutscene) &&

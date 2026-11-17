@@ -1,6 +1,8 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { isExcludedCharacter } from '../public/companion-exclusions.js';
+import { LOCAL_FALLBACK_CHARACTER } from '../public/companion-fallback.js';
 import {
   normalizePreferences,
   costumeKey,
@@ -287,4 +289,48 @@ test('Liatris 97 restores a saved prop selection to the complete shot and frames
   }, options, 'skill', liatris);
   assert.deepEqual(viewport.animations.loop, full);
   assert.deepEqual(viewport.animations.loop_2, liatris.skills[0].viewport);
+});
+
+
+const readCatalog = () => JSON.parse(readFileSync(new URL('../public/companion/catalog.json', import.meta.url), 'utf8'));
+const expectedMaleIds = ['0001', '0004', '0006', '0206', '0603', '0620', '0658', '1001', '1002', '1004', '1005', '1012', '1015', '1032'];
+
+test('the supplied male roster is excluded from every display mode', () => {
+  const real = readCatalog();
+  const retained = real.characters.filter(character => !expectedMaleIds.includes(character.id));
+  assert.equal(retained.length, 75);
+  assert.equal(retained.reduce((count, character) => count + character.costumes.length, 0), 181);
+  for (const modes of [{ portraits: true, skills: false }, { portraits: false, skills: true }, { portraits: true, skills: true }, { portraits: false, skills: false }]) {
+    const allowed = availableCharacters(real, preferences(modes));
+    assert.ok(allowed.length > 0);
+    assert.equal(allowed.some(character => expectedMaleIds.includes(character.id) || isExcludedCharacter(character)), false);
+  }
+    assert.equal(real.characters.length, 89);
+});
+
+test('male IDs and provided multilingual names stay excluded after a rename', () => {
+    for (const character of [{ id: '0001', name: '新名称' }, { id: 603, name: '匿名' }, { id: 'unknown-a', name: '拉德爾' }, { id: 'unknown-b', name: 'LATHEL' }, { id: 'unknown-c', name: 'ラテル' }, { id: 'unknown-d', aka: '라텔' }, { id: 'unknown-e', name: 'Gisgray  Blair' }, { id: 'unknown-f', name: '鐵面具166' }, { id: 'unknown-g', name: 'The Captain' }]) {
+        assert.equal(isExcludedCharacter(character), true);
+    }
+    assert.equal(isExcludedCharacter({ id: '0002', name: '悠丝缇亚', aka: 'Justia' }), false);
+    assert.equal(isExcludedCharacter({ id: 'unlisted', name: '未收录角色' }), false);
+});
+
+test('saved male selections and random redraws cannot select excluded characters', () => {
+    const real = readCatalog();
+    const saved = preferences({ random: false, characterId: '0001', costumeKey: 'spine/char/char000101/char000101.skel' });
+    for (const value of [0, .5, .99]) {
+        assert.equal(isExcludedCharacter(chooseCharacter(real, saved, false, () => value).character), false);
+    }
+    for (let index = 0; index < 100; index += 1) {
+        assert.equal(isExcludedCharacter(chooseCharacter(real, saved, true, () => index / 100).character), false);
+    }
+});
+
+test('the offline fallback and its manifest identify the same allowed character', () => {
+    const metadata = JSON.parse(readFileSync(new URL('../public/companion/character.json', import.meta.url), 'utf8'));
+    assert.equal(isExcludedCharacter(LOCAL_FALLBACK_CHARACTER), false);
+    assert.equal(metadata.catalogId, LOCAL_FALLBACK_CHARACTER.id);
+    assert.equal(metadata.costumeKey, costumeKey(LOCAL_FALLBACK_CHARACTER.costumes[0]));
+    assert.equal(metadata.characterId, 'char000201');
 });

@@ -33,12 +33,18 @@ catch (error) { window.initializationError = error.message; }
 
 CATALOG = {
     "commit": "424622b8c4fd",
-    "characters": [{"id": "0001", "name": "拉德尔", "costumes": [{
-        "label": "草药猎人",
-        "idle": {"skeleton": "spine/char/char000101/char000101.skel", "atlas": "spine/char/char000101/char000101.atlas"},
+    "characters": [{"id": "0002", "name": "悠丝缇亚", "costumes": [{
+        "label": "血骑士",
+        "idle": {"skeleton": "spine/char/char000201/char000201.skel", "atlas": "spine/char/char000201/char000201.atlas"},
         "cutscene": {"skeleton": "spine/cutscenes/test.skel", "atlas": "spine/cutscenes/test.atlas"},
     }]}],
 }
+
+CATALOG["characters"].append({"id": "0001", "name": "拉德尔", "costumes": [{
+    "label": "草药猎人",
+    "idle": {"skeleton": "spine/char/char000101/char000101.skel", "atlas": "spine/char/char000101/char000101.atlas"},
+    "cutscene": {"skeleton": "spine/cutscenes/male-test.skel", "atlas": "spine/cutscenes/male-test.atlas"},
+}]})
 
 # A renderer double lets the production component reach its loaded state while
 # keeping this test independent of GPU availability and external model servers.
@@ -77,7 +83,7 @@ class QuietHandler(SimpleHTTPRequestHandler):
 
 def preferences(**changes):
     return {"random": False, "portraits": True, "skills": False, "info": True,
-            "characterId": "0001", "costumeKey": "spine/char/char000101/char000101.skel", "skillAction": "", **changes}
+            "characterId": "0002", "costumeKey": "spine/char/char000201/char000201.skel", "skillAction": "", **changes}
 
 
 def run_cases(browser, origin, case_filter=None):
@@ -188,6 +194,19 @@ def run_cases(browser, origin, case_filter=None):
         expect(page.locator("#companion-root canvas")).to_have_count(0)
 
     case("the controls work with browser storage blocked", no_storage, blocked_storage=True)
+
+    def saved_male(page):
+        page.wait_for_function("document.querySelector('#companion-root').dataset.state === 'ready'")
+        open_mEnu(page)
+        values = page.get_by_label("指定人物与服装", exact=True).locator("option").evaluate_all("items => items.map(item => item.value)")
+        assert values and all("char000101" not in value for value in values)
+        saved = page.evaluate(f"JSON.parse(localStorage.getItem({json.dumps(PREFERENCE_KEY)}))")
+        assert saved["characterId"] == "0002"
+        assert saved["costumeKey"] == "spine/char/char000201/char000201.skel"
+        assert len(page.get_by_role("switch").all()) == 4, "no extra filter switch"
+
+    case("a saved male is removed from selection and replaced before rendering", saved_male,
+         prefs=preferences(characterId="0001", costumeKey="spine/char/char000101/char000101.skel"))
     return results
 
 

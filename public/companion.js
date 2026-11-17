@@ -2,6 +2,8 @@ import { PREFERENCES_KEY, LEGACY_KEY, normalizePreferences, costumeKey, availabl
   chooseCharacter, atlasPages, playableAnimations, configureViewports, presentationForCostume,
   isLoopingSkill, selectSkillAnimation } from './companion-model.js';
 import { createCompanionStage } from './companion-stage.js';
+import { LOCAL_FALLBACK_CHARACTER, LOCAL_FALLBACK_COMMIT } from './companion-fallback.js';
+import { isExcludedCharacter } from './companion-exclusions.js';
 import { composeSkillAttachments } from './companion-composition.js';
 import { queuePortraitMotion } from './companion-portrait.js';
 const RUNTIME_JS = '/vendor/spine/spine-player-4.1.56.js';
@@ -187,9 +189,9 @@ function withAbort(promise, signal) {
 async function loadCharacter(catalog, selection, mode, signal) {
   const part = mode === 'skill' ? selection.costume.cutscene : selection.costume.idle;
   if (!part) throw new Error('这套服装没有对应的动画');
-  const local = mode === 'portrait' && part.skeleton === 'spine/char/char000101/char000101.skel';
-  const skelUrl = local ? '/companion/assets/char000101.skel' : ASSET_BASE + catalog.commit + '/' + part.skeleton;
-  const atlasUrl = local ? '/companion/assets/char000101.atlas' : ASSET_BASE + catalog.commit + '/' + part.atlas;
+  const local = mode === 'portrait' && part.skeleton === LOCAL_FALLBACK_CHARACTER.costumes[0].idle.skeleton;
+  const skelUrl = local ? '/companion/assets/' + part.skeleton.split('/').pop() : ASSET_BASE + catalog.commit + '/' + part.skeleton;
+  const atlasUrl = local ? '/companion/assets/' + part.atlas.split('/').pop() : ASSET_BASE + catalog.commit + '/' + part.atlas;
   const [skeleton, atlas] = await Promise.all([
     fetchResource(skelUrl, signal).then(response => response.blob()),
     fetchResource(atlasUrl, signal).then(response => response.text()),
@@ -523,6 +525,9 @@ export function initCompanion() {
     mode = nextMode;
     const layer = document.createElement('div');
     layer.className = 'companion-layer';
+    if (nextMode === 'portrait' && costumeKey(selection.costume) === costumeKey(LOCAL_FALLBACK_CHARACTER.costumes[0])) {
+      layer.classList.add('fit-artwork');
+    }
     const record = {
       layer, selection, mode: nextMode, skillAction: preferences.skillAction,
       controller: new AbortController(), elapsed: 0, advancing: false,
@@ -679,7 +684,7 @@ export function initCompanion() {
   };
   const onShuffle = () => { selectCharacter(true); void start(); };
   const onPick = () => {
-    const character = catalog.characters.find(item => item.costumes.some(costume => costumeKey(costume) === picker.value));
+    const character = availableCharacters(catalog, preferences).find(item => item.costumes.some(costume => costumeKey(costume) === picker.value));
     if (!character) return;
     preferences.characterId = character.id;
     preferences.costumeKey = picker.value;
@@ -694,8 +699,13 @@ export function initCompanion() {
     void start('skill');
   };
   const onFallback = () => {
+    if (!catalog.characters.some(character => character.id === LOCAL_FALLBACK_CHARACTER.id &&
+      character.costumes.some(costume => costumeKey(costume) === costumeKey(LOCAL_FALLBACK_CHARACTER.costumes[0])))) {
+      catalog = { ...catalog, characters: [LOCAL_FALLBACK_CHARACTER,
+        ...catalog.characters.filter(character => character.id !== LOCAL_FALLBACK_CHARACTER.id)] };
+    }
     preferences = { ...preferences, random: false, portraits: true, skills: false,
-      characterId: '0001', costumeKey: 'spine/char/char000101/char000101.skel' };
+      characterId: LOCAL_FALLBACK_CHARACTER.id, costumeKey: costumeKey(LOCAL_FALLBACK_CHARACTER.costumes[0]) };
     selectCharacter();
     void start();
   };
@@ -734,7 +744,7 @@ export function initCompanion() {
       throw new Error('角色索引不完整');
     }
     presentations = reference;
-    catalog = { ...data, characters: data.characters.map(character => {
+    catalog = { ...data, characters: data.characters.filter(character => !isExcludedCharacter(character)).map(character => {
       const costumes = character.costumes.map(costume => {
         const presentation = presentationForCostume(presentations, costume);
         return { ...costume, label: presentation?.label || costume.label };
@@ -746,9 +756,8 @@ export function initCompanion() {
     void start();
   }).catch(() => {
     if (disposed) return;
-    // Keep the original offline character available even if the catalog is unavailable.
-    catalog = { commit: '424622b8c4fd', characters: [{ id: '0001', name: '拉德尔', costumes: [{ label: '草药猎人',
-      idle: { skeleton: 'spine/char/char000101/char000101.skel', atlas: 'spine/char/char000101/char000101.atlas' } }] }] };
+    // The same exclusion rules apply to the offline fallback.
+    catalog = { commit: LOCAL_FALLBACK_COMMIT, characters: [LOCAL_FALLBACK_CHARACTER].filter(character => !isExcludedCharacter(character)) };
     preferences.portraits ||= preferences.skills;
     preferences.skills = false;
     selectCharacter();

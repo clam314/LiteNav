@@ -1,11 +1,11 @@
 {
-  "name": "拉德尔",
-  "label": "草药猎人",
-  "characterId": "char000101",
-  "skelUrl": "/companion/assets/char000101.skel",
-  "atlasUrl": "/companion/assets/char000101.atlas",
+  "name": "悠丝缇亚",
+  "label": "血骑士",
+  "characterId": "char000201",
+  "skelUrl": "/companion/assets/char000201.skel",
+  "atlasUrl": "/companion/assets/char000201.atlas",
   "textureUrls": [
-    "/companion/assets/char000101.png"
+    "/companion/assets/char000201.png"
   ],
   "animation": "idle",
   "animationDuration": 4,
@@ -13,16 +13,20 @@
   "skeletonVersion": "4.1.11",
   "premultipliedAlpha": false,
   "source": "https://clam314.github.io/bd2web/characters.html",
-  "assetSource": "https://github.com/myssal/Brown-Dust-2-Asset/tree/bc29e143fcdd/spine/char/char000101",
-  "assetCommit": "bc29e143fcdd",
+  "assetSource": "https://github.com/myssal/Brown-Dust-2-Asset/tree/424622b8c4fd/spine/char/char000201",
+  "assetCommit": "424622b8c4fd",
   "viewport": {
-    "x": -450,
-    "y": -770,
+    "x": -449.5153575336905,
+    "y": -582.167319089905,
     "width": 820,
-    "height": 1230,
-    "padLeft": 0,
-    "padRight": 0,
-    "padTop": 0,
-    "padBottom": 0
-  }
+    "height": 1020,
+    "padLeft": "5%",
+    "padRight": "5%",
+    "padTop": "5%",
+    "padBottom": "5%"
+  },
+  "catalogId": "0002",
+  "aka": "Justia",
+  "costumeKey": "spine/char/char000201/char000201.skel",
+  "viewportSource": "https://www.gamekee.com/zsca2/593571?tab=fzjn&style=style1"
 }
