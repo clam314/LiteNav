@@ -160,7 +160,8 @@ export function configureViewports(player, animations, mode, presentation) {
   const motion = mode === 'portrait' ? player.skeleton.data.findAnimation('motion') : null;
   for (const animation of animations) {
     const action = definitions.find(action => action && (!action.animation || action.animation === animation.name));
-    const configured = action?.framing === 'full' ? undefined : action?.viewport;
+    // localViewport is this project's correction of a reference camera that cuts off the figure.
+    const configured = action?.framing === 'full' ? undefined : action?.localViewport || action?.viewport;
     let box;
     if (configured && [configured.x, configured.y, configured.width, configured.height].every(Number.isFinite) &&
         configured.width > 0 && configured.height > 0) {

@@ -4435,6 +4435,16 @@
         {
           "label": "技能动作 1",
           "animation": "loop",
+          "localViewport": {
+            "x": -400,
+            "y": -703.0463446607596,
+            "width": 860,
+            "height": 1270,
+            "padLeft": "5%",
+            "padRight": "5%",
+            "padTop": "5%",
+            "padBottom": "5%"
+          },
           "viewport": {
             "x": -550.7608212606407,
             "y": -703.0463446607596,

@@ -418,3 +418,17 @@ test('the rail camera stands the padded view on the bottom edge beside the navig
   camera = placeView(view, rail, 600, 200);
   assert.equal(rail.width / camera.width, 1);
 });
+
+test('a local viewport correction takes precedence over the reference camera', () => {
+  const viewport = { animations: {} };
+  const player = {
+    config: { viewport },
+    skeleton: stillSkeleton(),
+    calculateAnimationViewport() { assert.fail('a configured camera must not fall back to bounds'); },
+  };
+  const local = { x: -400, y: -700, width: 860, height: 1270 };
+  configureViewports(player, animations(['loop']), 'skill', {
+    skills: [{ animation: 'loop', localViewport: local, viewport: { x: -550, y: -700, width: 570, height: 1270 } }],
+  });
+  assert.deepEqual(viewport.animations.loop, floored(local));
+});
