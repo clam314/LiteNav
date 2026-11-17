@@ -97,7 +97,7 @@ function alertMarkup() {
 function sidebarMarkup() {
   const categories = directoryCategories();
   return [
-    '<aside class="sidebar"><a href="#home" class="brand" aria-label="归航首页"><span class="brand-mark">' + icon('sparkles', 32) + '</span><span class="brand-name">归航</span></a>',
+    '<aside class="sidebar"><a href="#home" class="brand" aria-label="轻航首页"><span class="brand-mark">' + icon('sparkles', 32) + '</span><span class="brand-name">轻航</span></a>',
     '<nav class="sidebar-nav" aria-label="页面目录"><a href="#home" class="nav-item ' + (view === 'home' && !activeCategory ? 'active' : '') + '">' + icon('home') + '<span>常用</span></a>',
     '<div class="nav-section-label">网址目录</div>',
     categories.map((category) => '<a href="#category-' + encodeURIComponent(category.id) + '" class="nav-item ' + (view === 'home' && activeCategory === category.id ? 'active' : '') + '">' + icon(category.icon || 'folder') + '<span>' + esc(category.name) + '</span></a>').join(''),
@@ -200,7 +200,7 @@ function render() {
     (view === 'home' ? '<button class="btn ' + (editMode ? 'btn-secondary is-editing' : 'btn-secondary') + '" data-action="toggle-edit">' + (editMode ? icon('check', 16) + '完成整理' : '整理') + '</button>' : '') +
     '<button class="btn btn-primary" data-action="' + (view === 'services' ? 'add-service' : 'add-link') + '">' + icon('plus', 18) + '添加' + (view === 'services' ? '服务' : '') + '</button></div></header>' +
     '<div class="page-content">' + (view === 'services' ? servicesMarkup() : view === 'settings' ? settingsMarkup() : homeMarkup()) + '</div></main></div>';
-  document.title = titles[view] + ' · 归航';
+  document.title = titles[view] + ' · 轻航 LiteNav';
   window.scrollTo({ top: previousScroll, behavior: 'instant' });
 }
 
@@ -268,7 +268,7 @@ function openLinkDialog({ id, kind = 'website', categoryId = '', pinned = false 
     '<label class="field" id="link-category-field"><span class="field-label">分类</span><select class="form-select" id="link-category" name="categoryId">' + categoryNames + '</select></label>',
     '<label class="checkbox-row"><input type="checkbox" id="link-pinned" name="pinned" ' + (draft.pinned ? 'checked' : '') + '>加入常用</label>',
     existing && existing.pinned ? '<label class="field"><span class="field-label">常用排序</span><input class="form-input" id="link-position" type="number" min="1" max="' + favorites().length + '" value="' + (favorites().findIndex((link) => link.id === draft.id) + 1) + '"><span class="field-hint">也可以在首页整理模式下拖动排序</span></label>' : '',
-    '<div class="monitor-options" id="link-monitor-options"><label class="checkbox-row"><input type="checkbox" id="link-monitor" name="monitorEnabled" ' + (draft.monitorEnabled ? 'checked' : '') + '>启用掉线检测</label><label class="field" id="link-check-url-field"><span class="field-label">检测地址 <span class="optional">可选</span></span><input class="form-input" id="link-check-url" name="checkUrl" inputmode="url" placeholder="默认检测上方服务地址" value="' + esc(draft.checkUrl || '') + '"><span class="field-hint">检测从运行归航的服务器发出，需要能访问该服务。</span></label></div>',
+    '<div class="monitor-options" id="link-monitor-options"><label class="checkbox-row"><input type="checkbox" id="link-monitor" name="monitorEnabled" ' + (draft.monitorEnabled ? 'checked' : '') + '>启用掉线检测</label><label class="field" id="link-check-url-field"><span class="field-label">检测地址 <span class="optional">可选</span></span><input class="form-input" id="link-check-url" name="checkUrl" inputmode="url" placeholder="默认检测上方服务地址" value="' + esc(draft.checkUrl || '') + '"><span class="field-hint">检测从运行轻航的服务器发出，需要能访问该服务。</span></label></div>',
     '<div class="service-config-fields" id="link-service-fields"><label class="field"><span class="field-label">描述 <span class="optional">可选</span></span><input class="form-input" id="link-description" maxlength="500" placeholder="例如 NAS 管理、影音库" value="' + esc(draft.description || '') + '"></label><details class="service-advanced"><summary>容器备注</summary><div class="field-row"><label class="field"><span class="field-label">服务器</span><input class="form-input" id="link-server" maxlength="100" placeholder="例如 local" value="' + esc(draft.server || '') + '"></label><label class="field"><span class="field-label">容器名称</span><input class="form-input" id="link-container" maxlength="100" placeholder="例如 jellyfin" value="' + esc(draft.container || '') + '"></label></div></details></div>',
     '<p class="form-error" id="link-error" role="alert" hidden></p></div>',
     '<footer class="dialog-footer"><span class="keyboard-hint">Enter ' + (existing ? '保存' : '添加') + '</span><div><button class="btn btn-ghost" type="button" data-action="close-dialog">取消</button><button class="btn btn-primary" type="submit">' + (existing ? '保存' : '添加') + '</button></div></footer></form>',
@@ -489,7 +489,7 @@ async function exportBackup() {
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
   anchor.href = url;
-  anchor.download = 'guihang-backup-' + new Date().toLocaleDateString('sv-SE') + '.json';
+  anchor.download = 'litenav-backup-' + new Date().toLocaleDateString('sv-SE') + '.json';
   anchor.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
   toast('备份已导出');
@@ -589,7 +589,7 @@ document.querySelector('#import-file').addEventListener('change', async (event) 
   try {
     if (file.size > 8 * 1024 * 1024) throw new Error('备份文件不能超过 8 MB');
     const imported = JSON.parse(await file.text());
-    if (!Array.isArray(imported.links) || !Array.isArray(imported.categories) || !imported.settings) throw new Error('这不是有效的归航备份文件');
+    if (!Array.isArray(imported.links) || !Array.isArray(imported.categories) || !imported.settings) throw new Error('这不是有效的轻航备份文件');
     const confirmed = await confirmDialog('导入备份', '将用备份中的 ' + imported.links.length + ' 个入口和 ' + imported.categories.length + ' 个分类替换当前数据。建议先导出当前备份。', '导入并替换');
     if (!confirmed) return;
     await mutate((state) => { state.links = imported.links; state.categories = imported.categories; state.settings = imported.settings; });
@@ -653,7 +653,7 @@ async function boot() {
     route();
     setInterval(() => { if (!document.hidden) refreshHealth().catch(() => {}); }, 10000);
   } catch (error) {
-    app.innerHTML = '<main class="boot-error">' + icon('alert', 32) + '<h1>暂时无法连接归航</h1><p>' + esc(error.message) + '</p><button class="btn btn-primary" data-action="reload">重新连接</button></main>';
+    app.innerHTML = '<main class="boot-error">' + icon('alert', 32) + '<h1>暂时无法连接轻航</h1><p>' + esc(error.message) + '</p><button class="btn btn-primary" data-action="reload">重新连接</button></main>';
   }
 }
 

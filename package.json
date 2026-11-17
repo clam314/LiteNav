@@ -1,9 +1,9 @@
 {
-  "name": "guihang",
+  "name": "litenav",
   "version": "0.1.0",
   "private": true,
   "type": "module",
-  "description": "归航 · PC 个人网址与服务导航",
+  "description": "轻航（LiteNav）· 轻量的个人网址与服务导航",
   "scripts": {
     "dev": "python3 server.py",
     "start": "python3 server.py",

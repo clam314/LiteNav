@@ -1,6 +1,7 @@
+# Preserve service and volume identifiers for existing deployments.
 services:
   guihang:
-    image: ${GUIHANG_IMAGE:-ghcr.io/clam314/guihang:latest}
+    image: ${LITENAV_IMAGE:-${GUIHANG_IMAGE:-litenav:local}}
     build: .
     ports:
       - "8765:8765"

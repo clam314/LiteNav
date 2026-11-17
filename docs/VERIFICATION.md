@@ -28,4 +28,4 @@
 
 - `docker compose config --quiet` 和工作流 actionlint 静态检查通过。
 - GitHub Actions 在构建前运行上述单元与浏览器回归；发布 amd64/arm64 镜像后，按发布 digest 启动容器验证默认配置、HTTP 健康接口及非 root 用户。
-- 本机 Docker daemon 未运行，不将本地静态检查当作镜像构建通过。实际构建、发布与启动结果以 [Docker 工作流运行记录](https://github.com/clam314/guihang/actions/workflows/docker.yml) 为准。
+- 本机 Docker daemon 未运行，不将本地静态检查当作镜像构建通过。实际构建、发布与启动结果以当前仓库的 GitHub Actions 运行记录为准。

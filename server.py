@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""归航：零依赖的本地导航、SQLite 配置存储和服务可用性检测。"""
+"""轻航 LiteNav：零依赖的本地导航、SQLite 配置存储和服务可用性检测。"""
 
 from __future__ import annotations
 
@@ -27,7 +27,7 @@ from urllib.request import Request, urlopen
 ROOT = Path(__file__).resolve().parent
 MAX_BODY = 1024 * 1024
 DEFAULT_SETTINGS = {"checkInterval": 60, "failureThreshold": 3, "timeout": 5}
-LOG = logging.getLogger("guihang")
+LOG = logging.getLogger("litenav")
 
 
 class APIError(ValueError):
@@ -176,6 +176,7 @@ class Store:
     """Keep user data authoritative; shipped seeds initialize empty stores only."""
 
     def __init__(self, data_dir: Path | str, seed_path: Path | str | None = None):
+        # Keep the existing filename so renaming the app does not reset user data.
         self.path = Path(data_dir) / "guihang.sqlite3"
         self.path.parent.mkdir(parents=True, exist_ok=True)
         self.lock = threading.RLock()
@@ -274,7 +275,7 @@ class Store:
 
 def probe(url: str, timeout: int = 5) -> dict:
     started = time.monotonic()
-    request = Request(url, headers={"User-Agent": "Guihang/1.0", "Accept": "*/*"}, method="GET")
+    request = Request(url, headers={"User-Agent": "LiteNav/1.0", "Accept": "*/*"}, method="GET")
     try:
         with urlopen(request, timeout=timeout) as response:
             status = response.status
@@ -443,7 +444,7 @@ def metadata(url: str, categories: list[dict]) -> dict:
     if known:
         return result
     try:
-        request = Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; Guihang/1.0)", "Accept": "text/html"})
+        request = Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; LiteNav/1.0)", "Accept": "text/html"})
         with urlopen(request, timeout=4) as response:
             content_type = response.headers.get_content_type()
             if content_type not in ("text/html", "application/xhtml+xml"):
@@ -483,7 +484,7 @@ class AppServer(ThreadingHTTPServer):
 
 class Handler(BaseHTTPRequestHandler):
     server: AppServer
-    server_version = "Guihang/1.0"
+    server_version = "LiteNav/1.0"
 
     def log_message(self, fmt, *args):
         LOG.info("%s %s", self.address_string(), fmt % args)
@@ -593,7 +594,7 @@ class Handler(BaseHTTPRequestHandler):
 
 
 def main():
-    parser = argparse.ArgumentParser(description="归航 · 个人网址与服务导航")
+    parser = argparse.ArgumentParser(description="轻航 LiteNav · 个人网址与服务导航")
     parser.add_argument("--host", default="127.0.0.1")
     parser.add_argument("--port", default=8765, type=int)
     parser.add_argument("--data-dir", default=str(ROOT / "data"))
@@ -601,7 +602,7 @@ def main():
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
     app = AppServer((args.host, args.port), Store(args.data_dir))
     app.monitor.start()
-    print("归航已启动：http://" + args.host + ":" + str(app.server_port), flush=True)
+    print("轻航 LiteNav 已启动：http://" + args.host + ":" + str(app.server_port), flush=True)
     try:
         app.serve_forever()
     except KeyboardInterrupt:

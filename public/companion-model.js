@@ -1,3 +1,4 @@
+// Keep the stored keys to preserve existing browser preferences after rebranding.
 export const PREFERENCES_KEY = 'guihang.companion.preferences';
 export const LEGACY_KEY = 'guihang.companion.enabled';
 

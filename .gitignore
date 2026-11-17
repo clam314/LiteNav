@@ -20,6 +20,7 @@ local-config/
 *.private.yaml
 *.private.yml
 guihang-backup-*.json
+litenav-backup-*.json
 *.sqlite
 *.sqlite-*
 *.sqlite3

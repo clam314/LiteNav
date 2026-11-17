@@ -363,7 +363,7 @@ class HTTPCase(DataFixture):
         super().setUp()
         self.public = self.directory / "public"
         self.public.mkdir()
-        (self.public / "index.html").write_text("<p>归航</p>", "utf-8")
+        (self.public / "index.html").write_text("<p>轻航</p>", "utf-8")
         self.app = server.AppServer(("127.0.0.1", 0), self.store, self.public)
         self.worker = threading.Thread(target=self.app.serve_forever, daemon=True)
         self.worker.start()
