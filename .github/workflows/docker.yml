@@ -146,14 +146,33 @@ jobs:
           cache-to: type=gha,mode=max,scope=guihang
 
       - name: Smoke test the published image
+        shell: bash
         env:
           IMAGE_DIGEST: ${{ steps.build.outputs.digest }}
         run: |
-          trap 'docker rm -f guihang-smoke >/dev/null 2>&1 || true' EXIT
+          cleanup() {
+            status=$?
+            if [ "$status" -ne 0 ]; then
+              docker logs guihang-smoke || true
+            fi
+            docker rm -f guihang-smoke >/dev/null 2>&1 || true
+          }
+          trap cleanup EXIT
+          docker buildx imagetools inspect --raw "$IMAGE_NAME@$IMAGE_DIGEST" > /tmp/guihang-manifest.json
+          python3 -c 'import json; m=json.load(open("/tmp/guihang-manifest.json")); p={(x.get("platform",{}).get("os"),x.get("platform",{}).get("architecture")) for x in m["manifests"]}; assert {("linux","amd64"),("linux","arm64")} <= p; print("Both image architectures verified")'
           docker run --detach --name guihang-smoke --publish 127.0.0.1:18765:8765 "$IMAGE_NAME@$IMAGE_DIGEST"
-          curl --fail --silent --show-error --retry 12 --retry-connrefused --retry-delay 1 \
-            http://127.0.0.1:18765/api/state | python3 -c 'import json,sys; s=json.load(sys.stdin); assert s["links"]; assert all(x["kind"] == "website" and not x["monitorEnabled"] for x in s["links"]); print("Public default configuration verified")'
-          curl --fail --silent --show-error http://127.0.0.1:18765/api/health >/dev/null
+          ready=false
+          for attempt in {1..45}; do
+            test "$(docker inspect --format '{{.State.Running}}' guihang-smoke)" = "true"
+            if curl --fail --silent --connect-timeout 1 --max-time 2 http://127.0.0.1:18765/api/health >/dev/null; then
+              ready=true
+              break
+            fi
+            sleep 1
+          done
+          test "$ready" = "true"
+          curl --fail --silent --show-error http://127.0.0.1:18765/api/state --output /tmp/guihang-state.json
+          python3 -c 'import json; s=json.load(open("/tmp/guihang-state.json")); assert s["links"]; assert all(x["kind"] == "website" and not x["monitorEnabled"] for x in s["links"]); print("Public default configuration verified")'
           test "$(docker exec guihang-smoke id -u)" = "10001"
 
       - name: Record published digest
