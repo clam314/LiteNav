@@ -14,6 +14,8 @@ import {
   selectSkillAnimation,
   isLoopingSkill,
   configureViewports,
+  visibleArtBottom,
+  trimViewportFloor,
 } from '../public/companion-model.js';
 
 const idle = skeleton => ({ skeleton });
@@ -111,7 +113,12 @@ test('atlas page parsing supports BOM, CRLF, multiple pages and region names end
   assert.throws(() => atlasPages('\r\n  \r\n'), /纹理配置不完整/);
 });
 
-const animations = names => names.map(name => ({ name, duration: 2 }));
+const animations = names => names.map(name => ({ name, duration: 2, apply() {} }));
+// A skeleton without drawn attachments leaves every viewport floor unchanged.
+const stillSkeleton = (overrides = {}) => ({
+  data: { findAnimation() { return null; } }, drawOrder: [], color: { a: 1 },
+  setToSetupPose() {}, updateWorldTransform() {}, ...overrides,
+});
 const animationNames = (names, mode, presentation) => playableAnimations(animations(names), mode, presentation)
   .map(animation => animation.name);
 
@@ -175,10 +182,10 @@ test('persistent skills loop while one-shot transition cuts do not', () => {
 
 test('portrait framing uses the runtime animation bounds', () => {
   const viewport = { padLeft: 0 };
-  const animation = { name: 'idle', duration: 4 };
+  const animation = { name: 'idle', duration: 4, apply() {} };
   const player = {
     config: { viewport },
-    skeleton: { setToSetupPose() {} },
+    skeleton: stillSkeleton(),
     calculateAnimationViewport(received, output) {
       assert.equal(received, animation);
       Object.assign(output, { x: -80, y: -200, width: 160, height: 400 });
@@ -193,7 +200,7 @@ test('reference skill viewports keep their exact per-action camera coordinates',
   const viewport = { animations: {}, padLeft: 0, padRight: 0, padTop: 0, padBottom: 0 };
   const player = {
     config: { viewport },
-    skeleton: { setToSetupPose() { resets += 1; } },
+    skeleton: stillSkeleton({ setToSetupPose() { resets += 1; }, updateWorldTransform() { resets = 0; } }),
     calculateAnimationViewport() { assert.fail('an exact reference camera must not be replaced with sampled bounds'); },
   };
   configureViewports(player, animations(['loop_2', 'loop']), 'skill', gamekeePresentation);
@@ -203,7 +210,7 @@ test('reference skill viewports keep their exact per-action camera coordinates',
     'reference actions intentionally use distinct scales, not a shared median');
   viewport.animations.loop_2.x = 0;
   assert.equal(gamekeePresentation.skills[0].viewport.x, -729.0915898106048, 'player state must not mutate saved reference data');
-  assert.equal(resets, 1);
+  assert.ok(resets > 0, 'the skeleton is left in its setup pose');
 });
 
 test('unconfigured skills use complete per-animation bounds without pooling unrelated cuts', () => {
@@ -214,7 +221,7 @@ test('unconfigured skills use complete per-animation bounds without pooling unre
   const calls = [];
   const player = {
     config: { viewport: { animations: {} } },
-    skeleton: { setToSetupPose() {} },
+    skeleton: stillSkeleton(),
     calculateAnimationViewport(animation, output) {
       calls.push(animation.name);
       Object.assign(output, bounds[animation.name]);
@@ -230,7 +237,7 @@ test('invalid reference bounds fall back to the selected animation bounds', () =
   let calculated = false;
   const player = {
     config: { viewport: { animations: {} } },
-    skeleton: { setToSetupPose() {} },
+    skeleton: stillSkeleton(),
     calculateAnimationViewport(animation, output) {
       assert.equal(animation.name, 'loop_2');
       calculated = true;
@@ -284,7 +291,7 @@ test('Liatris 97 restores a saved prop selection to the complete shot and frames
   for (const saved of ['', 'loop_2', 'missing']) assert.equal(selectSkillAnimation(options, saved, liatris), options[0]);
   const viewport = { animations: {} };
   const full = { x: -776, y: -1209, width: 2216, height: 1842 };
-  configureViewports({ config: { viewport }, skeleton: { setToSetupPose() {} },
+  configureViewports({ config: { viewport }, skeleton: stillSkeleton(),
     calculateAnimationViewport(animation, box) { assert.equal(animation, options[1]); Object.assign(box, full); },
   }, options, 'skill', liatris);
   assert.deepEqual(viewport.animations.loop, full);
@@ -333,4 +340,53 @@ test('the offline fallback and its manifest identify the same allowed character'
     assert.equal(metadata.catalogId, LOCAL_FALLBACK_CHARACTER.id);
     assert.equal(metadata.costumeKey, costumeKey(LOCAL_FALLBACK_CHARACTER.costumes[0]));
     assert.equal(metadata.characterId, 'char000201');
+});
+
+// A region whose lowest vertex follows the animation clock.
+function drawnSlot(bottom, { alpha = 1, mesh = false, region = true } = {}) {
+  const attachment = {
+    region: region ? {} : undefined, color: { a: 1 },
+    ...(mesh ? {
+      triangles: [0, 1, 2], worldVerticesLength: 6,
+      computeWorldVertices(slot, start, count, out) { out.set([0, bottom.value + 50, 10, bottom.value, 20, bottom.value + 80]); },
+    } : {
+      computeWorldVertices(slot, out) { out.set([0, bottom.value, 10, bottom.value, 10, bottom.value + 100, 0, bottom.value + 100]); },
+    }),
+  };
+  return { bone: { active: true }, color: { a: alpha }, getAttachment: () => attachment };
+}
+
+test('visible artwork bounds ignore transparent and non-drawing attachments across the whole animation', () => {
+  const clock = { value: 0 };
+  const skeleton = stillSkeleton({
+    drawOrder: [
+      drawnSlot(clock),
+      drawnSlot({ get value() { return clock.value - 40; } }, { mesh: true }),
+      drawnSlot({ value: -900 }, { alpha: 0 }),
+      drawnSlot({ value: -800 }, { region: false }),
+    ],
+  });
+  const animation = { duration: 2, apply(target, time) { clock.value = -100 - time * 50; } };
+  assert.equal(visibleArtBottom(skeleton, [animation, null]), -240);
+});
+
+test('empty viewport floors rise to the artwork without moving the top or sides', () => {
+  const box = { x: -100, y: -1000, width: 400, height: 1200, padTop: '5%' };
+  assert.deepEqual(trimViewportFloor(box, -600), { x: -100, y: -600, width: 400, height: 800, padTop: '5%' });
+  assert.equal(trimViewportFloor(box, -1100), box, 'artwork cropped by the floor keeps the reference crop');
+  assert.equal(trimViewportFloor(box, Infinity), box);
+  assert.equal(trimViewportFloor(box, 150), box, 'a nearly empty view is not shrunk around a stray detail');
+});
+
+test('portrait framing includes the motion reaction before raising the floor', () => {
+  const clock = { value: 0 };
+  const idle = { name: 'idle', duration: 1, apply() { clock.value = -100; } };
+  const motion = { name: 'motion', duration: 1, apply() { clock.value = -150; } };
+  const viewport = {};
+  const player = {
+    config: { viewport },
+    skeleton: stillSkeleton({ drawOrder: [drawnSlot(clock)], data: { findAnimation: name => name === 'motion' ? motion : null } }),
+  };
+  configureViewports(player, [idle], 'portrait', { portrait: { animation: 'idle', viewport: { x: -80, y: -400, width: 160, height: 500 } } });
+  assert.deepEqual(viewport, { x: -80, y: -150, width: 160, height: 250 });
 });

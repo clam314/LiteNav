@@ -99,8 +99,55 @@ export function selectSkillAnimation(animations, savedName, presentation) {
   return animations.find(animation => animation.name === name) || animations[0];
 }
 
+// Lowest point drawn by a visible region or mesh while the animations play.
+// Skeleton bounds also count transparent attachments, and reference viewports
+// often reserve floor space for a backdrop this page does not draw.
+export function visibleArtBottom(skeleton, animations, steps = 60) {
+  let bottom = Infinity;
+  let vertices = new Float32Array(1024);
+  for (const animation of animations) {
+    if (!animation) continue;
+    skeleton.setToSetupPose();
+    const stepTime = animation.duration > 0 ? animation.duration / steps : 0;
+    for (let i = 0; i <= (stepTime ? steps : 0); i++) {
+      const time = i * stepTime;
+      animation.apply(skeleton, time, time, false, [], 1, 0 /* setup */, 0 /* mixIn */);
+      skeleton.updateWorldTransform();
+      for (const slot of skeleton.drawOrder) {
+        const attachment = slot.bone.active ? slot.getAttachment() : null;
+        // Only regions and meshes carry texture; clipping and bounding boxes do not draw.
+        if (!attachment?.region) continue;
+        const alpha = skeleton.color.a * slot.color.a * (attachment.color?.a ?? 1);
+        if (alpha < 0.02) continue;
+        let count = 8;
+        if (attachment.triangles) {
+          count = attachment.worldVerticesLength;
+          if (vertices.length < count) vertices = new Float32Array(count);
+          attachment.computeWorldVertices(slot, 0, count, vertices, 0, 2);
+        } else {
+          attachment.computeWorldVertices(slot, vertices, 0, 2);
+        }
+        for (let v = 1; v < count; v += 2) if (vertices[v] < bottom) bottom = vertices[v];
+      }
+    }
+  }
+  skeleton.setToSetupPose();
+  return bottom;
+}
+
+// Raise an empty viewport floor to the artwork so the figure meets the rail's
+// bottom edge. The top and sides keep the preset's intended crop.
+export function trimViewportFloor(box, artBottom) {
+  if (!Number.isFinite(artBottom) || artBottom <= box.y) return box;
+  const height = box.y + box.height - artBottom;
+  if (height < box.height * .3) return box;
+  return { ...box, y: artBottom, height };
+}
+
 export function configureViewports(player, animations, mode, presentation) {
   const definitions = mode === 'portrait' ? [presentation?.portrait] : presentation?.skills || [];
+  // The portrait viewer also plays its "motion" reaction inside the same view.
+  const motion = mode === 'portrait' ? player.skeleton.data.findAnimation('motion') : null;
   for (const animation of animations) {
     const action = definitions.find(action => action && (!action.animation || action.animation === animation.name));
     const configured = action?.framing === 'full' ? undefined : action?.viewport;
@@ -114,6 +161,7 @@ export function configureViewports(player, animations, mode, presentation) {
       box = {};
       player.calculateAnimationViewport(animation, box);
     }
+    box = trimViewportFloor(box, visibleArtBottom(player.skeleton, [animation, motion]));
     if (mode === 'portrait') Object.assign(player.config.viewport, box);
     else player.config.viewport.animations[animation.name] = { ...box };
   }

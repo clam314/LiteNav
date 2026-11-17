@@ -39,6 +39,11 @@ body[data-companion] .toast-root { bottom: 82px; }
 .companion-layer.fit-artwork > .spine-player {
   /* Keep the complete shot, including its props, inside the visible rail. */
   left: auto; right: 0; transform: none; width: max(75%, var(--companion-space));
+  /* Size the canvas to the shot and sit it on the bottom edge. A full-height
+     canvas would letterbox wide shots and leave the cropped base floating.
+     The Spine player sets an inline height:100%, hence !important. */
+  top: auto; bottom: 0; height: auto !important; max-height: 100%;
+  aspect-ratio: var(--companion-art-aspect, 1);
 }
 .companion-player .spine-player-error { display: none !important; }
 .companion-caption {
