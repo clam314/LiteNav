@@ -77,3 +77,15 @@ test('the oldest stored assets are dropped beyond the limit', async () => {
   }
   assert.deepEqual([...cacheStorage.entries.keys()], [BASE + 'b', BASE + 'c']);
 });
+
+test('every game asset origin is cached while other URLs pass through', async () => {
+  const cacheStorage = fakeCacheStorage();
+  const { calls, fetchResource } = network();
+  const other = 'https://other-game.example/pinned/';
+  const fetchAsset = createAssetFetcher({ base: [BASE, other], fetchResource, cacheStorage });
+  await fetchAsset(other + 'b.png');
+  await fetchAsset('https://unrelated.example/c.png');
+  await settle();
+  assert.deepEqual([...cacheStorage.entries.keys()], [other + 'b.png']);
+  assert.deepEqual(calls.map(call => call.cache), ['force-cache', 'default']);
+});

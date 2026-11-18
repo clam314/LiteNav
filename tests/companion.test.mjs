@@ -5,6 +5,8 @@ import { isExcludedCharacter } from '../public/companion-exclusions.js';
 import { LOCAL_FALLBACK_CHARACTER } from '../public/companion-fallback.js';
 import {
   normalizePreferences,
+  displayOf,
+  withDisplay,
   costumeKey,
   availableCharacters,
   chooseCharacter,
@@ -36,28 +38,31 @@ const catalog = {
 };
 const preferences = overrides => normalizePreferences({ portraits: true, ...overrides });
 
+const DEFAULTS = { rotation: 3, resume: 'portrait', games: ['bd2'] };
+
 test('new preferences default to random people with display off; legacy enabled migrates only portrait visibility', () => {
   assert.deepEqual(normalizePreferences(null), {
-    random: true, portraits: false, skills: false, info: true, characterId: '', costumeKey: '', skillAction: '',
+    random: true, portraits: false, skills: false, ...DEFAULTS, characterId: '', costumeKey: '', skillAction: '',
   });
   assert.deepEqual(normalizePreferences(undefined, true), {
-    random: true, portraits: true, skills: false, info: true, characterId: '', costumeKey: '', skillAction: '',
+    random: true, portraits: true, skills: false, ...DEFAULTS, characterId: '', costumeKey: '', skillAction: '',
   });
   assert.equal(normalizePreferences({ portraits: false }, true).portraits, false);
 });
 
 test('preferences reject truthy strings, numbers, and non-string selection IDs', () => {
   assert.deepEqual(normalizePreferences({
-    random: 'false', portraits: 'true', skills: 1, info: 0,
+    random: 'false', portraits: 'true', skills: 1, rotation: 7, resume: 'off', games: 'bd2',
     characterId: 42, costumeKey: { skeleton: 'bad' }, skillAction: 2,
   }), normalizePreferences(null));
   assert.deepEqual(normalizePreferences({
-    random: false, portraits: true, skills: true, info: false,
+    random: false, portraits: true, skills: true, rotation: 0, resume: 'both', games: ['bd2'], info: false,
     characterId: 'two', costumeKey: 'two-a/idle', skillAction: 'loop_2',
   }), {
-    random: false, portraits: true, skills: true, info: false,
+    random: false, portraits: true, skills: true, rotation: 0, resume: 'both', games: ['bd2'],
     characterId: 'two', costumeKey: 'two-a/idle', skillAction: 'loop_2',
-  });
+  }, 'the retired info option is dropped');
+  assert.deepEqual(normalizePreferences({ games: ['unknown'] }).games, ['bd2'], 'unknown games fall back to all known ones');
 });
 
 test('eligibility checks actual portrait and skill resources, including null entries and both displays off', () => {
@@ -431,4 +436,19 @@ test('a local viewport correction takes precedence over the reference camera', (
     skills: [{ animation: 'loop', localViewport: local, viewport: { x: -550, y: -700, width: 570, height: 1270 } }],
   });
   assert.deepEqual(viewport.animations.loop, floored(local));
+});
+
+test('one display choice maps to both switches and the master switch restores the last one', () => {
+  const base = normalizePreferences({ portraits: true });
+  assert.equal(displayOf(base), 'portrait');
+  const both = withDisplay(base, 'both');
+  assert.deepEqual([both.portraits, both.skills, displayOf(both)], [true, true, 'both']);
+  const skill = withDisplay(both, 'skill');
+  assert.deepEqual([skill.portraits, skill.skills], [false, true]);
+  const off = withDisplay(skill, 'off');
+  assert.deepEqual([off.portraits, off.skills, off.resume, displayOf(off)], [false, false, 'skill', 'off']);
+  assert.equal(withDisplay(off, 'off').resume, 'skill', 'turning off twice keeps what to restore');
+  const on = withDisplay(off, 'on');
+  assert.deepEqual([on.portraits, on.skills, displayOf(on)], [false, true, 'skill']);
+  assert.equal(on.characterId, base.characterId, 'display changes keep the person');
 });

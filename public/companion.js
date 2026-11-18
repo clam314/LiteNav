@@ -1,4 +1,5 @@
-import { PREFERENCES_KEY, LEGACY_KEY, normalizePreferences, costumeKey, availableCharacters, paddedView, placeView,
+import { PREFERENCES_KEY, LEGACY_KEY, ROTATION_CHOICES, normalizePreferences, displayOf, withDisplay, costumeKey,
+  availableCharacters, paddedView, placeView,
   chooseCharacter, atlasPages, playableAnimations, configureViewports, presentationForCostume,
   isLoopingSkill, selectSkillAnimation } from './companion-model.js';
 import { createCompanionStage } from './companion-stage.js';
@@ -7,11 +8,9 @@ import { isExcludedCharacter } from './companion-exclusions.js';
 import { composeSkillAttachments } from './companion-composition.js';
 import { queuePortraitMotion } from './companion-portrait.js';
 import { createAssetFetcher } from './companion-assets.js';
+import { GAMES, selectedGames } from './companion-games.js';
 const RUNTIME_JS = '/vendor/spine/spine-player-4.1.56.js';
 const RUNTIME_CSS = '/vendor/spine/spine-player-4.1.56.css';
-const CATALOG_URL = '/companion/catalog.json';
-const PRESENTATIONS_URL = '/companion/gamekee-presets.json';
-const ASSET_BASE = 'https://raw.githubusercontent.com/myssal/Brown-Dust-2-Asset/';
 
 let runtimePromise;
 let currentCompanion;
@@ -153,7 +152,7 @@ async function fetchResource(url, signal, cache = 'default') {
   return response;
 }
 
-const fetchAsset = createAssetFetcher({ base: ASSET_BASE, fetchResource });
+const fetchAsset = createAssetFetcher({ base: GAMES.map(game => game.assetBase), fetchResource });
 
 function readDataURI(blob, signal) {
   return new Promise((resolve, reject) => {
@@ -193,8 +192,9 @@ async function loadCharacter(catalog, selection, mode, signal) {
   const part = mode === 'skill' ? selection.costume.cutscene : selection.costume.idle;
   if (!part) throw new Error('这套服装没有对应的动画');
   const local = mode === 'portrait' && part.skeleton === LOCAL_FALLBACK_CHARACTER.costumes[0].idle.skeleton;
-  const skelUrl = local ? '/companion/assets/' + part.skeleton.split('/').pop() : ASSET_BASE + catalog.commit + '/' + part.skeleton;
-  const atlasUrl = local ? '/companion/assets/' + part.atlas.split('/').pop() : ASSET_BASE + catalog.commit + '/' + part.atlas;
+  const remote = catalog.assetBase + catalog.commit + '/';
+  const skelUrl = local ? '/companion/assets/' + part.skeleton.split('/').pop() : remote + part.skeleton;
+  const atlasUrl = local ? '/companion/assets/' + part.atlas.split('/').pop() : remote + part.atlas;
   const [skeleton, atlas] = await Promise.all([
     fetchAsset(skelUrl, signal).then(response => response.blob()),
     fetchAsset(atlasUrl, signal).then(response => response.text()),
@@ -237,9 +237,8 @@ export function initCompanion() {
   if (currentCompanion) return currentCompanion;
   const root = document.getElementById('companion-root');
   if (!root) return undefined;
-  const option = (key, title, description) => `
-    <label class="companion-option"><span><strong>${title}</strong><small>${description}</small></span>
-      <input type="checkbox" role="switch" data-option="${key}" aria-label="${title}"></label>`;
+  const icon = path => `<svg viewBox="0 0 24 24" width="16" height="16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${path}</svg>`;
+  const segment = (name, value, text) => `<label><input type="radio" name="${name}" value="${value}"><span>${text}</span></label>`;
   root.innerHTML = `
     <aside class="companion-rail" aria-label="角色陪伴" hidden>
       <div class="companion-player" aria-hidden="true"></div>
@@ -248,30 +247,51 @@ export function initCompanion() {
         <button class="companion-retry" type="button" hidden>重试</button>
         <button class="companion-fallback" type="button" hidden>使用本地立绘</button>
       </div>
-      <div class="companion-caption" hidden>
-        <span class="companion-name"></span><span class="companion-label"></span><span class="companion-caption-mode"></span>
-      </div>
     </aside>
     <div class="companion-controls">
-    <button class="companion-toggle" type="button" aria-expanded="false" aria-controls="companion-menu" aria-label="角色设置">
-      <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">
-        <path d="m12 3 2.5 5.5 6 1-4.4 4.3 1 6.2-5.1-2.8-5.1 2.8 1-6.2L3.5 9.5l6-1L12 3Z"/>
-      </svg><span>角色设置</span><span class="companion-indicator" aria-hidden="true"></span>
+    <button class="companion-toggle" type="button" aria-expanded="false" aria-controls="companion-menu" aria-label="角色设置" data-tip="角色设置">
+      ${icon('<path d="m12 3 2.5 5.5 6 1-4.4 4.3 1 6.2-5.1-2.8-5.1 2.8 1-6.2L3.5 9.5l6-1L12 3Z"/>').replace('width="16" height="16"', 'width="18" height="18"')}
+      <span class="companion-indicator" aria-hidden="true"></span>
     </button>
     <section id="companion-menu" class="companion-menu" role="region" aria-label="角色设置" hidden>
-      <header class="companion-menu-header"><strong>角色陪伴</strong><button class="companion-menu-close" type="button" aria-label="关闭角色设置">×</button></header>
-      <div class="companion-menu-current"><strong class="companion-current-name">正在读取角色…</strong><span class="companion-current-label"></span></div>
-      ${option('random', '随机人物', '每次打开页面，更换一位人物与服装')}
-      ${option('portraits', '展示立绘', '播放人物的待机动画')}
-      ${option('skills', '展示技能', '与立绘同时开启时轮流展示')}
-      ${option('info', '人物信息', '在画面下方显示姓名与服装')}
-      <label class="companion-character-picker"><span>指定人物与服装 · 选择后关闭随机</span><select aria-label="指定人物与服装" disabled><option>正在读取角色…</option></select></label>
-      <label class="companion-character-picker companion-skill-picker" hidden><span>技能动作</span><select aria-label="技能动作" disabled><option>载入技能后可选择</option></select></label>
-      <div class="companion-menu-actions"><button class="companion-shuffle" type="button" disabled>换一位</button><button class="companion-pause" type="button" disabled>暂停动画</button></div>
-      <button class="companion-hide" type="button">关闭角色</button>
-      <small class="companion-menu-note" role="status" aria-live="polite"></small>
-      <div class="companion-menu-recovery companion-menu-actions" hidden><button class="companion-menu-retry" type="button">重试切换</button><button class="companion-menu-fallback" type="button">使用本地立绘</button></div>
-      <small class="companion-menu-note">仅在此浏览器记住设置；新角色首次加载需要联网。</small>
+      <header class="companion-menu-header">
+        <strong>角色陪伴</strong>
+        <input class="companion-power" type="checkbox" role="switch" aria-label="角色陪伴">
+        <button class="companion-menu-close" type="button" aria-label="关闭角色设置">×</button>
+      </header>
+      <div class="companion-now">
+        <div class="companion-now-copy">
+          <strong class="companion-current-name">正在读取角色…</strong>
+          <span class="companion-current-label"></span>
+        </div>
+        <button class="companion-icon-button companion-shuffle" type="button" aria-label="换一位" data-tip="换一位" disabled>
+          ${icon('<path d="M16 3h5v5"/><path d="M4 20 21 3"/><path d="M21 16v5h-5"/><path d="m15 15 6 6"/><path d="M4 4l5 5"/>')}
+        </button>
+        <button class="companion-icon-button companion-pause" type="button" aria-label="暂停动画" data-tip="暂停动画" aria-pressed="false" disabled>
+          <span class="companion-pause-icon">${icon('<path d="M9 5v14"/><path d="M15 5v14"/>')}</span>
+          <span class="companion-play-icon">${icon('<path d="m8 5 11 7-11 7V5Z"/>')}</span>
+        </button>
+      </div>
+      <fieldset class="companion-field">
+        <legend>展示</legend>
+        <div class="companion-segmented">${segment('companion-display', 'portrait', '立绘')}${segment('companion-display', 'skill', '技能')}${segment('companion-display', 'both', '轮流')}</div>
+      </fieldset>
+      <fieldset class="companion-field">
+        <legend>人物</legend>
+        <div class="companion-segmented">${segment('companion-person', 'random', '随机轮换')}${segment('companion-person', 'fixed', '固定')}</div>
+      </fieldset>
+      <label class="companion-field companion-rotation"><span>更换间隔</span><select aria-label="更换间隔">
+        ${ROTATION_CHOICES.map(minutes => `<option value="${minutes}">${minutes ? `每 ${minutes} 分钟` : '仅刷新页面时'}</option>`).join('')}
+      </select></label>
+      <label class="companion-field companion-fixed"><span>人物与服装</span><select aria-label="指定人物与服装" disabled><option>正在读取角色…</option></select></label>
+      <label class="companion-field companion-skill-picker" hidden><span>技能动作</span><select aria-label="技能动作" disabled><option>载入技能后可选择</option></select></label>
+      <fieldset class="companion-field">
+        <legend>游戏</legend>
+        <div class="companion-chips">${GAMES.map(game => `<label><input type="checkbox" name="companion-game" value="${game.id}"><span>${game.name}</span></label>`).join('')}</div>
+      </fieldset>
+      <p class="companion-menu-note" role="status" aria-live="polite" hidden></p>
+      <div class="companion-menu-recovery" hidden><button class="companion-menu-retry" type="button">重试切换</button><button class="companion-menu-fallback" type="button">使用本地立绘</button></div>
+      <small class="companion-menu-foot">设置仅保存在此浏览器，新角色首次加载需要联网。</small>
     </section></div>`;
 
   const rail = root.querySelector('.companion-rail');
@@ -283,20 +303,24 @@ export function initCompanion() {
   const statusText = root.querySelector('.companion-status-text');
   const retry = root.querySelector('.companion-retry');
   const fallback = root.querySelector('.companion-fallback');
-  const caption = root.querySelector('.companion-caption');
+  const power = root.querySelector('.companion-power');
   const currentName = root.querySelector('.companion-current-name');
   const currentLabel = root.querySelector('.companion-current-label');
+  const displayInputs = [...root.querySelectorAll('[name="companion-display"]')];
+  const personInputs = [...root.querySelectorAll('[name="companion-person"]')];
+  const gameInputs = [...root.querySelectorAll('[name="companion-game"]')];
+  const rotationField = root.querySelector('.companion-rotation');
+  const rotationPicker = root.querySelector('[aria-label="更换间隔"]');
+  const fixedField = root.querySelector('.companion-fixed');
   const picker = root.querySelector('[aria-label="指定人物与服装"]');
   const skillPickerLabel = root.querySelector('.companion-skill-picker');
   const skillPicker = root.querySelector('[aria-label="技能动作"]');
   const shuffle = root.querySelector('.companion-shuffle');
   const pause = root.querySelector('.companion-pause');
-  const hide = root.querySelector('.companion-hide');
   const note = root.querySelector('.companion-menu-note');
   const recovery = root.querySelector('.companion-menu-recovery');
   const menuRetry = root.querySelector('.companion-menu-retry');
   const menuFallback = root.querySelector('.companion-menu-fallback');
-  const switches = [...root.querySelectorAll('[data-option]')];
 
   // Bind the menu before setting up rendering, media queries or asset loading.
   // A renderer setup failure must never leave a visible, unresponsive button.
@@ -339,6 +363,9 @@ export function initCompanion() {
   let mode = 'portrait';
   let loadError = '';
   let pickerSignature;
+  let noteHold = false;
+  // While random rotation is on, the next person appears after this time.
+  let rotationDue = Infinity;
   const assetCache = new Map();
   const enabled = () => preferences.portraits || preferences.skills;
   const initialMode = () => preferences.portraits ? 'portrait' : 'skill';
@@ -380,17 +407,29 @@ export function initCompanion() {
   function updateUI() {
     const active = stage.active;
     const visible = enabled() && desktop.matches;
+    const display = displayOf(preferences);
     document.body.dataset.companion = visible ? 'on' : 'off';
     root.dataset.enabled = String(enabled());
     rail.hidden = !visible;
-    caption.hidden = !active || !preferences.info;
-    switches.forEach(input => { input.checked = preferences[input.dataset.option]; });
-    shuffle.disabled = !catalog;
+    power.checked = enabled();
+    // While off, the segments show what the switch would restore.
+    displayInputs.forEach(input => { input.checked = input.value === (display === 'off' ? preferences.resume : display); });
+    personInputs.forEach(input => { input.checked = (input.value === 'random') === preferences.random; });
+    rotationField.hidden = !preferences.random;
+    rotationPicker.value = String(preferences.rotation);
+    fixedField.hidden = preferences.random;
+    gameInputs.forEach(input => {
+      input.checked = preferences.games.includes(input.value);
+      // At least one game must stay selected.
+      input.disabled = input.checked && preferences.games.length === 1;
+    });
+    shuffle.disabled = !catalog || !enabled();
     pause.disabled = !active;
-    hide.disabled = !enabled();
-    pause.textContent = motionAllowed ? '暂停动画' : '播放动画';
+    const pauseText = motionAllowed ? '暂停动画' : '播放动画';
+    pause.setAttribute('aria-label', pauseText);
+    pause.dataset.tip = pauseText;
     pause.setAttribute('aria-pressed', String(!motionAllowed));
-    skillPickerLabel.hidden = !preferences.skills;
+    skillPickerLabel.hidden = preferences.random || !preferences.skills;
     skillPicker.disabled = !skillAnimations.length;
     const skillSignature = skillAnimations.map(animation => animation.name).join('|');
     if (skillSignature !== skillPickerSignature) {
@@ -414,12 +453,7 @@ export function initCompanion() {
       currentName.textContent = selection.character.name;
       currentLabel.textContent = selection.costume.label;
     }
-    if (active) {
-      caption.querySelector('.companion-name').textContent = active.selection.character.name;
-      caption.querySelector('.companion-label').textContent = active.selection.costume.label;
-      caption.querySelector('.companion-caption-mode').textContent = active.mode === 'skill' ? '技能' : '立绘';
-      root.dataset.mode = active.mode;
-    }
+    if (active) root.dataset.mode = active.mode;
     if (catalog) {
       const signature = `${preferences.portraits}:${preferences.skills}`;
       if (signature !== pickerSignature) {
@@ -441,26 +475,26 @@ export function initCompanion() {
       if (selection) picker.value = costumeKey(selection.costume);
     }
     recovery.hidden = !loadError;
+    let message = '';
     if (!enabled()) {
       root.dataset.state = 'off';
-      note.textContent = '立绘和技能均已关闭，导航使用完整宽度。';
+      message = '已关闭，导航使用完整宽度。';
     } else if (!desktop.matches) {
       root.dataset.state = 'compact';
-      note.textContent = '设置已记住，窗口宽度达到 1280px 时展示角色。';
+      message = '窗口宽度达到 1280px 时展示角色。';
     } else if (loadError) {
       root.dataset.state = 'error';
-      note.textContent = active ? `${loadError}，已保留当前画面，可重试切换。` : loadError;
+      message = active ? `${loadError}，已保留当前画面。` : loadError;
     } else if (stage.pending) {
       root.dataset.state = active ? 'switching' : 'loading';
-      note.textContent = statusText.textContent;
-    } else if (!motionAllowed) {
-      root.dataset.state = 'ready';
-      note.textContent = reducedMotion.matches ? '已按系统偏好暂停，可点击播放动画。' : '动画已暂停。';
+      message = statusText.textContent;
     } else {
       root.dataset.state = active ? 'ready' : 'off';
-      note.textContent = preferences.portraits && preferences.skills ? '立绘与技能轮流展示。' :
-        (preferences.random ? '刷新页面时随机换人，也可以随时点「换一位」。' : '已固定当前人物与服装，刷新后保持。');
+      if (!motionAllowed) message = reducedMotion.matches ? '已按系统偏好暂停动画。' : '动画已暂停。';
     }
+    // Errors from a rejected choice stay until the next change.
+    if (!noteHold) note.textContent = message;
+    note.hidden = !note.textContent;
   }
 
   function updatePlayback() {
@@ -510,7 +544,6 @@ export function initCompanion() {
     clearAssets();
     loadError = '';
     host.replaceChildren();
-    caption.hidden = true;
     status.hidden = true;
     delete root.dataset.paused;
     delete root.dataset.mode;
@@ -528,6 +561,27 @@ export function initCompanion() {
     updateUI();
   }
 
+  function scheduleRotation() {
+    rotationDue = preferences.random && preferences.rotation ? performance.now() + preferences.rotation * 60000 : Infinity;
+  }
+
+  // Move to another random person at a natural break in the current motion.
+  function advance(record, next) {
+    record.advancing = true;
+    queueMicrotask(() => {
+      if (stage.active !== record) return;
+      if (next !== 'rotate') { void start(next); return; }
+      try {
+        selectCharacter(true);
+      } catch {
+        scheduleRotation();
+        record.advancing = false;
+        return;
+      }
+      void start();
+    });
+  }
+
   function selectCharacter(redraw = false, preserveSkillAction = false) {
     if (!catalog) return;
     const previous = selection ? costumeKey(selection.costume) : preferences.costumeKey;
@@ -537,6 +591,7 @@ export function initCompanion() {
       skillAnimations = [];
       skillPickerSignature = undefined;
       clearAssets();
+      scheduleRotation();
     }
     preferences.characterId = selection.character.id;
     preferences.costumeKey = costumeKey(selection.costume);
@@ -605,7 +660,10 @@ export function initCompanion() {
               if (!record.animations.length) throw new Error('这套服装暂无可播放动画');
               record.animation = record.animations[0];
               if (record.mode === 'skill') {
-                record.animation = selectSkillAnimation(record.animations, record.skillAction, presentation);
+                // Random rotation also varies the action unless one was chosen.
+                const saved = record.skillAction || (preferences.random && record.animations.length > 1 ?
+                  record.animations[Math.floor(Math.random() * record.animations.length)].name : '');
+                record.animation = selectSkillAnimation(record.animations, saved, presentation);
                 const action = presentation?.skills?.find(action => action.animation === record.animation.name);
                 record.animation = composeSkillAttachments(spine, data, record.animation, action?.attachmentLayers);
                 if (action?.framing === 'full') layer.classList.add('fit-artwork');
@@ -653,15 +711,17 @@ export function initCompanion() {
             if (record.view) layoutCamera(record, loadedPlayer);
             if (stage.active !== record || stage.pending || record.advancing || delta <= 0) return;
             record.elapsed += delta;
+            // Paused or hidden pages draw no frames, so rotation waits for them.
+            const rotate = performance.now() >= rotationDue;
             if (record.mode === 'portrait') {
               const playingMotion = record.portraitMotion && loadedPlayer.animationState.getCurrent(0)?.animation === record.portraitMotion;
-              if (preferences.skills && record.elapsed >= 16 && !playingMotion) {
-                record.advancing = true;
-                queueMicrotask(() => { if (stage.active === record) void start('skill'); });
-              }
+              if (playingMotion) return;
+              if (rotate) advance(record, 'rotate');
+              else if (preferences.skills && record.elapsed >= 16) advance(record, 'skill');
+            } else if (rotate && record.elapsed >= record.animation.duration) {
+              advance(record, 'rotate');
             } else if (preferences.portraits && record.elapsed >= Math.max(record.animation.duration + 2, 12)) {
-              record.advancing = true;
-              queueMicrotask(() => { if (stage.active === record) void start('portrait'); });
+              advance(record, 'portrait');
             }
           },
           error() {
@@ -684,33 +744,44 @@ export function initCompanion() {
     }
   }
 
-  const onHide = () => {
-    preferences = { ...preferences, portraits: false, skills: false };
-    writePreferences(preferences);
-    stop();
-    updateUI();
-  };
-  const onOption = event => {
-    const key = event.target.dataset.option;
+  function applyDisplay(next) {
     const previous = preferences;
-    preferences = { ...preferences, [key]: event.target.checked };
-    if (key === 'portraits' || key === 'skills') {
-      // Closing must work even if the catalog has no compatible selection.
-      if (!enabled()) { onHide(); return; }
-      try {
-        if (catalog) selectCharacter();
-      } catch (error) {
-        preferences = previous;
-        updateUI();
-        note.textContent = `${error.message}，已保留原设置。`;
-        return;
-      }
+    preferences = next;
+    noteHold = false;
+    // Turning off must work even if the catalog has no compatible selection.
+    if (!enabled()) {
       writePreferences(preferences);
-      void start(key === 'skills' && preferences.skills ? 'skill' : initialMode());
-    } else {
-      writePreferences(preferences);
+      stop();
       updateUI();
+      return;
     }
+    try {
+      if (catalog) selectCharacter();
+    } catch (error) {
+      preferences = previous;
+      noteHold = true;
+      note.textContent = `${error.message}，已保留原设置。`;
+      updateUI();
+      return;
+    }
+    writePreferences(preferences);
+    // A newly added skill display plays first so the change is visible at once.
+    void start(preferences.skills && !previous.skills ? 'skill' : initialMode());
+  }
+  function updatePreference(changes) {
+    preferences = { ...preferences, ...changes };
+    noteHold = false;
+    writePreferences(preferences);
+    updateUI();
+  }
+  const onPower = () => applyDisplay(withDisplay(preferences, power.checked ? 'on' : 'off'));
+  const onDisplay = event => applyDisplay(withDisplay(preferences, event.target.value));
+  const onPerson = event => { updatePreference({ random: event.target.value === 'random' }); scheduleRotation(); };
+  const onRotation = () => { updatePreference({ rotation: Number(rotationPicker.value) }); scheduleRotation(); };
+  const onGame = () => {
+    const games = gameInputs.filter(input => input.checked).map(input => input.value);
+    if (games.length) updatePreference({ games });
+    else updateUI();
   };
   const onShuffle = () => { selectCharacter(true); void start(); };
   const onPick = () => {
@@ -754,10 +825,13 @@ export function initCompanion() {
   menuFallback.addEventListener('click', onFallback);
   shuffle.addEventListener('click', onShuffle);
   pause.addEventListener('click', onPause);
-  hide.addEventListener('click', onHide);
+  power.addEventListener('change', onPower);
+  displayInputs.forEach(input => input.addEventListener('change', onDisplay));
+  personInputs.forEach(input => input.addEventListener('change', onPerson));
+  rotationPicker.addEventListener('change', onRotation);
+  gameInputs.forEach(input => input.addEventListener('change', onGame));
   picker.addEventListener('change', onPick);
   skillPicker.addEventListener('change', onSkillPick);
-  switches.forEach(input => input.addEventListener('change', onOption));
   document.addEventListener('visibilitychange', updatePlayback);
   reducedMotion.addEventListener('change', onMotionChange);
   desktop.addEventListener('change', onDesktopChange);
@@ -765,16 +839,19 @@ export function initCompanion() {
 
   const catalogController = new AbortController();
   const catalogTimeout = setTimeout(() => catalogController.abort(), 15000);
+  // Only one game is registered so far. A second one will merge its catalog
+  // into the same pool here, with ids namespaced by game.
+  const game = selectedGames(preferences.games)[0];
   Promise.all([
-    fetchResource(CATALOG_URL, catalogController.signal).then(response => response.json()),
-    fetchResource(PRESENTATIONS_URL, catalogController.signal, 'no-cache').then(response => response.json()).catch(() => ({})),
+    fetchResource(game.catalogUrl, catalogController.signal).then(response => response.json()),
+    fetchResource(game.presentationsUrl, catalogController.signal, 'no-cache').then(response => response.json()).catch(() => ({})),
   ]).then(([data, reference]) => {
     if (disposed) return;
     if (!/^[a-f0-9]{12,40}$/.test(data.commit) || !Array.isArray(data.characters) || !data.characters.length) {
       throw new Error('角色索引不完整');
     }
     presentations = reference;
-    catalog = { ...data, characters: data.characters.filter(character => !isExcludedCharacter(character)).map(character => {
+    catalog = { ...data, game: game.id, assetBase: game.assetBase, characters: data.characters.filter(character => !isExcludedCharacter(character)).map(character => {
       const costumes = character.costumes.map(costume => {
         const presentation = presentationForCostume(presentations, costume);
         return { ...costume, label: presentation?.label || costume.label };
@@ -787,7 +864,7 @@ export function initCompanion() {
   }).catch(() => {
     if (disposed) return;
     // The same exclusion rules apply to the offline fallback.
-    catalog = { commit: LOCAL_FALLBACK_COMMIT, characters: [LOCAL_FALLBACK_CHARACTER].filter(character => !isExcludedCharacter(character)) };
+    catalog = { commit: LOCAL_FALLBACK_COMMIT, game: game.id, assetBase: game.assetBase, characters: [LOCAL_FALLBACK_CHARACTER].filter(character => !isExcludedCharacter(character)) };
     preferences.portraits ||= preferences.skills;
     preferences.skills = false;
     selectCharacter();
@@ -809,10 +886,13 @@ export function initCompanion() {
       menuFallback.removeEventListener('click', onFallback);
       shuffle.removeEventListener('click', onShuffle);
       pause.removeEventListener('click', onPause);
-      hide.removeEventListener('click', onHide);
+      power.removeEventListener('change', onPower);
+      displayInputs.forEach(input => input.removeEventListener('change', onDisplay));
+      personInputs.forEach(input => input.removeEventListener('change', onPerson));
+      rotationPicker.removeEventListener('change', onRotation);
+      gameInputs.forEach(input => input.removeEventListener('change', onGame));
       picker.removeEventListener('change', onPick);
       skillPicker.removeEventListener('change', onSkillPick);
-      switches.forEach(input => input.removeEventListener('change', onOption));
       document.removeEventListener('pointerdown', onOutside);
       document.removeEventListener('keydown', onKeydown, true);
       document.removeEventListener('focusin', onFocus);

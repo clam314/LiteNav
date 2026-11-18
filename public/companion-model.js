@@ -1,7 +1,13 @@
 // Keep the stored keys to preserve existing browser preferences after rebranding.
 import { isExcludedCharacter } from './companion-exclusions.js';
+import { DEFAULT_GAMES, selectedGames } from './companion-games.js';
 export const PREFERENCES_KEY = 'guihang.companion.preferences';
 export const LEGACY_KEY = 'guihang.companion.enabled';
+
+// Minutes between random people while the page stays open; 0 changes only on reload.
+export const ROTATION_CHOICES = [1, 3, 5, 10, 0];
+export const DEFAULT_ROTATION = 3;
+export const DISPLAY_MODES = ['portrait', 'skill', 'both'];
 
 export function normalizePreferences(value, legacyEnabled = false) {
   const data = value && typeof value === 'object' ? value : {};
@@ -10,11 +16,30 @@ export function normalizePreferences(value, legacyEnabled = false) {
     random: boolean('random', true),
     portraits: boolean('portraits', legacyEnabled),
     skills: boolean('skills', false),
-    info: boolean('info', true),
+    rotation: ROTATION_CHOICES.includes(data.rotation) ? data.rotation : DEFAULT_ROTATION,
+    // The display to restore when the master switch turns the companion back on.
+    resume: DISPLAY_MODES.includes(data.resume) ? data.resume : 'portrait',
+    games: Array.isArray(data.games) ? selectedGames(data.games).map(game => game.id) : [...DEFAULT_GAMES],
     characterId: typeof data.characterId === 'string' ? data.characterId : '',
     costumeKey: typeof data.costumeKey === 'string' ? data.costumeKey : '',
     skillAction: typeof data.skillAction === 'string' ? data.skillAction : '',
   };
+}
+
+export function displayOf(preferences) {
+  if (preferences.portraits && preferences.skills) return 'both';
+  if (preferences.portraits) return 'portrait';
+  return preferences.skills ? 'skill' : 'off';
+}
+
+// Switching the display keeps the person; turning it off remembers what to restore.
+export function withDisplay(preferences, display) {
+  if (display === 'off') {
+    const current = displayOf(preferences);
+    return { ...preferences, portraits: false, skills: false, resume: current === 'off' ? preferences.resume : current };
+  }
+  const mode = display === 'on' ? preferences.resume : display;
+  return { ...preferences, portraits: mode !== 'skill', skills: mode !== 'portrait', resume: mode };
 }
 
 export const costumeKey = costume => costume.idle?.skeleton || costume.cutscene?.skeleton || '';

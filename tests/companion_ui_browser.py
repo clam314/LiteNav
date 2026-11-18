@@ -84,7 +84,7 @@ class QuietHandler(SimpleHTTPRequestHandler):
 
 
 def preferences(**changes):
-    return {"random": False, "portraits": True, "skills": False, "info": True,
+    return {"random": False, "portraits": True, "skills": False,
             "characterId": "0002", "costumeKey": "spine/char/char000201/char000201.skel", "skillAction": "", **changes}
 
 
@@ -157,11 +157,11 @@ def run_cases(browser, origin, case_filter=None):
     def unavailable_skill(page):
         page.wait_for_function("document.querySelector('#companion-root').dataset.state === 'ready'")
         open_menu(page)
-        page.get_by_role("switch", name="展示技能", exact=True).click()
-        expect(page.get_by_role("switch", name="展示技能", exact=True)).not_to_be_checked()
-        expect(page.get_by_role("switch", name="展示立绘", exact=True)).to_be_checked()
-        expect(page.locator(".companion-menu-note").first).to_contain_text("没有符合展示选项的角色")
-        page.get_by_role("switch", name="展示立绘", exact=True).click()
+        page.get_by_role("radio", name="技能", exact=True).click()
+        expect(page.get_by_role("radio", name="技能", exact=True)).not_to_be_checked()
+        expect(page.get_by_role("radio", name="立绘", exact=True)).to_be_checked()
+        expect(page.locator(".companion-menu-note")).to_contain_text("没有符合展示选项的角色")
+        page.get_by_role("switch", name="角色陪伴", exact=True).click()
         expect(page.locator("body")).to_have_attribute("data-companion", "off")
         expect(page.locator("#companion-root canvas")).to_have_count(0)
 
@@ -171,27 +171,29 @@ def run_cases(browser, origin, case_filter=None):
         page.wait_for_function("document.querySelector('#companion-root').dataset.state === 'ready'")
         before = page.evaluate(f"JSON.parse(localStorage.getItem({json.dumps(PREFERENCE_KEY)}))")
         open_menu(page)
-        page.get_by_role("button", name="关闭角色", exact=True).click()
+        page.get_by_role("switch", name="角色陪伴", exact=True).click()
         expect(page.locator("body")).to_have_attribute("data-companion", "off")
         expect(page.locator("#companion-root canvas")).to_have_count(0)
-        expect(page.get_by_role("switch", name="展示立绘", exact=True)).not_to_be_checked()
-        expect(page.get_by_role("switch", name="展示技能", exact=True)).not_to_be_checked()
+        expect(page.get_by_role("switch", name="角色陪伴", exact=True)).not_to_be_checked()
+        expect(page.get_by_role("radio", name="轮流", exact=True)).to_be_checked()
         after = page.evaluate(f"JSON.parse(localStorage.getItem({json.dumps(PREFERENCE_KEY)}))")
-        for key in ["random", "info", "characterId", "costumeKey", "skillAction"]:
+        for key in ["random", "characterId", "costumeKey", "skillAction"]:
             assert after[key] == before[key], f"closing must preserve {key}"
+        assert after["resume"] == "both" and not after["portraits"] and not after["skills"]
         page.reload()
         page.wait_for_function("document.querySelector('#companion-root').dataset.state === 'off'")
         expect(page.locator("#companion-root canvas")).to_have_count(0)
         open_menu(page)
-        expect(page.get_by_role("button", name="关闭角色", exact=True)).to_be_disabled()
+        expect(page.get_by_role("switch", name="角色陪伴", exact=True)).not_to_be_checked()
+        expect(page.get_by_role("button", name="换一位", exact=True)).to_be_disabled()
 
-    case("one action closes both modes and retains the chosen person after reload", close_all, prefs=preferences(skills=True, info=False))
+    case("one switch closes both modes and retains the chosen person after reload", close_all, prefs=preferences(skills=True))
 
     def no_storage(page):
         open_menu(page)
-        page.get_by_role("switch", name="展示立绘", exact=True).click()
+        page.get_by_role("switch", name="角色陪伴", exact=True).click()
         page.wait_for_function("document.querySelector('#companion-root').dataset.state === 'ready'")
-        page.get_by_role("button", name="关闭角色", exact=True).click()
+        page.get_by_role("switch", name="角色陪伴", exact=True).click()
         expect(page.locator("body")).to_have_attribute("data-companion", "off")
         expect(page.locator("#companion-root canvas")).to_have_count(0)
 
@@ -205,7 +207,7 @@ def run_cases(browser, origin, case_filter=None):
         saved = page.evaluate(f"JSON.parse(localStorage.getItem({json.dumps(PREFERENCE_KEY)}))")
         assert saved["characterId"] == "0002"
         assert saved["costumeKey"] == "spine/char/char000201/char000201.skel"
-        assert len(page.get_by_role("switch").all()) == 4, "no extra filter switch"
+        assert len(page.get_by_role("switch").all()) == 1, "only the master switch"
 
     case("a saved male is removed from selection and replaced before rendering", saved_male,
          prefs=preferences(characterId="0001", costumeKey="spine/char/char000101/char000101.skel"))

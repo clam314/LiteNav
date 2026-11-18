@@ -7,7 +7,9 @@ export const ASSET_CACHE_NAME = 'litenav-companion-assets';
 // Roughly 30 costume modes (skeleton, atlas and textures each count once).
 export const ASSET_CACHE_LIMIT = 120;
 
+// base is one origin prefix or a list of them (one per game).
 export function createAssetFetcher({ base, fetchResource, cacheStorage = globalThis.caches, limit = ASSET_CACHE_LIMIT }) {
+  const bases = [].concat(base);
   let opening;
   const openStore = () => {
     // Insecure origins, private windows and blocked storage have no usable store.
@@ -25,7 +27,7 @@ export function createAssetFetcher({ base, fetchResource, cacheStorage = globalT
   }
 
   return async function fetchAsset(url, signal) {
-    if (!url.startsWith(base)) return fetchResource(url, signal);
+    if (!bases.some(prefix => url.startsWith(prefix))) return fetchResource(url, signal);
     const store = await openStore();
     const stored = await store?.match(url).catch(() => undefined);
     if (stored) return stored;
