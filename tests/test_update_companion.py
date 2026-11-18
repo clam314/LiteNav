@@ -59,20 +59,42 @@ class NikkeCatalogTests(unittest.TestCase):
         self.assertEqual(costume["cutscene"]["skeleton"], "l2d/c011/aim/c011_aim_00.skel")
         self.assertIsNone(anis["costumes"][0]["cutscene"], "outfits without an aim skeleton have no firing loop")
 
-    def test_unnamed_outfits_follow_their_person_and_new_people_wait_for_a_name(self):
-        paths = tree("c018", "c018_01", "c600", "c013")
-        skipped = []
-        people = self.build(paths, index=[{"id": "c013", "name": "Marian"}], names={"c018": "尼恩：透视之眼"}, skipped=skipped)
-        names = {person["name"]: [costume["label"] for costume in person["costumes"]] for person in people}
-        self.assertEqual(names, {"尼恩": ["透视之眼", "未命名时装 c018_01"], "Marian": ["默认"]})
-        self.assertEqual(skipped, ["c600"])
+    def test_index_names_split_units_and_skins(self):
+        paths = tree("c010", "c010_02", "c016", "c016_03", "c113", "c113_01")
+        index = [{"id": "c010", "name": "Rapi", "cn": "拉毗"}, {"id": "c010_02", "name": "Rapi White Promise", "cn": "拉毗 白色诺言"},
+                 {"id": "c016", "name": "Rapi: Red Hood", "cn": "拉毗：小红帽"},
+                 {"id": "c016_03", "name": "Rapi: Red Hood Radiance", "cn": "拉毗：小红帽 耀光"},
+                 {"id": "c113", "name": "E.H.", "cn": "E.H."}, {"id": "c113_01", "name": "E.H. Junkyard Vanguard", "cn": "E.H. 极道先锋"}]
+        people = {person["name"]: person for person in self.build(paths, index=index)}
+        self.assertEqual([costume["label"] for costume in people["拉毗"]["costumes"]], ["默认", "白色诺言", "小红帽", "小红帽 耀光"])
+        self.assertEqual(people["拉毗"]["aka"], "Rapi")
+        self.assertEqual([costume["label"] for costume in people["E.H."]["costumes"]], ["默认", "极道先锋"])
 
-    def test_npcs_enemies_males_and_old_models_are_left_out(self):
-        paths = tree("c010", "c010_01", "c250", "c803", "c813", "c911")
-        index = [{"id": "c010_01", "name": "Rapi_old"}]
-        names = {"c010": "拉毗", "c250": "量产型", "c803": "电次", "c813": "9S", "c911": "NPC"}
+    def test_manual_names_win_over_the_index(self):
+        paths = tree("c010", "c010_03")
+        index = [{"id": "c010", "cn": "拉毗"}, {"id": "c010_03", "cn": "拉毗 经典假期"}]
+        people = self.build(paths, index=index, names={"c010_03": "拉毗：慵懒海滩"})
+        self.assertEqual([costume["label"] for costume in people[0]["costumes"]], ["默认", "慵懒海滩"])
+
+    def test_skins_without_chinese_follow_their_person_and_unnamed_people_wait(self):
+        paths = tree("c018", "c018_01", "c600", "c600_02", "c013")
+        index = [{"id": "c018", "cn": "尼恩：透视之眼"}, {"id": "c600", "name": "Mint", "cn": "敏特"},
+                 {"id": "c600_02", "name": "Mint"}, {"id": "c013", "name": "Marian"}]
+        skipped = []
+        people = self.build(paths, index=index, skipped=skipped)
+        names = {person["name"]: [costume["label"] for costume in person["costumes"]] for person in people}
+        self.assertEqual(names, {"尼恩": ["透视之眼", "透视之眼 未命名时装 c018_01"], "敏特": ["默认", "未命名时装 c600_02"]})
+        self.assertEqual(skipped, ["c013"], "a person needs a Chinese name")
+
+    def test_npcs_enemies_soldiers_products_idolls_males_and_old_models_are_left_out(self):
+        paths = tree("c010", "c010_01", "c250", "c300", "c304", "c308", "c803", "c813", "c853", "c911", "c990")
+        index = [{"id": "c010_01", "name": "Rapi_old"}, {"id": "c990", "name": "Product 12: B-0007", "cn": "新产品"}]
+        names = {"c010": "拉毗", "c250": "量产型", "c300": "士兵E.G.", "c304": "iDoll花", "c308": "iDoll太阳",
+                 "c803": "电次", "c813": "9S", "c853": "亚当", "c911": "NPC"}
         people = self.build(paths, index=index, names=names)
         self.assertEqual([(person["name"], len(person["costumes"])) for person in people], [("拉毗", 1)])
+        for name in ("士兵O.W.", "产品23", "iDoll海", "Soldier XY", "Product 30"):
+            self.assertFalse(update.is_shown("c410", name), f"{name} is matched by name outside c300-c308")
 
     def test_listed_outfits_use_their_stand_skin(self):
         paths = tree("c220", "c010")

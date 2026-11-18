@@ -5,9 +5,11 @@ Brown Dust 2: the roster that clam314/bd2web keeps in sync with
 myssal/Brown-Dust-2-Asset is used as is.
 
 NIKKE: Nikke-db/Nikke-db.github.io is read at its latest commit. The l2d file
-tree decides which outfits exist (its l2d.json index misses some), each
-skeleton header gives the Spine runtime version, and scripts/nikke-names.json
-supplies Chinese names, falling back to the index's English names.
+tree decides which outfits exist, each skeleton header gives the Spine runtime
+version, and the l2d index that Nikke-db/nikke-db-vue maintains for its site
+supplies Simplified Chinese (cn) and English names. scripts/nikke-names.json
+holds manual names that take precedence. A person needs a Chinese name to be
+shown; the index leaves male characters and server-only entries without one.
 
 Both catalogs pin an upstream commit, so the browser never loads moving
 assets. Standard library only; set GITHUB_TOKEN to raise the API rate limit.
@@ -38,14 +40,19 @@ NIKKE_NAMES = ROOT / "scripts/nikke-names.json"
 BD2_ROSTER = "https://raw.githubusercontent.com/clam314/bd2web/main/data/roster.json"
 NIKKE_REPO = "Nikke-db/Nikke-db.github.io"
 NIKKE_RAW = "https://raw.githubusercontent.com/" + NIKKE_REPO + "/{commit}/"
+NIKKE_NAMES_REPO = "Nikke-db/nikke-db-vue"
+NIKKE_NAMES_INDEX = "https://raw.githubusercontent.com/" + NIKKE_NAMES_REPO + "/{commit}/src/utils/json/l2d.json"
 
 PLAYABLE_ID = re.compile(r"c(\d{3})(?:_(\d{2}))?")
-# NPCs (c9xx), mass-produced enemies (c25x) and male characters are not shown.
+# NPCs (c9xx), mass-produced enemies (c25x), soldiers, products and iDolls
+# (c300-c308, matched by name too) and male characters are not shown.
 NIKKE_EXCLUDED = {
     "c803", "c803_01",  # Denji
     "c804",  # Aki Hayakawa
     "c813",  # 9S
+    "c853",  # Adam
 }
+NIKKE_EXCLUDED_NAMES = re.compile(r"士兵|产品|idoll|soldier|product", re.IGNORECASE)
 # Outfits that need a specific skin, following clam314/Nikkiweb.
 NIKKE_STAND_SKINS = {
     **dict.fromkeys(["c220", "c102", "c940", "c101_01", "c350", "c810", "c810_01", "c321"], "acc"),
@@ -142,14 +149,30 @@ def parse_id(value: str):
     return (match.group(1), match.group(2)) if match else None
 
 
-def is_shown(outfit_id: str, english: str) -> bool:
+def is_shown(outfit_id: str, english: str, chinese: str = "") -> bool:
     parsed = parse_id(outfit_id)
     if not parsed or outfit_id in NIKKE_EXCLUDED:
         return False
     number = int(parsed[0])
-    if number >= 900 or 250 <= number <= 259:
+    if number >= 900 or 250 <= number <= 259 or 300 <= number <= 308:
+        return False
+    if NIKKE_EXCLUDED_NAMES.search(english) or NIKKE_EXCLUDED_NAMES.search(chinese):
         return False
     return not english.lower().endswith("_old")
+
+
+def split_name(name: str) -> tuple[str, str]:
+    """Person and variant, separated by a full- or half-width colon."""
+    parts = [part.strip() for part in re.split(r"[：:]", name, maxsplit=1)]
+    return parts[0], parts[1] if len(parts) > 1 else ""
+
+
+def skin_name(own: str, parent: str, person: str) -> str:
+    """The outfit's own words after its base unit's name ("拉毗 白色诺言" -> "白色诺言")."""
+    for prefix in (parent, person):
+        if prefix and own.startswith(prefix):
+            return own[len(prefix):].strip(" ：:")
+    return own.strip()
 
 
 def outfit_files(paths: set[str], outfit_id: str) -> dict:
@@ -164,35 +187,41 @@ def outfit_files(paths: set[str], outfit_id: str) -> dict:
 def build_nikke(tree_paths: set[str], index: list, names: dict, versions: dict, skipped: list | None = None) -> list:
     """Group outfits into people. versions maps skeleton path -> runtime.
 
-    Outfits of a known person may lack a name of their own; a new person
-    without any name is left out (and reported) until it is named, since it
-    could be an NPC or a male character.
+    Base units (cNNN) need a Chinese name, from names or the index's cn field;
+    without one they are left out and reported, since the index leaves male
+    characters unnamed. Skins (cNNN_NN) join their base unit's person and are
+    labelled by the words after its name, or by English when they have none.
     """
     english = {entry["id"]: str(entry.get("name") or "") for entry in index if isinstance(entry, dict) and entry.get("id")}
+    chinese = {entry["id"]: str(entry.get("cn") or "") for entry in index if isinstance(entry, dict) and entry.get("id")}
+    chinese.update({key: value for key, value in names.items() if value})
     outfits = sorted({path.split("/")[0] for path in tree_paths if parse_id(path.split("/")[0])})
     people: dict[str, dict] = {}
-    person_of: dict[str, str] = {}
+    units: dict[str, tuple[str, str]] = {}  # base id -> (person, unit label)
     for outfit_id in outfits:
         files = outfit_files(tree_paths, outfit_id)
-        if "stand" not in files or not is_shown(outfit_id, english.get(outfit_id, "")):
+        if "stand" not in files or not is_shown(outfit_id, english.get(outfit_id, ""), chinese.get(outfit_id, "")):
             continue
         number, suffix = parse_id(outfit_id)
-        zh = names.get(outfit_id, "")
-        if zh:
-            # Names separate person and outfit with a full- or half-width colon.
-            parts = [part.strip() for part in re.split(r"[：:]", zh, maxsplit=1)]
-            person, label = parts[0], parts[1] if len(parts) > 1 else ""
-        elif suffix and f"c{number}" in person_of:
-            person, label = person_of[f"c{number}"], english.get(outfit_id) or f"未命名时装 {outfit_id}"
-        elif english.get(outfit_id):
-            person, label = english[outfit_id].replace("_", " "), ""
+        base = f"c{number}"
+        own = chinese.get(outfit_id, "")
+        if suffix and base in units:
+            person, unit = units[base]
+            if own:
+                skin = skin_name(own, chinese.get(base, ""), person)
+            else:
+                skin = skin_name(english.get(outfit_id, ""), english.get(base, ""), "") or f"未命名时装 {outfit_id}"
+            label = " ".join(part for part in (unit, skin) if part)
+        elif own:
+            person, label = split_name(own)
+            if not suffix:
+                units[outfit_id] = (person, label)
         else:
             if skipped is not None:
                 skipped.append(outfit_id)
             continue
-        person_of[outfit_id] = person
         entry = people.setdefault(person, {"id": f"nikke:{outfit_id}", "name": person,
-                                           "aka": english.get(outfit_id, "").replace("_", " "), "costumes": []})
+                                           "aka": split_name(english.get(outfit_id, ""))[0].replace("_", " "), "costumes": []})
         costume = {"label": label or "默认", "outfit": outfit_id}
         for mode, part in (("idle", files["stand"]), ("cutscene", files.get("aim"))):
             if not part:
@@ -218,7 +247,8 @@ def update_nikke() -> tuple[Path, str]:
         raise ValueError("Nikke-db l2d tree was truncated")
     paths = {item["path"] for item in tree["tree"]}
     raw = NIKKE_RAW.format(commit=commit)
-    index = get_json(raw + "js/json/l2d.json")
+    names_commit = get_json(f"https://api.github.com/repos/{NIKKE_NAMES_REPO}/commits/main")["sha"]
+    index = get_json(NIKKE_NAMES_INDEX.format(commit=names_commit))
     names = json.loads(NIKKE_NAMES.read_text(encoding="utf-8"))
 
     # Read only the header of each skeleton that the catalog will reference.
@@ -233,13 +263,16 @@ def update_nikke() -> tuple[Path, str]:
     skipped: list[str] = []
     characters = build_nikke(paths, index, names, versions, skipped)
     if skipped:
-        print(f"nikke: {len(skipped)} unnamed outfits left out; name them in {NIKKE_NAMES.relative_to(ROOT)}: "
+        print(f"nikke: {len(skipped)} outfits without a Chinese name left out "
+              f"(male characters, server-only entries or not yet named upstream; "
+              f"add a name in {NIKKE_NAMES.relative_to(ROOT)} to show one): "
               + ", ".join(skipped))
     previous = json.loads(NIKKE_CATALOG.read_text(encoding="utf-8")) if NIKKE_CATALOG.exists() else {}
     if previous.get("characters") == characters:
         # Unrelated upstream commits (story art, galleries) keep the pinned commit.
         return NIKKE_CATALOG, dump(previous)
     return NIKKE_CATALOG, dump({"generatedAt": now(), "source": f"{NIKKE_REPO}@{commit[:12]}",
+                                "names": f"{NIKKE_NAMES_REPO}@{names_commit[:12]}",
                                 "commit": commit, "characters": characters})
 
 

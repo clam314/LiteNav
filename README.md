@@ -87,7 +87,7 @@ YAML 工具覆盖日常配置的常用写法；锚点与别名（`&` / `*`）、
   </tr>
 </table>
 
-角色设置只保存在当前浏览器，不会写入服务端配置。名单中的男性角色和 NPC 会被自动过滤。角色目录每周由 GitHub Actions 从上游资源自动刷新，新角色和新时装会随之加入。看过的角色素材会缓存在浏览器中，再次出现时无需重新下载；离线时可使用内置的本地立绘。
+角色设置只保存在当前浏览器，不会写入服务端配置。名单中的男性角色、NPC 以及士兵、产品、iDoll 等非角色单位会被自动过滤。角色目录每周由 GitHub Actions 从上游资源自动刷新，新角色和新时装会随之加入。看过的角色素材会缓存在浏览器中，再次出现时无需重新下载；离线时可使用内置的本地立绘。
 
 ## 快速开始
 
@@ -147,7 +147,7 @@ python3 tests/companion_ui_browser.py
 python3 scripts/update_companion.py
 ```
 
-NIKKE 新角色若暂无中文名，脚本会列出其编号，在 `scripts/nikke-names.json` 中补充后重新运行即可。
+NIKKE 的中文名随 Nikke-db 官方索引自动更新；上游暂无中文名的编号会被列出，需要时可在 `scripts/nikke-names.json` 中手工补充后重新运行。
 
 更多验证细节见 [验证记录](docs/VERIFICATION.md)。
 

@@ -1,6 +1,7 @@
 {
- "generatedAt": "2026-11-18T16:37:18+00:00",
+ "generatedAt": "2026-11-18T17:13:52+00:00",
  "source": "Nikke-db/Nikke-db.github.io@7d9c7b8666ba",
+ "names": "Nikke-db/nikke-db-vue@3e3fb7e3acd5",
  "commit": "7d9c7b8666ba3356ae846e50178d43150af558aa",
  "characters": [
   {
@@ -37,7 +38,7 @@
      }
     },
     {
-     "label": "慵懒海滩",
+     "label": "经典假期",
      "outfit": "c010_03",
      "idle": {
       "skeleton": "l2d/c010_03/c010_03_00.skel",
@@ -65,7 +66,7 @@
      }
     },
     {
-     "label": "小红帽：红色风情",
+     "label": "小红帽 红色风情",
      "outfit": "c016_01",
      "idle": {
       "skeleton": "l2d/c016_01/c016_01_00.skel",
@@ -79,7 +80,7 @@
      }
     },
     {
-     "label": "小红帽：挚爱之红",
+     "label": "小红帽 挚爱之红",
      "outfit": "c016_02",
      "idle": {
       "skeleton": "l2d/c016_02/c016_02_00.skel",
@@ -93,7 +94,7 @@
      }
     },
     {
-     "label": "小红帽：耀光",
+     "label": "小红帽 耀光",
      "outfit": "c016_03",
      "idle": {
       "skeleton": "l2d/c016_03/c016_03_00.skel",
@@ -170,7 +171,7 @@
      }
     },
     {
-     "label": "未命名时装 c018_01",
+     "label": "透视之眼 亲爱的公主",
      "outfit": "c018_01",
      "idle": {
       "skeleton": "l2d/c018_01/c018_01_00.skel",
@@ -217,12 +218,54 @@
       "atlas": "l2d/c015/aim/c015_aim_00.atlas",
       "runtime": "4.1"
      }
+    },
+    {
+     "label": "超级巨星",
+     "outfit": "c017",
+     "idle": {
+      "skeleton": "l2d/c017/c017_00.skel",
+      "atlas": "l2d/c017/c017_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c017/aim/c017_aim_00.skel",
+      "atlas": "l2d/c017/aim/c017_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "超级巨星 星光",
+     "outfit": "c017_01",
+     "idle": {
+      "skeleton": "l2d/c017_01/c017_01_00.skel",
+      "atlas": "l2d/c017_01/c017_01_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c017_01/aim/c017_01_aim_00.skel",
+      "atlas": "l2d/c017_01/aim/c017_01_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "超级巨星 T.T. STAR",
+     "outfit": "c017_02",
+     "idle": {
+      "skeleton": "l2d/c017_02/c017_02_00.skel",
+      "atlas": "l2d/c017_02/c017_02_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c017_02/aim/c017_02_aim_00.skel",
+      "atlas": "l2d/c017_02/aim/c017_02_aim_00.atlas",
+      "runtime": "4.1"
+     }
     }
    ]
   },
   {
    "id": "nikke:c013",
-   "name": "Marian",
+   "name": "玛丽安",
    "aka": "Marian",
    "costumes": [
     {
@@ -237,6 +280,34 @@
       "skeleton": "l2d/c013/aim/c013_aim_00.skel",
       "atlas": "l2d/c013/aim/c013_aim_00.atlas",
       "runtime": "4.0"
+     }
+    },
+    {
+     "label": "女王",
+     "outfit": "c019",
+     "idle": {
+      "skeleton": "l2d/c019/c019_00.skel",
+      "atlas": "l2d/c019/c019_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c019/aim/c019_aim_00.skel",
+      "atlas": "l2d/c019/aim/c019_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "女王 最后的爱恋",
+     "outfit": "c019_01",
+     "idle": {
+      "skeleton": "l2d/c019_01/c019_01_00.skel",
+      "atlas": "l2d/c019_01/c019_01_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c019_01/aim/c019_01_aim_00.skel",
+      "atlas": "l2d/c019_01/aim/c019_01_aim_00.atlas",
+      "runtime": "4.1"
      }
     }
    ]
@@ -398,7 +469,7 @@
   {
    "id": "nikke:c033",
    "name": "基里",
-   "aka": "",
+   "aka": "Quiry",
    "costumes": [
     {
      "label": "默认",
@@ -450,7 +521,7 @@
      }
     },
     {
-     "label": "杀手妻子：秘密派对清洁工",
+     "label": "杀手妻子 秘密派对清洁工",
      "outfit": "c043_01",
      "idle": {
       "skeleton": "l2d/c043_01/c043_01_00.skel",
@@ -464,7 +535,7 @@
      }
     },
     {
-     "label": "未命名时装 c043_02",
+     "label": "杀手妻子 秘密警探",
      "outfit": "c043_02",
      "idle": {
       "skeleton": "l2d/c043_02/c043_02_00.skel",
@@ -499,7 +570,7 @@
      }
     },
     {
-     "label": "未命名时装 c041_01",
+     "label": "秘密行动",
      "outfit": "c041_01",
      "idle": {
       "skeleton": "l2d/c041_01/c041_01_00.skel",
@@ -531,6 +602,20 @@
       "skeleton": "l2d/c060/aim/c060_aim_00.skel",
       "atlas": "l2d/c060/aim/c060_aim_00.atlas",
       "runtime": "4.0"
+     }
+    },
+    {
+     "label": "南瓜女巫",
+     "outfit": "c063",
+     "idle": {
+      "skeleton": "l2d/c063/c063_00.skel",
+      "atlas": "l2d/c063/c063_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c063/aim/c063_aim_00.skel",
+      "atlas": "l2d/c063/aim/c063_aim_00.atlas",
+      "runtime": "4.1"
      }
     }
    ]
@@ -590,7 +675,7 @@
      }
     },
     {
-     "label": "古典工具服",
+     "label": "古典工作服",
      "outfit": "c070_01",
      "idle": {
       "skeleton": "l2d/c070_01/c070_01_00.skel",
@@ -689,7 +774,7 @@
      }
     },
     {
-     "label": "黑色假日",
+     "label": "草莓花朵",
      "outfit": "c072_01",
      "idle": {
       "skeleton": "l2d/c072_01/c072_01_00.skel",
@@ -703,7 +788,7 @@
      }
     },
     {
-     "label": "草莓花朵",
+     "label": "黑色假日",
      "outfit": "c072_02",
      "idle": {
       "skeleton": "l2d/c072_02/c072_02_00.skel",
@@ -727,6 +812,20 @@
      "cutscene": {
       "skeleton": "l2d/c072_04/aim/c072_04_aim_00.skel",
       "atlas": "l2d/c072_04/aim/c072_04_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "冬日甜心",
+     "outfit": "c075",
+     "idle": {
+      "skeleton": "l2d/c075/c075_00.skel",
+      "atlas": "l2d/c075/c075_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c075/aim/c075_aim_00.skel",
+      "atlas": "l2d/c075/aim/c075_aim_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -829,7 +928,7 @@
      }
     },
     {
-     "label": "未命名时装 c082_80",
+     "label": "(CN)",
      "outfit": "c082_80",
      "idle": {
       "skeleton": "l2d/c082_80/c082_80_00.skel",
@@ -906,7 +1005,7 @@
      }
     },
     {
-     "label": "战术升级：秘密疗法",
+     "label": "战术升级 秘密疗法",
      "outfit": "c093_01",
      "idle": {
       "skeleton": "l2d/c093_01/c093_01_00.skel",
@@ -969,7 +1068,7 @@
      }
     },
     {
-     "label": "战术升级：青涩新生",
+     "label": "战术升级 青涩新生",
      "outfit": "c094_01",
      "idle": {
       "skeleton": "l2d/c094_01/c094_01_00.skel",
@@ -1018,7 +1117,7 @@
      }
     },
     {
-     "label": "战术升级：休假日",
+     "label": "战术升级 休假日",
      "outfit": "c095_01",
      "idle": {
       "skeleton": "l2d/c095_01/c095_01_00.skel",
@@ -1050,6 +1149,34 @@
       "skeleton": "l2d/c100/aim/c100_aim_00.skel",
       "atlas": "l2d/c100/aim/c100_aim_00.atlas",
       "runtime": "4.0"
+     }
+    },
+    {
+     "label": "究极英雄",
+     "outfit": "c103",
+     "idle": {
+      "skeleton": "l2d/c103/c103_00.skel",
+      "atlas": "l2d/c103/c103_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c103/aim/c103_aim_00.skel",
+      "atlas": "l2d/c103/aim/c103_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "究极英雄 原型英雄",
+     "outfit": "c103_01",
+     "idle": {
+      "skeleton": "l2d/c103_01/c103_01_00.skel",
+      "atlas": "l2d/c103_01/c103_01_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c103_01/aim/c103_01_aim_00.skel",
+      "atlas": "l2d/c103_01/aim/c103_01_aim_00.atlas",
+      "runtime": "4.1"
      }
     }
    ]
@@ -1101,6 +1228,20 @@
       "atlas": "l2d/c101_02/aim/c101_02_aim_00.atlas",
       "runtime": "4.1"
      }
+    },
+    {
+     "label": "终极反派",
+     "outfit": "c104",
+     "idle": {
+      "skeleton": "l2d/c104/c104_00.skel",
+      "atlas": "l2d/c104/c104_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c104/aim/c104_aim_00.skel",
+      "atlas": "l2d/c104/aim/c104_aim_00.atlas",
+      "runtime": "4.1"
+     }
     }
    ]
   },
@@ -1136,6 +1277,34 @@
       "skeleton": "l2d/c102_01/aim/c102_01_aim_00.skel",
       "atlas": "l2d/c102_01/aim/c102_01_aim_00.atlas",
       "runtime": "4.0"
+     }
+    },
+    {
+     "label": "平凡技师",
+     "outfit": "c105",
+     "idle": {
+      "skeleton": "l2d/c105/c105_00.skel",
+      "atlas": "l2d/c105/c105_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c105/aim/c105_aim_00.skel",
+      "atlas": "l2d/c105/aim/c105_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "平凡技师 首席研究员",
+     "outfit": "c105_01",
+     "idle": {
+      "skeleton": "l2d/c105_01/c105_01_00.skel",
+      "atlas": "l2d/c105_01/c105_01_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c105_01/aim/c105_01_aim_00.skel",
+      "atlas": "l2d/c105_01/aim/c105_01_aim_00.atlas",
+      "runtime": "4.1"
      }
     }
    ]
@@ -1260,6 +1429,41 @@
    ]
   },
   {
+   "id": "nikke:c113",
+   "name": "E.H.",
+   "aka": "E.H.",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c113",
+     "idle": {
+      "skeleton": "l2d/c113/c113_00.skel",
+      "atlas": "l2d/c113/c113_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c113/aim/c113_aim_00.skel",
+      "atlas": "l2d/c113/aim/c113_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "极道先锋",
+     "outfit": "c113_01",
+     "idle": {
+      "skeleton": "l2d/c113_01/c113_01_00.skel",
+      "atlas": "l2d/c113_01/c113_01_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c113_01/aim/c113_01_aim_00.skel",
+      "atlas": "l2d/c113_01/aim/c113_01_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    }
+   ]
+  },
+  {
    "id": "nikke:c120",
    "name": "N102",
    "aka": "N102",
@@ -1283,7 +1487,7 @@
   {
    "id": "nikke:c121",
    "name": "安妮",
-   "aka": "Anne: Miracle Fairy",
+   "aka": "Anne",
    "costumes": [
     {
      "label": "奇迹仙女",
@@ -1370,7 +1574,7 @@
      }
     },
     {
-     "label": "浴后",
+     "label": "海洋维他命",
      "outfit": "c131_01",
      "idle": {
       "skeleton": "l2d/c131_01/c131_01_00.skel",
@@ -1433,7 +1637,7 @@
      }
     },
     {
-     "label": "未命名时装 c140_03",
+     "label": "杀手兔女郎",
      "outfit": "c140_03",
      "idle": {
       "skeleton": "l2d/c140_03/c140_03_00.skel",
@@ -1566,7 +1770,7 @@
      }
     },
     {
-     "label": "未命名时装 c150_02",
+     "label": "夏日浪漫",
      "outfit": "c150_02",
      "idle": {
       "skeleton": "l2d/c150_02/c150_02_00.skel",
@@ -1601,7 +1805,7 @@
      }
     },
     {
-     "label": "可爱粉红",
+     "label": "可爱粉色",
      "outfit": "c160_01",
      "idle": {
       "skeleton": "l2d/c160_01/c160_01_00.skel",
@@ -1650,7 +1854,7 @@
      }
     },
     {
-     "label": "未命名时装 c162_01",
+     "label": "羁绊锁链 痛苦吞食者",
      "outfit": "c162_01",
      "idle": {
       "skeleton": "l2d/c162_01/c162_01_00.skel",
@@ -2011,7 +2215,7 @@
   {
    "id": "nikke:c192",
    "name": "托比",
-   "aka": "",
+   "aka": "Tove",
    "costumes": [
     {
      "label": "默认",
@@ -2098,7 +2302,7 @@
      }
     },
     {
-     "label": "兔之吻——奢侈兔",
+     "label": "奢侈兔",
      "outfit": "c200_01",
      "idle": {
       "skeleton": "l2d/c200_01/c200_01_00.skel",
@@ -2217,7 +2421,7 @@
      }
     },
     {
-     "label": "快乐书呆子",
+     "label": "书呆子日快乐",
      "outfit": "c210_01",
      "idle": {
       "skeleton": "l2d/c210_01/c210_01_00.skel",
@@ -2245,7 +2449,7 @@
      }
     },
     {
-     "label": "黑客兔子",
+     "label": "黑客兔",
      "outfit": "c210_03",
      "idle": {
       "skeleton": "l2d/c210_03/c210_03_00.skel",
@@ -2372,7 +2576,7 @@
      }
     },
     {
-     "label": "未命名时装 c471_01",
+     "label": "重型武装 垂泪之日",
      "outfit": "c471_01",
      "idle": {
       "skeleton": "l2d/c471_01/c471_01_00.skel",
@@ -2417,6 +2621,20 @@
      "cutscene": {
       "skeleton": "l2d/c226/aim/c226_aim_00.skel",
       "atlas": "l2d/c226/aim/c226_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "圣域",
+     "outfit": "c473",
+     "idle": {
+      "skeleton": "l2d/c473/c473_00.skel",
+      "atlas": "l2d/c473/c473_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c473/aim/c473_aim_00.skel",
+      "atlas": "l2d/c473/aim/c473_aim_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -2470,7 +2688,7 @@
      }
     },
     {
-     "label": "暗影：莲花",
+     "label": "暗影 莲花",
      "outfit": "c225_01",
      "idle": {
       "skeleton": "l2d/c225_01/c225_01_00.skel",
@@ -2482,13 +2700,27 @@
       "atlas": "l2d/c225_01/aim/c225_01_aim_00.atlas",
       "runtime": "4.1"
      }
+    },
+    {
+     "label": "弑神",
+     "outfit": "c472",
+     "idle": {
+      "skeleton": "l2d/c472/c472_00.skel",
+      "atlas": "l2d/c472/c472_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c472/aim/c472_aim_00.skel",
+      "atlas": "l2d/c472/aim/c472_aim_00.atlas",
+      "runtime": "4.1"
+     }
     }
    ]
   },
   {
    "id": "nikke:c223",
    "name": "娜由塔",
-   "aka": "",
+   "aka": "Nayuta",
    "costumes": [
     {
      "label": "默认",
@@ -2519,7 +2751,7 @@
      }
     },
     {
-     "label": "未命名时装 c223_02",
+     "label": "三毒",
      "outfit": "c223_02",
      "idle": {
       "skeleton": "l2d/c223_02/c223_02_00.skel",
@@ -2531,6 +2763,23 @@
       "atlas": "l2d/c223_02/aim/c223_02_aim_00.atlas",
       "runtime": "4.1"
      }
+    }
+   ]
+  },
+  {
+   "id": "nikke:c227",
+   "name": "匹诺曹",
+   "aka": "Pinocchio",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c227",
+     "idle": {
+      "skeleton": "l2d/c227/c227_00.skel",
+      "atlas": "l2d/c227/c227_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -2622,6 +2871,16 @@
       "atlas": "l2d/c232/aim/c232_aim_00.atlas",
       "runtime": "4.0"
      }
+    },
+    {
+     "label": "默认",
+     "outfit": "c235",
+     "idle": {
+      "skeleton": "l2d/c235/c235_00.skel",
+      "atlas": "l2d/c235/c235_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -2643,6 +2902,16 @@
       "atlas": "l2d/c233/aim/c233_aim_00.atlas",
       "runtime": "4.0"
      }
+    },
+    {
+     "label": "默认",
+     "outfit": "c474",
+     "idle": {
+      "skeleton": "l2d/c474/c474_00.skel",
+      "atlas": "l2d/c474/c474_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": null
     },
     {
      "label": "怀旧",
@@ -2673,7 +2942,7 @@
      }
     },
     {
-     "label": "未命名时装 c233_80",
+     "label": "(CN)",
      "outfit": "c233_80",
      "idle": {
       "skeleton": "l2d/c233_80/c233_80_00.skel",
@@ -2685,6 +2954,37 @@
       "atlas": "l2d/c233_80/aim/c233_80_aim_00.atlas",
       "runtime": "4.1"
      }
+    },
+    {
+     "label": "机缘巧遇",
+     "outfit": "c234",
+     "idle": {
+      "skeleton": "l2d/c234/c234_00.skel",
+      "atlas": "l2d/c234/c234_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c234/aim/c234_aim_00.skel",
+      "atlas": "l2d/c234/aim/c234_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    }
+   ]
+  },
+  {
+   "id": "nikke:c236",
+   "name": "芭比珑",
+   "aka": "Papillon",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c236",
+     "idle": {
+      "skeleton": "l2d/c236/c236_00.skel",
+      "atlas": "l2d/c236/c236_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -2785,7 +3085,7 @@
      }
     },
     {
-     "label": "初次爱恋",
+     "label": "初次的爱恋",
      "outfit": "c260_01",
      "idle": {
       "skeleton": "l2d/c260_01/c260_01_00.skel",
@@ -2813,7 +3113,7 @@
      }
     },
     {
-     "label": "未命名时装 c260_80",
+     "label": "(CN)",
      "outfit": "c260_80",
      "idle": {
       "skeleton": "l2d/c260_80/c260_80_00.skel",
@@ -2881,23 +3181,6 @@
       "atlas": "l2d/c262_01/aim/c262_01_aim_00.atlas",
       "runtime": "4.1"
      }
-    }
-   ]
-  },
-  {
-   "id": "nikke:c263",
-   "name": "Indivilia",
-   "aka": "Indivilia",
-   "costumes": [
-    {
-     "label": "默认",
-     "outfit": "c263",
-     "idle": {
-      "skeleton": "l2d/c263/c263_00.skel",
-      "atlas": "l2d/c263/c263_00.atlas",
-      "runtime": "4.1"
-     },
-     "cutscene": null
     }
    ]
   },
@@ -3131,7 +3414,7 @@
      }
     },
     {
-     "label": "未命名时装 c281_02",
+     "label": "百花之王",
      "outfit": "c281_02",
      "idle": {
       "skeleton": "l2d/c281_02/c281_02_00.skel",
@@ -3215,7 +3498,7 @@
      }
     },
     {
-     "label": "未命名时装 c290_01",
+     "label": "醉酒兔女郎",
      "outfit": "c290_01",
      "idle": {
       "skeleton": "l2d/c290_01/c290_01_00.skel",
@@ -3246,195 +3529,6 @@
      "cutscene": {
       "skeleton": "l2d/c291/aim/c291_aim_00.skel",
       "atlas": "l2d/c291/aim/c291_aim_00.atlas",
-      "runtime": "4.0"
-     }
-    }
-   ]
-  },
-  {
-   "id": "nikke:c300",
-   "name": "士兵E.G",
-   "aka": "Soldier EG",
-   "costumes": [
-    {
-     "label": "默认",
-     "outfit": "c300",
-     "idle": {
-      "skeleton": "l2d/c300/c300_00.skel",
-      "atlas": "l2d/c300/c300_00.atlas",
-      "runtime": "4.0"
-     },
-     "cutscene": {
-      "skeleton": "l2d/c300/aim/c300_aim_00.skel",
-      "atlas": "l2d/c300/aim/c300_aim_00.atlas",
-      "runtime": "4.0"
-     }
-    }
-   ]
-  },
-  {
-   "id": "nikke:c301",
-   "name": "士兵F.A",
-   "aka": "Soldier FA",
-   "costumes": [
-    {
-     "label": "默认",
-     "outfit": "c301",
-     "idle": {
-      "skeleton": "l2d/c301/c301_00.skel",
-      "atlas": "l2d/c301/c301_00.atlas",
-      "runtime": "4.0"
-     },
-     "cutscene": {
-      "skeleton": "l2d/c301/aim/c301_aim_00.skel",
-      "atlas": "l2d/c301/aim/c301_aim_00.atlas",
-      "runtime": "4.0"
-     }
-    }
-   ]
-  },
-  {
-   "id": "nikke:c302",
-   "name": "产品08",
-   "aka": "Product 08",
-   "costumes": [
-    {
-     "label": "默认",
-     "outfit": "c302",
-     "idle": {
-      "skeleton": "l2d/c302/c302_00.skel",
-      "atlas": "l2d/c302/c302_00.atlas",
-      "runtime": "4.0"
-     },
-     "cutscene": {
-      "skeleton": "l2d/c302/aim/c302_aim_00.skel",
-      "atlas": "l2d/c302/aim/c302_aim_00.atlas",
-      "runtime": "4.0"
-     }
-    }
-   ]
-  },
-  {
-   "id": "nikke:c303",
-   "name": "产品12",
-   "aka": "Product 12",
-   "costumes": [
-    {
-     "label": "默认",
-     "outfit": "c303",
-     "idle": {
-      "skeleton": "l2d/c303/c303_00.skel",
-      "atlas": "l2d/c303/c303_00.atlas",
-      "runtime": "4.0"
-     },
-     "cutscene": {
-      "skeleton": "l2d/c303/aim/c303_aim_00.skel",
-      "atlas": "l2d/c303/aim/c303_aim_00.atlas",
-      "runtime": "4.0"
-     }
-    }
-   ]
-  },
-  {
-   "id": "nikke:c304",
-   "name": "IDoll花",
-   "aka": "iDoll Flower",
-   "costumes": [
-    {
-     "label": "默认",
-     "outfit": "c304",
-     "idle": {
-      "skeleton": "l2d/c304/c304_00.skel",
-      "atlas": "l2d/c304/c304_00.atlas",
-      "runtime": "4.0"
-     },
-     "cutscene": {
-      "skeleton": "l2d/c304/aim/c304_aim_00.skel",
-      "atlas": "l2d/c304/aim/c304_aim_00.atlas",
-      "runtime": "4.0"
-     }
-    }
-   ]
-  },
-  {
-   "id": "nikke:c305",
-   "name": "iDoll海",
-   "aka": "iDoll Ocean",
-   "costumes": [
-    {
-     "label": "默认",
-     "outfit": "c305",
-     "idle": {
-      "skeleton": "l2d/c305/c305_00.skel",
-      "atlas": "l2d/c305/c305_00.atlas",
-      "runtime": "4.0"
-     },
-     "cutscene": {
-      "skeleton": "l2d/c305/aim/c305_aim_00.skel",
-      "atlas": "l2d/c305/aim/c305_aim_00.atlas",
-      "runtime": "4.0"
-     }
-    }
-   ]
-  },
-  {
-   "id": "nikke:c306",
-   "name": "士兵O.W",
-   "aka": "Soldier OW",
-   "costumes": [
-    {
-     "label": "默认",
-     "outfit": "c306",
-     "idle": {
-      "skeleton": "l2d/c306/c306_00.skel",
-      "atlas": "l2d/c306/c306_00.atlas",
-      "runtime": "4.0"
-     },
-     "cutscene": {
-      "skeleton": "l2d/c306/aim/c306_aim_00.skel",
-      "atlas": "l2d/c306/aim/c306_aim_00.atlas",
-      "runtime": "4.0"
-     }
-    }
-   ]
-  },
-  {
-   "id": "nikke:c307",
-   "name": "产品23",
-   "aka": "Product 23",
-   "costumes": [
-    {
-     "label": "默认",
-     "outfit": "c307",
-     "idle": {
-      "skeleton": "l2d/c307/c307_00.skel",
-      "atlas": "l2d/c307/c307_00.atlas",
-      "runtime": "4.0"
-     },
-     "cutscene": {
-      "skeleton": "l2d/c307/aim/c307_aim_00.skel",
-      "atlas": "l2d/c307/aim/c307_aim_00.atlas",
-      "runtime": "4.0"
-     }
-    }
-   ]
-  },
-  {
-   "id": "nikke:c308",
-   "name": "iDoll太阳",
-   "aka": "iDoll Sun",
-   "costumes": [
-    {
-     "label": "默认",
-     "outfit": "c308",
-     "idle": {
-      "skeleton": "l2d/c308/c308_00.skel",
-      "atlas": "l2d/c308/c308_00.atlas",
-      "runtime": "4.0"
-     },
-     "cutscene": {
-      "skeleton": "l2d/c308/aim/c308_aim_00.skel",
-      "atlas": "l2d/c308/aim/c308_aim_00.atlas",
       "runtime": "4.0"
      }
     }
@@ -3474,7 +3568,7 @@
      }
     },
     {
-     "label": "特务兔女郎",
+     "label": "特工兔女郎",
      "outfit": "c315",
      "idle": {
       "skeleton": "l2d/c315/c315_00.skel",
@@ -3546,6 +3640,41 @@
    ]
   },
   {
+   "id": "nikke:c316",
+   "name": "薇尔维特",
+   "aka": "Velvet",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c316",
+     "idle": {
+      "skeleton": "l2d/c316/c316_00.skel",
+      "atlas": "l2d/c316/c316_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c316/aim/c316_aim_00.skel",
+      "atlas": "l2d/c316/aim/c316_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "魅惑兔",
+     "outfit": "c316_01",
+     "idle": {
+      "skeleton": "l2d/c316_01/c316_01_00.skel",
+      "atlas": "l2d/c316_01/c316_01_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c316_01/aim/c316_01_aim_00.skel",
+      "atlas": "l2d/c316_01/aim/c316_01_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    }
+   ]
+  },
+  {
    "id": "nikke:c321",
    "name": "玛律恰那",
    "aka": "Marciana",
@@ -3576,6 +3705,20 @@
      "cutscene": {
       "skeleton": "l2d/c321_01/aim/c321_01_aim_00.skel",
       "atlas": "l2d/c321_01/aim/c321_01_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "海洋进修",
+     "outfit": "c322",
+     "idle": {
+      "skeleton": "l2d/c322/c322_00.skel",
+      "atlas": "l2d/c322/c322_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c322/aim/c322_aim_00.skel",
+      "atlas": "l2d/c322/aim/c322_aim_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -3714,7 +3857,7 @@
      }
     },
     {
-     "label": "浪漫的女仆：茶饮服务",
+     "label": "浪漫的女仆 茶饮服务",
      "outfit": "c354_01",
      "idle": {
       "skeleton": "l2d/c354_01/c354_01_00.skel",
@@ -3864,8 +4007,25 @@
    ]
   },
   {
+   "id": "nikke:c370",
+   "name": "伊特妮缇",
+   "aka": "Eternity",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c370",
+     "idle": {
+      "skeleton": "l2d/c370/c370_00.skel",
+      "atlas": "l2d/c370/c370_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "nikke:c371",
-   "name": "Endless",
+   "name": "恩德莉丝",
    "aka": "Endless",
    "costumes": [
     {
@@ -4108,6 +4268,20 @@
       "atlas": "l2d/c400_01/aim/c400_01_aim_00.atlas",
       "runtime": "4.1"
      }
+    },
+    {
+     "label": "神力兔女郎",
+     "outfit": "c404",
+     "idle": {
+      "skeleton": "l2d/c404/c404_00.skel",
+      "atlas": "l2d/c404/c404_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c404/aim/c404_aim_00.skel",
+      "atlas": "l2d/c404/aim/c404_aim_00.atlas",
+      "runtime": "4.1"
+     }
     }
    ]
   },
@@ -4141,6 +4315,20 @@
      "cutscene": {
       "skeleton": "l2d/c401_01/aim/c401_01_aim_00.skel",
       "atlas": "l2d/c401_01/aim/c401_01_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "疾速兔女郎",
+     "outfit": "c405",
+     "idle": {
+      "skeleton": "l2d/c405/c405_00.skel",
+      "atlas": "l2d/c405/c405_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c405/aim/c405_aim_00.skel",
+      "atlas": "l2d/c405/aim/c405_aim_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -4180,7 +4368,7 @@
      }
     },
     {
-     "label": "逃生女王：变装天鹅",
+     "label": "逃生女王 变装天鹅",
      "outfit": "c403_01",
      "idle": {
       "skeleton": "l2d/c403_01/c403_01_00.skel",
@@ -4198,7 +4386,7 @@
   {
    "id": "nikke:c411",
    "name": "芙罗拉",
-   "aka": "",
+   "aka": "Flora",
    "costumes": [
     {
      "label": "默认",
@@ -4215,7 +4403,7 @@
      }
     },
     {
-     "label": "未命名时装 c411_01",
+     "label": "妖精兔",
      "outfit": "c411_01",
      "idle": {
       "skeleton": "l2d/c411_01/c411_01_00.skel",
@@ -4233,7 +4421,7 @@
   {
    "id": "nikke:c412",
    "name": "特蕾娜",
-   "aka": "",
+   "aka": "Trina",
    "costumes": [
     {
      "label": "默认",
@@ -4371,6 +4559,44 @@
    ]
   },
   {
+   "id": "nikke:c440",
+   "name": "爱莉",
+   "aka": "Eyeri",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c440",
+     "idle": {
+      "skeleton": "l2d/c440/c440_00.skel",
+      "atlas": "l2d/c440/c440_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "nikke:c441",
+   "name": "阿维斯塔",
+   "aka": "Avistar",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c441",
+     "idle": {
+      "skeleton": "l2d/c441/c441_00.skel",
+      "atlas": "l2d/c441/c441_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c441/aim/c441_aim_00.skel",
+      "atlas": "l2d/c441/aim/c441_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    }
+   ]
+  },
+  {
    "id": "nikke:c450",
    "name": "娜嘉",
    "aka": "Naga",
@@ -4418,7 +4644,7 @@
      }
     },
     {
-     "label": "未命名时装 c450_03",
+     "label": "金环恋曲",
      "outfit": "c450_03",
      "idle": {
       "skeleton": "l2d/c450_03/c450_03_00.skel",
@@ -4481,7 +4707,7 @@
      }
     },
     {
-     "label": "未命名时装 c451_03",
+     "label": "海岸甜心",
      "outfit": "c451_03",
      "idle": {
       "skeleton": "l2d/c451_03/c451_03_00.skel",
@@ -4546,9 +4772,77 @@
    ]
   },
   {
+   "id": "nikke:c480",
+   "name": "利弗林",
+   "aka": "Liveryn",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c480",
+     "idle": {
+      "skeleton": "l2d/c480/c480_00.skel",
+      "atlas": "l2d/c480/c480_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "nikke:c481",
+   "name": "芙拉吉尔",
+   "aka": "Fragile",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c481",
+     "idle": {
+      "skeleton": "l2d/c481/c481_00.skel",
+      "atlas": "l2d/c481/c481_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "nikke:c490",
+   "name": "哈梅林",
+   "aka": "Hammering",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c490",
+     "idle": {
+      "skeleton": "l2d/c490/c490_00.skel",
+      "atlas": "l2d/c490/c490_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "nikke:c491",
+   "name": "德里尔林",
+   "aka": "Drilley",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c491",
+     "idle": {
+      "skeleton": "l2d/c491/c491_00.skel",
+      "atlas": "l2d/c491/c491_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "nikke:c500",
    "name": "伊莱格",
-   "aka": "",
+   "aka": "Elegg",
    "costumes": [
     {
      "label": "默认",
@@ -4563,13 +4857,27 @@
       "atlas": "l2d/c500/aim/c500_aim_00.atlas",
       "runtime": "4.1"
      }
+    },
+    {
+     "label": "BOOM与惊吓",
+     "outfit": "c502",
+     "idle": {
+      "skeleton": "l2d/c502/c502_00.skel",
+      "atlas": "l2d/c502/c502_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c502/aim/c502_aim_00.skel",
+      "atlas": "l2d/c502/aim/c502_aim_00.atlas",
+      "runtime": "4.1"
+     }
     }
    ]
   },
   {
    "id": "nikke:c501",
    "name": "特罗尼",
-   "aka": "",
+   "aka": "Trony",
    "costumes": [
     {
      "label": "默认",
@@ -4602,9 +4910,54 @@
    ]
   },
   {
+   "id": "nikke:c510",
+   "name": "格拉维",
+   "aka": "Grave",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c510",
+     "idle": {
+      "skeleton": "l2d/c510/c510_00.skel",
+      "atlas": "l2d/c510/c510_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": null
+    },
+    {
+     "label": "默认",
+     "outfit": "c514",
+     "idle": {
+      "skeleton": "l2d/c514/c514_00.skel",
+      "atlas": "l2d/c514/c514_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c514/aim/c514_aim_00.skel",
+      "atlas": "l2d/c514/aim/c514_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "美丽的你",
+     "outfit": "c514_01",
+     "idle": {
+      "skeleton": "l2d/c514_01/c514_01_00.skel",
+      "atlas": "l2d/c514_01/c514_01_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c514_01/aim/c514_01_aim_00.skel",
+      "atlas": "l2d/c514_01/aim/c514_01_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    }
+   ]
+  },
+  {
    "id": "nikke:c511",
    "name": "灰姑娘",
-   "aka": "",
+   "aka": "Cinderella",
    "costumes": [
     {
      "label": "默认",
@@ -4635,7 +4988,7 @@
      }
     },
     {
-     "label": "未命名时装 c511_02",
+     "label": "美丽的我",
      "outfit": "c511_02",
      "idle": {
       "skeleton": "l2d/c511_02/c511_02_00.skel",
@@ -4649,7 +5002,7 @@
      }
     },
     {
-     "label": "未命名时装 c511_03",
+     "label": "水晶女仆",
      "outfit": "c511_03",
      "idle": {
       "skeleton": "l2d/c511_03/c511_03_00.skel",
@@ -4661,13 +5014,27 @@
       "atlas": "l2d/c511_03/aim/c511_03_aim_00.atlas",
       "runtime": "4.1"
      }
+    },
+    {
+     "label": "琉璃波光",
+     "outfit": "c515",
+     "idle": {
+      "skeleton": "l2d/c515/c515_00.skel",
+      "atlas": "l2d/c515/c515_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c515/aim/c515_aim_00.skel",
+      "atlas": "l2d/c515/aim/c515_aim_00.atlas",
+      "runtime": "4.1"
+     }
     }
    ]
   },
   {
    "id": "nikke:c513",
    "name": "小美人鱼",
-   "aka": "",
+   "aka": "Little Mermaid",
    "costumes": [
     {
      "label": "默认",
@@ -4684,7 +5051,7 @@
      }
     },
     {
-     "label": "未命名时装 c513_01",
+     "label": "深渊之花",
      "outfit": "c513_01",
      "idle": {
       "skeleton": "l2d/c513_01/c513_01_00.skel",
@@ -4712,7 +5079,7 @@
      }
     },
     {
-     "label": "未命名时装 c513_03",
+     "label": "珍珠贝公主",
      "outfit": "c513_03",
      "idle": {
       "skeleton": "l2d/c513_03/c513_03_00.skel",
@@ -4728,44 +5095,9 @@
    ]
   },
   {
-   "id": "nikke:c514",
-   "name": "格拉维",
-   "aka": "",
-   "costumes": [
-    {
-     "label": "默认",
-     "outfit": "c514",
-     "idle": {
-      "skeleton": "l2d/c514/c514_00.skel",
-      "atlas": "l2d/c514/c514_00.atlas",
-      "runtime": "4.1"
-     },
-     "cutscene": {
-      "skeleton": "l2d/c514/aim/c514_aim_00.skel",
-      "atlas": "l2d/c514/aim/c514_aim_00.atlas",
-      "runtime": "4.1"
-     }
-    },
-    {
-     "label": "未命名时装 c514_01",
-     "outfit": "c514_01",
-     "idle": {
-      "skeleton": "l2d/c514_01/c514_01_00.skel",
-      "atlas": "l2d/c514_01/c514_01_00.atlas",
-      "runtime": "4.1"
-     },
-     "cutscene": {
-      "skeleton": "l2d/c514_01/aim/c514_01_aim_00.skel",
-      "atlas": "l2d/c514_01/aim/c514_01_aim_00.atlas",
-      "runtime": "4.1"
-     }
-    }
-   ]
-  },
-  {
    "id": "nikke:c520",
    "name": "布蕾德",
-   "aka": "",
+   "aka": "Bready",
    "costumes": [
     {
      "label": "默认",
@@ -4800,7 +5132,7 @@
   {
    "id": "nikke:c521",
    "name": "克劳斯特",
-   "aka": "",
+   "aka": "Crust",
    "costumes": [
     {
      "label": "默认",
@@ -4817,7 +5149,7 @@
      }
     },
     {
-     "label": "未命名时装 c521_01",
+     "label": "捣蛋主厨",
      "outfit": "c521_01",
      "idle": {
       "skeleton": "l2d/c521_01/c521_01_00.skel",
@@ -4833,12 +5165,60 @@
    ]
   },
   {
-   "id": "nikke:c532_01",
-   "name": "索拉",
-   "aka": "",
+   "id": "nikke:c530",
+   "name": "思凯",
+   "aka": "Sky",
    "costumes": [
     {
-     "label": "美好日子",
+     "label": "默认",
+     "outfit": "c530",
+     "idle": {
+      "skeleton": "l2d/c530/c530_00.skel",
+      "atlas": "l2d/c530/c530_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "nikke:c531",
+   "name": "西埃洛",
+   "aka": "Cielo",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c531",
+     "idle": {
+      "skeleton": "l2d/c531/c531_00.skel",
+      "atlas": "l2d/c531/c531_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "nikke:c532",
+   "name": "索拉",
+   "aka": "Sora",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c532",
+     "idle": {
+      "skeleton": "l2d/c532/c532_00.skel",
+      "atlas": "l2d/c532/c532_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c532/aim/c532_aim_00.skel",
+      "atlas": "l2d/c532/aim/c532_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "春日飞行",
      "outfit": "c532_01",
      "idle": {
       "skeleton": "l2d/c532_01/c532_01_00.skel",
@@ -4856,7 +5236,7 @@
   {
    "id": "nikke:c550",
    "name": "贝伊",
-   "aka": "",
+   "aka": "Bay",
    "costumes": [
     {
      "label": "默认",
@@ -4891,7 +5271,7 @@
   {
    "id": "nikke:c551",
    "name": "克雷伊",
-   "aka": "",
+   "aka": "Clay",
    "costumes": [
     {
      "label": "默认",
@@ -4924,9 +5304,77 @@
    ]
   },
   {
+   "id": "nikke:c560",
+   "name": "贝西摩斯",
+   "aka": "Behemoth",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c560",
+     "idle": {
+      "skeleton": "l2d/c560/c560_00.skel",
+      "atlas": "l2d/c560/c560_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "nikke:c561",
+   "name": "席兹",
+   "aka": "Ziz",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c561",
+     "idle": {
+      "skeleton": "l2d/c561/c561_00.skel",
+      "atlas": "l2d/c561/c561_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "nikke:c562",
+   "name": "利维坦",
+   "aka": "Leviathan",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c562",
+     "idle": {
+      "skeleton": "l2d/c562/c562_00.skel",
+      "atlas": "l2d/c562/c562_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "nikke:c563",
+   "name": "巴哈姆特",
+   "aka": "Bahamut",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c563",
+     "idle": {
+      "skeleton": "l2d/c563/c563_00.skel",
+      "atlas": "l2d/c563/c563_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "nikke:c570",
    "name": "方舟黑色游侠",
-   "aka": "",
+   "aka": "Ark Ranger Black",
    "costumes": [
     {
      "label": "默认",
@@ -4945,9 +5393,43 @@
    ]
   },
   {
+   "id": "nikke:c571",
+   "name": "方舟红色游侠",
+   "aka": "Ark Ranger Red",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c571",
+     "idle": {
+      "skeleton": "l2d/c571/c571_00.skel",
+      "atlas": "l2d/c571/c571_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "nikke:c572",
+   "name": "方舟蓝色游侠",
+   "aka": "Ark Ranger Blue",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c572",
+     "idle": {
+      "skeleton": "l2d/c572/c572_00.skel",
+      "atlas": "l2d/c572/c572_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "nikke:c580",
    "name": "潘托姆",
-   "aka": "",
+   "aka": "Phantom",
    "costumes": [
     {
      "label": "默认",
@@ -4964,7 +5446,7 @@
      }
     },
     {
-     "label": "未命名时装 c580_01",
+     "label": "圣洁怪盗",
      "outfit": "c580_01",
      "idle": {
       "skeleton": "l2d/c580_01/c580_01_00.skel",
@@ -4982,7 +5464,7 @@
   {
    "id": "nikke:c581",
    "name": "阿尔卡娜",
-   "aka": "",
+   "aka": "Arcana",
    "costumes": [
     {
      "label": "默认",
@@ -4997,13 +5479,62 @@
       "atlas": "l2d/c581/aim/c581_aim_00.atlas",
       "runtime": "4.1"
      }
+    },
+    {
+     "label": "命运伴侣",
+     "outfit": "c583",
+     "idle": {
+      "skeleton": "l2d/c583/c583_00.skel",
+      "atlas": "l2d/c583/c583_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c583/aim/c583_aim_00.skel",
+      "atlas": "l2d/c583/aim/c583_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    }
+   ]
+  },
+  {
+   "id": "nikke:c582",
+   "name": "蕾贝儿",
+   "aka": "Label",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c582",
+     "idle": {
+      "skeleton": "l2d/c582/c582_00.skel",
+      "atlas": "l2d/c582/c582_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c582/aim/c582_aim_00.skel",
+      "atlas": "l2d/c582/aim/c582_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "神秘学者",
+     "outfit": "c582_01",
+     "idle": {
+      "skeleton": "l2d/c582_01/c582_01_00.skel",
+      "atlas": "l2d/c582_01/c582_01_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c582_01/aim/c582_01_aim_00.skel",
+      "atlas": "l2d/c582_01/aim/c582_01_aim_00.atlas",
+      "runtime": "4.1"
+     }
     }
    ]
   },
   {
    "id": "nikke:c590",
    "name": "莫莉",
-   "aka": "",
+   "aka": "Mori",
    "costumes": [
     {
      "label": "默认",
@@ -5016,6 +5547,138 @@
      "cutscene": {
       "skeleton": "l2d/c590/aim/c590_aim_00.skel",
       "atlas": "l2d/c590/aim/c590_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    }
+   ]
+  },
+  {
+   "id": "nikke:c600",
+   "name": "敏特",
+   "aka": "Mint",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c600",
+     "idle": {
+      "skeleton": "l2d/c600/c600_00.skel",
+      "atlas": "l2d/c600/c600_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c600/aim/c600_aim_00.skel",
+      "atlas": "l2d/c600/aim/c600_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "清新薄荷",
+     "outfit": "c600_01",
+     "idle": {
+      "skeleton": "l2d/c600_01/c600_01_00.skel",
+      "atlas": "l2d/c600_01/c600_01_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c600_01/aim/c600_01_aim_00.skel",
+      "atlas": "l2d/c600_01/aim/c600_01_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "未命名时装 c600_02",
+     "outfit": "c600_02",
+     "idle": {
+      "skeleton": "l2d/c600_02/c600_02_00.skel",
+      "atlas": "l2d/c600_02/c600_02_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "nikke:c601",
+   "name": "普莉卡",
+   "aka": "Prika",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c601",
+     "idle": {
+      "skeleton": "l2d/c601/c601_00.skel",
+      "atlas": "l2d/c601/c601_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c601/aim/c601_aim_00.skel",
+      "atlas": "l2d/c601/aim/c601_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "酷冷辣椒",
+     "outfit": "c601_01",
+     "idle": {
+      "skeleton": "l2d/c601_01/c601_01_00.skel",
+      "atlas": "l2d/c601_01/c601_01_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c601_01/aim/c601_01_aim_00.skel",
+      "atlas": "l2d/c601_01/aim/c601_01_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "未命名时装 c601_02",
+     "outfit": "c601_02",
+     "idle": {
+      "skeleton": "l2d/c601_02/c601_02_00.skel",
+      "atlas": "l2d/c601_02/c601_02_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "nikke:c610",
+   "name": "机甲神谢芙蒂",
+   "aka": "Mekami Shifty",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c610",
+     "idle": {
+      "skeleton": "l2d/c610/c610_00.skel",
+      "atlas": "l2d/c610/c610_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c610/aim/c610_aim_00.skel",
+      "atlas": "l2d/c610/aim/c610_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    }
+   ]
+  },
+  {
+   "id": "nikke:c620",
+   "name": "白鹤",
+   "aka": "Snow Crane",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c620",
+     "idle": {
+      "skeleton": "l2d/c620/c620_00.skel",
+      "atlas": "l2d/c620/c620_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c620/aim/c620_aim_00.skel",
+      "atlas": "l2d/c620/aim/c620_aim_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -5041,7 +5704,7 @@
      }
     },
     {
-     "label": "脱下大衣",
+     "label": "脱下外套",
      "outfit": "c800_01",
      "idle": {
       "skeleton": "l2d/c800_01/c800_01_00.skel",
@@ -5134,7 +5797,7 @@
      }
     },
     {
-     "label": "寄叶制服",
+     "label": "寄叶制服1",
      "outfit": "c810_02",
      "idle": {
       "skeleton": "l2d/c810_02/c810_02_00.skel",
@@ -5212,7 +5875,7 @@
      }
     },
     {
-     "label": "寄叶非宣方水上活动服原型",
+     "label": "寄叶非官方水上活动服原型",
      "outfit": "c811_03",
      "idle": {
       "skeleton": "l2d/c811_03/c811_03_00.skel",
@@ -5251,7 +5914,7 @@
   {
    "id": "nikke:c820",
    "name": "雷姆",
-   "aka": "",
+   "aka": "Rem",
    "costumes": [
     {
      "label": "默认",
@@ -5300,7 +5963,7 @@
   {
    "id": "nikke:c821",
    "name": "爱蜜莉雅",
-   "aka": "",
+   "aka": "Emilia",
    "costumes": [
     {
      "label": "默认",
@@ -5349,7 +6012,7 @@
   {
    "id": "nikke:c822",
    "name": "拉姆",
-   "aka": "",
+   "aka": "Ram",
    "costumes": [
     {
      "label": "默认",
@@ -5370,7 +6033,7 @@
   {
    "id": "nikke:c830",
    "name": "明日香",
-   "aka": "",
+   "aka": "Asuka",
    "costumes": [
     {
      "label": "默认",
@@ -5415,7 +6078,7 @@
      }
     },
     {
-     "label": "明日香的作战服",
+     "label": "测试用作战服",
      "outfit": "c830_03",
      "idle": {
       "skeleton": "l2d/c830_03/c830_03_00.skel",
@@ -5443,7 +6106,7 @@
      }
     },
     {
-     "label": "WILLE：最终决战：明日香",
+     "label": "WILLE 最终决战：明日香",
      "outfit": "c835_01",
      "idle": {
       "skeleton": "l2d/c835_01/c835_01_00.skel",
@@ -5457,7 +6120,7 @@
      }
     },
     {
-     "label": "WILLE：孤海乐章",
+     "label": "WILLE 孤海乐章",
      "outfit": "c835_02",
      "idle": {
       "skeleton": "l2d/c835_02/c835_02_00.skel",
@@ -5475,7 +6138,7 @@
   {
    "id": "nikke:c831",
    "name": "零",
-   "aka": "",
+   "aka": "Rei",
    "costumes": [
     {
      "label": "默认",
@@ -5524,7 +6187,7 @@
   {
    "id": "nikke:c832",
    "name": "真理",
-   "aka": "",
+   "aka": "Mari",
    "costumes": [
     {
      "label": "默认",
@@ -5569,7 +6232,7 @@
      }
     },
     {
-     "label": "最终对决：真理",
+     "label": "最终决战：真理",
      "outfit": "c832_03",
      "idle": {
       "skeleton": "l2d/c832_03/c832_03_00.skel",
@@ -5601,7 +6264,7 @@
   {
    "id": "nikke:c833",
    "name": "美里",
-   "aka": "",
+   "aka": "Misato",
    "costumes": [
     {
      "label": "默认",
@@ -5622,7 +6285,7 @@
   {
    "id": "nikke:c834",
    "name": "零（暂称）",
-   "aka": "",
+   "aka": "Rei (Tentative Name)",
    "costumes": [
     {
      "label": "默认",
@@ -5639,7 +6302,7 @@
      }
     },
     {
-     "label": "第三村的神似小姐",
+     "label": "第三村的长得像小姐",
      "outfit": "c834_01",
      "idle": {
       "skeleton": "l2d/c834_01/c834_01_00.skel",
@@ -5671,7 +6334,7 @@
   {
    "id": "nikke:c836",
    "name": "樱",
-   "aka": "",
+   "aka": "Sakura",
    "costumes": [
     {
      "label": "默认",
@@ -5690,9 +6353,128 @@
    ]
   },
   {
+   "id": "nikke:c840",
+   "name": "艾达",
+   "aka": "Ada",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c840",
+     "idle": {
+      "skeleton": "l2d/c840/c840_00.skel",
+      "atlas": "l2d/c840/c840_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c840/aim/c840_aim_00.skel",
+      "atlas": "l2d/c840/aim/c840_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "SEPARATE WAYS",
+     "outfit": "c840_01",
+     "idle": {
+      "skeleton": "l2d/c840_01/c840_01_00.skel",
+      "atlas": "l2d/c840_01/c840_01_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c840_01/aim/c840_01_aim_00.skel",
+      "atlas": "l2d/c840_01/aim/c840_01_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "DRESS",
+     "outfit": "c840_02",
+     "idle": {
+      "skeleton": "l2d/c840_02/c840_02_00.skel",
+      "atlas": "l2d/c840_02/c840_02_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c840_02/aim/c840_02_aim_00.skel",
+      "atlas": "l2d/c840_02/aim/c840_02_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    }
+   ]
+  },
+  {
+   "id": "nikke:c841",
+   "name": "吉儿",
+   "aka": "Jill",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c841",
+     "idle": {
+      "skeleton": "l2d/c841/c841_00.skel",
+      "atlas": "l2d/c841/c841_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c841/aim/c841_aim_00.skel",
+      "atlas": "l2d/c841/aim/c841_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "CLASSIC",
+     "outfit": "c841_01",
+     "idle": {
+      "skeleton": "l2d/c841_01/c841_01_00.skel",
+      "atlas": "l2d/c841_01/c841_01_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c841_01/aim/c841_01_aim_00.skel",
+      "atlas": "l2d/c841_01/aim/c841_01_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "BATTLE SUIT",
+     "outfit": "c841_02",
+     "idle": {
+      "skeleton": "l2d/c841_02/c841_02_00.skel",
+      "atlas": "l2d/c841_02/c841_02_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c841_02/aim/c841_02_aim_00.skel",
+      "atlas": "l2d/c841_02/aim/c841_02_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    }
+   ]
+  },
+  {
+   "id": "nikke:c842",
+   "name": "克莱尔",
+   "aka": "Claire",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c842",
+     "idle": {
+      "skeleton": "l2d/c842/c842_00.skel",
+      "atlas": "l2d/c842/c842_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c842/aim/c842_aim_00.skel",
+      "atlas": "l2d/c842/aim/c842_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    }
+   ]
+  },
+  {
    "id": "nikke:c850",
    "name": "伊芙",
-   "aka": "",
+   "aka": "EVE",
    "costumes": [
     {
      "label": "默认",
@@ -5755,7 +6537,7 @@
   {
    "id": "nikke:c851",
    "name": "渡鸦",
-   "aka": "",
+   "aka": "Raven",
    "costumes": [
     {
      "label": "默认",
@@ -5772,7 +6554,7 @@
      }
     },
     {
-     "label": "星球空降服（第六小队）第2版",
+     "label": "星球空降服（第6小队）第2版",
      "outfit": "c851_01",
      "idle": {
       "skeleton": "l2d/c851_01/c851_01_00.skel",
@@ -5804,7 +6586,7 @@
   {
    "id": "nikke:c852",
    "name": "百合",
-   "aka": "",
+   "aka": "Lily",
    "costumes": [
     {
      "label": "默认",
@@ -5823,9 +6605,58 @@
    ]
   },
   {
+   "id": "nikke:c860",
+   "name": "千束",
+   "aka": "Chisato",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c860",
+     "idle": {
+      "skeleton": "l2d/c860/c860_00.skel",
+      "atlas": "l2d/c860/c860_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c860/aim/c860_aim_00.skel",
+      "atlas": "l2d/c860/aim/c860_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "DA训练服（第一套）",
+     "outfit": "c860_01",
+     "idle": {
+      "skeleton": "l2d/c860_01/c860_01_00.skel",
+      "atlas": "l2d/c860_01/c860_01_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c860_01/aim/c860_01_aim_00.skel",
+      "atlas": "l2d/c860_01/aim/c860_01_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "赤红火花吉他",
+     "outfit": "c860_02",
+     "idle": {
+      "skeleton": "l2d/c860_02/c860_02_00.skel",
+      "atlas": "l2d/c860_02/c860_02_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c860_02/aim/c860_02_aim_00.skel",
+      "atlas": "l2d/c860_02/aim/c860_02_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    }
+   ]
+  },
+  {
    "id": "nikke:c861",
    "name": "泷奈",
-   "aka": "",
+   "aka": "Takina",
    "costumes": [
     {
      "label": "默认",
@@ -5874,7 +6705,7 @@
   {
    "id": "nikke:c862",
    "name": "胡桃",
-   "aka": "",
+   "aka": "Kurumi",
    "costumes": [
     {
      "label": "默认",
@@ -5887,6 +6718,125 @@
      "cutscene": {
       "skeleton": "l2d/c862/aim/c862_aim_00.skel",
       "atlas": "l2d/c862/aim/c862_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    }
+   ]
+  },
+  {
+   "id": "nikke:c870",
+   "name": "QUEEN（真）",
+   "aka": "Queen (Makoto)",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c870",
+     "idle": {
+      "skeleton": "l2d/c870/c870_00.skel",
+      "atlas": "l2d/c870/c870_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c870/aim/c870_aim_00.skel",
+      "atlas": "l2d/c870/aim/c870_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "秀尽学园学生会长",
+     "outfit": "c870_01",
+     "idle": {
+      "skeleton": "l2d/c870_01/c870_01_00.skel",
+      "atlas": "l2d/c870_01/c870_01_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c870_01/aim/c870_01_aim_00.skel",
+      "atlas": "l2d/c870_01/aim/c870_01_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "女王睡衣（Ver. NIKKE Collabo）",
+     "outfit": "c870_02",
+     "idle": {
+      "skeleton": "l2d/c870_02/c870_02_00.skel",
+      "atlas": "l2d/c870_02/c870_02_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c870_02/aim/c870_02_aim_00.skel",
+      "atlas": "l2d/c870_02/aim/c870_02_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    }
+   ]
+  },
+  {
+   "id": "nikke:c871",
+   "name": "雪子",
+   "aka": "Yukiko",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c871",
+     "idle": {
+      "skeleton": "l2d/c871/c871_00.skel",
+      "atlas": "l2d/c871/c871_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c871/aim/c871_aim_00.skel",
+      "atlas": "l2d/c871/aim/c871_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "天城屋旅馆和服",
+     "outfit": "c871_01",
+     "idle": {
+      "skeleton": "l2d/c871_01/c871_01_00.skel",
+      "atlas": "l2d/c871_01/c871_01_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c871_01/aim/c871_01_aim_00.skel",
+      "atlas": "l2d/c871_01/aim/c871_01_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    },
+    {
+     "label": "冬日雅居（Ver. NIKKE Collabo）",
+     "outfit": "c871_02",
+     "idle": {
+      "skeleton": "l2d/c871_02/c871_02_00.skel",
+      "atlas": "l2d/c871_02/c871_02_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c871_02/aim/c871_02_aim_00.skel",
+      "atlas": "l2d/c871_02/aim/c871_02_aim_00.atlas",
+      "runtime": "4.1"
+     }
+    }
+   ]
+  },
+  {
+   "id": "nikke:c872",
+   "name": "埃癸斯",
+   "aka": "Aigis",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "c872",
+     "idle": {
+      "skeleton": "l2d/c872/c872_00.skel",
+      "atlas": "l2d/c872/c872_00.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": {
+      "skeleton": "l2d/c872/aim/c872_aim_00.skel",
+      "atlas": "l2d/c872/aim/c872_aim_00.atlas",
       "runtime": "4.1"
      }
     }
