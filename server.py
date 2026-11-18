@@ -426,7 +426,7 @@ class MetadataParser(HTMLParser):
             self.title_parts.append(data)
 
 
-def metadata(url: str, categories: list[dict]) -> dict:
+def metadata(url: str, categories: list[dict], remote: bool = True) -> dict:
     url = normalize_url(url)
     hostname = urlsplit(url).hostname or ""
     match_host = hostname.removeprefix("www.")
@@ -441,7 +441,7 @@ def metadata(url: str, categories: list[dict]) -> dict:
         "kind": kind,
     }
     # Familiar sites can be recognized immediately, without waiting for a network request.
-    if known:
+    if known or not remote:
         return result
     try:
         request = Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; LiteNav/1.0)", "Accept": "text/html"})
@@ -552,6 +552,19 @@ class Handler(BaseHTTPRequestHandler):
             body = self.json_body()
             if method == "PUT" and path == "/api/state":
                 self.json_response(self.server.store.save(body))
+            elif method == "POST" and path == "/api/metadata" and "urls" in body:
+                urls = body.get("urls")
+                if not isinstance(urls, list) or len(urls) > 5000:
+                    raise APIError("网址列表格式不正确")
+                state = self.server.store.state()
+                # Batches (bookmark imports) only use the built-in site table and never fetch pages.
+                items = []
+                for url in urls:
+                    try:
+                        items.append(metadata(url, state["categories"], remote=False))
+                    except APIError:
+                        items.append(None)
+                self.json_response({"items": items})
             elif method == "POST" and path == "/api/metadata":
                 state = self.server.store.state()
                 self.json_response(metadata(body.get("url"), state["categories"]))

@@ -1,6 +1,8 @@
 import { icon, brandIcon } from './icons.js';
 import { initCompanion } from './companion.js';
 import { toolsMarkup, mountTools, resolveTool } from './tools.js';
+import { searchLinks, googleSearchUrl } from './search.js';
+import { parseBookmarks } from './bookmarks.js';
 
 initCompanion();
 
@@ -18,6 +20,9 @@ let currentDialog = null;
 let mutationQueue = Promise.resolve();
 let dragged = null;
 let checkTimer = null;
+let searchQuery = '';
+let searchIndex = 0;
+let searchResults = [];
 
 const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const uid = () => globalThis.crypto?.randomUUID?.() || 'item-' + Date.now() + '-' + Math.random().toString(36).slice(2, 9);
@@ -192,19 +197,76 @@ function settingsMarkup() {
     categories.map((category) => '<div class="category-settings-row" draggable="true" data-drag-kind="category" data-resource="' + esc(category.id) + '"><span class="drag-handle" title="拖动调整顺序" aria-hidden="true">' + icon('grip', 16) + '</span><span class="category-settings-name">' + icon(category.icon, 19) + '<span>' + esc(category.name) + '</span></span><span class="category-settings-count">' + config.links.filter((link) => link.kind === 'website' && link.categoryId === category.id).length + ' 个网址</span>' +
       '<label class="column-picker"><span class="sr-only">' + esc(category.name) + '所在列</span><select class="form-select" data-category-column="' + esc(category.id) + '">' + [0, 1, 2].map((n) => '<option value="' + n + '" ' + (Number(category.column) === n ? 'selected' : '') + '>第 ' + (n + 1) + ' 列</option>').join('') + '</select></label>' +
       '<button class="icon-button" data-action="edit-category" data-id="' + esc(category.id) + '" aria-label="编辑分类 ' + esc(category.name) + '">' + icon('edit', 16) + '</button><button class="icon-button danger" data-action="delete-category" data-id="' + esc(category.id) + '" aria-label="删除分类 ' + esc(category.name) + '">' + icon('trash', 16) + '</button></div>').join('') + '</div></section>' +
-    '<section class="settings-section"><div class="section-heading">' + icon('download', 22) + '<h2>数据备份</h2></div><div class="settings-card"><p class="settings-description">导出网址、分类与服务配置，方便备份或迁移。</p><div class="settings-actions"><button class="btn btn-secondary" data-action="export">' + icon('upload', 16) + '导出备份</button><button class="btn btn-secondary" data-action="import">' + icon('download', 16) + '导入备份</button></div></div></section>';
+    '<section class="settings-section"><div class="section-heading">' + icon('download', 22) + '<h2>数据备份</h2></div><div class="settings-card"><p class="settings-description">导出网址、分类与服务配置，方便备份或迁移。</p><div class="settings-actions"><button class="btn btn-secondary" data-action="export">' + icon('upload', 16) + '导出备份</button><button class="btn btn-secondary" data-action="import">' + icon('download', 16) + '导入备份</button></div></div></section>' +
+    '<section class="settings-section"><div class="section-heading">' + icon('bookmark', 22) + '<h2>导入浏览器书签</h2></div><div class="settings-card"><p class="settings-description">在 Chrome、Edge、Firefox 或 Safari 中把书签导出为 HTML 文件，再在这里导入。每个顶层文件夹会成为一个分类，已添加过的网址会自动跳过，导入前可以先预览。</p><div class="settings-actions"><button class="btn btn-secondary" data-action="import-bookmarks">' + icon('bookmark', 16) + '选择书签文件</button></div></div></section>';
+}
+
+function searchMarkup() {
+  return '<div class="quick-search" id="quick-search">' + icon('search', 17) +
+    '<input id="quick-search-input" class="quick-search-input" type="search" role="combobox" aria-label="搜索网址和服务" aria-autocomplete="list" aria-expanded="false" aria-controls="quick-search-results" autocomplete="off" spellcheck="false" enterkeyhint="go" placeholder="搜索网址和服务，回车打开" value="' + esc(searchQuery) + '">' +
+    '<kbd class="quick-search-key" aria-hidden="true" title="按 / 或 Ctrl + K 开始搜索">/</kbd>' +
+    '<div class="quick-search-results" id="quick-search-results" role="listbox" aria-label="搜索结果" hidden></div></div>';
+}
+
+function searchOptionMarkup(entry, index) {
+  const selected = index === searchIndex;
+  const attributes = ' id="quick-search-option-' + index + '" role="option" aria-selected="' + selected + '" class="quick-search-option' + (selected ? ' is-selected' : '') + '" data-search-index="' + index + '" href="' + esc(entry.url) + '" target="_blank" rel="noopener noreferrer" tabindex="-1"';
+  if (entry.google) return '<a' + attributes + '><span class="quick-search-google">' + icon('search', 16) + '</span><span class="quick-search-copy"><span class="quick-search-name">用 Google 搜索“' + esc(searchQuery.trim()) + '”</span><span class="quick-search-meta">google.com</span></span></a>';
+  const link = entry.link;
+  const place = link.kind === 'service' ? '服务' : config.categories.find((category) => category.id === link.categoryId)?.name || '';
+  return '<a' + attributes + '>' + brandIcon(link.icon, link.name) + '<span class="quick-search-copy"><span class="quick-search-name">' + esc(link.name) + '</span><span class="quick-search-meta">' + esc(domain(link.url)) + '</span></span>' +
+    (link.pinned ? '<span class="quick-search-tag">常用</span>' : '') + (place ? '<span class="quick-search-tag">' + esc(place) + '</span>' : '') + '</a>';
+}
+
+function updateSearchResults() {
+  const input = document.querySelector('#quick-search-input');
+  const panel = document.querySelector('#quick-search-results');
+  if (!input || !panel) return;
+  const query = searchQuery.trim();
+  searchResults = query ? [...searchLinks(query, config.links).map((link) => ({ link, url: link.url })), { google: true, url: googleSearchUrl(query) }] : [];
+  searchIndex = Math.min(Math.max(0, searchIndex), Math.max(0, searchResults.length - 1));
+  const open = Boolean(query) && document.activeElement === input;
+  panel.hidden = !open;
+  input.setAttribute('aria-expanded', String(open));
+  if (!open) { input.removeAttribute('aria-activedescendant'); return; }
+  panel.innerHTML = searchResults.map(searchOptionMarkup).join('');
+  input.setAttribute('aria-activedescendant', 'quick-search-option-' + searchIndex);
+  panel.querySelector('.is-selected')?.scrollIntoView({ block: 'nearest' });
+}
+
+function resetSearch() {
+  searchQuery = '';
+  searchIndex = 0;
+  const input = document.querySelector('#quick-search-input');
+  if (input) { input.value = ''; input.blur(); }
+  updateSearchResults();
+}
+
+function openSearchResult(index, newTab = true) {
+  const entry = searchResults[index];
+  if (entry && newTab) window.open(entry.url, '_blank', 'noopener,noreferrer');
+  else if (newTab) return;
+  resetSearch();
 }
 
 function render() {
   if (!config) return;
+  const searchInput = document.querySelector('#quick-search-input');
+  const searchFocus = searchInput && document.activeElement === searchInput ? [searchInput.selectionStart, searchInput.selectionEnd] : null;
   const titles = { home: '我的导航', services: '我的服务', settings: '设置', tools: '工具箱' };
   const previousScroll = window.scrollY;
   app.innerHTML = '<div class="app-shell ' + (editMode ? 'edit-mode' : '') + '">' + sidebarMarkup() +
-    '<main class="workspace"><header class="topbar"><h1 class="page-title">' + titles[view] + '</h1><div class="topbar-actions"><span id="service-alert">' + alertMarkup() + '</span>' +
+    '<main class="workspace"><header class="topbar"><h1 class="page-title">' + titles[view] + '</h1>' + searchMarkup() + '<div class="topbar-actions"><span id="service-alert">' + alertMarkup() + '</span>' +
     (view === 'home' || view === 'services' ? '<button class="btn ' + (editMode ? 'btn-secondary is-editing' : 'btn-secondary') + '" data-action="toggle-edit">' + (editMode ? icon('check', 16) + '完成整理' : '整理') + '</button>' : '') +
     (view === 'tools' ? '' : '<button class="btn btn-primary" data-action="' + (view === 'services' ? 'add-service' : 'add-link') + '">' + icon('plus', 18) + '添加' + (view === 'services' ? '服务' : '') + '</button>') + '</div></header>' +
     '<div class="page-content">' + (view === 'services' ? servicesMarkup() : view === 'settings' ? settingsMarkup() : view === 'tools' ? toolsMarkup(activeTool) : homeMarkup()) + '</div></main></div>';
   if (view === 'tools') mountTools(app, { toast });
+  if (searchFocus) {
+    const input = document.querySelector('#quick-search-input');
+    input.focus({ preventScroll: true });
+    input.setSelectionRange(...searchFocus);
+    updateSearchResults();
+  }
   document.title = titles[view] + ' · 轻航 LiteNav';
   window.scrollTo({ top: previousScroll, behavior: 'instant' });
 }
@@ -539,6 +601,7 @@ async function handleAction(button) {
     }
     case 'export': await exportBackup(); break;
     case 'import': document.querySelector('#import-file').click(); break;
+    case 'import-bookmarks': document.querySelector('#bookmark-file').click(); break;
     case 'reload': location.reload(); break;
     case 'toggle-monitor': {
       const link = config.links.find((item) => item.id === button.dataset.id);
@@ -563,7 +626,31 @@ document.addEventListener('click', (event) => {
   handleAction(button).catch((error) => toast(error.message));
 });
 
+const isTyping = (element) => element?.closest?.('input, textarea, select, [contenteditable]:not([contenteditable="false"])');
+
 document.addEventListener('keydown', (event) => {
+  if (event.target.id === 'quick-search-input') {
+    if (event.isComposing || event.keyCode === 229) return;
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      if (!searchResults.length) return;
+      searchIndex = (searchIndex + (event.key === 'ArrowDown' ? 1 : -1) + searchResults.length) % searchResults.length;
+      updateSearchResults();
+    } else if (event.key === 'Enter') {
+      event.preventDefault();
+      openSearchResult(searchIndex);
+    } else if (event.key === 'Escape') {
+      event.preventDefault();
+      if (searchQuery) { searchQuery = ''; event.target.value = ''; updateSearchResults(); }
+      else event.target.blur();
+    }
+    return;
+  }
+  const quickOpen = (event.key === '/' && !event.ctrlKey && !event.metaKey && !event.altKey) || (event.key.toLowerCase?.() === 'k' && (event.ctrlKey || event.metaKey) && !event.altKey && !event.shiftKey);
+  if (quickOpen && !currentDialog && !isTyping(event.target)) {
+    const input = document.querySelector('#quick-search-input');
+    if (input) { event.preventDefault(); input.focus(); input.select(); return; }
+  }
   if (event.key === 'Escape' && !currentDialog && editMode) { editMode = false; render(); }
   if (event.key === 'Enter' && event.target.matches('.editable-item')) { event.preventDefault(); openLinkDialog({ id: event.target.dataset.resource }); }
 });
@@ -586,6 +673,142 @@ document.addEventListener('change', (event) => {
   const id = event.target.dataset.categoryColumn;
   const column = Number(event.target.value);
   mutate((state) => { const category = state.categories.find((item) => item.id === id); if (category) category.column = column; }).then(() => toast('已调整分类所在列')).catch((error) => toast(error.message));
+});
+
+const canonicalUrl = (url) => { try { return safeUrl(url).replace(/\/$/, ''); } catch { return ''; } };
+
+function planBookmarkImport(groups) {
+  const seen = new Set(config.links.map((link) => canonicalUrl(link.url)));
+  let duplicates = 0;
+  let invalid = 0;
+  const plan = [];
+  for (const group of groups) {
+    const links = [];
+    for (const bookmark of group.links) {
+      let url;
+      try { url = safeUrl(bookmark.url); } catch { invalid += 1; continue; }
+      if (url.length > 4096) { invalid += 1; continue; }
+      const key = url.replace(/\/$/, '');
+      if (seen.has(key)) { duplicates += 1; continue; }
+      seen.add(key);
+      links.push({ name: bookmark.name, url, kind: inferService(url) ? 'service' : 'website' });
+    }
+    if (links.length) plan.push({ name: group.name, links, existing: config.categories.some((category) => category.name === group.name) });
+  }
+  return { plan, duplicates, invalid };
+}
+
+async function importBookmarks(plan) {
+  const bookmarks = plan.flatMap((group) => group.links.map((link) => ({ ...link, group: group.name })));
+  const newCategories = new Set(plan.filter((group) => !group.existing && group.links.some((link) => link.kind === 'website')).map((group) => group.name));
+  if (config.links.length + bookmarks.length > 5000) throw new Error('导入后入口会超过 5000 个，请取消勾选一些文件夹');
+  if (config.categories.length + newCategories.size > 200) throw new Error('导入后分类会超过 200 个，请取消勾选一些文件夹');
+  const items = [];
+  for (let start = 0; start < bookmarks.length; start += 500) {
+    const batch = await api('/api/metadata', { method: 'POST', body: JSON.stringify({ urls: bookmarks.slice(start, start + 500).map((link) => link.url) }) });
+    items.push(...(batch.items || []));
+  }
+  const createdLinks = [];
+  const createdCategories = [];
+  await mutate((state) => {
+    createdLinks.length = 0;
+    createdCategories.length = 0;
+    const seen = new Set(state.links.map((link) => canonicalUrl(link.url)));
+    let nextOrder = Math.max(-1, ...state.links.map((link) => link.order || 0)) + 1;
+    let nextCategoryOrder = Math.max(-1, ...state.categories.map((category) => category.order || 0)) + 1;
+    bookmarks.forEach((bookmark, index) => {
+      const key = bookmark.url.replace(/\/$/, '');
+      if (seen.has(key)) return;
+      seen.add(key);
+      const meta = items?.[index] || {};
+      let categoryId = '';
+      if (bookmark.kind === 'website') {
+        let category = state.categories.find((item) => item.name === bookmark.group);
+        if (!category) {
+          const counts = [0, 1, 2].map((column) => state.categories.filter((item) => Number(item.column) === column).length);
+          category = { id: uid(), name: bookmark.group, icon: 'folder', column: counts.indexOf(Math.min(...counts)), order: nextCategoryOrder++ };
+          state.categories.push(category);
+          createdCategories.push(category.id);
+        }
+        categoryId = category.id;
+      }
+      let icon = meta.icon || '';
+      if (!icon) { try { icon = new URL('/favicon.ico', bookmark.url).href; } catch { icon = ''; } }
+      const link = {
+        id: uid(), name: (bookmark.name || meta.name || domain(bookmark.url)).slice(0, 120), url: bookmark.url, icon,
+        kind: bookmark.kind, categoryId, pinned: false, monitorEnabled: false, order: nextOrder++, pinnedOrder: 0,
+      };
+      state.links.push(link);
+      createdLinks.push(link.id);
+    });
+  }).catch((error) => {
+    if (error.status === 413) throw new Error('一次导入的内容太多，请少选一些文件夹，分几次导入');
+    throw error;
+  });
+  const linkIds = new Set(createdLinks);
+  const categoryIds = new Set(createdCategories);
+  const services = config.links.filter((link) => linkIds.has(link.id) && link.kind === 'service').length;
+  toast('已导入 ' + linkIds.size + ' 个网址' + (categoryIds.size ? '，新建 ' + categoryIds.size + ' 个分类' : '') + (services ? '，其中 ' + services + ' 个放进了「我的服务」' : ''), {
+    label: '撤销',
+    run: () => mutate((state) => {
+      state.links = state.links.filter((link) => !linkIds.has(link.id));
+      state.categories = state.categories.filter((category) => !categoryIds.has(category.id) || state.links.some((link) => link.categoryId === category.id));
+    }),
+  });
+}
+
+function openBookmarkDialog({ plan, duplicates, invalid }) {
+  const total = plan.reduce((sum, group) => sum + group.links.length, 0);
+  const services = plan.reduce((sum, group) => sum + group.links.filter((link) => link.kind === 'service').length, 0);
+  const skippedText = [duplicates ? duplicates + ' 个已添加过' : '', invalid ? invalid + ' 个不是网页地址' : ''].filter(Boolean).join('、');
+  const dialog = makeDialog('<form class="dialog-form" id="bookmark-form"><header class="dialog-header"><h2>导入浏览器书签</h2><button type="button" class="icon-button" data-action="close-dialog" aria-label="关闭">' + icon('x', 21) + '</button></header>' +
+    '<div class="dialog-body"><p class="confirm-message">找到 ' + total + ' 个新网址，来自 ' + plan.length + ' 个文件夹' + (skippedText ? '；另有 ' + skippedText + '，将会跳过' : '') + '。</p>' +
+    '<fieldset class="bookmark-groups"><legend class="field-label">选择要导入的文件夹</legend>' +
+    plan.map((group, index) => '<label class="bookmark-group"><input type="checkbox" name="group" value="' + index + '" checked><span class="bookmark-group-name">' + icon('folder', 16) + '<span>' + esc(group.name) + '</span></span><span class="bookmark-group-target">' + (group.links.every((link) => link.kind === 'service') ? '我的服务' : group.existing ? '并入现有分类' : '新建分类') + '</span><span class="bookmark-group-count">' + group.links.length + ' 个</span></label>').join('') +
+    '</fieldset><p class="field-hint">子文件夹里的网址会并入所在的顶层文件夹' + (services ? '；' + services + ' 个局域网地址会放进「我的服务」，不会自动开启检测' : '') + '。导入后可以撤销。</p><p class="form-error" role="alert" hidden></p></div>' +
+    '<footer class="dialog-footer"><span></span><div><button class="btn btn-ghost" type="button" data-action="close-dialog">取消</button><button class="btn btn-primary" type="submit">导入 ' + total + ' 个</button></div></footer></form>');
+  const form = dialog.querySelector('form');
+  const submit = form.querySelector('[type="submit"]');
+  const selected = () => [...form.querySelectorAll('[name="group"]:checked')].map((input) => plan[Number(input.value)]);
+  const count = () => selected().reduce((sum, group) => sum + group.links.length, 0);
+  form.addEventListener('change', () => {
+    submit.textContent = '导入 ' + count() + ' 个';
+    submit.disabled = !count();
+  });
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!count() || submit.dataset.busy) return;
+    submit.dataset.busy = 'true';
+    submit.disabled = true;
+    submit.textContent = '导入中…';
+    try {
+      await importBookmarks(selected());
+      dialog.close();
+      if (view !== 'home') location.hash = '#home';
+    } catch (error) {
+      delete submit.dataset.busy;
+      submit.disabled = false;
+      submit.textContent = '导入 ' + count() + ' 个';
+      const element = form.querySelector('.form-error');
+      element.textContent = error.message;
+      element.hidden = false;
+    }
+  });
+}
+
+document.querySelector('#bookmark-file').addEventListener('change', async (event) => {
+  const file = event.target.files[0];
+  event.target.value = '';
+  if (!file) return;
+  try {
+    if (file.size > 30 * 1024 * 1024) throw new Error('书签文件不能超过 30 MB');
+    const { groups, skipped } = parseBookmarks(await file.text());
+    if (!groups.length) throw new Error(skipped ? '书签文件里没有可导入的网页地址' : '没有在文件中找到书签，请选择浏览器导出的书签 HTML 文件');
+    const result = planBookmarkImport(groups);
+    result.invalid += skipped;
+    if (!result.plan.length) throw new Error('书签里的网址都已经添加过了');
+    openBookmarkDialog(result);
+  } catch (error) { toast(error.message); }
 });
 
 document.querySelector('#import-file').addEventListener('change', async (event) => {
@@ -742,6 +965,32 @@ document.addEventListener('dragend', () => {
   dropTarget = null;
   document.querySelectorAll('.dragging').forEach((element) => element.classList.remove('dragging'));
   clearDropMarks();
+});
+
+document.addEventListener('input', (event) => {
+  if (event.target.id !== 'quick-search-input') return;
+  searchQuery = event.target.value;
+  searchIndex = 0;
+  updateSearchResults();
+});
+document.addEventListener('focusin', (event) => { if (event.target.id === 'quick-search-input') updateSearchResults(); });
+document.addEventListener('focusout', (event) => { if (event.target.id === 'quick-search-input') requestAnimationFrame(updateSearchResults); });
+// Keep focus in the box while choosing a result with the mouse, so the list does not close before the click lands.
+document.addEventListener('mousedown', (event) => { if (event.target.closest('.quick-search-option')) event.preventDefault(); });
+document.addEventListener('mousemove', (event) => {
+  const option = event.target.closest?.('.quick-search-option');
+  if (!option || Number(option.dataset.searchIndex) === searchIndex) return;
+  searchIndex = Number(option.dataset.searchIndex);
+  document.querySelectorAll('.quick-search-option').forEach((element) => {
+    const selected = element === option;
+    element.classList.toggle('is-selected', selected);
+    element.setAttribute('aria-selected', String(selected));
+  });
+  document.querySelector('#quick-search-input')?.setAttribute('aria-activedescendant', option.id);
+});
+document.addEventListener('click', (event) => {
+  // The link opens itself; only clear the box afterwards.
+  if (event.target.closest('.quick-search-option')) setTimeout(() => openSearchResult(-1, false), 0);
 });
 
 window.addEventListener('hashchange', route);

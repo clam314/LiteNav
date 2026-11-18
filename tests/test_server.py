@@ -401,6 +401,17 @@ class HTTPCase(DataFixture):
         self.assertEqual(json.loads(body)["categoryId"], "dev")
         self.assertEqual(self.request("/api/check", {}, "POST")[0], 202)
 
+    def test_batch_metadata_uses_known_sites_only(self):
+        with patch("server.urlopen") as request:
+            status, body = self.request("/api/metadata", {"urls": ["github.com", "https://example.org/a", "javascript:alert(1)"]}, "POST")
+        request.assert_not_called()
+        self.assertEqual(status, 200)
+        github, unknown, invalid = json.loads(body)["items"]
+        self.assertEqual((github["name"], github["categoryId"]), ("GitHub", "dev"))
+        self.assertEqual((unknown["name"], unknown["icon"]), ("example.org", ""))
+        self.assertIsNone(invalid)
+        self.assertEqual(self.request("/api/metadata", {"urls": "github.com"}, "POST")[0], 400)
+
     def test_static_cannot_escape_public_directory(self):
         self.assertEqual(self.request("/")[0], 200)
         self.assertEqual(self.request("/%2e%2e/seed.json")[0], 404)
