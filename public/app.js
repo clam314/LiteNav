@@ -1,5 +1,6 @@
 import { icon, brandIcon } from './icons.js';
 import { initCompanion } from './companion.js';
+import { toolsMarkup, mountTools, resolveTool } from './tools.js';
 
 initCompanion();
 
@@ -12,6 +13,7 @@ let health = { services: {} };
 let view = 'home';
 let editMode = false;
 let activeCategory = '';
+let activeTool = '';
 let currentDialog = null;
 let mutationQueue = Promise.resolve();
 let dragged = null;
@@ -101,7 +103,8 @@ function sidebarMarkup() {
     '<nav class="sidebar-nav" aria-label="页面目录"><a href="#home" class="nav-item ' + (view === 'home' && !activeCategory ? 'active' : '') + '">' + icon('home') + '<span>常用</span></a>',
     '<div class="nav-section-label">网址目录</div>',
     categories.map((category) => '<a href="#category-' + encodeURIComponent(category.id) + '" class="nav-item ' + (view === 'home' && activeCategory === category.id ? 'active' : '') + '">' + icon(category.icon || 'folder') + '<span>' + esc(category.name) + '</span></a>').join(''),
-    '<div class="nav-divider"></div><a href="#services" class="nav-item ' + (view === 'services' ? 'active' : '') + '">' + icon('server') + '<span>我的服务</span></a></nav>',
+    '<div class="nav-divider"></div><a href="#services" class="nav-item ' + (view === 'services' ? 'active' : '') + '">' + icon('server') + '<span>我的服务</span></a>',
+    '<a href="#tools" class="nav-item ' + (view === 'tools' ? 'active' : '') + '">' + icon('toolbox') + '<span>工具箱</span></a></nav>',
     '<div class="sidebar-bottom"><a href="#settings" class="nav-item ' + (view === 'settings' ? 'active' : '') + '">' + icon('settings') + '<span>设置</span></a></div></aside>',
   ].join('');
 }
@@ -193,13 +196,14 @@ function settingsMarkup() {
 
 function render() {
   if (!config) return;
-  const titles = { home: '我的导航', services: '我的服务', settings: '设置' };
+  const titles = { home: '我的导航', services: '我的服务', settings: '设置', tools: '工具箱' };
   const previousScroll = window.scrollY;
   app.innerHTML = '<div class="app-shell ' + (editMode ? 'edit-mode' : '') + '">' + sidebarMarkup() +
     '<main class="workspace"><header class="topbar"><h1 class="page-title">' + titles[view] + '</h1><div class="topbar-actions"><span id="service-alert">' + alertMarkup() + '</span>' +
     (view === 'home' ? '<button class="btn ' + (editMode ? 'btn-secondary is-editing' : 'btn-secondary') + '" data-action="toggle-edit">' + (editMode ? icon('check', 16) + '完成整理' : '整理') + '</button>' : '') +
-    '<button class="btn btn-primary" data-action="' + (view === 'services' ? 'add-service' : 'add-link') + '">' + icon('plus', 18) + '添加' + (view === 'services' ? '服务' : '') + '</button></div></header>' +
-    '<div class="page-content">' + (view === 'services' ? servicesMarkup() : view === 'settings' ? settingsMarkup() : homeMarkup()) + '</div></main></div>';
+    (view === 'tools' ? '' : '<button class="btn btn-primary" data-action="' + (view === 'services' ? 'add-service' : 'add-link') + '">' + icon('plus', 18) + '添加' + (view === 'services' ? '服务' : '') + '</button>') + '</div></header>' +
+    '<div class="page-content">' + (view === 'services' ? servicesMarkup() : view === 'settings' ? settingsMarkup() : view === 'tools' ? toolsMarkup(activeTool) : homeMarkup()) + '</div></main></div>';
+  if (view === 'tools') mountTools(app, { toast });
   document.title = titles[view] + ' · 轻航 LiteNav';
   window.scrollTo({ top: previousScroll, behavior: 'instant' });
 }
@@ -207,7 +211,8 @@ function render() {
 function route() {
   const hash = location.hash.slice(1);
   const oldView = view;
-  view = hash === 'services' ? 'services' : hash === 'settings' ? 'settings' : 'home';
+  view = hash === 'services' ? 'services' : hash === 'settings' ? 'settings' : hash === 'tools' || hash.startsWith('tools/') ? 'tools' : 'home';
+  if (view === 'tools') activeTool = resolveTool(hash.slice(6));
   try { activeCategory = hash.startsWith('category-') ? decodeURIComponent(hash.slice(9)) : ''; }
   catch { activeCategory = ''; }
   if (view !== oldView) editMode = false;
@@ -642,7 +647,7 @@ document.addEventListener('dragend', () => {
 window.addEventListener('hashchange', route);
 window.addEventListener('focus', () => {
   if (!config || currentDialog || editMode) return;
-  api('/api/state').then((latest) => { if (latest.revision !== config.revision) { config = latest; render(); } }).catch(() => {});
+  api('/api/state').then((latest) => { if (latest.revision !== config.revision) { config = latest; if (view !== 'tools') render(); } }).catch(() => {});
   refreshHealth().catch(() => {});
 });
 

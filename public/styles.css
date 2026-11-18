@@ -345,7 +345,7 @@ input, select, textarea { min-width: 0; }
    browsers and viewers who reduce transparency keep the opaque cards. */
 @supports ((backdrop-filter: blur(1px)) or (-webkit-backdrop-filter: blur(1px))) {
   @media (min-width: 1280px) {
-    body[data-companion="on"] :is(.favorites-grid, .category-card, .service-card, .settings-card, .empty-state:not(.category-card .empty-state)) {
+    body[data-companion="on"] :is(.favorites-grid, .category-card, .service-card, .settings-card, .tool-card, .empty-state:not(.category-card .empty-state)) {
       --ink: #f2f4f8;
       --muted: #bfc4cf;
       background: rgb(18 21 28 / 58%);
@@ -356,7 +356,7 @@ input, select, textarea { min-width: 0; }
   }
   /* Browsers without this media feature simply keep the glass. */
   @media (prefers-reduced-transparency: reduce) {
-    body[data-companion="on"] :is(.favorites-grid, .category-card, .service-card, .settings-card, .empty-state:not(.category-card .empty-state)) {
+    body[data-companion="on"] :is(.favorites-grid, .category-card, .service-card, .settings-card, .tool-card, .empty-state:not(.category-card .empty-state)) {
       --ink: inherit;
       --muted: inherit;
       text-shadow: none;
