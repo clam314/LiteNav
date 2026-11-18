@@ -85,8 +85,8 @@ SHA-256：
 - 时装以上游 `l2d` 文件树中实际存在的骨骼为准；素材仓库自带的旧索引 `js/json/l2d.json` 漏收了部分时装（例如 `c016_03`），不再使用。每个骨骼的 Spine 版本读取自文件头，4.0 与 4.1 素材分别由对应运行时播放。
 - 名字：取自 Nikke-db 为其网站维护的 [nikke-db-vue](https://github.com/Nikke-db/nikke-db-vue) `src/utils/json/l2d.json`，与素材同步更新，含简体中文（`cn`）与英文名，目录记录所用提交。基础角色按「人物：型号」拆分，时装取基础角色名之后的部分；没有中文名的时装按英文名拆分，仍无名则显示「未命名时装」。人物必须有中文名才收录：该索引不为男性角色和部分服务器专属条目提供中文名，这类编号会在更新时列出。`scripts/nikke-names.json` 可手工指定名字并优先于索引，目前为空（此前取自 [clam314/Nikkiweb](https://github.com/clam314/Nikkiweb) 的名称表已全部被索引覆盖）。
 - 不展示：NPC（`c9xx`）、量产型敌人（`c250`–`c259`）、士兵、产品与 iDoll（`c300`–`c308`，并按「士兵／产品／iDoll」等名字匹配）、旧版模型（英文名以 `_old` 结尾）以及联动男性角色电次、早川秋、9S、亚当。
-- 部分立绘需要指定皮肤（`acc`、`bg`），名单沿用 Nikkiweb。
-- 展示方式：立绘播放站立骨骼的 `idle`；「动作」为开火循环，在瞄准骨骼上交替播放 `aim_idle` 与 `aim_fire`，开火时叠加 `aim_fire_hair`、`aim_fire_hip`（如有）。
+- 部分立绘需要指定皮肤（`acc`、`bg`），名单沿用 Nikkiweb。另有骨骼把头、手臂等部件拆在 `part_0`、`part_1` 等额外皮肤里，默认皮肤并不完整（例如方舟黑色游侠 `c570` 的掩体与瞄准骨骼）；运行时会把能补上缺失起始部件的皮肤合并进来。
+- 展示方式：立绘播放站立骨骼的 `idle`；「动作」为战斗循环，参照 Nikkiweb 的「开火循环展示」在掩体（`cover/{id}_cover_00`）与瞄准骨骼之间切换：掩体待机 → `to_aim` → 瞄准 → `aim_fire` 连射（叠加 `aim_fire_hair`、`aim_fire_hip`，有技能射击时接着播放）→ `to_cover` → 掩体待机 → `cover_reload` 换弹，循环往复。两套骨骼共用同一取景，过渡动作在离开的那套骨骼上播放；没有掩体骨骼的时装只在瞄准姿势上开火。
 - NIKKE 部分 atlas 的区域名含韩文。运行时以纯文本 data URI 交给 Spine，避免其 `atob` 解码破坏 UTF-8。
 
 Spine 4.0 运行时 `/vendor/spine/spine-player-4.0.30.js` 下载自官方 npm 包 [`@esotericsoftware/spine-player@4.0.30`](https://www.npmjs.com/package/@esotericsoftware/spine-player/v/4.0.30)（`dist/iife/spine-player.js`），保持原始字节；其样式与 4.1.56 版完全相同，共用同一份 CSS。许可证同样为上文的 Spine Runtimes License Agreement。

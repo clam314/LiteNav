@@ -31,6 +31,7 @@ body[data-companion] .toast-root { bottom: 82px; }
   transition: opacity 420ms ease-in-out;
 }
 .companion-layer.is-visible { opacity: 1; }
+.companion-layer > .spine-player.is-hidden { visibility: hidden; }
 .companion-layer > .spine-player {
   /* The canvas fills the rail; layoutCamera() places the shot inside it. */
   position: absolute !important; inset: 0;

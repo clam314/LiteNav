@@ -5,6 +5,7 @@ import { isExcludedCharacter } from '../public/companion-exclusions.js';
 import { LOCAL_FALLBACK_CHARACTER } from '../public/companion-fallback.js';
 import {
   normalizePreferences,
+  completeSkin,
   gameOf,
   displayOf,
   withDisplay,
@@ -486,4 +487,32 @@ test('Spine 4.0 regions are measured from their bone and 4.1 regions from their 
   const skeleton = stillSkeleton({ drawOrder: [slot(region(false)), slot(region(true))] });
   assert.equal(visibleArtBounds(skeleton, [{ duration: 0, apply() {} }]).minY, -10);
   assert.deepEqual(seen, ['bone', 'slot']);
+});
+
+test('outfits that split their body across part skins get one complete skin', () => {
+  class Skin {
+    constructor(name, entries = {}) { this.name = name; this.entries = { ...entries }; }
+    getAttachment(slot, name) { return this.entries[slot + '/' + name] || null; }
+    addSkin(skin) { Object.assign(this.entries, skin.entries); }
+  }
+  const make = () => {
+    const defaultSkin = new Skin('default', { '0/body': 'body' });
+    const skins = [defaultSkin, new Skin('part_0', { '1/head': 'head' }), new Skin('part_1', { '2/arm': 'arm' }), new Skin('bg', { '3/sea': 'sea' })];
+    const slots = [{ index: 0, attachmentName: 'body' }, { index: 1, attachmentName: 'head' }, { index: 2, attachmentName: 'arm' }, { index: 4, attachmentName: null }];
+    return {
+      data: { defaultSkin, skins, slots }, skin: null, poses: 0,
+      getAttachment(slot, name) { return (this.skin && this.skin.getAttachment(slot, name)) || defaultSkin.getAttachment(slot, name); },
+      setSkin(skin) { this.skin = skin; },
+      setSlotsToSetupPose() { this.poses += 1; },
+    };
+  };
+  const skeleton = make();
+  assert.deepEqual(completeSkin({ Skin }, skeleton), ['part_0', 'part_1'], 'skins that fill nothing (bg) stay out');
+  assert.ok(skeleton.data.slots.every(slot => !slot.attachmentName || skeleton.getAttachment(slot.index, slot.attachmentName)));
+  assert.equal(skeleton.poses, 1);
+  assert.deepEqual(completeSkin({ Skin }, skeleton), [], 'a complete skeleton is left alone');
+  const whole = make();
+  whole.data.slots = whole.data.slots.slice(0, 1);
+  assert.deepEqual(completeSkin({ Skin }, whole), []);
+  assert.equal(whole.skin, null);
 });

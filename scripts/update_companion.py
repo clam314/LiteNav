@@ -176,9 +176,10 @@ def skin_name(own: str, parent: str, person: str) -> str:
 
 
 def outfit_files(paths: set[str], outfit_id: str) -> dict:
-    """Stand and aim files present in the l2d tree for one outfit."""
+    """Stand, cover and aim files present in the l2d tree for one outfit."""
     files = {}
-    for mode, stem in (("stand", f"{outfit_id}/{outfit_id}_00"), ("aim", f"{outfit_id}/aim/{outfit_id}_aim_00")):
+    for mode, stem in (("stand", f"{outfit_id}/{outfit_id}_00"), ("cover", f"{outfit_id}/cover/{outfit_id}_cover_00"),
+                       ("aim", f"{outfit_id}/aim/{outfit_id}_aim_00")):
         if f"{stem}.skel" in paths and f"{stem}.atlas" in paths:
             files[mode] = {"skeleton": f"l2d/{stem}.skel", "atlas": f"l2d/{stem}.atlas"}
     return files
@@ -223,7 +224,12 @@ def build_nikke(tree_paths: set[str], index: list, names: dict, versions: dict, 
         entry = people.setdefault(person, {"id": f"nikke:{outfit_id}", "name": person,
                                            "aka": split_name(english.get(outfit_id, ""))[0].replace("_", " "), "costumes": []})
         costume = {"label": label or "默认", "outfit": outfit_id}
-        for mode, part in (("idle", files["stand"]), ("cutscene", files.get("aim"))):
+        # The combat loop moves between the cover and aim skeletons; without a
+        # cover skeleton it stays on the aim pose.
+        parts = [("idle", files["stand"]), ("cutscene", files.get("aim"))]
+        if "aim" in files and "cover" in files:
+            parts.append(("cover", files["cover"]))
+        for mode, part in parts:
             if not part:
                 costume[mode] = None
                 continue

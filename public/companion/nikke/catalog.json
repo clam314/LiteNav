@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-18T17:13:52+00:00",
+ "generatedAt": "2026-11-18T17:28:54+00:00",
  "source": "Nikke-db/Nikke-db.github.io@7d9c7b8666ba",
  "names": "Nikke-db/nikke-db-vue@3e3fb7e3acd5",
  "commit": "7d9c7b8666ba3356ae846e50178d43150af558aa",
@@ -21,6 +21,11 @@
       "skeleton": "l2d/c010/aim/c010_aim_00.skel",
       "atlas": "l2d/c010/aim/c010_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c010/cover/c010_cover_00.skel",
+      "atlas": "l2d/c010/cover/c010_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -34,6 +39,11 @@
      "cutscene": {
       "skeleton": "l2d/c010_02/aim/c010_02_aim_00.skel",
       "atlas": "l2d/c010_02/aim/c010_02_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c010_02/cover/c010_02_cover_00.skel",
+      "atlas": "l2d/c010_02/cover/c010_02_cover_00.atlas",
       "runtime": "4.0"
      }
     },
@@ -49,6 +59,11 @@
       "skeleton": "l2d/c010_03/aim/c010_03_aim_00.skel",
       "atlas": "l2d/c010_03/aim/c010_03_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c010_03/cover/c010_03_cover_00.skel",
+      "atlas": "l2d/c010_03/cover/c010_03_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -62,6 +77,11 @@
      "cutscene": {
       "skeleton": "l2d/c016/aim/c016_aim_00.skel",
       "atlas": "l2d/c016/aim/c016_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c016/cover/c016_cover_00.skel",
+      "atlas": "l2d/c016/cover/c016_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -77,6 +97,11 @@
       "skeleton": "l2d/c016_01/aim/c016_01_aim_00.skel",
       "atlas": "l2d/c016_01/aim/c016_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c016_01/cover/c016_01_cover_00.skel",
+      "atlas": "l2d/c016_01/cover/c016_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -91,6 +116,11 @@
       "skeleton": "l2d/c016_02/aim/c016_02_aim_00.skel",
       "atlas": "l2d/c016_02/aim/c016_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c016_02/cover/c016_02_cover_00.skel",
+      "atlas": "l2d/c016_02/cover/c016_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -104,6 +134,11 @@
      "cutscene": {
       "skeleton": "l2d/c016_03/aim/c016_03_aim_00.skel",
       "atlas": "l2d/c016_03/aim/c016_03_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c016_03/cover/c016_03_cover_00.skel",
+      "atlas": "l2d/c016_03/cover/c016_03_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -126,6 +161,11 @@
       "skeleton": "l2d/c011/aim/c011_aim_00.skel",
       "atlas": "l2d/c011/aim/c011_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c011/cover/c011_cover_00.skel",
+      "atlas": "l2d/c011/cover/c011_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -139,6 +179,11 @@
      "cutscene": {
       "skeleton": "l2d/c011_01/aim/c011_01_aim_00.skel",
       "atlas": "l2d/c011_01/aim/c011_01_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c011_01/cover/c011_01_cover_00.skel",
+      "atlas": "l2d/c011_01/cover/c011_01_cover_00.atlas",
       "runtime": "4.0"
      }
     },
@@ -154,6 +199,11 @@
       "skeleton": "l2d/c014/aim/c014_aim_00.skel",
       "atlas": "l2d/c014/aim/c014_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c014/cover/c014_cover_00.skel",
+      "atlas": "l2d/c014/cover/c014_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -168,6 +218,11 @@
       "skeleton": "l2d/c018/aim/c018_aim_00.skel",
       "atlas": "l2d/c018/aim/c018_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c018/cover/c018_cover_00.skel",
+      "atlas": "l2d/c018/cover/c018_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -181,6 +236,11 @@
      "cutscene": {
       "skeleton": "l2d/c018_01/aim/c018_01_aim_00.skel",
       "atlas": "l2d/c018_01/aim/c018_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c018_01/cover/c018_01_cover_00.skel",
+      "atlas": "l2d/c018_01/cover/c018_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -203,6 +263,11 @@
       "skeleton": "l2d/c012/aim/c012_aim_00.skel",
       "atlas": "l2d/c012/aim/c012_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c012/cover/c012_cover_00.skel",
+      "atlas": "l2d/c012/cover/c012_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -216,6 +281,11 @@
      "cutscene": {
       "skeleton": "l2d/c015/aim/c015_aim_00.skel",
       "atlas": "l2d/c015/aim/c015_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c015/cover/c015_cover_00.skel",
+      "atlas": "l2d/c015/cover/c015_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -231,6 +301,11 @@
       "skeleton": "l2d/c017/aim/c017_aim_00.skel",
       "atlas": "l2d/c017/aim/c017_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c017/cover/c017_cover_00.skel",
+      "atlas": "l2d/c017/cover/c017_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -245,6 +320,11 @@
       "skeleton": "l2d/c017_01/aim/c017_01_aim_00.skel",
       "atlas": "l2d/c017_01/aim/c017_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c017_01/cover/c017_01_cover_00.skel",
+      "atlas": "l2d/c017_01/cover/c017_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -258,6 +338,11 @@
      "cutscene": {
       "skeleton": "l2d/c017_02/aim/c017_02_aim_00.skel",
       "atlas": "l2d/c017_02/aim/c017_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c017_02/cover/c017_02_cover_00.skel",
+      "atlas": "l2d/c017_02/cover/c017_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -280,6 +365,11 @@
       "skeleton": "l2d/c013/aim/c013_aim_00.skel",
       "atlas": "l2d/c013/aim/c013_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c013/cover/c013_cover_00.skel",
+      "atlas": "l2d/c013/cover/c013_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -294,6 +384,11 @@
       "skeleton": "l2d/c019/aim/c019_aim_00.skel",
       "atlas": "l2d/c019/aim/c019_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c019/cover/c019_cover_00.skel",
+      "atlas": "l2d/c019/cover/c019_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -307,6 +402,11 @@
      "cutscene": {
       "skeleton": "l2d/c019_01/aim/c019_01_aim_00.skel",
       "atlas": "l2d/c019_01/aim/c019_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c019_01/cover/c019_01_cover_00.skel",
+      "atlas": "l2d/c019_01/cover/c019_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -329,6 +429,11 @@
       "skeleton": "l2d/c020/aim/c020_aim_00.skel",
       "atlas": "l2d/c020/aim/c020_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c020/cover/c020_cover_00.skel",
+      "atlas": "l2d/c020/cover/c020_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -342,6 +447,11 @@
      "cutscene": {
       "skeleton": "l2d/c023/aim/c023_aim_00.skel",
       "atlas": "l2d/c023/aim/c023_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c023/cover/c023_cover_00.skel",
+      "atlas": "l2d/c023/cover/c023_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -364,6 +474,11 @@
       "skeleton": "l2d/c022/aim/c022_aim_00.skel",
       "atlas": "l2d/c022/aim/c022_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c022/cover/c022_cover_00.skel",
+      "atlas": "l2d/c022/cover/c022_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -377,6 +492,11 @@
      "cutscene": {
       "skeleton": "l2d/c022_01/aim/c022_01_aim_00.skel",
       "atlas": "l2d/c022_01/aim/c022_01_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c022_01/cover/c022_01_cover_00.skel",
+      "atlas": "l2d/c022_01/cover/c022_01_cover_00.atlas",
       "runtime": "4.0"
      }
     }
@@ -399,6 +519,11 @@
       "skeleton": "l2d/c030/aim/c030_aim_00.skel",
       "atlas": "l2d/c030/aim/c030_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c030/cover/c030_cover_00.skel",
+      "atlas": "l2d/c030/cover/c030_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -413,6 +538,11 @@
       "skeleton": "l2d/c030_01/aim/c030_01_aim_00.skel",
       "atlas": "l2d/c030_01/aim/c030_01_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c030_01/cover/c030_01_cover_00.skel",
+      "atlas": "l2d/c030_01/cover/c030_01_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -426,6 +556,11 @@
      "cutscene": {
       "skeleton": "l2d/c030_02/aim/c030_02_aim_00.skel",
       "atlas": "l2d/c030_02/aim/c030_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c030_02/cover/c030_02_cover_00.skel",
+      "atlas": "l2d/c030_02/cover/c030_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -448,6 +583,11 @@
       "skeleton": "l2d/c032/aim/c032_aim_00.skel",
       "atlas": "l2d/c032/aim/c032_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c032/cover/c032_cover_00.skel",
+      "atlas": "l2d/c032/cover/c032_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -461,6 +601,11 @@
      "cutscene": {
       "skeleton": "l2d/c032_01/aim/c032_01_aim_00.skel",
       "atlas": "l2d/c032_01/aim/c032_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c032_01/cover/c032_01_cover_00.skel",
+      "atlas": "l2d/c032_01/cover/c032_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -483,6 +628,11 @@
       "skeleton": "l2d/c033/aim/c033_aim_00.skel",
       "atlas": "l2d/c033/aim/c033_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c033/cover/c033_cover_00.skel",
+      "atlas": "l2d/c033/cover/c033_cover_00.atlas",
+      "runtime": "4.1"
      }
     }
    ]
@@ -504,6 +654,11 @@
       "skeleton": "l2d/c040/aim/c040_aim_00.skel",
       "atlas": "l2d/c040/aim/c040_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c040/cover/c040_cover_00.skel",
+      "atlas": "l2d/c040/cover/c040_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -517,6 +672,11 @@
      "cutscene": {
       "skeleton": "l2d/c043/aim/c043_aim_00.skel",
       "atlas": "l2d/c043/aim/c043_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c043/cover/c043_cover_00.skel",
+      "atlas": "l2d/c043/cover/c043_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -532,6 +692,11 @@
       "skeleton": "l2d/c043_01/aim/c043_01_aim_00.skel",
       "atlas": "l2d/c043_01/aim/c043_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c043_01/cover/c043_01_cover_00.skel",
+      "atlas": "l2d/c043_01/cover/c043_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -545,6 +710,11 @@
      "cutscene": {
       "skeleton": "l2d/c043_02/aim/c043_02_aim_00.skel",
       "atlas": "l2d/c043_02/aim/c043_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c043_02/cover/c043_02_cover_00.skel",
+      "atlas": "l2d/c043_02/cover/c043_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -567,6 +737,11 @@
       "skeleton": "l2d/c041/aim/c041_aim_00.skel",
       "atlas": "l2d/c041/aim/c041_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c041/cover/c041_cover_00.skel",
+      "atlas": "l2d/c041/cover/c041_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -580,6 +755,11 @@
      "cutscene": {
       "skeleton": "l2d/c041_01/aim/c041_01_aim_00.skel",
       "atlas": "l2d/c041_01/aim/c041_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c041_01/cover/c041_01_cover_00.skel",
+      "atlas": "l2d/c041_01/cover/c041_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -602,6 +782,11 @@
       "skeleton": "l2d/c060/aim/c060_aim_00.skel",
       "atlas": "l2d/c060/aim/c060_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c060/cover/c060_cover_00.skel",
+      "atlas": "l2d/c060/cover/c060_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -615,6 +800,11 @@
      "cutscene": {
       "skeleton": "l2d/c063/aim/c063_aim_00.skel",
       "atlas": "l2d/c063/aim/c063_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c063/cover/c063_cover_00.skel",
+      "atlas": "l2d/c063/cover/c063_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -637,6 +827,11 @@
       "skeleton": "l2d/c061/aim/c061_aim_00.skel",
       "atlas": "l2d/c061/aim/c061_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c061/cover/c061_cover_00.skel",
+      "atlas": "l2d/c061/cover/c061_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -650,6 +845,11 @@
      "cutscene": {
       "skeleton": "l2d/c062/aim/c062_aim_00.skel",
       "atlas": "l2d/c062/aim/c062_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c062/cover/c062_cover_00.skel",
+      "atlas": "l2d/c062/cover/c062_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -672,6 +872,11 @@
       "skeleton": "l2d/c070/aim/c070_aim_00.skel",
       "atlas": "l2d/c070/aim/c070_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c070/cover/c070_cover_00.skel",
+      "atlas": "l2d/c070/cover/c070_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -685,6 +890,11 @@
      "cutscene": {
       "skeleton": "l2d/c070_01/aim/c070_01_aim_00.skel",
       "atlas": "l2d/c070_01/aim/c070_01_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c070_01/cover/c070_01_cover_00.skel",
+      "atlas": "l2d/c070_01/cover/c070_01_cover_00.atlas",
       "runtime": "4.0"
      }
     },
@@ -701,6 +911,11 @@
       "skeleton": "l2d/c070_02/aim/c070_02_aim_00.skel",
       "atlas": "l2d/c070_02/aim/c070_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c070_02/cover/c070_02_cover_00.skel",
+      "atlas": "l2d/c070_02/cover/c070_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -714,6 +929,11 @@
      "cutscene": {
       "skeleton": "l2d/c073/aim/c073_aim_00.skel",
       "atlas": "l2d/c073/aim/c073_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c073/cover/c073_cover_00.skel",
+      "atlas": "l2d/c073/cover/c073_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -736,6 +956,11 @@
       "skeleton": "l2d/c071/aim/c071_aim_00.skel",
       "atlas": "l2d/c071/aim/c071_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c071/cover/c071_cover_00.skel",
+      "atlas": "l2d/c071/cover/c071_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -749,6 +974,11 @@
      "cutscene": {
       "skeleton": "l2d/c074/aim/c074_aim_00.skel",
       "atlas": "l2d/c074/aim/c074_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c074/cover/c074_cover_00.skel",
+      "atlas": "l2d/c074/cover/c074_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -771,6 +1001,11 @@
       "skeleton": "l2d/c072/aim/c072_aim_00.skel",
       "atlas": "l2d/c072/aim/c072_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c072/cover/c072_cover_00.skel",
+      "atlas": "l2d/c072/cover/c072_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -784,6 +1019,11 @@
      "cutscene": {
       "skeleton": "l2d/c072_01/aim/c072_01_aim_00.skel",
       "atlas": "l2d/c072_01/aim/c072_01_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c072_01/cover/c072_01_cover_00.skel",
+      "atlas": "l2d/c072_01/cover/c072_01_cover_00.atlas",
       "runtime": "4.0"
      }
     },
@@ -799,6 +1039,11 @@
       "skeleton": "l2d/c072_02/aim/c072_02_aim_00.skel",
       "atlas": "l2d/c072_02/aim/c072_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c072_02/cover/c072_02_cover_00.skel",
+      "atlas": "l2d/c072_02/cover/c072_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -813,6 +1058,11 @@
       "skeleton": "l2d/c072_04/aim/c072_04_aim_00.skel",
       "atlas": "l2d/c072_04/aim/c072_04_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c072_04/cover/c072_04_cover_00.skel",
+      "atlas": "l2d/c072_04/cover/c072_04_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -826,6 +1076,11 @@
      "cutscene": {
       "skeleton": "l2d/c075/aim/c075_aim_00.skel",
       "atlas": "l2d/c075/aim/c075_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c075/cover/c075_cover_00.skel",
+      "atlas": "l2d/c075/cover/c075_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -848,6 +1103,11 @@
       "skeleton": "l2d/c080/aim/c080_aim_00.skel",
       "atlas": "l2d/c080/aim/c080_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c080/cover/c080_cover_00.skel",
+      "atlas": "l2d/c080/cover/c080_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -862,6 +1122,11 @@
       "skeleton": "l2d/c080_01/aim/c080_01_aim_00.skel",
       "atlas": "l2d/c080_01/aim/c080_01_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c080_01/cover/c080_01_cover_00.skel",
+      "atlas": "l2d/c080_01/cover/c080_01_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -875,6 +1140,11 @@
      "cutscene": {
       "skeleton": "l2d/c080_02/aim/c080_02_aim_00.skel",
       "atlas": "l2d/c080_02/aim/c080_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c080_02/cover/c080_02_cover_00.skel",
+      "atlas": "l2d/c080_02/cover/c080_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -897,6 +1167,11 @@
       "skeleton": "l2d/c082/aim/c082_aim_00.skel",
       "atlas": "l2d/c082/aim/c082_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c082/cover/c082_cover_00.skel",
+      "atlas": "l2d/c082/cover/c082_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -910,6 +1185,11 @@
      "cutscene": {
       "skeleton": "l2d/c082_01/aim/c082_01_aim_00.skel",
       "atlas": "l2d/c082_01/aim/c082_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c082_01/cover/c082_01_cover_00.skel",
+      "atlas": "l2d/c082_01/cover/c082_01_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -925,6 +1205,11 @@
       "skeleton": "l2d/c082_02/aim/c082_02_aim_00.skel",
       "atlas": "l2d/c082_02/aim/c082_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c082_02/cover/c082_02_cover_00.skel",
+      "atlas": "l2d/c082_02/cover/c082_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -938,6 +1223,11 @@
      "cutscene": {
       "skeleton": "l2d/c082_80/aim/c082_80_aim_00.skel",
       "atlas": "l2d/c082_80/aim/c082_80_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c082_80/cover/c082_80_cover_00.skel",
+      "atlas": "l2d/c082_80/cover/c082_80_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -960,6 +1250,11 @@
       "skeleton": "l2d/c090/aim/c090_aim_00.skel",
       "atlas": "l2d/c090/aim/c090_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c090/cover/c090_cover_00.skel",
+      "atlas": "l2d/c090/cover/c090_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -973,6 +1268,11 @@
      "cutscene": {
       "skeleton": "l2d/c090_01/aim/c090_01_aim_00.skel",
       "atlas": "l2d/c090_01/aim/c090_01_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c090_01/cover/c090_01_cover_00.skel",
+      "atlas": "l2d/c090_01/cover/c090_01_cover_00.atlas",
       "runtime": "4.0"
      }
     },
@@ -988,6 +1288,11 @@
       "skeleton": "l2d/c090_02/aim/c090_02_aim_00.skel",
       "atlas": "l2d/c090_02/aim/c090_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c090_02/cover/c090_02_cover_00.skel",
+      "atlas": "l2d/c090_02/cover/c090_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -1002,6 +1307,11 @@
       "skeleton": "l2d/c093/aim/c093_aim_00.skel",
       "atlas": "l2d/c093/aim/c093_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c093/cover/c093_cover_00.skel",
+      "atlas": "l2d/c093/cover/c093_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -1015,6 +1325,11 @@
      "cutscene": {
       "skeleton": "l2d/c093_01/aim/c093_01_aim_00.skel",
       "atlas": "l2d/c093_01/aim/c093_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c093_01/cover/c093_01_cover_00.skel",
+      "atlas": "l2d/c093_01/cover/c093_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -1037,6 +1352,11 @@
       "skeleton": "l2d/c091/aim/c091_aim_00.skel",
       "atlas": "l2d/c091/aim/c091_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c091/cover/c091_cover_00.skel",
+      "atlas": "l2d/c091/cover/c091_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -1050,6 +1370,11 @@
      "cutscene": {
       "skeleton": "l2d/c091_01/aim/c091_01_aim_00.skel",
       "atlas": "l2d/c091_01/aim/c091_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c091_01/cover/c091_01_cover_00.skel",
+      "atlas": "l2d/c091_01/cover/c091_01_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -1065,6 +1390,11 @@
       "skeleton": "l2d/c094/aim/c094_aim_00.skel",
       "atlas": "l2d/c094/aim/c094_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c094/cover/c094_cover_00.skel",
+      "atlas": "l2d/c094/cover/c094_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -1078,6 +1408,11 @@
      "cutscene": {
       "skeleton": "l2d/c094_01/aim/c094_01_aim_00.skel",
       "atlas": "l2d/c094_01/aim/c094_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c094_01/cover/c094_01_cover_00.skel",
+      "atlas": "l2d/c094_01/cover/c094_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -1100,6 +1435,11 @@
       "skeleton": "l2d/c092/aim/c092_aim_00.skel",
       "atlas": "l2d/c092/aim/c092_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c092/cover/c092_cover_00.skel",
+      "atlas": "l2d/c092/cover/c092_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -1114,6 +1454,11 @@
       "skeleton": "l2d/c095/aim/c095_aim_00.skel",
       "atlas": "l2d/c095/aim/c095_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c095/cover/c095_cover_00.skel",
+      "atlas": "l2d/c095/cover/c095_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -1127,6 +1472,11 @@
      "cutscene": {
       "skeleton": "l2d/c095_01/aim/c095_01_aim_00.skel",
       "atlas": "l2d/c095_01/aim/c095_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c095_01/cover/c095_01_cover_00.skel",
+      "atlas": "l2d/c095_01/cover/c095_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -1149,6 +1499,11 @@
       "skeleton": "l2d/c100/aim/c100_aim_00.skel",
       "atlas": "l2d/c100/aim/c100_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c100/cover/c100_cover_00.skel",
+      "atlas": "l2d/c100/cover/c100_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -1163,6 +1518,11 @@
       "skeleton": "l2d/c103/aim/c103_aim_00.skel",
       "atlas": "l2d/c103/aim/c103_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c103/cover/c103_cover_00.skel",
+      "atlas": "l2d/c103/cover/c103_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -1176,6 +1536,11 @@
      "cutscene": {
       "skeleton": "l2d/c103_01/aim/c103_01_aim_00.skel",
       "atlas": "l2d/c103_01/aim/c103_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c103_01/cover/c103_01_cover_00.skel",
+      "atlas": "l2d/c103_01/cover/c103_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -1198,6 +1563,11 @@
       "skeleton": "l2d/c101/aim/c101_aim_00.skel",
       "atlas": "l2d/c101/aim/c101_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c101/cover/c101_cover_00.skel",
+      "atlas": "l2d/c101/cover/c101_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -1213,6 +1583,11 @@
       "skeleton": "l2d/c101_01/aim/c101_01_aim_00.skel",
       "atlas": "l2d/c101_01/aim/c101_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c101_01/cover/c101_01_cover_00.skel",
+      "atlas": "l2d/c101_01/cover/c101_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -1227,6 +1602,11 @@
       "skeleton": "l2d/c101_02/aim/c101_02_aim_00.skel",
       "atlas": "l2d/c101_02/aim/c101_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c101_02/cover/c101_02_cover_00.skel",
+      "atlas": "l2d/c101_02/cover/c101_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -1240,6 +1620,11 @@
      "cutscene": {
       "skeleton": "l2d/c104/aim/c104_aim_00.skel",
       "atlas": "l2d/c104/aim/c104_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c104/cover/c104_cover_00.skel",
+      "atlas": "l2d/c104/cover/c104_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -1263,6 +1648,11 @@
       "skeleton": "l2d/c102/aim/c102_aim_00.skel",
       "atlas": "l2d/c102/aim/c102_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c102/cover/c102_cover_00.skel",
+      "atlas": "l2d/c102/cover/c102_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -1276,6 +1666,11 @@
      "cutscene": {
       "skeleton": "l2d/c102_01/aim/c102_01_aim_00.skel",
       "atlas": "l2d/c102_01/aim/c102_01_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c102_01/cover/c102_01_cover_00.skel",
+      "atlas": "l2d/c102_01/cover/c102_01_cover_00.atlas",
       "runtime": "4.0"
      }
     },
@@ -1291,6 +1686,11 @@
       "skeleton": "l2d/c105/aim/c105_aim_00.skel",
       "atlas": "l2d/c105/aim/c105_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c105/cover/c105_cover_00.skel",
+      "atlas": "l2d/c105/cover/c105_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -1304,6 +1704,11 @@
      "cutscene": {
       "skeleton": "l2d/c105_01/aim/c105_01_aim_00.skel",
       "atlas": "l2d/c105_01/aim/c105_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c105_01/cover/c105_01_cover_00.skel",
+      "atlas": "l2d/c105_01/cover/c105_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -1326,6 +1731,11 @@
       "skeleton": "l2d/c110/aim/c110_aim_00.skel",
       "atlas": "l2d/c110/aim/c110_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c110/cover/c110_cover_00.skel",
+      "atlas": "l2d/c110/cover/c110_cover_00.atlas",
+      "runtime": "4.0"
      }
     }
    ]
@@ -1347,6 +1757,11 @@
       "skeleton": "l2d/c111/aim/c111_aim_00.skel",
       "atlas": "l2d/c111/aim/c111_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c111/cover/c111_cover_00.skel",
+      "atlas": "l2d/c111/cover/c111_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -1360,6 +1775,11 @@
      "cutscene": {
       "skeleton": "l2d/c111_01/aim/c111_01_aim_00.skel",
       "atlas": "l2d/c111_01/aim/c111_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c111_01/cover/c111_01_cover_00.skel",
+      "atlas": "l2d/c111_01/cover/c111_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -1382,6 +1802,11 @@
       "skeleton": "l2d/c112/aim/c112_aim_00.skel",
       "atlas": "l2d/c112/aim/c112_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c112/cover/c112_cover_00.skel",
+      "atlas": "l2d/c112/cover/c112_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -1395,6 +1820,11 @@
      "cutscene": {
       "skeleton": "l2d/c112_01/aim/c112_01_aim_00.skel",
       "atlas": "l2d/c112_01/aim/c112_01_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c112_01/cover/c112_01_cover_00.skel",
+      "atlas": "l2d/c112_01/cover/c112_01_cover_00.atlas",
       "runtime": "4.0"
      }
     },
@@ -1410,6 +1840,11 @@
       "skeleton": "l2d/c112_02/aim/c112_02_aim_00.skel",
       "atlas": "l2d/c112_02/aim/c112_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c112_02/cover/c112_02_cover_00.skel",
+      "atlas": "l2d/c112_02/cover/c112_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -1423,6 +1858,11 @@
      "cutscene": {
       "skeleton": "l2d/c112_03/aim/c112_03_aim_00.skel",
       "atlas": "l2d/c112_03/aim/c112_03_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c112_03/cover/c112_03_cover_00.skel",
+      "atlas": "l2d/c112_03/cover/c112_03_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -1445,6 +1885,11 @@
       "skeleton": "l2d/c113/aim/c113_aim_00.skel",
       "atlas": "l2d/c113/aim/c113_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c113/cover/c113_cover_00.skel",
+      "atlas": "l2d/c113/cover/c113_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -1458,6 +1903,11 @@
      "cutscene": {
       "skeleton": "l2d/c113_01/aim/c113_01_aim_00.skel",
       "atlas": "l2d/c113_01/aim/c113_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c113_01/cover/c113_01_cover_00.skel",
+      "atlas": "l2d/c113_01/cover/c113_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -1480,6 +1930,11 @@
       "skeleton": "l2d/c120/aim/c120_aim_00.skel",
       "atlas": "l2d/c120/aim/c120_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c120/cover/c120_cover_00.skel",
+      "atlas": "l2d/c120/cover/c120_cover_00.atlas",
+      "runtime": "4.0"
      }
     }
    ]
@@ -1500,6 +1955,11 @@
      "cutscene": {
       "skeleton": "l2d/c121/aim/c121_aim_00.skel",
       "atlas": "l2d/c121/aim/c121_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c121/cover/c121_cover_00.skel",
+      "atlas": "l2d/c121/cover/c121_cover_00.atlas",
       "runtime": "4.0"
      }
     }
@@ -1522,6 +1982,11 @@
       "skeleton": "l2d/c130/aim/c130_aim_00.skel",
       "atlas": "l2d/c130/aim/c130_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c130/cover/c130_cover_00.skel",
+      "atlas": "l2d/c130/cover/c130_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -1536,6 +2001,11 @@
       "skeleton": "l2d/c130_01/aim/c130_01_aim_00.skel",
       "atlas": "l2d/c130_01/aim/c130_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c130_01/cover/c130_01_cover_00.skel",
+      "atlas": "l2d/c130_01/cover/c130_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -1549,6 +2019,11 @@
      "cutscene": {
       "skeleton": "l2d/c132/aim/c132_aim_00.skel",
       "atlas": "l2d/c132/aim/c132_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c132/cover/c132_cover_00.skel",
+      "atlas": "l2d/c132/cover/c132_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -1571,6 +2046,11 @@
       "skeleton": "l2d/c131/aim/c131_aim_00.skel",
       "atlas": "l2d/c131/aim/c131_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c131/cover/c131_cover_00.skel",
+      "atlas": "l2d/c131/cover/c131_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -1585,6 +2065,11 @@
       "skeleton": "l2d/c131_01/aim/c131_01_aim_00.skel",
       "atlas": "l2d/c131_01/aim/c131_01_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c131_01/cover/c131_01_cover_00.skel",
+      "atlas": "l2d/c131_01/cover/c131_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     }
    ]
@@ -1606,6 +2091,11 @@
       "skeleton": "l2d/c140/aim/c140_aim_00.skel",
       "atlas": "l2d/c140/aim/c140_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c140/cover/c140_cover_00.skel",
+      "atlas": "l2d/c140/cover/c140_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -1619,6 +2109,11 @@
      "cutscene": {
       "skeleton": "l2d/c140_01/aim/c140_01_aim_00.skel",
       "atlas": "l2d/c140_01/aim/c140_01_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c140_01/cover/c140_01_cover_00.skel",
+      "atlas": "l2d/c140_01/cover/c140_01_cover_00.atlas",
       "runtime": "4.0"
      }
     },
@@ -1634,6 +2129,11 @@
       "skeleton": "l2d/c140_02/aim/c140_02_aim_00.skel",
       "atlas": "l2d/c140_02/aim/c140_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c140_02/cover/c140_02_cover_00.skel",
+      "atlas": "l2d/c140_02/cover/c140_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -1647,6 +2147,11 @@
      "cutscene": {
       "skeleton": "l2d/c140_03/aim/c140_03_aim_00.skel",
       "atlas": "l2d/c140_03/aim/c140_03_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c140_03/cover/c140_03_cover_00.skel",
+      "atlas": "l2d/c140_03/cover/c140_03_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -1669,6 +2174,11 @@
       "skeleton": "l2d/c141/aim/c141_aim_00.skel",
       "atlas": "l2d/c141/aim/c141_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c141/cover/c141_cover_00.skel",
+      "atlas": "l2d/c141/cover/c141_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -1683,6 +2193,11 @@
       "skeleton": "l2d/c141_01/aim/c141_01_aim_00.skel",
       "atlas": "l2d/c141_01/aim/c141_01_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c141_01/cover/c141_01_cover_00.skel",
+      "atlas": "l2d/c141_01/cover/c141_01_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -1696,6 +2211,11 @@
      "cutscene": {
       "skeleton": "l2d/c143/aim/c143_aim_00.skel",
       "atlas": "l2d/c143/aim/c143_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c143/cover/c143_cover_00.skel",
+      "atlas": "l2d/c143/cover/c143_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -1718,6 +2238,11 @@
       "skeleton": "l2d/c142/aim/c142_aim_00.skel",
       "atlas": "l2d/c142/aim/c142_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c142/cover/c142_cover_00.skel",
+      "atlas": "l2d/c142/cover/c142_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -1731,6 +2256,11 @@
      "cutscene": {
       "skeleton": "l2d/c142_01/aim/c142_01_aim_00.skel",
       "atlas": "l2d/c142_01/aim/c142_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c142_01/cover/c142_01_cover_00.skel",
+      "atlas": "l2d/c142_01/cover/c142_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -1753,6 +2283,11 @@
       "skeleton": "l2d/c150/aim/c150_aim_00.skel",
       "atlas": "l2d/c150/aim/c150_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c150/cover/c150_cover_00.skel",
+      "atlas": "l2d/c150/cover/c150_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -1767,6 +2302,11 @@
       "skeleton": "l2d/c150_01/aim/c150_01_aim_00.skel",
       "atlas": "l2d/c150_01/aim/c150_01_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c150_01/cover/c150_01_cover_00.skel",
+      "atlas": "l2d/c150_01/cover/c150_01_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -1780,6 +2320,11 @@
      "cutscene": {
       "skeleton": "l2d/c150_02/aim/c150_02_aim_00.skel",
       "atlas": "l2d/c150_02/aim/c150_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c150_02/cover/c150_02_cover_00.skel",
+      "atlas": "l2d/c150_02/cover/c150_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -1802,6 +2347,11 @@
       "skeleton": "l2d/c160/aim/c160_aim_00.skel",
       "atlas": "l2d/c160/aim/c160_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c160/cover/c160_cover_00.skel",
+      "atlas": "l2d/c160/cover/c160_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -1815,6 +2365,11 @@
      "cutscene": {
       "skeleton": "l2d/c160_01/aim/c160_01_aim_00.skel",
       "atlas": "l2d/c160_01/aim/c160_01_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c160_01/cover/c160_01_cover_00.skel",
+      "atlas": "l2d/c160_01/cover/c160_01_cover_00.atlas",
       "runtime": "4.0"
      }
     }
@@ -1837,6 +2392,11 @@
       "skeleton": "l2d/c161/aim/c161_aim_00.skel",
       "atlas": "l2d/c161/aim/c161_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c161/cover/c161_cover_00.skel",
+      "atlas": "l2d/c161/cover/c161_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -1851,6 +2411,11 @@
       "skeleton": "l2d/c162/aim/c162_aim_00.skel",
       "atlas": "l2d/c162/aim/c162_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c162/cover/c162_cover_00.skel",
+      "atlas": "l2d/c162/cover/c162_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -1864,6 +2429,11 @@
      "cutscene": {
       "skeleton": "l2d/c162_01/aim/c162_01_aim_00.skel",
       "atlas": "l2d/c162_01/aim/c162_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c162_01/cover/c162_01_cover_00.skel",
+      "atlas": "l2d/c162_01/cover/c162_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -1886,6 +2456,11 @@
       "skeleton": "l2d/c170/aim/c170_aim_00.skel",
       "atlas": "l2d/c170/aim/c170_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c170/cover/c170_cover_00.skel",
+      "atlas": "l2d/c170/cover/c170_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -1899,6 +2474,11 @@
      "cutscene": {
       "skeleton": "l2d/c170_01/aim/c170_01_aim_00.skel",
       "atlas": "l2d/c170_01/aim/c170_01_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c170_01/cover/c170_01_cover_00.skel",
+      "atlas": "l2d/c170_01/cover/c170_01_cover_00.atlas",
       "runtime": "4.0"
      }
     },
@@ -1914,6 +2494,11 @@
       "skeleton": "l2d/c170_02/aim/c170_02_aim_00.skel",
       "atlas": "l2d/c170_02/aim/c170_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c170_02/cover/c170_02_cover_00.skel",
+      "atlas": "l2d/c170_02/cover/c170_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -1927,6 +2512,11 @@
      "cutscene": {
       "skeleton": "l2d/c170_03/aim/c170_03_aim_00.skel",
       "atlas": "l2d/c170_03/aim/c170_03_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c170_03/cover/c170_03_cover_00.skel",
+      "atlas": "l2d/c170_03/cover/c170_03_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -1942,6 +2532,11 @@
       "skeleton": "l2d/c170_04/aim/c170_04_aim_00.skel",
       "atlas": "l2d/c170_04/aim/c170_04_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c170_04/cover/c170_04_cover_00.skel",
+      "atlas": "l2d/c170_04/cover/c170_04_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -1955,6 +2550,11 @@
      "cutscene": {
       "skeleton": "l2d/c313/aim/c313_aim_00.skel",
       "atlas": "l2d/c313/aim/c313_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c313/cover/c313_cover_00.skel",
+      "atlas": "l2d/c313/cover/c313_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -1977,6 +2577,11 @@
       "skeleton": "l2d/c171/aim/c171_aim_00.skel",
       "atlas": "l2d/c171/aim/c171_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c171/cover/c171_cover_00.skel",
+      "atlas": "l2d/c171/cover/c171_cover_00.atlas",
+      "runtime": "4.0"
      }
     }
    ]
@@ -1997,6 +2602,11 @@
      "cutscene": {
       "skeleton": "l2d/c172/aim/c172_aim_00.skel",
       "atlas": "l2d/c172/aim/c172_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c172/cover/c172_cover_00.skel",
+      "atlas": "l2d/c172/cover/c172_cover_00.atlas",
       "runtime": "4.0"
      }
     }
@@ -2019,6 +2629,11 @@
       "skeleton": "l2d/c180/aim/c180_aim_00.skel",
       "atlas": "l2d/c180/aim/c180_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c180/cover/c180_cover_00.skel",
+      "atlas": "l2d/c180/cover/c180_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -2033,6 +2648,11 @@
       "skeleton": "l2d/c180_01/aim/c180_01_aim_00.skel",
       "atlas": "l2d/c180_01/aim/c180_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c180_01/cover/c180_01_cover_00.skel",
+      "atlas": "l2d/c180_01/cover/c180_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -2046,6 +2666,11 @@
      "cutscene": {
       "skeleton": "l2d/c182/aim/c182_aim_00.skel",
       "atlas": "l2d/c182/aim/c182_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c182/cover/c182_cover_00.skel",
+      "atlas": "l2d/c182/cover/c182_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -2068,6 +2693,11 @@
       "skeleton": "l2d/c181/aim/c181_aim_00.skel",
       "atlas": "l2d/c181/aim/c181_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c181/cover/c181_cover_00.skel",
+      "atlas": "l2d/c181/cover/c181_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -2081,6 +2711,11 @@
      "cutscene": {
       "skeleton": "l2d/c181_01/aim/c181_01_aim_00.skel",
       "atlas": "l2d/c181_01/aim/c181_01_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c181_01/cover/c181_01_cover_00.skel",
+      "atlas": "l2d/c181_01/cover/c181_01_cover_00.atlas",
       "runtime": "4.0"
      }
     },
@@ -2096,6 +2731,11 @@
       "skeleton": "l2d/c181_02/aim/c181_02_aim_00.skel",
       "atlas": "l2d/c181_02/aim/c181_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c181_02/cover/c181_02_cover_00.skel",
+      "atlas": "l2d/c181_02/cover/c181_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -2109,6 +2749,11 @@
      "cutscene": {
       "skeleton": "l2d/c183/aim/c183_aim_00.skel",
       "atlas": "l2d/c183/aim/c183_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c183/cover/c183_cover_00.skel",
+      "atlas": "l2d/c183/cover/c183_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -2131,6 +2776,11 @@
       "skeleton": "l2d/c190/aim/c190_aim_00.skel",
       "atlas": "l2d/c190/aim/c190_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c190/cover/c190_cover_00.skel",
+      "atlas": "l2d/c190/cover/c190_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -2144,6 +2794,11 @@
      "cutscene": {
       "skeleton": "l2d/c194/aim/c194_aim_00.skel",
       "atlas": "l2d/c194/aim/c194_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c194/cover/c194_cover_00.skel",
+      "atlas": "l2d/c194/cover/c194_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -2166,6 +2821,11 @@
       "skeleton": "l2d/c191/aim/c191_aim_00.skel",
       "atlas": "l2d/c191/aim/c191_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c191/cover/c191_cover_00.skel",
+      "atlas": "l2d/c191/cover/c191_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -2179,6 +2839,11 @@
      "cutscene": {
       "skeleton": "l2d/c191_01/aim/c191_01_aim_00.skel",
       "atlas": "l2d/c191_01/aim/c191_01_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c191_01/cover/c191_01_cover_00.skel",
+      "atlas": "l2d/c191_01/cover/c191_01_cover_00.atlas",
       "runtime": "4.0"
      }
     },
@@ -2194,6 +2859,11 @@
       "skeleton": "l2d/c191_02/aim/c191_02_aim_00.skel",
       "atlas": "l2d/c191_02/aim/c191_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c191_02/cover/c191_02_cover_00.skel",
+      "atlas": "l2d/c191_02/cover/c191_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -2207,6 +2877,11 @@
      "cutscene": {
       "skeleton": "l2d/c195/aim/c195_aim_00.skel",
       "atlas": "l2d/c195/aim/c195_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c195/cover/c195_cover_00.skel",
+      "atlas": "l2d/c195/cover/c195_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -2229,6 +2904,11 @@
       "skeleton": "l2d/c192/aim/c192_aim_00.skel",
       "atlas": "l2d/c192/aim/c192_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c192/cover/c192_cover_00.skel",
+      "atlas": "l2d/c192/cover/c192_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -2243,6 +2923,11 @@
       "skeleton": "l2d/c192_01/aim/c192_01_aim_00.skel",
       "atlas": "l2d/c192_01/aim/c192_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c192_01/cover/c192_01_cover_00.skel",
+      "atlas": "l2d/c192_01/cover/c192_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -2256,6 +2941,11 @@
      "cutscene": {
       "skeleton": "l2d/c192_02/aim/c192_02_aim_00.skel",
       "atlas": "l2d/c192_02/aim/c192_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c192_02/cover/c192_02_cover_00.skel",
+      "atlas": "l2d/c192_02/cover/c192_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -2278,6 +2968,11 @@
       "skeleton": "l2d/c193/aim/c193_aim_00.skel",
       "atlas": "l2d/c193/aim/c193_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c193/cover/c193_cover_00.skel",
+      "atlas": "l2d/c193/cover/c193_cover_00.atlas",
+      "runtime": "4.0"
      }
     }
    ]
@@ -2299,6 +2994,11 @@
       "skeleton": "l2d/c200/aim/c200_aim_00.skel",
       "atlas": "l2d/c200/aim/c200_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c200/cover/c200_cover_00.skel",
+      "atlas": "l2d/c200/cover/c200_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -2313,6 +3013,11 @@
       "skeleton": "l2d/c200_01/aim/c200_01_aim_00.skel",
       "atlas": "l2d/c200_01/aim/c200_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c200_01/cover/c200_01_cover_00.skel",
+      "atlas": "l2d/c200_01/cover/c200_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -2326,6 +3031,11 @@
      "cutscene": {
       "skeleton": "l2d/c203/aim/c203_aim_00.skel",
       "atlas": "l2d/c203/aim/c203_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c203/cover/c203_cover_00.skel",
+      "atlas": "l2d/c203/cover/c203_cover_00.atlas",
       "runtime": "4.0"
      }
     }
@@ -2348,6 +3058,11 @@
       "skeleton": "l2d/c201/aim/c201_aim_00.skel",
       "atlas": "l2d/c201/aim/c201_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c201/cover/c201_cover_00.skel",
+      "atlas": "l2d/c201/cover/c201_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -2361,6 +3076,11 @@
      "cutscene": {
       "skeleton": "l2d/c201_01/aim/c201_01_aim_00.skel",
       "atlas": "l2d/c201_01/aim/c201_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c201_01/cover/c201_01_cover_00.skel",
+      "atlas": "l2d/c201_01/cover/c201_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -2383,6 +3103,11 @@
       "skeleton": "l2d/c202/aim/c202_aim_00.skel",
       "atlas": "l2d/c202/aim/c202_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c202/cover/c202_cover_00.skel",
+      "atlas": "l2d/c202/cover/c202_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -2396,6 +3121,11 @@
      "cutscene": {
       "skeleton": "l2d/c202_01/aim/c202_01_aim_00.skel",
       "atlas": "l2d/c202_01/aim/c202_01_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c202_01/cover/c202_01_cover_00.skel",
+      "atlas": "l2d/c202_01/cover/c202_01_cover_00.atlas",
       "runtime": "4.0"
      }
     }
@@ -2418,6 +3148,11 @@
       "skeleton": "l2d/c210/aim/c210_aim_00.skel",
       "atlas": "l2d/c210/aim/c210_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c210/cover/c210_cover_00.skel",
+      "atlas": "l2d/c210/cover/c210_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -2431,6 +3166,11 @@
      "cutscene": {
       "skeleton": "l2d/c210_01/aim/c210_01_aim_00.skel",
       "atlas": "l2d/c210_01/aim/c210_01_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c210_01/cover/c210_01_cover_00.skel",
+      "atlas": "l2d/c210_01/cover/c210_01_cover_00.atlas",
       "runtime": "4.0"
      }
     },
@@ -2446,6 +3186,11 @@
       "skeleton": "l2d/c210_02/aim/c210_02_aim_00.skel",
       "atlas": "l2d/c210_02/aim/c210_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c210_02/cover/c210_02_cover_00.skel",
+      "atlas": "l2d/c210_02/cover/c210_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -2459,6 +3204,11 @@
      "cutscene": {
       "skeleton": "l2d/c210_03/aim/c210_03_aim_00.skel",
       "atlas": "l2d/c210_03/aim/c210_03_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c210_03/cover/c210_03_cover_00.skel",
+      "atlas": "l2d/c210_03/cover/c210_03_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -2481,6 +3231,11 @@
       "skeleton": "l2d/c212/aim/c212_aim_00.skel",
       "atlas": "l2d/c212/aim/c212_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c212/cover/c212_cover_00.skel",
+      "atlas": "l2d/c212/cover/c212_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -2495,6 +3250,11 @@
       "skeleton": "l2d/c212_01/aim/c212_01_aim_00.skel",
       "atlas": "l2d/c212_01/aim/c212_01_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c212_01/cover/c212_01_cover_00.skel",
+      "atlas": "l2d/c212_01/cover/c212_01_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -2508,6 +3268,11 @@
      "cutscene": {
       "skeleton": "l2d/c212_02/aim/c212_02_aim_00.skel",
       "atlas": "l2d/c212_02/aim/c212_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c212_02/cover/c212_02_cover_00.skel",
+      "atlas": "l2d/c212_02/cover/c212_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -2531,6 +3296,11 @@
       "skeleton": "l2d/c220/aim/c220_aim_00.skel",
       "atlas": "l2d/c220/aim/c220_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c220/cover/c220_cover_00.skel",
+      "atlas": "l2d/c220/cover/c220_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -2544,6 +3314,11 @@
      "cutscene": {
       "skeleton": "l2d/c220_01/aim/c220_01_aim_00.skel",
       "atlas": "l2d/c220_01/aim/c220_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c220_01/cover/c220_01_cover_00.skel",
+      "atlas": "l2d/c220_01/cover/c220_01_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -2559,6 +3334,11 @@
       "skeleton": "l2d/c224/aim/c224_aim_00.skel",
       "atlas": "l2d/c224/aim/c224_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c224/cover/c224_cover_00.skel",
+      "atlas": "l2d/c224/cover/c224_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -2573,6 +3353,11 @@
       "skeleton": "l2d/c471/aim/c471_aim_00.skel",
       "atlas": "l2d/c471/aim/c471_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c471/cover/c471_cover_00.skel",
+      "atlas": "l2d/c471/cover/c471_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -2586,6 +3371,11 @@
      "cutscene": {
       "skeleton": "l2d/c471_01/aim/c471_01_aim_00.skel",
       "atlas": "l2d/c471_01/aim/c471_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c471_01/cover/c471_01_cover_00.skel",
+      "atlas": "l2d/c471_01/cover/c471_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -2608,6 +3398,11 @@
       "skeleton": "l2d/c221/aim/c221_aim_00.skel",
       "atlas": "l2d/c221/aim/c221_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c221/cover/c221_cover_00.skel",
+      "atlas": "l2d/c221/cover/c221_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -2622,6 +3417,11 @@
       "skeleton": "l2d/c226/aim/c226_aim_00.skel",
       "atlas": "l2d/c226/aim/c226_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c226/cover/c226_cover_00.skel",
+      "atlas": "l2d/c226/cover/c226_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -2635,6 +3435,11 @@
      "cutscene": {
       "skeleton": "l2d/c473/aim/c473_aim_00.skel",
       "atlas": "l2d/c473/aim/c473_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c473/cover/c473_cover_00.skel",
+      "atlas": "l2d/c473/cover/c473_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -2657,6 +3462,11 @@
       "skeleton": "l2d/c222/aim/c222_aim_00.skel",
       "atlas": "l2d/c222/aim/c222_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c222/cover/c222_cover_00.skel",
+      "atlas": "l2d/c222/cover/c222_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -2670,6 +3480,11 @@
      "cutscene": {
       "skeleton": "l2d/c222_01/aim/c222_01_aim_00.skel",
       "atlas": "l2d/c222_01/aim/c222_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c222_01/cover/c222_01_cover_00.skel",
+      "atlas": "l2d/c222_01/cover/c222_01_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -2685,6 +3500,11 @@
       "skeleton": "l2d/c225/aim/c225_aim_00.skel",
       "atlas": "l2d/c225/aim/c225_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c225/cover/c225_cover_00.skel",
+      "atlas": "l2d/c225/cover/c225_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -2699,6 +3519,11 @@
       "skeleton": "l2d/c225_01/aim/c225_01_aim_00.skel",
       "atlas": "l2d/c225_01/aim/c225_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c225_01/cover/c225_01_cover_00.skel",
+      "atlas": "l2d/c225_01/cover/c225_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -2712,6 +3537,11 @@
      "cutscene": {
       "skeleton": "l2d/c472/aim/c472_aim_00.skel",
       "atlas": "l2d/c472/aim/c472_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c472/cover/c472_cover_00.skel",
+      "atlas": "l2d/c472/cover/c472_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -2734,6 +3564,11 @@
       "skeleton": "l2d/c223/aim/c223_aim_00.skel",
       "atlas": "l2d/c223/aim/c223_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c223/cover/c223_cover_00.skel",
+      "atlas": "l2d/c223/cover/c223_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -2748,6 +3583,11 @@
       "skeleton": "l2d/c223_01/aim/c223_01_aim_00.skel",
       "atlas": "l2d/c223_01/aim/c223_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c223_01/cover/c223_01_cover_00.skel",
+      "atlas": "l2d/c223_01/cover/c223_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -2761,6 +3601,11 @@
      "cutscene": {
       "skeleton": "l2d/c223_02/aim/c223_02_aim_00.skel",
       "atlas": "l2d/c223_02/aim/c223_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c223_02/cover/c223_02_cover_00.skel",
+      "atlas": "l2d/c223_02/cover/c223_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -2800,6 +3645,11 @@
       "skeleton": "l2d/c230/aim/c230_aim_00.skel",
       "atlas": "l2d/c230/aim/c230_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c230/cover/c230_cover_00.skel",
+      "atlas": "l2d/c230/cover/c230_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -2813,6 +3663,11 @@
      "cutscene": {
       "skeleton": "l2d/c230_01/aim/c230_01_aim_00.skel",
       "atlas": "l2d/c230_01/aim/c230_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c230_01/cover/c230_01_cover_00.skel",
+      "atlas": "l2d/c230_01/cover/c230_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -2835,6 +3690,11 @@
       "skeleton": "l2d/c231/aim/c231_aim_00.skel",
       "atlas": "l2d/c231/aim/c231_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c231/cover/c231_cover_00.skel",
+      "atlas": "l2d/c231/cover/c231_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -2848,6 +3708,11 @@
      "cutscene": {
       "skeleton": "l2d/c231_01/aim/c231_01_aim_00.skel",
       "atlas": "l2d/c231_01/aim/c231_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c231_01/cover/c231_01_cover_00.skel",
+      "atlas": "l2d/c231_01/cover/c231_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -2869,6 +3734,11 @@
      "cutscene": {
       "skeleton": "l2d/c232/aim/c232_aim_00.skel",
       "atlas": "l2d/c232/aim/c232_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c232/cover/c232_cover_00.skel",
+      "atlas": "l2d/c232/cover/c232_cover_00.atlas",
       "runtime": "4.0"
      }
     },
@@ -2901,6 +3771,11 @@
       "skeleton": "l2d/c233/aim/c233_aim_00.skel",
       "atlas": "l2d/c233/aim/c233_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c233/cover/c233_cover_00.skel",
+      "atlas": "l2d/c233/cover/c233_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -2925,6 +3800,11 @@
       "skeleton": "l2d/c233_01/aim/c233_01_aim_00.skel",
       "atlas": "l2d/c233_01/aim/c233_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c233_01/cover/c233_01_cover_00.skel",
+      "atlas": "l2d/c233_01/cover/c233_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -2938,6 +3818,11 @@
      "cutscene": {
       "skeleton": "l2d/c233_02/aim/c233_02_aim_00.skel",
       "atlas": "l2d/c233_02/aim/c233_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c233_02/cover/c233_02_cover_00.skel",
+      "atlas": "l2d/c233_02/cover/c233_02_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -2953,6 +3838,11 @@
       "skeleton": "l2d/c233_80/aim/c233_80_aim_00.skel",
       "atlas": "l2d/c233_80/aim/c233_80_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c233_80/cover/c233_80_cover_00.skel",
+      "atlas": "l2d/c233_80/cover/c233_80_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -2966,6 +3856,11 @@
      "cutscene": {
       "skeleton": "l2d/c234/aim/c234_aim_00.skel",
       "atlas": "l2d/c234/aim/c234_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c234/cover/c234_cover_00.skel",
+      "atlas": "l2d/c234/cover/c234_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -3005,6 +3900,11 @@
       "skeleton": "l2d/c240/aim/c240_aim_00.skel",
       "atlas": "l2d/c240/aim/c240_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c240/cover/c240_cover_00.skel",
+      "atlas": "l2d/c240/cover/c240_cover_00.atlas",
+      "runtime": "4.1"
      }
     }
    ]
@@ -3025,6 +3925,11 @@
      "cutscene": {
       "skeleton": "l2d/c241/aim/c241_aim_00.skel",
       "atlas": "l2d/c241/aim/c241_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c241/cover/c241_cover_00.skel",
+      "atlas": "l2d/c241/cover/c241_cover_00.atlas",
       "runtime": "4.0"
      }
     }
@@ -3047,6 +3952,11 @@
       "skeleton": "l2d/c242/aim/c242_aim_00.skel",
       "atlas": "l2d/c242/aim/c242_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c242/cover/c242_cover_00.skel",
+      "atlas": "l2d/c242/cover/c242_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -3060,6 +3970,11 @@
      "cutscene": {
       "skeleton": "l2d/c242_01/aim/c242_01_aim_00.skel",
       "atlas": "l2d/c242_01/aim/c242_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c242_01/cover/c242_01_cover_00.skel",
+      "atlas": "l2d/c242_01/cover/c242_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -3082,6 +3997,11 @@
       "skeleton": "l2d/c260/aim/c260_aim_00.skel",
       "atlas": "l2d/c260/aim/c260_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c260/cover/c260_cover_00.skel",
+      "atlas": "l2d/c260/cover/c260_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -3095,6 +4015,11 @@
      "cutscene": {
       "skeleton": "l2d/c260_01/aim/c260_01_aim_00.skel",
       "atlas": "l2d/c260_01/aim/c260_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c260_01/cover/c260_01_cover_00.skel",
+      "atlas": "l2d/c260_01/cover/c260_01_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -3110,6 +4035,11 @@
       "skeleton": "l2d/c260_02/aim/c260_02_aim_00.skel",
       "atlas": "l2d/c260_02/aim/c260_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c260_02/cover/c260_02_cover_00.skel",
+      "atlas": "l2d/c260_02/cover/c260_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3123,6 +4053,11 @@
      "cutscene": {
       "skeleton": "l2d/c260_80/aim/c260_80_aim_00.skel",
       "atlas": "l2d/c260_80/aim/c260_80_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c260_80/cover/c260_80_cover_00.skel",
+      "atlas": "l2d/c260_80/cover/c260_80_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -3145,6 +4080,11 @@
       "skeleton": "l2d/c261/aim/c261_aim_00.skel",
       "atlas": "l2d/c261/aim/c261_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c261/cover/c261_cover_00.skel",
+      "atlas": "l2d/c261/cover/c261_cover_00.atlas",
+      "runtime": "4.0"
      }
     }
    ]
@@ -3166,6 +4106,11 @@
       "skeleton": "l2d/c262/aim/c262_aim_00.skel",
       "atlas": "l2d/c262/aim/c262_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c262/cover/c262_cover_00.skel",
+      "atlas": "l2d/c262/cover/c262_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3179,6 +4124,11 @@
      "cutscene": {
       "skeleton": "l2d/c262_01/aim/c262_01_aim_00.skel",
       "atlas": "l2d/c262_01/aim/c262_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c262_01/cover/c262_01_cover_00.skel",
+      "atlas": "l2d/c262_01/cover/c262_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -3201,6 +4151,11 @@
       "skeleton": "l2d/c270/aim/c270_aim_00.skel",
       "atlas": "l2d/c270/aim/c270_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c270/cover/c270_cover_00.skel",
+      "atlas": "l2d/c270/cover/c270_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3214,6 +4169,11 @@
      "cutscene": {
       "skeleton": "l2d/c270_01/aim/c270_01_aim_00.skel",
       "atlas": "l2d/c270_01/aim/c270_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c270_01/cover/c270_01_cover_00.skel",
+      "atlas": "l2d/c270_01/cover/c270_01_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -3229,6 +4189,11 @@
       "skeleton": "l2d/c270_02/aim/c270_02_aim_00.skel",
       "atlas": "l2d/c270_02/aim/c270_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c270_02/cover/c270_02_cover_00.skel",
+      "atlas": "l2d/c270_02/cover/c270_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3242,6 +4207,11 @@
      "cutscene": {
       "skeleton": "l2d/c270_03/aim/c270_03_aim_00.skel",
       "atlas": "l2d/c270_03/aim/c270_03_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c270_03/cover/c270_03_cover_00.skel",
+      "atlas": "l2d/c270_03/cover/c270_03_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -3264,6 +4234,11 @@
       "skeleton": "l2d/c271/aim/c271_aim_00.skel",
       "atlas": "l2d/c271/aim/c271_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c271/cover/c271_cover_00.skel",
+      "atlas": "l2d/c271/cover/c271_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3278,6 +4253,11 @@
       "skeleton": "l2d/c271_01/aim/c271_01_aim_00.skel",
       "atlas": "l2d/c271_01/aim/c271_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c271_01/cover/c271_01_cover_00.skel",
+      "atlas": "l2d/c271_01/cover/c271_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3291,6 +4271,11 @@
      "cutscene": {
       "skeleton": "l2d/c271_02/aim/c271_02_aim_00.skel",
       "atlas": "l2d/c271_02/aim/c271_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c271_02/cover/c271_02_cover_00.skel",
+      "atlas": "l2d/c271_02/cover/c271_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -3313,6 +4298,11 @@
       "skeleton": "l2d/c272/aim/c272_aim_00.skel",
       "atlas": "l2d/c272/aim/c272_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c272/cover/c272_cover_00.skel",
+      "atlas": "l2d/c272/cover/c272_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3326,6 +4316,11 @@
      "cutscene": {
       "skeleton": "l2d/c272_01/aim/c272_01_aim_00.skel",
       "atlas": "l2d/c272_01/aim/c272_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c272_01/cover/c272_01_cover_00.skel",
+      "atlas": "l2d/c272_01/cover/c272_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -3348,6 +4343,11 @@
       "skeleton": "l2d/c280/aim/c280_aim_00.skel",
       "atlas": "l2d/c280/aim/c280_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c280/cover/c280_cover_00.skel",
+      "atlas": "l2d/c280/cover/c280_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3362,6 +4362,11 @@
       "skeleton": "l2d/c280_01/aim/c280_01_aim_00.skel",
       "atlas": "l2d/c280_01/aim/c280_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c280_01/cover/c280_01_cover_00.skel",
+      "atlas": "l2d/c280_01/cover/c280_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3375,6 +4380,11 @@
      "cutscene": {
       "skeleton": "l2d/c283/aim/c283_aim_00.skel",
       "atlas": "l2d/c283/aim/c283_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c283/cover/c283_cover_00.skel",
+      "atlas": "l2d/c283/cover/c283_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -3397,6 +4407,11 @@
       "skeleton": "l2d/c281/aim/c281_aim_00.skel",
       "atlas": "l2d/c281/aim/c281_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c281/cover/c281_cover_00.skel",
+      "atlas": "l2d/c281/cover/c281_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3411,6 +4426,11 @@
       "skeleton": "l2d/c281_01/aim/c281_01_aim_00.skel",
       "atlas": "l2d/c281_01/aim/c281_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c281_01/cover/c281_01_cover_00.skel",
+      "atlas": "l2d/c281_01/cover/c281_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3424,6 +4444,11 @@
      "cutscene": {
       "skeleton": "l2d/c281_02/aim/c281_02_aim_00.skel",
       "atlas": "l2d/c281_02/aim/c281_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c281_02/cover/c281_02_cover_00.skel",
+      "atlas": "l2d/c281_02/cover/c281_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -3446,6 +4471,11 @@
       "skeleton": "l2d/c282/aim/c282_aim_00.skel",
       "atlas": "l2d/c282/aim/c282_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c282/cover/c282_cover_00.skel",
+      "atlas": "l2d/c282/cover/c282_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -3460,6 +4490,11 @@
       "skeleton": "l2d/c282_01/aim/c282_01_aim_00.skel",
       "atlas": "l2d/c282_01/aim/c282_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c282_01/cover/c282_01_cover_00.skel",
+      "atlas": "l2d/c282_01/cover/c282_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3473,6 +4508,11 @@
      "cutscene": {
       "skeleton": "l2d/c284/aim/c284_aim_00.skel",
       "atlas": "l2d/c284/aim/c284_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c284/cover/c284_cover_00.skel",
+      "atlas": "l2d/c284/cover/c284_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -3495,6 +4535,11 @@
       "skeleton": "l2d/c290/aim/c290_aim_00.skel",
       "atlas": "l2d/c290/aim/c290_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c290/cover/c290_cover_00.skel",
+      "atlas": "l2d/c290/cover/c290_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3508,6 +4553,11 @@
      "cutscene": {
       "skeleton": "l2d/c290_01/aim/c290_01_aim_00.skel",
       "atlas": "l2d/c290_01/aim/c290_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c290_01/cover/c290_01_cover_00.skel",
+      "atlas": "l2d/c290_01/cover/c290_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -3530,6 +4580,11 @@
       "skeleton": "l2d/c291/aim/c291_aim_00.skel",
       "atlas": "l2d/c291/aim/c291_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c291/cover/c291_cover_00.skel",
+      "atlas": "l2d/c291/cover/c291_cover_00.atlas",
+      "runtime": "4.0"
      }
     }
    ]
@@ -3551,6 +4606,11 @@
       "skeleton": "l2d/c310/aim/c310_aim_00.skel",
       "atlas": "l2d/c310/aim/c310_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c310/cover/c310_cover_00.skel",
+      "atlas": "l2d/c310/cover/c310_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3565,6 +4625,11 @@
       "skeleton": "l2d/c310_01/aim/c310_01_aim_00.skel",
       "atlas": "l2d/c310_01/aim/c310_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c310_01/cover/c310_01_cover_00.skel",
+      "atlas": "l2d/c310_01/cover/c310_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3578,6 +4643,11 @@
      "cutscene": {
       "skeleton": "l2d/c315/aim/c315_aim_00.skel",
       "atlas": "l2d/c315/aim/c315_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c315/cover/c315_cover_00.skel",
+      "atlas": "l2d/c315/cover/c315_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -3600,6 +4670,11 @@
       "skeleton": "l2d/c311/aim/c311_aim_00.skel",
       "atlas": "l2d/c311/aim/c311_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c311/cover/c311_cover_00.skel",
+      "atlas": "l2d/c311/cover/c311_cover_00.atlas",
+      "runtime": "4.0"
      }
     }
    ]
@@ -3621,6 +4696,11 @@
       "skeleton": "l2d/c312/aim/c312_aim_00.skel",
       "atlas": "l2d/c312/aim/c312_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c312/cover/c312_cover_00.skel",
+      "atlas": "l2d/c312/cover/c312_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -3634,6 +4714,11 @@
      "cutscene": {
       "skeleton": "l2d/c314/aim/c314_aim_00.skel",
       "atlas": "l2d/c314/aim/c314_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c314/cover/c314_cover_00.skel",
+      "atlas": "l2d/c314/cover/c314_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -3656,6 +4741,11 @@
       "skeleton": "l2d/c316/aim/c316_aim_00.skel",
       "atlas": "l2d/c316/aim/c316_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c316/cover/c316_cover_00.skel",
+      "atlas": "l2d/c316/cover/c316_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3669,6 +4759,11 @@
      "cutscene": {
       "skeleton": "l2d/c316_01/aim/c316_01_aim_00.skel",
       "atlas": "l2d/c316_01/aim/c316_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c316_01/cover/c316_01_cover_00.skel",
+      "atlas": "l2d/c316_01/cover/c316_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -3692,6 +4787,11 @@
       "skeleton": "l2d/c321/aim/c321_aim_00.skel",
       "atlas": "l2d/c321/aim/c321_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c321/cover/c321_cover_00.skel",
+      "atlas": "l2d/c321/cover/c321_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3706,6 +4806,11 @@
       "skeleton": "l2d/c321_01/aim/c321_01_aim_00.skel",
       "atlas": "l2d/c321_01/aim/c321_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c321_01/cover/c321_01_cover_00.skel",
+      "atlas": "l2d/c321_01/cover/c321_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3719,6 +4824,11 @@
      "cutscene": {
       "skeleton": "l2d/c322/aim/c322_aim_00.skel",
       "atlas": "l2d/c322/aim/c322_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c322/cover/c322_cover_00.skel",
+      "atlas": "l2d/c322/cover/c322_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -3741,6 +4851,11 @@
       "skeleton": "l2d/c330/aim/c330_aim_00.skel",
       "atlas": "l2d/c330/aim/c330_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c330/cover/c330_cover_00.skel",
+      "atlas": "l2d/c330/cover/c330_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3755,6 +4870,11 @@
       "skeleton": "l2d/c330_01/aim/c330_01_aim_00.skel",
       "atlas": "l2d/c330_01/aim/c330_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c330_01/cover/c330_01_cover_00.skel",
+      "atlas": "l2d/c330_01/cover/c330_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3768,6 +4888,11 @@
      "cutscene": {
       "skeleton": "l2d/c330_02/aim/c330_02_aim_00.skel",
       "atlas": "l2d/c330_02/aim/c330_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c330_02/cover/c330_02_cover_00.skel",
+      "atlas": "l2d/c330_02/cover/c330_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -3789,6 +4914,11 @@
      "cutscene": {
       "skeleton": "l2d/c331/aim/c331_aim_00.skel",
       "atlas": "l2d/c331/aim/c331_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c331/cover/c331_cover_00.skel",
+      "atlas": "l2d/c331/cover/c331_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -3812,6 +4942,11 @@
       "skeleton": "l2d/c350/aim/c350_aim_00.skel",
       "atlas": "l2d/c350/aim/c350_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c350/cover/c350_cover_00.skel",
+      "atlas": "l2d/c350/cover/c350_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3825,6 +4960,11 @@
      "cutscene": {
       "skeleton": "l2d/c350_01/aim/c350_01_aim_00.skel",
       "atlas": "l2d/c350_01/aim/c350_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c350_01/cover/c350_01_cover_00.skel",
+      "atlas": "l2d/c350_01/cover/c350_01_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -3840,6 +4980,11 @@
       "skeleton": "l2d/c350_02/aim/c350_02_aim_00.skel",
       "atlas": "l2d/c350_02/aim/c350_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c350_02/cover/c350_02_cover_00.skel",
+      "atlas": "l2d/c350_02/cover/c350_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3854,6 +4999,11 @@
       "skeleton": "l2d/c354/aim/c354_aim_00.skel",
       "atlas": "l2d/c354/aim/c354_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c354/cover/c354_cover_00.skel",
+      "atlas": "l2d/c354/cover/c354_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3867,6 +5017,11 @@
      "cutscene": {
       "skeleton": "l2d/c354_01/aim/c354_01_aim_00.skel",
       "atlas": "l2d/c354_01/aim/c354_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c354_01/cover/c354_01_cover_00.skel",
+      "atlas": "l2d/c354_01/cover/c354_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -3890,6 +5045,11 @@
       "skeleton": "l2d/c351/aim/c351_aim_00.skel",
       "atlas": "l2d/c351/aim/c351_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c351/cover/c351_cover_00.skel",
+      "atlas": "l2d/c351/cover/c351_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3904,6 +5064,11 @@
       "skeleton": "l2d/c351_01/aim/c351_01_aim_00.skel",
       "atlas": "l2d/c351_01/aim/c351_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c351_01/cover/c351_01_cover_00.skel",
+      "atlas": "l2d/c351_01/cover/c351_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3917,6 +5082,11 @@
      "cutscene": {
       "skeleton": "l2d/c355/aim/c355_aim_00.skel",
       "atlas": "l2d/c355/aim/c355_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c355/cover/c355_cover_00.skel",
+      "atlas": "l2d/c355/cover/c355_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -3939,6 +5109,11 @@
       "skeleton": "l2d/c352/aim/c352_aim_00.skel",
       "atlas": "l2d/c352/aim/c352_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c352/cover/c352_cover_00.skel",
+      "atlas": "l2d/c352/cover/c352_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -3952,6 +5127,11 @@
      "cutscene": {
       "skeleton": "l2d/c352_01/aim/c352_01_aim_00.skel",
       "atlas": "l2d/c352_01/aim/c352_01_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c352_01/cover/c352_01_cover_00.skel",
+      "atlas": "l2d/c352_01/cover/c352_01_cover_00.atlas",
       "runtime": "4.0"
      }
     },
@@ -3967,6 +5147,11 @@
       "skeleton": "l2d/c352_02/aim/c352_02_aim_00.skel",
       "atlas": "l2d/c352_02/aim/c352_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c352_02/cover/c352_02_cover_00.skel",
+      "atlas": "l2d/c352_02/cover/c352_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -3980,6 +5165,11 @@
      "cutscene": {
       "skeleton": "l2d/c353/aim/c353_aim_00.skel",
       "atlas": "l2d/c353/aim/c353_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c353/cover/c353_cover_00.skel",
+      "atlas": "l2d/c353/cover/c353_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -4001,6 +5191,11 @@
      "cutscene": {
       "skeleton": "l2d/c361/aim/c361_aim_00.skel",
       "atlas": "l2d/c361/aim/c361_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c361/cover/c361_cover_00.skel",
+      "atlas": "l2d/c361/cover/c361_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -4057,6 +5252,11 @@
       "skeleton": "l2d/c380/aim/c380_aim_00.skel",
       "atlas": "l2d/c380/aim/c380_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c380/cover/c380_cover_00.skel",
+      "atlas": "l2d/c380/cover/c380_cover_00.atlas",
+      "runtime": "4.1"
      }
     }
    ]
@@ -4078,6 +5278,11 @@
       "skeleton": "l2d/c381/aim/c381_aim_00.skel",
       "atlas": "l2d/c381/aim/c381_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c381/cover/c381_cover_00.skel",
+      "atlas": "l2d/c381/cover/c381_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -4091,6 +5296,11 @@
      "cutscene": {
       "skeleton": "l2d/c381_01/aim/c381_01_aim_00.skel",
       "atlas": "l2d/c381_01/aim/c381_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c381_01/cover/c381_01_cover_00.skel",
+      "atlas": "l2d/c381_01/cover/c381_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -4113,6 +5323,11 @@
       "skeleton": "l2d/c382/aim/c382_aim_00.skel",
       "atlas": "l2d/c382/aim/c382_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c382/cover/c382_cover_00.skel",
+      "atlas": "l2d/c382/cover/c382_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -4126,6 +5341,11 @@
      "cutscene": {
       "skeleton": "l2d/c382_01/aim/c382_01_aim_00.skel",
       "atlas": "l2d/c382_01/aim/c382_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c382_01/cover/c382_01_cover_00.skel",
+      "atlas": "l2d/c382_01/cover/c382_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -4148,6 +5368,11 @@
       "skeleton": "l2d/c390/aim/c390_aim_00.skel",
       "atlas": "l2d/c390/aim/c390_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c390/cover/c390_cover_00.skel",
+      "atlas": "l2d/c390/cover/c390_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -4162,6 +5387,11 @@
       "skeleton": "l2d/c390_01/aim/c390_01_aim_00.skel",
       "atlas": "l2d/c390_01/aim/c390_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c390_01/cover/c390_01_cover_00.skel",
+      "atlas": "l2d/c390_01/cover/c390_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -4175,6 +5405,11 @@
      "cutscene": {
       "skeleton": "l2d/c390_02/aim/c390_02_aim_00.skel",
       "atlas": "l2d/c390_02/aim/c390_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c390_02/cover/c390_02_cover_00.skel",
+      "atlas": "l2d/c390_02/cover/c390_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -4197,6 +5432,11 @@
       "skeleton": "l2d/c391/aim/c391_aim_00.skel",
       "atlas": "l2d/c391/aim/c391_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c391/cover/c391_cover_00.skel",
+      "atlas": "l2d/c391/cover/c391_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -4210,6 +5450,11 @@
      "cutscene": {
       "skeleton": "l2d/c391_01/aim/c391_01_aim_00.skel",
       "atlas": "l2d/c391_01/aim/c391_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c391_01/cover/c391_01_cover_00.skel",
+      "atlas": "l2d/c391_01/cover/c391_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -4232,6 +5477,11 @@
       "skeleton": "l2d/c392/aim/c392_aim_00.skel",
       "atlas": "l2d/c392/aim/c392_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c392/cover/c392_cover_00.skel",
+      "atlas": "l2d/c392/cover/c392_cover_00.atlas",
+      "runtime": "4.0"
      }
     }
    ]
@@ -4253,6 +5503,11 @@
       "skeleton": "l2d/c400/aim/c400_aim_00.skel",
       "atlas": "l2d/c400/aim/c400_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c400/cover/c400_cover_00.skel",
+      "atlas": "l2d/c400/cover/c400_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -4267,6 +5522,11 @@
       "skeleton": "l2d/c400_01/aim/c400_01_aim_00.skel",
       "atlas": "l2d/c400_01/aim/c400_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c400_01/cover/c400_01_cover_00.skel",
+      "atlas": "l2d/c400_01/cover/c400_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -4280,6 +5540,11 @@
      "cutscene": {
       "skeleton": "l2d/c404/aim/c404_aim_00.skel",
       "atlas": "l2d/c404/aim/c404_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c404/cover/c404_cover_00.skel",
+      "atlas": "l2d/c404/cover/c404_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -4302,6 +5567,11 @@
       "skeleton": "l2d/c401/aim/c401_aim_00.skel",
       "atlas": "l2d/c401/aim/c401_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c401/cover/c401_cover_00.skel",
+      "atlas": "l2d/c401/cover/c401_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -4316,6 +5586,11 @@
       "skeleton": "l2d/c401_01/aim/c401_01_aim_00.skel",
       "atlas": "l2d/c401_01/aim/c401_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c401_01/cover/c401_01_cover_00.skel",
+      "atlas": "l2d/c401_01/cover/c401_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -4329,6 +5604,11 @@
      "cutscene": {
       "skeleton": "l2d/c405/aim/c405_aim_00.skel",
       "atlas": "l2d/c405/aim/c405_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c405/cover/c405_cover_00.skel",
+      "atlas": "l2d/c405/cover/c405_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -4351,6 +5631,11 @@
       "skeleton": "l2d/c402/aim/c402_aim_00.skel",
       "atlas": "l2d/c402/aim/c402_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c402/cover/c402_cover_00.skel",
+      "atlas": "l2d/c402/cover/c402_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -4365,6 +5650,11 @@
       "skeleton": "l2d/c403/aim/c403_aim_00.skel",
       "atlas": "l2d/c403/aim/c403_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c403/cover/c403_cover_00.skel",
+      "atlas": "l2d/c403/cover/c403_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -4378,6 +5668,11 @@
      "cutscene": {
       "skeleton": "l2d/c403_01/aim/c403_01_aim_00.skel",
       "atlas": "l2d/c403_01/aim/c403_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c403_01/cover/c403_01_cover_00.skel",
+      "atlas": "l2d/c403_01/cover/c403_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -4400,6 +5695,11 @@
       "skeleton": "l2d/c411/aim/c411_aim_00.skel",
       "atlas": "l2d/c411/aim/c411_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c411/cover/c411_cover_00.skel",
+      "atlas": "l2d/c411/cover/c411_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -4413,6 +5713,11 @@
      "cutscene": {
       "skeleton": "l2d/c411_01/aim/c411_01_aim_00.skel",
       "atlas": "l2d/c411_01/aim/c411_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c411_01/cover/c411_01_cover_00.skel",
+      "atlas": "l2d/c411_01/cover/c411_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -4435,6 +5740,11 @@
       "skeleton": "l2d/c412/aim/c412_aim_00.skel",
       "atlas": "l2d/c412/aim/c412_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c412/cover/c412_cover_00.skel",
+      "atlas": "l2d/c412/cover/c412_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -4448,6 +5758,11 @@
      "cutscene": {
       "skeleton": "l2d/c412_01/aim/c412_01_aim_00.skel",
       "atlas": "l2d/c412_01/aim/c412_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c412_01/cover/c412_01_cover_00.skel",
+      "atlas": "l2d/c412_01/cover/c412_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -4470,6 +5785,11 @@
       "skeleton": "l2d/c430/aim/c430_aim_00.skel",
       "atlas": "l2d/c430/aim/c430_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c430/cover/c430_cover_00.skel",
+      "atlas": "l2d/c430/cover/c430_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -4484,6 +5804,11 @@
       "skeleton": "l2d/c430_01/aim/c430_01_aim_00.skel",
       "atlas": "l2d/c430_01/aim/c430_01_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c430_01/cover/c430_01_cover_00.skel",
+      "atlas": "l2d/c430_01/cover/c430_01_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -4497,6 +5822,11 @@
      "cutscene": {
       "skeleton": "l2d/c430_02/aim/c430_02_aim_00.skel",
       "atlas": "l2d/c430_02/aim/c430_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c430_02/cover/c430_02_cover_00.skel",
+      "atlas": "l2d/c430_02/cover/c430_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -4519,6 +5849,11 @@
       "skeleton": "l2d/c431/aim/c431_aim_00.skel",
       "atlas": "l2d/c431/aim/c431_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c431/cover/c431_cover_00.skel",
+      "atlas": "l2d/c431/cover/c431_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -4532,6 +5867,11 @@
      "cutscene": {
       "skeleton": "l2d/c431_01/aim/c431_01_aim_00.skel",
       "atlas": "l2d/c431_01/aim/c431_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c431_01/cover/c431_01_cover_00.skel",
+      "atlas": "l2d/c431_01/cover/c431_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -4553,6 +5893,11 @@
      "cutscene": {
       "skeleton": "l2d/c432/aim/c432_aim_00.skel",
       "atlas": "l2d/c432/aim/c432_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c432/cover/c432_cover_00.skel",
+      "atlas": "l2d/c432/cover/c432_cover_00.atlas",
       "runtime": "4.0"
      }
     }
@@ -4592,6 +5937,11 @@
       "skeleton": "l2d/c441/aim/c441_aim_00.skel",
       "atlas": "l2d/c441/aim/c441_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c441/cover/c441_cover_00.skel",
+      "atlas": "l2d/c441/cover/c441_cover_00.atlas",
+      "runtime": "4.1"
      }
     }
    ]
@@ -4613,6 +5963,11 @@
       "skeleton": "l2d/c450/aim/c450_aim_00.skel",
       "atlas": "l2d/c450/aim/c450_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c450/cover/c450_cover_00.skel",
+      "atlas": "l2d/c450/cover/c450_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -4626,6 +5981,11 @@
      "cutscene": {
       "skeleton": "l2d/c450_01/aim/c450_01_aim_00.skel",
       "atlas": "l2d/c450_01/aim/c450_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c450_01/cover/c450_01_cover_00.skel",
+      "atlas": "l2d/c450_01/cover/c450_01_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -4641,6 +6001,11 @@
       "skeleton": "l2d/c450_02/aim/c450_02_aim_00.skel",
       "atlas": "l2d/c450_02/aim/c450_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c450_02/cover/c450_02_cover_00.skel",
+      "atlas": "l2d/c450_02/cover/c450_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -4654,6 +6019,11 @@
      "cutscene": {
       "skeleton": "l2d/c450_03/aim/c450_03_aim_00.skel",
       "atlas": "l2d/c450_03/aim/c450_03_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c450_03/cover/c450_03_cover_00.skel",
+      "atlas": "l2d/c450_03/cover/c450_03_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -4676,6 +6046,11 @@
       "skeleton": "l2d/c451/aim/c451_aim_00.skel",
       "atlas": "l2d/c451/aim/c451_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c451/cover/c451_cover_00.skel",
+      "atlas": "l2d/c451/cover/c451_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -4689,6 +6064,11 @@
      "cutscene": {
       "skeleton": "l2d/c451_01/aim/c451_01_aim_00.skel",
       "atlas": "l2d/c451_01/aim/c451_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c451_01/cover/c451_01_cover_00.skel",
+      "atlas": "l2d/c451_01/cover/c451_01_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -4704,6 +6084,11 @@
       "skeleton": "l2d/c451_02/aim/c451_02_aim_00.skel",
       "atlas": "l2d/c451_02/aim/c451_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c451_02/cover/c451_02_cover_00.skel",
+      "atlas": "l2d/c451_02/cover/c451_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -4717,6 +6102,11 @@
      "cutscene": {
       "skeleton": "l2d/c451_03/aim/c451_03_aim_00.skel",
       "atlas": "l2d/c451_03/aim/c451_03_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c451_03/cover/c451_03_cover_00.skel",
+      "atlas": "l2d/c451_03/cover/c451_03_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -4739,6 +6129,11 @@
       "skeleton": "l2d/c470/aim/c470_aim_00.skel",
       "atlas": "l2d/c470/aim/c470_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c470/cover/c470_cover_00.skel",
+      "atlas": "l2d/c470/cover/c470_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -4753,6 +6148,11 @@
       "skeleton": "l2d/c470_01/aim/c470_01_aim_00.skel",
       "atlas": "l2d/c470_01/aim/c470_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c470_01/cover/c470_01_cover_00.skel",
+      "atlas": "l2d/c470_01/cover/c470_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -4766,6 +6166,11 @@
      "cutscene": {
       "skeleton": "l2d/c470_02/aim/c470_02_aim_00.skel",
       "atlas": "l2d/c470_02/aim/c470_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c470_02/cover/c470_02_cover_00.skel",
+      "atlas": "l2d/c470_02/cover/c470_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -4856,6 +6261,11 @@
       "skeleton": "l2d/c500/aim/c500_aim_00.skel",
       "atlas": "l2d/c500/aim/c500_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c500/cover/c500_cover_00.skel",
+      "atlas": "l2d/c500/cover/c500_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -4869,6 +6279,11 @@
      "cutscene": {
       "skeleton": "l2d/c502/aim/c502_aim_00.skel",
       "atlas": "l2d/c502/aim/c502_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c502/cover/c502_cover_00.skel",
+      "atlas": "l2d/c502/cover/c502_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -4891,6 +6306,11 @@
       "skeleton": "l2d/c501/aim/c501_aim_00.skel",
       "atlas": "l2d/c501/aim/c501_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c501/cover/c501_cover_00.skel",
+      "atlas": "l2d/c501/cover/c501_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -4904,6 +6324,11 @@
      "cutscene": {
       "skeleton": "l2d/c501_01/aim/c501_01_aim_00.skel",
       "atlas": "l2d/c501_01/aim/c501_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c501_01/cover/c501_01_cover_00.skel",
+      "atlas": "l2d/c501_01/cover/c501_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -4936,6 +6361,11 @@
       "skeleton": "l2d/c514/aim/c514_aim_00.skel",
       "atlas": "l2d/c514/aim/c514_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c514/cover/c514_cover_00.skel",
+      "atlas": "l2d/c514/cover/c514_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -4949,6 +6379,11 @@
      "cutscene": {
       "skeleton": "l2d/c514_01/aim/c514_01_aim_00.skel",
       "atlas": "l2d/c514_01/aim/c514_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c514_01/cover/c514_01_cover_00.skel",
+      "atlas": "l2d/c514_01/cover/c514_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -4971,6 +6406,11 @@
       "skeleton": "l2d/c511/aim/c511_aim_00.skel",
       "atlas": "l2d/c511/aim/c511_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c511/cover/c511_cover_00.skel",
+      "atlas": "l2d/c511/cover/c511_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -4984,6 +6424,11 @@
      "cutscene": {
       "skeleton": "l2d/c511_01/aim/c511_01_aim_00.skel",
       "atlas": "l2d/c511_01/aim/c511_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c511_01/cover/c511_01_cover_00.skel",
+      "atlas": "l2d/c511_01/cover/c511_01_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -4999,6 +6444,11 @@
       "skeleton": "l2d/c511_02/aim/c511_02_aim_00.skel",
       "atlas": "l2d/c511_02/aim/c511_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c511_02/cover/c511_02_cover_00.skel",
+      "atlas": "l2d/c511_02/cover/c511_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -5013,6 +6463,11 @@
       "skeleton": "l2d/c511_03/aim/c511_03_aim_00.skel",
       "atlas": "l2d/c511_03/aim/c511_03_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c511_03/cover/c511_03_cover_00.skel",
+      "atlas": "l2d/c511_03/cover/c511_03_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -5026,6 +6481,11 @@
      "cutscene": {
       "skeleton": "l2d/c515/aim/c515_aim_00.skel",
       "atlas": "l2d/c515/aim/c515_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c515/cover/c515_cover_00.skel",
+      "atlas": "l2d/c515/cover/c515_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -5048,6 +6508,11 @@
       "skeleton": "l2d/c513/aim/c513_aim_00.skel",
       "atlas": "l2d/c513/aim/c513_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c513/cover/c513_cover_00.skel",
+      "atlas": "l2d/c513/cover/c513_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -5061,6 +6526,11 @@
      "cutscene": {
       "skeleton": "l2d/c513_01/aim/c513_01_aim_00.skel",
       "atlas": "l2d/c513_01/aim/c513_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c513_01/cover/c513_01_cover_00.skel",
+      "atlas": "l2d/c513_01/cover/c513_01_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -5076,6 +6546,11 @@
       "skeleton": "l2d/c513_02/aim/c513_02_aim_00.skel",
       "atlas": "l2d/c513_02/aim/c513_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c513_02/cover/c513_02_cover_00.skel",
+      "atlas": "l2d/c513_02/cover/c513_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -5089,6 +6564,11 @@
      "cutscene": {
       "skeleton": "l2d/c513_03/aim/c513_03_aim_00.skel",
       "atlas": "l2d/c513_03/aim/c513_03_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c513_03/cover/c513_03_cover_00.skel",
+      "atlas": "l2d/c513_03/cover/c513_03_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -5111,6 +6591,11 @@
       "skeleton": "l2d/c520/aim/c520_aim_00.skel",
       "atlas": "l2d/c520/aim/c520_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c520/cover/c520_cover_00.skel",
+      "atlas": "l2d/c520/cover/c520_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -5124,6 +6609,11 @@
      "cutscene": {
       "skeleton": "l2d/c520_01/aim/c520_01_aim_00.skel",
       "atlas": "l2d/c520_01/aim/c520_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c520_01/cover/c520_01_cover_00.skel",
+      "atlas": "l2d/c520_01/cover/c520_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -5146,6 +6636,11 @@
       "skeleton": "l2d/c521/aim/c521_aim_00.skel",
       "atlas": "l2d/c521/aim/c521_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c521/cover/c521_cover_00.skel",
+      "atlas": "l2d/c521/cover/c521_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -5159,6 +6654,11 @@
      "cutscene": {
       "skeleton": "l2d/c521_01/aim/c521_01_aim_00.skel",
       "atlas": "l2d/c521_01/aim/c521_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c521_01/cover/c521_01_cover_00.skel",
+      "atlas": "l2d/c521_01/cover/c521_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -5215,6 +6715,11 @@
       "skeleton": "l2d/c532/aim/c532_aim_00.skel",
       "atlas": "l2d/c532/aim/c532_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c532/cover/c532_cover_00.skel",
+      "atlas": "l2d/c532/cover/c532_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -5228,6 +6733,11 @@
      "cutscene": {
       "skeleton": "l2d/c532_01/aim/c532_01_aim_00.skel",
       "atlas": "l2d/c532_01/aim/c532_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c532_01/cover/c532_01_cover_00.skel",
+      "atlas": "l2d/c532_01/cover/c532_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -5250,6 +6760,11 @@
       "skeleton": "l2d/c550/aim/c550_aim_00.skel",
       "atlas": "l2d/c550/aim/c550_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c550/cover/c550_cover_00.skel",
+      "atlas": "l2d/c550/cover/c550_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -5263,6 +6778,11 @@
      "cutscene": {
       "skeleton": "l2d/c550_01/aim/c550_01_aim_00.skel",
       "atlas": "l2d/c550_01/aim/c550_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c550_01/cover/c550_01_cover_00.skel",
+      "atlas": "l2d/c550_01/cover/c550_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -5285,6 +6805,11 @@
       "skeleton": "l2d/c551/aim/c551_aim_00.skel",
       "atlas": "l2d/c551/aim/c551_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c551/cover/c551_cover_00.skel",
+      "atlas": "l2d/c551/cover/c551_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -5298,6 +6823,11 @@
      "cutscene": {
       "skeleton": "l2d/c551_01/aim/c551_01_aim_00.skel",
       "atlas": "l2d/c551_01/aim/c551_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c551_01/cover/c551_01_cover_00.skel",
+      "atlas": "l2d/c551_01/cover/c551_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -5388,6 +6918,11 @@
       "skeleton": "l2d/c570/aim/c570_aim_00.skel",
       "atlas": "l2d/c570/aim/c570_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c570/cover/c570_cover_00.skel",
+      "atlas": "l2d/c570/cover/c570_cover_00.atlas",
+      "runtime": "4.1"
      }
     }
    ]
@@ -5443,6 +6978,11 @@
       "skeleton": "l2d/c580/aim/c580_aim_00.skel",
       "atlas": "l2d/c580/aim/c580_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c580/cover/c580_cover_00.skel",
+      "atlas": "l2d/c580/cover/c580_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -5456,6 +6996,11 @@
      "cutscene": {
       "skeleton": "l2d/c580_01/aim/c580_01_aim_00.skel",
       "atlas": "l2d/c580_01/aim/c580_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c580_01/cover/c580_01_cover_00.skel",
+      "atlas": "l2d/c580_01/cover/c580_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -5478,6 +7023,11 @@
       "skeleton": "l2d/c581/aim/c581_aim_00.skel",
       "atlas": "l2d/c581/aim/c581_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c581/cover/c581_cover_00.skel",
+      "atlas": "l2d/c581/cover/c581_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -5491,6 +7041,11 @@
      "cutscene": {
       "skeleton": "l2d/c583/aim/c583_aim_00.skel",
       "atlas": "l2d/c583/aim/c583_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c583/cover/c583_cover_00.skel",
+      "atlas": "l2d/c583/cover/c583_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -5513,6 +7068,11 @@
       "skeleton": "l2d/c582/aim/c582_aim_00.skel",
       "atlas": "l2d/c582/aim/c582_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c582/cover/c582_cover_00.skel",
+      "atlas": "l2d/c582/cover/c582_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -5526,6 +7086,11 @@
      "cutscene": {
       "skeleton": "l2d/c582_01/aim/c582_01_aim_00.skel",
       "atlas": "l2d/c582_01/aim/c582_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c582_01/cover/c582_01_cover_00.skel",
+      "atlas": "l2d/c582_01/cover/c582_01_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -5548,6 +7113,11 @@
       "skeleton": "l2d/c590/aim/c590_aim_00.skel",
       "atlas": "l2d/c590/aim/c590_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c590/cover/c590_cover_00.skel",
+      "atlas": "l2d/c590/cover/c590_cover_00.atlas",
+      "runtime": "4.1"
      }
     }
    ]
@@ -5569,6 +7139,11 @@
       "skeleton": "l2d/c600/aim/c600_aim_00.skel",
       "atlas": "l2d/c600/aim/c600_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c600/cover/c600_cover_00.skel",
+      "atlas": "l2d/c600/cover/c600_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -5582,6 +7157,11 @@
      "cutscene": {
       "skeleton": "l2d/c600_01/aim/c600_01_aim_00.skel",
       "atlas": "l2d/c600_01/aim/c600_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c600_01/cover/c600_01_cover_00.skel",
+      "atlas": "l2d/c600_01/cover/c600_01_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -5614,6 +7194,11 @@
       "skeleton": "l2d/c601/aim/c601_aim_00.skel",
       "atlas": "l2d/c601/aim/c601_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c601/cover/c601_cover_00.skel",
+      "atlas": "l2d/c601/cover/c601_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -5627,6 +7212,11 @@
      "cutscene": {
       "skeleton": "l2d/c601_01/aim/c601_01_aim_00.skel",
       "atlas": "l2d/c601_01/aim/c601_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c601_01/cover/c601_01_cover_00.skel",
+      "atlas": "l2d/c601_01/cover/c601_01_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -5659,6 +7249,11 @@
       "skeleton": "l2d/c610/aim/c610_aim_00.skel",
       "atlas": "l2d/c610/aim/c610_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c610/cover/c610_cover_00.skel",
+      "atlas": "l2d/c610/cover/c610_cover_00.atlas",
+      "runtime": "4.1"
      }
     }
    ]
@@ -5679,6 +7274,11 @@
      "cutscene": {
       "skeleton": "l2d/c620/aim/c620_aim_00.skel",
       "atlas": "l2d/c620/aim/c620_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c620/cover/c620_cover_00.skel",
+      "atlas": "l2d/c620/cover/c620_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -5701,6 +7301,11 @@
       "skeleton": "l2d/c800/aim/c800_aim_00.skel",
       "atlas": "l2d/c800/aim/c800_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c800/cover/c800_cover_00.skel",
+      "atlas": "l2d/c800/cover/c800_cover_00.atlas",
+      "runtime": "4.0"
      }
     },
     {
@@ -5714,6 +7319,11 @@
      "cutscene": {
       "skeleton": "l2d/c800_01/aim/c800_01_aim_00.skel",
       "atlas": "l2d/c800_01/aim/c800_01_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c800_01/cover/c800_01_cover_00.skel",
+      "atlas": "l2d/c800_01/cover/c800_01_cover_00.atlas",
       "runtime": "4.0"
      }
     }
@@ -5736,6 +7346,11 @@
       "skeleton": "l2d/c801/aim/c801_aim_00.skel",
       "atlas": "l2d/c801/aim/c801_aim_00.atlas",
       "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c801/cover/c801_cover_00.skel",
+      "atlas": "l2d/c801/cover/c801_cover_00.atlas",
+      "runtime": "4.0"
      }
     }
    ]
@@ -5756,6 +7371,11 @@
      "cutscene": {
       "skeleton": "l2d/c802/aim/c802_aim_00.skel",
       "atlas": "l2d/c802/aim/c802_aim_00.atlas",
+      "runtime": "4.0"
+     },
+     "cover": {
+      "skeleton": "l2d/c802/cover/c802_cover_00.skel",
+      "atlas": "l2d/c802/cover/c802_cover_00.atlas",
       "runtime": "4.0"
      }
     }
@@ -5779,6 +7399,11 @@
       "skeleton": "l2d/c810/aim/c810_aim_00.skel",
       "atlas": "l2d/c810/aim/c810_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c810/cover/c810_cover_00.skel",
+      "atlas": "l2d/c810/cover/c810_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -5793,6 +7418,11 @@
      "cutscene": {
       "skeleton": "l2d/c810_01/aim/c810_01_aim_00.skel",
       "atlas": "l2d/c810_01/aim/c810_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c810_01/cover/c810_01_cover_00.skel",
+      "atlas": "l2d/c810_01/cover/c810_01_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -5809,6 +7439,11 @@
       "skeleton": "l2d/c810_02/aim/c810_02_aim_00.skel",
       "atlas": "l2d/c810_02/aim/c810_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c810_02/cover/c810_02_cover_00.skel",
+      "atlas": "l2d/c810_02/cover/c810_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -5822,6 +7457,11 @@
      "cutscene": {
       "skeleton": "l2d/c810_03/aim/c810_03_aim_00.skel",
       "atlas": "l2d/c810_03/aim/c810_03_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c810_03/cover/c810_03_cover_00.skel",
+      "atlas": "l2d/c810_03/cover/c810_03_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -5844,6 +7484,11 @@
       "skeleton": "l2d/c811/aim/c811_aim_00.skel",
       "atlas": "l2d/c811/aim/c811_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c811/cover/c811_cover_00.skel",
+      "atlas": "l2d/c811/cover/c811_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -5857,6 +7502,11 @@
      "cutscene": {
       "skeleton": "l2d/c811_01/aim/c811_01_aim_00.skel",
       "atlas": "l2d/c811_01/aim/c811_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c811_01/cover/c811_01_cover_00.skel",
+      "atlas": "l2d/c811_01/cover/c811_01_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -5872,6 +7522,11 @@
       "skeleton": "l2d/c811_02/aim/c811_02_aim_00.skel",
       "atlas": "l2d/c811_02/aim/c811_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c811_02/cover/c811_02_cover_00.skel",
+      "atlas": "l2d/c811_02/cover/c811_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -5885,6 +7540,11 @@
      "cutscene": {
       "skeleton": "l2d/c811_03/aim/c811_03_aim_00.skel",
       "atlas": "l2d/c811_03/aim/c811_03_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c811_03/cover/c811_03_cover_00.skel",
+      "atlas": "l2d/c811_03/cover/c811_03_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -5907,6 +7567,11 @@
       "skeleton": "l2d/c812/aim/c812_aim_00.skel",
       "atlas": "l2d/c812/aim/c812_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c812/cover/c812_cover_00.skel",
+      "atlas": "l2d/c812/cover/c812_cover_00.atlas",
+      "runtime": "4.1"
      }
     }
    ]
@@ -5928,6 +7593,11 @@
       "skeleton": "l2d/c820/aim/c820_aim_00.skel",
       "atlas": "l2d/c820/aim/c820_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c820/cover/c820_cover_00.skel",
+      "atlas": "l2d/c820/cover/c820_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -5942,6 +7612,11 @@
       "skeleton": "l2d/c820_01/aim/c820_01_aim_00.skel",
       "atlas": "l2d/c820_01/aim/c820_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c820_01/cover/c820_01_cover_00.skel",
+      "atlas": "l2d/c820_01/cover/c820_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -5955,6 +7630,11 @@
      "cutscene": {
       "skeleton": "l2d/c820_02/aim/c820_02_aim_00.skel",
       "atlas": "l2d/c820_02/aim/c820_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c820_02/cover/c820_02_cover_00.skel",
+      "atlas": "l2d/c820_02/cover/c820_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -5977,6 +7657,11 @@
       "skeleton": "l2d/c821/aim/c821_aim_00.skel",
       "atlas": "l2d/c821/aim/c821_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c821/cover/c821_cover_00.skel",
+      "atlas": "l2d/c821/cover/c821_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -5991,6 +7676,11 @@
       "skeleton": "l2d/c821_01/aim/c821_01_aim_00.skel",
       "atlas": "l2d/c821_01/aim/c821_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c821_01/cover/c821_01_cover_00.skel",
+      "atlas": "l2d/c821_01/cover/c821_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6004,6 +7694,11 @@
      "cutscene": {
       "skeleton": "l2d/c821_02/aim/c821_02_aim_00.skel",
       "atlas": "l2d/c821_02/aim/c821_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c821_02/cover/c821_02_cover_00.skel",
+      "atlas": "l2d/c821_02/cover/c821_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -6026,6 +7721,11 @@
       "skeleton": "l2d/c822/aim/c822_aim_00.skel",
       "atlas": "l2d/c822/aim/c822_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c822/cover/c822_cover_00.skel",
+      "atlas": "l2d/c822/cover/c822_cover_00.atlas",
+      "runtime": "4.1"
      }
     }
    ]
@@ -6047,6 +7747,11 @@
       "skeleton": "l2d/c830/aim/c830_aim_00.skel",
       "atlas": "l2d/c830/aim/c830_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c830/cover/c830_cover_00.skel",
+      "atlas": "l2d/c830/cover/c830_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6060,6 +7765,11 @@
      "cutscene": {
       "skeleton": "l2d/c830_01/aim/c830_01_aim_00.skel",
       "atlas": "l2d/c830_01/aim/c830_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c830_01/cover/c830_01_cover_00.skel",
+      "atlas": "l2d/c830_01/cover/c830_01_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -6075,6 +7785,11 @@
       "skeleton": "l2d/c830_02/aim/c830_02_aim_00.skel",
       "atlas": "l2d/c830_02/aim/c830_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c830_02/cover/c830_02_cover_00.skel",
+      "atlas": "l2d/c830_02/cover/c830_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6088,6 +7803,11 @@
      "cutscene": {
       "skeleton": "l2d/c830_03/aim/c830_03_aim_00.skel",
       "atlas": "l2d/c830_03/aim/c830_03_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c830_03/cover/c830_03_cover_00.skel",
+      "atlas": "l2d/c830_03/cover/c830_03_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -6103,6 +7823,11 @@
       "skeleton": "l2d/c835/aim/c835_aim_00.skel",
       "atlas": "l2d/c835/aim/c835_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c835/cover/c835_cover_00.skel",
+      "atlas": "l2d/c835/cover/c835_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6117,6 +7842,11 @@
       "skeleton": "l2d/c835_01/aim/c835_01_aim_00.skel",
       "atlas": "l2d/c835_01/aim/c835_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c835_01/cover/c835_01_cover_00.skel",
+      "atlas": "l2d/c835_01/cover/c835_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6130,6 +7860,11 @@
      "cutscene": {
       "skeleton": "l2d/c835_02/aim/c835_02_aim_00.skel",
       "atlas": "l2d/c835_02/aim/c835_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c835_02/cover/c835_02_cover_00.skel",
+      "atlas": "l2d/c835_02/cover/c835_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -6152,6 +7887,11 @@
       "skeleton": "l2d/c831/aim/c831_aim_00.skel",
       "atlas": "l2d/c831/aim/c831_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c831/cover/c831_cover_00.skel",
+      "atlas": "l2d/c831/cover/c831_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6166,6 +7906,11 @@
       "skeleton": "l2d/c831_01/aim/c831_01_aim_00.skel",
       "atlas": "l2d/c831_01/aim/c831_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c831_01/cover/c831_01_cover_00.skel",
+      "atlas": "l2d/c831_01/cover/c831_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6179,6 +7924,11 @@
      "cutscene": {
       "skeleton": "l2d/c831_02/aim/c831_02_aim_00.skel",
       "atlas": "l2d/c831_02/aim/c831_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c831_02/cover/c831_02_cover_00.skel",
+      "atlas": "l2d/c831_02/cover/c831_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -6201,6 +7951,11 @@
       "skeleton": "l2d/c832/aim/c832_aim_00.skel",
       "atlas": "l2d/c832/aim/c832_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c832/cover/c832_cover_00.skel",
+      "atlas": "l2d/c832/cover/c832_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6214,6 +7969,11 @@
      "cutscene": {
       "skeleton": "l2d/c832_01/aim/c832_01_aim_00.skel",
       "atlas": "l2d/c832_01/aim/c832_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c832_01/cover/c832_01_cover_00.skel",
+      "atlas": "l2d/c832_01/cover/c832_01_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -6229,6 +7989,11 @@
       "skeleton": "l2d/c832_02/aim/c832_02_aim_00.skel",
       "atlas": "l2d/c832_02/aim/c832_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c832_02/cover/c832_02_cover_00.skel",
+      "atlas": "l2d/c832_02/cover/c832_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6243,6 +8008,11 @@
       "skeleton": "l2d/c832_03/aim/c832_03_aim_00.skel",
       "atlas": "l2d/c832_03/aim/c832_03_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c832_03/cover/c832_03_cover_00.skel",
+      "atlas": "l2d/c832_03/cover/c832_03_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6256,6 +8026,11 @@
      "cutscene": {
       "skeleton": "l2d/c832_04/aim/c832_04_aim_00.skel",
       "atlas": "l2d/c832_04/aim/c832_04_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c832_04/cover/c832_04_cover_00.skel",
+      "atlas": "l2d/c832_04/cover/c832_04_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -6278,6 +8053,11 @@
       "skeleton": "l2d/c833/aim/c833_aim_00.skel",
       "atlas": "l2d/c833/aim/c833_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c833/cover/c833_cover_00.skel",
+      "atlas": "l2d/c833/cover/c833_cover_00.atlas",
+      "runtime": "4.1"
      }
     }
    ]
@@ -6299,6 +8079,11 @@
       "skeleton": "l2d/c834/aim/c834_aim_00.skel",
       "atlas": "l2d/c834/aim/c834_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c834/cover/c834_cover_00.skel",
+      "atlas": "l2d/c834/cover/c834_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6313,6 +8098,11 @@
       "skeleton": "l2d/c834_01/aim/c834_01_aim_00.skel",
       "atlas": "l2d/c834_01/aim/c834_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c834_01/cover/c834_01_cover_00.skel",
+      "atlas": "l2d/c834_01/cover/c834_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6326,6 +8116,11 @@
      "cutscene": {
       "skeleton": "l2d/c834_02/aim/c834_02_aim_00.skel",
       "atlas": "l2d/c834_02/aim/c834_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c834_02/cover/c834_02_cover_00.skel",
+      "atlas": "l2d/c834_02/cover/c834_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -6348,6 +8143,11 @@
       "skeleton": "l2d/c836/aim/c836_aim_00.skel",
       "atlas": "l2d/c836/aim/c836_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c836/cover/c836_cover_00.skel",
+      "atlas": "l2d/c836/cover/c836_cover_00.atlas",
+      "runtime": "4.1"
      }
     }
    ]
@@ -6369,6 +8169,11 @@
       "skeleton": "l2d/c840/aim/c840_aim_00.skel",
       "atlas": "l2d/c840/aim/c840_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c840/cover/c840_cover_00.skel",
+      "atlas": "l2d/c840/cover/c840_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6383,6 +8188,11 @@
       "skeleton": "l2d/c840_01/aim/c840_01_aim_00.skel",
       "atlas": "l2d/c840_01/aim/c840_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c840_01/cover/c840_01_cover_00.skel",
+      "atlas": "l2d/c840_01/cover/c840_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6396,6 +8206,11 @@
      "cutscene": {
       "skeleton": "l2d/c840_02/aim/c840_02_aim_00.skel",
       "atlas": "l2d/c840_02/aim/c840_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c840_02/cover/c840_02_cover_00.skel",
+      "atlas": "l2d/c840_02/cover/c840_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -6418,6 +8233,11 @@
       "skeleton": "l2d/c841/aim/c841_aim_00.skel",
       "atlas": "l2d/c841/aim/c841_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c841/cover/c841_cover_00.skel",
+      "atlas": "l2d/c841/cover/c841_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6432,6 +8252,11 @@
       "skeleton": "l2d/c841_01/aim/c841_01_aim_00.skel",
       "atlas": "l2d/c841_01/aim/c841_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c841_01/cover/c841_01_cover_00.skel",
+      "atlas": "l2d/c841_01/cover/c841_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6445,6 +8270,11 @@
      "cutscene": {
       "skeleton": "l2d/c841_02/aim/c841_02_aim_00.skel",
       "atlas": "l2d/c841_02/aim/c841_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c841_02/cover/c841_02_cover_00.skel",
+      "atlas": "l2d/c841_02/cover/c841_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -6467,6 +8297,11 @@
       "skeleton": "l2d/c842/aim/c842_aim_00.skel",
       "atlas": "l2d/c842/aim/c842_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c842/cover/c842_cover_00.skel",
+      "atlas": "l2d/c842/cover/c842_cover_00.atlas",
+      "runtime": "4.1"
      }
     }
    ]
@@ -6488,6 +8323,11 @@
       "skeleton": "l2d/c850/aim/c850_aim_00.skel",
       "atlas": "l2d/c850/aim/c850_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c850/cover/c850_cover_00.skel",
+      "atlas": "l2d/c850/cover/c850_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6501,6 +8341,11 @@
      "cutscene": {
       "skeleton": "l2d/c850_01/aim/c850_01_aim_00.skel",
       "atlas": "l2d/c850_01/aim/c850_01_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c850_01/cover/c850_01_cover_00.skel",
+      "atlas": "l2d/c850_01/cover/c850_01_cover_00.atlas",
       "runtime": "4.1"
      }
     },
@@ -6516,6 +8361,11 @@
       "skeleton": "l2d/c850_02/aim/c850_02_aim_00.skel",
       "atlas": "l2d/c850_02/aim/c850_02_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c850_02/cover/c850_02_cover_00.skel",
+      "atlas": "l2d/c850_02/cover/c850_02_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6529,6 +8379,11 @@
      "cutscene": {
       "skeleton": "l2d/c850_03/aim/c850_03_aim_00.skel",
       "atlas": "l2d/c850_03/aim/c850_03_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c850_03/cover/c850_03_cover_00.skel",
+      "atlas": "l2d/c850_03/cover/c850_03_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -6551,6 +8406,11 @@
       "skeleton": "l2d/c851/aim/c851_aim_00.skel",
       "atlas": "l2d/c851/aim/c851_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c851/cover/c851_cover_00.skel",
+      "atlas": "l2d/c851/cover/c851_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6565,6 +8425,11 @@
       "skeleton": "l2d/c851_01/aim/c851_01_aim_00.skel",
       "atlas": "l2d/c851_01/aim/c851_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c851_01/cover/c851_01_cover_00.skel",
+      "atlas": "l2d/c851_01/cover/c851_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6578,6 +8443,11 @@
      "cutscene": {
       "skeleton": "l2d/c851_02/aim/c851_02_aim_00.skel",
       "atlas": "l2d/c851_02/aim/c851_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c851_02/cover/c851_02_cover_00.skel",
+      "atlas": "l2d/c851_02/cover/c851_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -6600,6 +8470,11 @@
       "skeleton": "l2d/c852/aim/c852_aim_00.skel",
       "atlas": "l2d/c852/aim/c852_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c852/cover/c852_cover_00.skel",
+      "atlas": "l2d/c852/cover/c852_cover_00.atlas",
+      "runtime": "4.1"
      }
     }
    ]
@@ -6621,6 +8496,11 @@
       "skeleton": "l2d/c860/aim/c860_aim_00.skel",
       "atlas": "l2d/c860/aim/c860_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c860/cover/c860_cover_00.skel",
+      "atlas": "l2d/c860/cover/c860_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6635,6 +8515,11 @@
       "skeleton": "l2d/c860_01/aim/c860_01_aim_00.skel",
       "atlas": "l2d/c860_01/aim/c860_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c860_01/cover/c860_01_cover_00.skel",
+      "atlas": "l2d/c860_01/cover/c860_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6648,6 +8533,11 @@
      "cutscene": {
       "skeleton": "l2d/c860_02/aim/c860_02_aim_00.skel",
       "atlas": "l2d/c860_02/aim/c860_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c860_02/cover/c860_02_cover_00.skel",
+      "atlas": "l2d/c860_02/cover/c860_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -6670,6 +8560,11 @@
       "skeleton": "l2d/c861/aim/c861_aim_00.skel",
       "atlas": "l2d/c861/aim/c861_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c861/cover/c861_cover_00.skel",
+      "atlas": "l2d/c861/cover/c861_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6684,6 +8579,11 @@
       "skeleton": "l2d/c861_01/aim/c861_01_aim_00.skel",
       "atlas": "l2d/c861_01/aim/c861_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c861_01/cover/c861_01_cover_00.skel",
+      "atlas": "l2d/c861_01/cover/c861_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6697,6 +8597,11 @@
      "cutscene": {
       "skeleton": "l2d/c861_02/aim/c861_02_aim_00.skel",
       "atlas": "l2d/c861_02/aim/c861_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c861_02/cover/c861_02_cover_00.skel",
+      "atlas": "l2d/c861_02/cover/c861_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -6719,6 +8624,11 @@
       "skeleton": "l2d/c862/aim/c862_aim_00.skel",
       "atlas": "l2d/c862/aim/c862_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c862/cover/c862_cover_00.skel",
+      "atlas": "l2d/c862/cover/c862_cover_00.atlas",
+      "runtime": "4.1"
      }
     }
    ]
@@ -6740,6 +8650,11 @@
       "skeleton": "l2d/c870/aim/c870_aim_00.skel",
       "atlas": "l2d/c870/aim/c870_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c870/cover/c870_cover_00.skel",
+      "atlas": "l2d/c870/cover/c870_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6754,6 +8669,11 @@
       "skeleton": "l2d/c870_01/aim/c870_01_aim_00.skel",
       "atlas": "l2d/c870_01/aim/c870_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c870_01/cover/c870_01_cover_00.skel",
+      "atlas": "l2d/c870_01/cover/c870_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6767,6 +8687,11 @@
      "cutscene": {
       "skeleton": "l2d/c870_02/aim/c870_02_aim_00.skel",
       "atlas": "l2d/c870_02/aim/c870_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c870_02/cover/c870_02_cover_00.skel",
+      "atlas": "l2d/c870_02/cover/c870_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -6789,6 +8714,11 @@
       "skeleton": "l2d/c871/aim/c871_aim_00.skel",
       "atlas": "l2d/c871/aim/c871_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c871/cover/c871_cover_00.skel",
+      "atlas": "l2d/c871/cover/c871_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6803,6 +8733,11 @@
       "skeleton": "l2d/c871_01/aim/c871_01_aim_00.skel",
       "atlas": "l2d/c871_01/aim/c871_01_aim_00.atlas",
       "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c871_01/cover/c871_01_cover_00.skel",
+      "atlas": "l2d/c871_01/cover/c871_01_cover_00.atlas",
+      "runtime": "4.1"
      }
     },
     {
@@ -6816,6 +8751,11 @@
      "cutscene": {
       "skeleton": "l2d/c871_02/aim/c871_02_aim_00.skel",
       "atlas": "l2d/c871_02/aim/c871_02_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c871_02/cover/c871_02_cover_00.skel",
+      "atlas": "l2d/c871_02/cover/c871_02_cover_00.atlas",
       "runtime": "4.1"
      }
     }
@@ -6837,6 +8777,11 @@
      "cutscene": {
       "skeleton": "l2d/c872/aim/c872_aim_00.skel",
       "atlas": "l2d/c872/aim/c872_aim_00.atlas",
+      "runtime": "4.1"
+     },
+     "cover": {
+      "skeleton": "l2d/c872/cover/c872_cover_00.skel",
+      "atlas": "l2d/c872/cover/c872_cover_00.atlas",
       "runtime": "4.1"
      }
     }

@@ -1,7 +1,7 @@
 import { PREFERENCES_KEY, LEGACY_KEY, ROTATION_CHOICES, normalizePreferences, displayOf, withDisplay, costumeKey, gameOf,
   availableCharacters, paddedView, placeView,
   chooseCharacter, atlasPages, playableAnimations, configureViewports, presentationForCostume,
-  isLoopingSkill, selectSkillAnimation } from './companion-model.js';
+  isLoopingSkill, selectSkillAnimation, completeSkin } from './companion-model.js';
 import { createCompanionStage } from './companion-stage.js';
 import { LOCAL_FALLBACK_CHARACTER, LOCAL_FALLBACK_COMMIT } from './companion-fallback.js';
 import { isExcludedCharacter } from './companion-exclusions.js';
@@ -10,6 +10,7 @@ import { queuePortraitMotion } from './companion-portrait.js';
 import { createAssetFetcher } from './companion-assets.js';
 import { GAMES, gameById } from './companion-games.js';
 import { fireAnimations, queueFireCycle } from './companion-fire.js';
+import { combatAnimations, createCombatCycle } from './companion-combat.js';
 // Spine binaries only load in the runtime version that exported them, and
 // each build declares the same global. Load builds one at a time, keep each
 // one, and leave window.spine on 4.1 for code that looks for it there.
@@ -202,7 +203,8 @@ function withAbort(promise, signal) {
   });
 }
 
-const partFor = (selection, mode) => mode === 'skill' ? selection.costume.cutscene : selection.costume.idle;
+const partFor = (selection, mode) => mode === 'skill' ? selection.costume.cutscene :
+  mode === 'cover' ? selection.costume.cover : selection.costume.idle;
 
 async function loadCharacter(catalog, selection, mode, signal) {
   const part = partFor(selection, mode);
@@ -239,12 +241,35 @@ async function loadCharacter(catalog, selection, mode, signal) {
 // Spine fits its whole canvas to the camera. The canvas fills the rail, and the
 // camera is widened around the preset view so that view stands on the bottom
 // edge while artwork beyond it keeps drawing toward the faded rail edges.
+const unionView = (a, b) => {
+  const x = Math.min(a.x, b.x);
+  const y = Math.min(a.y, b.y);
+  return { x, y, width: Math.max(a.x + a.width, b.x + b.width) - x, height: Math.max(a.y + a.height, b.y + b.height) - y };
+};
+
+// A second player for NIKKE's cover skeleton, sharing the layer and camera.
+function spawnPartner(spine, layer, assets, part, record) {
+  return new Promise((resolve, reject) => {
+    record.partner = new spine.SpinePlayer(layer, {
+      binaryUrl: assets.skelUrl, atlasUrl: assets.atlasUrl, rawDataURIs: assets.rawDataURIs,
+      viewport: { padLeft: '5%', padRight: '5%', padTop: '5%', padBottom: '5%', transitionTime: 0 },
+      premultipliedAlpha: assets.premultipliedAlpha,
+      alpha: true, backgroundColor: '#00000000', showControls: false, showLoading: false,
+      preserveDrawingBuffer: false, defaultMix: 0,
+      ...(part.skin ? { skin: part.skin } : {}),
+      success: resolve,
+      error: () => reject(new Error('角色动画暂时无法播放')),
+      frame(player) { if (record.view) layoutCamera(record, player); },
+    });
+  });
+}
+
 function layoutCamera(record, player) {
   const width = player.canvas.clientWidth;
   const height = player.canvas.clientHeight;
   const key = width + 'x' + height;
-  if (!width || !height || key === record.railKey) return;
-  record.railKey = key;
+  if (!width || !height || key === player.companionRailKey) return;
+  player.companionRailKey = key;
   const space = parseFloat(getComputedStyle(record.layer).getPropertyValue('--companion-space')) || width / 2;
   // Wide full shots stay out of the strongest left fade.
   const maxWidth = record.layer.classList.contains('fit-artwork') ? Math.max(width * .75, space) : width;
@@ -392,6 +417,7 @@ export function initCompanion() {
       clearTimeout(record.timeout);
       clearTimeout(record.loadingTimer);
       disposePlayer(record.player);
+      disposePlayer(record.partner);
       record.layer.remove();
     },
     transition(outgoing, incoming, done) {
@@ -520,9 +546,11 @@ export function initCompanion() {
   function updatePlayback() {
     const paused = document.hidden || !motionAllowed;
     for (const record of [stage.active, stage.pending, stage.outgoing]) {
-      if (!record?.player) continue;
-      if (paused) record.player.pause();
-      else record.player.play();
+      for (const player of [record?.player, record?.partner]) {
+        if (!player) continue;
+        if (paused) player.pause();
+        else player.play();
+      }
     }
     if (stage.active) root.dataset.paused = String(paused);
     updateUI();
@@ -656,9 +684,17 @@ export function initCompanion() {
       showError(record, '角色载入较慢');
     }, 45000);
     try {
-      const [spine, assets] = await withAbort(Promise.all([
+      // NIKKE's combat loop also needs the cover skeleton.
+      const coverPart = record.mode === 'skill' && gameOf(record.selection.character) === 'nikke' ? record.selection.costume.cover : null;
+      const [spine, assets, coverSpine, coverAssets] = await withAbort(Promise.all([
         loadRuntime(partFor(record.selection, record.mode)?.runtime), assetsFor(record.selection, record.mode),
+        coverPart ? loadRuntime(coverPart.runtime) : null, coverPart ? assetsFor(record.selection, 'cover') : null,
       ]), signal);
+      if (signal.aborted || stage.pending !== record || disposed) return;
+      if (coverPart) {
+        const partner = await withAbort(spawnPartner(coverSpine, layer, coverAssets, coverPart, record), signal);
+        completeSkin(coverSpine, partner.skeleton);
+      }
       if (signal.aborted || stage.pending !== record || disposed) return;
       await new Promise((resolve, reject) => {
         const abort = () => reject(new DOMException('Aborted', 'AbortError'));
@@ -677,6 +713,7 @@ export function initCompanion() {
               record.player = loadedPlayer;
               const presentation = presentationForCostume(presentations, record.selection.costume);
               const data = loadedPlayer.skeleton.data;
+              if (gameOf(record.selection.character) === 'nikke') completeSkin(spine, loadedPlayer.skeleton);
               const firing = record.mode === 'skill' && gameOf(record.selection.character) === 'nikke' ? fireAnimations(data) : null;
               record.animations = firing ? [firing.idle] : playableAnimations(data.animations, record.mode, presentation);
               if (!record.animations.length) throw new Error('这套服装暂无可播放动画');
@@ -690,25 +727,44 @@ export function initCompanion() {
                 record.animation = composeSkillAttachments(spine, data, record.animation, action?.attachmentLayers);
                 if (action?.framing === 'full') layer.classList.add('fit-artwork');
               }
-              configureViewports(loadedPlayer, [record.animation], record.mode, presentation,
-                firing ? [firing.fire, ...firing.overlays] : []);
+              const combat = firing && record.partner ? combatAnimations(record.partner.skeleton.data, data) : null;
+              configureViewports(loadedPlayer, [record.animation], record.mode, presentation, firing ?
+                [firing.fire, ...firing.overlays, ...(combat ? [combat.skill, combat.toCover].filter(Boolean) : [])] : []);
               loadedPlayer.animationState.clearTracks();
               loadedPlayer.skeleton.setToSetupPose();
               loadedPlayer.setAnimation(record.animation, record.mode === 'portrait' || isLoopingSkill(record.animation, presentation));
               if (record.mode === 'portrait') {
                 record.portraitMotion = queuePortraitMotion(loadedPlayer.animationState, record.animation);
+              } else if (combat) {
+                const partner = record.partner;
+                configureViewports(partner, [combat.coverIdle], 'skill', undefined, [combat.toAim, combat.reload].filter(Boolean));
+                partner.animationState.clearTracks();
+                partner.skeleton.setToSetupPose();
+                partner.setAnimation(combat.coverIdle, true);
+                const show = side => {
+                  loadedPlayer.dom.classList.toggle('is-hidden', side !== 'aim');
+                  partner.dom.classList.toggle('is-hidden', side !== 'cover');
+                };
+                record.combat = createCombatCycle(combat,
+                  { state: partner.animationState, show: () => show('cover') },
+                  { state: loadedPlayer.animationState, show: () => show('aim') });
+                record.loopSeconds = record.combat.cycleSeconds;
               } else if (firing) {
                 queueFireCycle(loadedPlayer.animationState, firing);
               }
-              // The camera is laid out against the rail on every frame from here on.
-              record.view = paddedView(loadedPlayer.currentViewport);
-              record.railKey = '';
+              // The camera is laid out against the rail on every frame from here on;
+              // both combat skeletons share one view so switching never jumps.
+              record.view = combat ? unionView(paddedView(loadedPlayer.currentViewport), paddedView(record.partner.currentViewport)) :
+                paddedView(loadedPlayer.currentViewport);
               if (!motionAllowed && record.mode === 'skill') loadedPlayer.animationState.update(record.animation.duration * .35);
               loadedPlayer.animationState.apply(loadedPlayer.skeleton);
               loadedPlayer.skeleton.updateWorldTransform();
               record.configured = true;
-              if (document.hidden || !motionAllowed) loadedPlayer.pause();
-              else loadedPlayer.play();
+              for (const player of [loadedPlayer, record.partner]) {
+                if (!player) continue;
+                if (document.hidden || !motionAllowed) player.pause();
+                else player.play();
+              }
             } catch (error) { finish(() => reject(error)); }
           },
           // success runs before rendering. Keep this layer transparent until
@@ -734,6 +790,8 @@ export function initCompanion() {
           frame(loadedPlayer, delta) {
             // Runs before the camera is set for this frame, paused or not.
             if (record.view) layoutCamera(record, loadedPlayer);
+            // The combat loop follows the animation clock, so it pauses with it.
+            if (record.combat && delta > 0) record.combat.advance(delta);
             if (stage.active !== record || stage.pending || record.advancing || delta <= 0) return;
             record.elapsed += delta;
             // Paused or hidden pages draw no frames, so rotation waits for them.
@@ -743,9 +801,9 @@ export function initCompanion() {
               if (playingMotion) return;
               if (rotate) advance(record, 'rotate');
               else if (preferences.skills && record.elapsed >= 16) advance(record, 'skill');
-            } else if (rotate && record.elapsed >= record.animation.duration) {
+            } else if (rotate && record.elapsed >= (record.loopSeconds || record.animation.duration)) {
               advance(record, 'rotate');
-            } else if (preferences.portraits && record.elapsed >= Math.max(record.animation.duration + 2, 12)) {
+            } else if (preferences.portraits && record.elapsed >= Math.max((record.loopSeconds || record.animation.duration) + 2, 12)) {
               advance(record, 'portrait');
             }
           },

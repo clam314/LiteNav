@@ -96,6 +96,13 @@ class NikkeCatalogTests(unittest.TestCase):
         for name in ("士兵O.W.", "产品23", "iDoll海", "Soldier XY", "Product 30"):
             self.assertFalse(update.is_shown("c410", name), f"{name} is matched by name outside c300-c308")
 
+    def test_combat_outfits_carry_their_cover_skeleton(self):
+        cover = lambda outfit: {f"{outfit}/cover/{outfit}_cover_00.skel", f"{outfit}/cover/{outfit}_cover_00.atlas"}
+        paths = tree("c010") | cover("c010") | tree("c011", aim=False) | cover("c011")
+        rapi, neon = self.build(paths, names={"c010": "拉毗", "c011": "尼恩"})
+        self.assertEqual(rapi["costumes"][0]["cover"]["skeleton"], "l2d/c010/cover/c010_cover_00.skel")
+        self.assertNotIn("cover", neon["costumes"][0], "a cover skeleton alone cannot form the combat loop")
+
     def test_listed_outfits_use_their_stand_skin(self):
         paths = tree("c220", "c010")
         people = {person["name"]: person for person in self.build(paths, names={"c220": "白雪公主", "c010": "拉毗"})}

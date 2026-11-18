@@ -246,3 +246,22 @@ export function placeView(view, rail, space, maxWidth = rail.width) {
     padLeft: 0, padRight: 0, padTop: 0, padBottom: 0,
   };
 }
+
+// Some NIKKE outfits split their body across extra skins (part_0, part_1, …)
+// and leave the default skin without the head or arms. Merge every other skin
+// that supplies a setup attachment the current skins lack. Returns the names
+// of the merged skins, or an empty list when nothing was missing.
+export function completeSkin(spine, skeleton) {
+  const data = skeleton.data;
+  const missing = data.slots.filter(slot => slot.attachmentName && !skeleton.getAttachment(slot.index, slot.attachmentName));
+  if (!missing.length) return [];
+  const extras = data.skins.filter(skin => skin !== data.defaultSkin && skin !== skeleton.skin &&
+    missing.some(slot => skin.getAttachment(slot.index, slot.attachmentName)));
+  if (!extras.length) return [];
+  const complete = new spine.Skin('companion-complete');
+  if (skeleton.skin) complete.addSkin(skeleton.skin);
+  extras.forEach(skin => complete.addSkin(skin));
+  skeleton.setSkin(complete);
+  skeleton.setSlotsToSetupPose();
+  return extras.map(skin => skin.name);
+}
