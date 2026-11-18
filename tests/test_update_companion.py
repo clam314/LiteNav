@@ -103,6 +103,14 @@ class NikkeCatalogTests(unittest.TestCase):
         self.assertEqual(rapi["costumes"][0]["cover"]["skeleton"], "l2d/c010/cover/c010_cover_00.skel")
         self.assertNotIn("cover", neon["costumes"][0], "a cover skeleton alone cannot form the combat loop")
 
+    def test_standalone_models_named_after_their_folder_join_their_person(self):
+        paths = tree("c570") | {"c570_99/c570_99.skel", "c570_99/c570_99.atlas", "c570_99/c570_99.png"}
+        people = self.build(paths, index=[{"id": "c570", "cn": "方舟黑色游侠"}], names={"c570_99": "方舟黑色游侠：兜帽装束"})
+        costumes = people[0]["costumes"]
+        self.assertEqual([costume["label"] for costume in costumes], ["默认", "兜帽装束"])
+        self.assertEqual(costumes[1]["idle"]["skeleton"], "l2d/c570_99/c570_99.skel")
+        self.assertIsNone(costumes[1]["cutscene"])
+
     def test_listed_outfits_use_their_stand_skin(self):
         paths = tree("c220", "c010")
         people = {person["name"]: person for person in self.build(paths, names={"c220": "白雪公主", "c010": "拉毗"})}

@@ -178,9 +178,12 @@ def skin_name(own: str, parent: str, person: str) -> str:
 def outfit_files(paths: set[str], outfit_id: str) -> dict:
     """Stand, cover and aim files present in the l2d tree for one outfit."""
     files = {}
-    for mode, stem in (("stand", f"{outfit_id}/{outfit_id}_00"), ("cover", f"{outfit_id}/cover/{outfit_id}_cover_00"),
-                       ("aim", f"{outfit_id}/aim/{outfit_id}_aim_00")):
-        if f"{stem}.skel" in paths and f"{stem}.atlas" in paths:
+    # A few standalone models (c570_99) name the stand files after the folder alone.
+    for mode, stems in (("stand", (f"{outfit_id}/{outfit_id}_00", f"{outfit_id}/{outfit_id}")),
+                        ("cover", (f"{outfit_id}/cover/{outfit_id}_cover_00",)),
+                        ("aim", (f"{outfit_id}/aim/{outfit_id}_aim_00",))):
+        stem = next((stem for stem in stems if f"{stem}.skel" in paths and f"{stem}.atlas" in paths), None)
+        if stem:
             files[mode] = {"skeleton": f"l2d/{stem}.skel", "atlas": f"l2d/{stem}.atlas"}
     return files
 

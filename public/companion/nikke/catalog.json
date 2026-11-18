@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-18T17:28:54+00:00",
+ "generatedAt": "2026-11-18T17:45:31+00:00",
  "source": "Nikke-db/Nikke-db.github.io@7d9c7b8666ba",
  "names": "Nikke-db/nikke-db-vue@3e3fb7e3acd5",
  "commit": "7d9c7b8666ba3356ae846e50178d43150af558aa",
@@ -6924,6 +6924,16 @@
       "atlas": "l2d/c570/cover/c570_cover_00.atlas",
       "runtime": "4.1"
      }
+    },
+    {
+     "label": "兜帽装束",
+     "outfit": "c570_99",
+     "idle": {
+      "skeleton": "l2d/c570_99/c570_99.skel",
+      "atlas": "l2d/c570_99/c570_99.atlas",
+      "runtime": "4.1"
+     },
+     "cutscene": null
     }
    ]
   },
