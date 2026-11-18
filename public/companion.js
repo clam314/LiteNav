@@ -241,10 +241,15 @@ async function loadCharacter(catalog, selection, mode, signal) {
 // Spine fits its whole canvas to the camera. The canvas fills the rail, and the
 // camera is widened around the preset view so that view stands on the bottom
 // edge while artwork beyond it keeps drawing toward the faded rail edges.
-const unionView = (a, b) => {
-  const x = Math.min(a.x, b.x);
-  const y = Math.min(a.y, b.y);
-  return { x, y, width: Math.max(a.x + a.width, b.x + b.width) - x, height: Math.max(a.y + a.height, b.y + b.height) - y };
+// The cover and aim skeletons place the figure at different spots, so a
+// shared camera made her jump sideways on every switch. Give both views the
+// same size (and so the same scale), each centred on its own figure and
+// standing on its own floor, so a switch changes the pose but not the place.
+const alignedViews = (a, b) => {
+  const width = Math.max(a.width, b.width);
+  const height = Math.max(a.height, b.height);
+  const frame = view => ({ x: view.x + view.width / 2 - width / 2, y: view.y, width, height });
+  return [frame(a), frame(b)];
 };
 
 // A second player for NIKKE's cover skeleton, sharing the layer and camera.
@@ -273,7 +278,7 @@ function layoutCamera(record, player) {
   const space = parseFloat(getComputedStyle(record.layer).getPropertyValue('--companion-space')) || width / 2;
   // Wide full shots stay out of the strongest left fade.
   const maxWidth = record.layer.classList.contains('fit-artwork') ? Math.max(width * .75, space) : width;
-  Object.assign(player.currentViewport, placeView(record.view, { width, height }, space, maxWidth));
+  Object.assign(player.currentViewport, placeView(player.companionView || record.view, { width, height }, space, maxWidth));
 }
 
 export function initCompanion() {
@@ -752,10 +757,12 @@ export function initCompanion() {
               } else if (firing) {
                 queueFireCycle(loadedPlayer.animationState, firing);
               }
-              // The camera is laid out against the rail on every frame from here on;
-              // both combat skeletons share one view so switching never jumps.
-              record.view = combat ? unionView(paddedView(loadedPlayer.currentViewport), paddedView(record.partner.currentViewport)) :
-                paddedView(loadedPlayer.currentViewport);
+              // The camera is laid out against the rail on every frame from here on.
+              record.view = paddedView(loadedPlayer.currentViewport);
+              if (combat) {
+                [loadedPlayer.companionView, record.partner.companionView] =
+                  alignedViews(record.view, paddedView(record.partner.currentViewport));
+              }
               if (!motionAllowed && record.mode === 'skill') loadedPlayer.animationState.update(record.animation.duration * .35);
               loadedPlayer.animationState.apply(loadedPlayer.skeleton);
               loadedPlayer.skeleton.updateWorldTransform();

@@ -22,13 +22,24 @@ export function combatAnimations(coverData, aimData) {
 // One cycle as steps: which skeleton is shown, what it plays, and how long to hold.
 export function combatSteps(set) {
   const steps = [];
-  if (set.toAim) steps.push({ on: 'cover', play: set.toAim, loop: false, hold: Math.max(0.24, set.toAim.duration + 0.14) });
-  steps.push({ on: 'aim', show: 'aim', play: set.aimIdle, loop: true, hold: 0.22 });
+  // Both transitions carry the figure across the frame (rising to the right,
+  // sliding out of cover), which read as a jump once the other pose appeared.
+  // The target pose fades in as each transition starts.
+  if (set.toAim) {
+    steps.push({ on: 'cover', play: set.toAim, loop: false, show: 'aim',
+      with: { on: 'aim', play: set.aimIdle, loop: true }, hold: Math.max(0.24, set.toAim.duration + 0.14) + 0.22 });
+  } else {
+    steps.push({ on: 'aim', show: 'aim', play: set.aimIdle, loop: true, hold: 0.22 });
+  }
   steps.push({ on: 'aim', play: set.fire, loop: true, overlays: true, hold: clamp(set.fire.duration * 4.2, 1.15, 1.8) });
   if (set.skill) steps.push({ on: 'aim', play: set.skill, loop: true, hold: clamp(set.skill.duration * 2.6, 1.9, 3.4) });
   steps.push({ on: 'aim', play: set.aimIdle, loop: true, hold: 0.26 });
-  if (set.toCover) steps.push({ on: 'aim', play: set.toCover, loop: false, hold: Math.max(0.24, set.toCover.duration + 0.19) });
-  steps.push({ on: 'cover', show: 'cover', play: set.coverIdle, loop: true, hold: 0.52 });
+  if (set.toCover) {
+    steps.push({ on: 'aim', play: set.toCover, loop: false, show: 'cover',
+      with: { on: 'cover', play: set.coverIdle, loop: true }, hold: Math.max(0.24, set.toCover.duration + 0.19) + 0.52 });
+  } else {
+    steps.push({ on: 'cover', show: 'cover', play: set.coverIdle, loop: true, hold: 0.52 });
+  }
   steps.push(set.reload ?
     { on: 'cover', play: set.reload, loop: false, then: set.coverIdle, hold: set.reload.duration + 0.12 + 0.48 } :
     { on: 'cover', play: set.coverIdle, loop: true, hold: 0.6 });
@@ -47,6 +58,7 @@ export function createCombatCycle(set, cover, aim, { intro = 0.65 } = {}) {
 
   function run(step) {
     const { state } = sides[step.on];
+    if (step.with) sides[step.with.on].state.setAnimationWith(0, step.with.play, step.with.loop);
     if (step.show) sides[step.show].show();
     state.setAnimationWith(0, step.play, step.loop);
     if (step.then) state.addAnimationWith(0, step.then, true, 0);

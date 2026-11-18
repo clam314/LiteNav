@@ -33,13 +33,15 @@ test('combat uses both skeletons and needs a cover idle and a normal shot', () =
 test('a cycle rises to aim, fires, returns to cover and reloads, each transition on the skeleton it leaves', () => {
   const steps = combatSteps(combatAnimations(cover, aim));
   assert.deepEqual(steps.map(step => [step.on, step.show || '', step.play.name]), [
-    ['cover', '', 'to_aim'], ['aim', 'aim', 'aim_idle'], ['aim', '', 'aim_fire'], ['aim', '', 'aim_idle'],
-    ['aim', '', 'to_cover'], ['cover', 'cover', 'cover_idle'], ['cover', '', 'cover_reload'],
+    ['cover', 'aim', 'to_aim'], ['aim', '', 'aim_fire'], ['aim', '', 'aim_idle'],
+    ['aim', 'cover', 'to_cover'], ['cover', '', 'cover_reload'],
   ]);
-  assert.equal(steps[2].hold, 1.15, 'a short shot still fires for at least 1.15 s');
+  assert.equal(steps[0].with.play.name, 'aim_idle', 'the aim pose fades in while the cover pose rises');
+  assert.equal(steps[3].with.play.name, 'cover_idle', 'the cover pose fades in while the aim pose slides out');
+  assert.equal(steps[1].hold, 1.15, 'a short shot still fires for at least 1.15 s');
   assert.equal(steps.at(-1).then.name, 'cover_idle', 'reloading returns to the cover idle');
   const skilled = combatSteps(combatAnimations(cover, data([...aim.animations, animation('aim_skill_fire', 1)])));
-  assert.deepEqual(skilled.slice(2, 4).map(step => step.play.name), ['aim_fire', 'aim_skill_fire']);
+  assert.deepEqual(skilled.slice(1, 3).map(step => step.play.name), ['aim_fire', 'aim_skill_fire']);
 });
 
 test('the cycle follows the frame clock and toggles sway layers only while firing', () => {
@@ -49,15 +51,18 @@ test('the cycle follows the frame clock and toggles sway layers only while firin
   cycle.advance(0.4);
   assert.equal(log.length, 2, 'nothing changes before the intro ends');
   cycle.advance(0.2);
-  assert.deepEqual(log.slice(2), [['cover', 'set', 0, 'to_aim', false]]);
+  assert.deepEqual(log.slice(2), [['aim', 'set', 0, 'aim_idle', true], ['show', 'aim'], ['cover', 'set', 0, 'to_aim', false]],
+    'the aim pose is already playing when it fades in over the rise');
   log.length = 0;
   cycle.advance(0.34 + 0.22);
-  assert.deepEqual(log, [
-    ['show', 'aim'], ['aim', 'set', 0, 'aim_idle', true], ['aim', 'empty', 1, 0.1],
-    ['aim', 'set', 0, 'aim_fire', true], ['aim', 'set', 1, 'aim_fire_hair', true],
-  ]);
+  assert.deepEqual(log, [['aim', 'set', 0, 'aim_fire', true], ['aim', 'set', 1, 'aim_fire_hair', true]]);
   log.length = 0;
   cycle.advance(0);
   assert.deepEqual(log, [], 'a paused frame (no delta) does not advance');
   assert.ok(Math.abs(cycle.cycleSeconds - (0.34 + 0.22 + 1.15 + 0.26 + 0.39 + 0.52 + 1.6)) < 1e-9);
+  cycle.advance(0.26);
+  log.length = 0;
+  cycle.advance(1.15);
+  assert.deepEqual(log.slice(-4, -1), [['cover', 'set', 0, 'cover_idle', true], ['show', 'cover'], ['aim', 'set', 0, 'to_cover', false]],
+    'the cover pose is already playing when it fades in over the slide');
 });

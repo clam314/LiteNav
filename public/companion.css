@@ -31,7 +31,9 @@ body[data-companion] .toast-root { bottom: 82px; }
   transition: opacity 420ms ease-in-out;
 }
 .companion-layer.is-visible { opacity: 1; }
-.companion-layer > .spine-player.is-hidden { visibility: hidden; }
+/* NIKKE combat swaps between two skeletons; a short crossfade softens the cut. */
+.companion-layer > .spine-player { transition: opacity 120ms linear; }
+.companion-layer > .spine-player.is-hidden { opacity: 0; }
 .companion-layer > .spine-player {
   /* The canvas fills the rail; layoutCamera() places the shot inside it. */
   position: absolute !important; inset: 0;
