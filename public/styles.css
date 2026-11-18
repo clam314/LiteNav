@@ -181,6 +181,22 @@ input, select, textarea { min-width: 0; }
 .dragging { opacity: .42; }
 .drag-over { outline: 2px dashed var(--blue); outline-offset: 2px; background: var(--blue-soft); }
 .drag-handle { color: var(--subtle); cursor: grab; }
+.drag-handle svg { display: block; width: 16px; height: 16px; }
+.drop-zone { outline: 2px dashed var(--blue); outline-offset: 3px; }
+.drop-before, .drop-after { position: relative; }
+.drop-before::before, .drop-after::after { content: ""; position: absolute; z-index: 3; left: 4px; right: 4px; height: 2px; border-radius: 2px; background: var(--blue); box-shadow: 0 0 6px var(--blue); pointer-events: none; }
+.drop-before::before { top: var(--drop-offset, -3px); }
+.drop-after::after { bottom: var(--drop-offset, -3px); }
+.category-card { --drop-offset: -9px; }
+.category-settings-row { --drop-offset: -1px; }
+.edit-mode .directory-column { min-height: 96px; border-radius: var(--radius); }
+.edit-mode .category-header { cursor: grab; }
+.edit-mode .category-header:active { cursor: grabbing; }
+.edit-mode .category-card { border-color: var(--blue-line); }
+.service-card.is-sortable { cursor: grab; border-color: var(--blue-line); }
+.service-card.is-sortable:active { cursor: grabbing; }
+.category-settings-list .settings-description { margin-bottom: 6px; }
+.category-settings-row .drag-handle { flex: 0 0 auto; padding: 4px 2px; }
 .edit-notice { margin-bottom: 14px; padding: 10px 13px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--blue); background: var(--blue-soft); border: 1px solid var(--blue-line); border-radius: 8px; font-size: 12px; }
 
 .page-intro { margin: 0 0 20px; }

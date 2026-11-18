@@ -102,7 +102,7 @@ function sidebarMarkup() {
     '<aside class="sidebar"><a href="#home" class="brand" aria-label="轻航首页"><span class="brand-mark">' + icon('sparkles', 32) + '</span><span class="brand-name">轻航</span></a>',
     '<nav class="sidebar-nav" aria-label="页面目录"><a href="#home" class="nav-item ' + (view === 'home' && !activeCategory ? 'active' : '') + '">' + icon('home') + '<span>常用</span></a>',
     '<div class="nav-section-label">网址目录</div>',
-    categories.map((category) => '<a href="#category-' + encodeURIComponent(category.id) + '" class="nav-item ' + (view === 'home' && activeCategory === category.id ? 'active' : '') + '">' + icon(category.icon || 'folder') + '<span>' + esc(category.name) + '</span></a>').join(''),
+    categories.map((category) => '<a href="#category-' + encodeURIComponent(category.id) + '" draggable="true" data-drag-kind="category" data-resource="' + esc(category.id) + '" title="拖动调整分类顺序" class="nav-item ' + (view === 'home' && activeCategory === category.id ? 'active' : '') + '">' + icon(category.icon || 'folder') + '<span>' + esc(category.name) + '</span></a>').join(''),
     '<div class="nav-divider"></div><a href="#services" class="nav-item ' + (view === 'services' ? 'active' : '') + '">' + icon('server') + '<span>我的服务</span></a>',
     '<a href="#tools" class="nav-item ' + (view === 'tools' ? 'active' : '') + '">' + icon('toolbox') + '<span>工具箱</span></a></nav>',
     '<div class="sidebar-bottom"><a href="#settings" class="nav-item ' + (view === 'settings' ? 'active' : '') + '">' + icon('settings') + '<span>设置</span></a></div></aside>',
@@ -118,20 +118,21 @@ function itemActions(link, scope) {
 
 function shortcutMarkup(link) {
   const content = brandIcon(link.icon, link.name) + '<span class="shortcut-name">' + esc(link.name).replace(/([a-z])([A-Z])/g, '$1<wbr>$2') + '</span>';
-  if (editMode) return '<div class="shortcut editable-item" draggable="true" data-resource="' + esc(link.id) + '" data-scope="favorites" tabindex="0" aria-label="' + esc(link.name) + '，可拖动排序；按回车编辑">' + content + itemActions(link, 'favorites') + '</div>';
+  if (editMode) return '<div class="shortcut editable-item" draggable="true" data-drag-kind="link" data-resource="' + esc(link.id) + '" data-scope="favorites" tabindex="0" aria-label="' + esc(link.name) + '，可拖动排序；按回车编辑">' + content + itemActions(link, 'favorites') + '</div>';
   return '<a class="shortcut" href="' + esc(link.url) + '" target="_blank" rel="noopener noreferrer" aria-label="打开 ' + esc(link.name) + '" title="' + esc(link.name) + '\n' + esc(link.url) + '">' + content + '</a>';
 }
 
 function siteMarkup(link, categoryId) {
   const content = brandIcon(link.icon, link.name) + '<span class="site-copy"><span class="site-name">' + esc(link.name) + '</span><span class="site-domain">' + esc(domain(link.url)) + '</span></span>';
-  if (editMode) return '<div class="site-link editable-item" draggable="true" data-resource="' + esc(link.id) + '" data-scope="category-' + esc(categoryId) + '" tabindex="0" aria-label="' + esc(link.name) + '，可拖动排序；按回车编辑">' + content + itemActions(link, 'category') + '</div>';
+  if (editMode) return '<div class="site-link editable-item" draggable="true" data-drag-kind="link" data-resource="' + esc(link.id) + '" data-scope="category-' + esc(categoryId) + '" tabindex="0" aria-label="' + esc(link.name) + '，可拖动排序或拖到其他分类；按回车编辑">' + content + itemActions(link, 'category') + '</div>';
   return '<a class="site-link" href="' + esc(link.url) + '" target="_blank" rel="noopener noreferrer" title="' + esc(link.name) + '\n' + esc(link.url) + '">' + content + '<span class="link-arrow">' + icon('arrow-up-right', 13) + '</span></a>';
 }
 
 function categoryMarkup(category) {
   const links = ordered(config.links.filter((link) => link.kind === 'website' && link.categoryId === category.id));
-  return '<section class="category-card" id="category-' + esc(category.id) + '" aria-labelledby="title-' + esc(category.id) + '">' +
-    '<header class="category-header"><div class="category-title">' + icon(category.icon || 'folder', 21) + '<h3 id="title-' + esc(category.id) + '">' + esc(category.name) + '</h3></div>' +
+  const sortable = editMode ? ' draggable="true" data-drag-kind="category" data-resource="' + esc(category.id) + '" data-link-drop="category-' + esc(category.id) + '"' : '';
+  return '<section class="category-card" id="category-' + esc(category.id) + '" aria-labelledby="title-' + esc(category.id) + '"' + sortable + '>' +
+    '<header class="category-header"' + (editMode ? ' title="拖动标题栏调整分类顺序，可拖到其他列"' : '') + '><div class="category-title">' + (editMode ? '<span class="drag-handle" aria-hidden="true">' + icon('grip', 16) + '</span>' : '') + icon(category.icon || 'folder', 21) + '<h3 id="title-' + esc(category.id) + '">' + esc(category.name) + '</h3></div>' +
     (editMode ? '<button class="icon-button" data-action="add-link" data-category="' + esc(category.id) + '" aria-label="添加到 ' + esc(category.name) + '">' + icon('plus', 17) + '</button>' : '<span class="category-count" aria-label="' + links.length + ' 个网址">' + links.length + '</span>') + '</header>' +
     '<div class="link-grid" data-sort-scope="category-' + esc(category.id) + '">' + (links.map((link) => siteMarkup(link, category.id)).join('') || '<div class="empty-category">还没有网址<button class="btn btn-ghost" data-action="add-link" data-category="' + esc(category.id) + '">添加一个</button></div>') + '</div></section>';
 }
@@ -140,8 +141,8 @@ function homeMarkup() {
   const pinned = favorites();
   const categories = ordered(config.categories);
   return '<section class="favorites-section" id="favorites"><div class="section-heading">' + icon('sparkles', 24) + '<h2>常用</h2>' +
-    (editMode ? '<span class="section-note">拖动调整顺序，回车可编辑</span>' : '') + '</div>' +
-    '<div class="favorites-grid" data-sort-scope="favorites">' + (pinned.map(shortcutMarkup).join('') || '<div class="empty-state">' + icon('star', 25) + '<p>把常用的网址或服务放在这里</p><button class="btn btn-secondary" data-action="add-link" data-pinned="true">添加常用</button></div>') + '</div></section>' +
+    (editMode ? '<span class="section-note">拖动调整顺序，网址可拖到其他分类，分类可拖动标题栏换位置</span>' : '') + '</div>' +
+    '<div class="favorites-grid" data-sort-scope="favorites" data-link-drop="favorites">' + (pinned.map(shortcutMarkup).join('') || '<div class="empty-state">' + icon('star', 25) + '<p>把常用的网址或服务放在这里</p><button class="btn btn-secondary" data-action="add-link" data-pinned="true">添加常用</button></div>') + '</div></section>' +
     '<section class="directory-section"><div class="section-heading">' + icon('link', 23) + '<h2>网址导航</h2></div><div class="directory-columns">' +
     [0, 1, 2].map((column) => '<div class="directory-column" data-column="' + column + '">' + categories.filter((category) => Number(category.column) === column).map(categoryMarkup).join('') + '</div>').join('') + '</div></section>';
 }
@@ -160,8 +161,8 @@ function serviceMarkup(link) {
   if (status === 'online') detail = '响应 ' + latency;
   if (status === 'offline' || status === 'degraded') detail = '连续 ' + (state.consecutiveFailures || 1) + ' 次未响应' + (status === 'degraded' ? '，正在确认' : '');
   const lastChecked = state.lastChecked ? new Date(typeof state.lastChecked === 'number' && state.lastChecked < 1e12 ? state.lastChecked * 1000 : state.lastChecked).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '尚未检测';
-  return '<article class="service-card ' + (status === 'offline' ? 'has-error' : '') + '" data-service="' + esc(link.id) + '"><header class="service-card-header">' +
-    '<a class="service-identity" href="' + esc(link.url) + '" target="_blank" rel="noopener noreferrer">' + brandIcon(link.icon, link.name) + '<span class="service-copy"><h3>' + esc(link.name) + '</h3><span class="site-domain">' + esc(domain(link.url)) + '</span></span></a>' +
+  return '<article class="service-card ' + (status === 'offline' ? 'has-error' : '') + (editMode ? ' is-sortable' : '') + '" data-service="' + esc(link.id) + '"' + (editMode ? ' draggable="true" data-drag-kind="service" data-resource="' + esc(link.id) + '"' : '') + '><header class="service-card-header">' +
+    '<a class="service-identity"' + (editMode ? ' draggable="false"' : '') + ' href="' + esc(link.url) + '" target="_blank" rel="noopener noreferrer">' + brandIcon(link.icon, link.name) + '<span class="service-copy"><h3>' + esc(link.name) + '</h3><span class="site-domain">' + esc(domain(link.url)) + '</span></span></a>' +
     '<span class="status-badge ' + status + '">' + statusLabels[status] + '</span></header>' +
     (link.description ? '<p class="service-description">' + esc(link.description) + '</p>' : '') +
     '<div class="service-details"><p>' + esc(detail) + '</p><div class="service-meta">最近检测：' + esc(lastChecked) + '</div>' +
@@ -176,19 +177,19 @@ function servicesMarkup() {
   const services = ordered(config.links.filter((link) => link.kind === 'service'));
   const monitored = services.filter((link) => link.monitorEnabled).length;
   return '<div class="page-intro"><p>' + (monitored ? '后台每 ' + config.settings.checkInterval + ' 秒检测一次；连续 ' + config.settings.failureThreshold + ' 次异常后提醒。' : '先将示例地址改为你的服务地址，再开启掉线检测。') + '</p></div>' +
-    '<div class="service-toolbar"><span class="section-hint">' + services.length + ' 个服务 · ' + monitored + ' 个已开启监控</span><button class="btn btn-secondary" data-action="check-all" ' + (!monitored ? 'disabled' : '') + '>' + icon('refresh', 16) + '立即检测</button></div>' +
+    '<div class="service-toolbar"><span class="section-hint">' + (editMode ? '拖动卡片调整服务顺序' : services.length + ' 个服务 · ' + monitored + ' 个已开启监控') + '</span><button class="btn btn-secondary" data-action="check-all" ' + (!monitored ? 'disabled' : '') + '>' + icon('refresh', 16) + '立即检测</button></div>' +
     '<div class="service-grid">' + (services.map(serviceMarkup).join('') || '<div class="empty-state">' + icon('server', 30) + '<h2>添加你的第一个服务</h2><p>NAS、影音库或智能家居，都可以放在这里。</p><button class="btn btn-primary" data-action="add-service">添加服务</button></div>') + '</div>';
 }
 
 function settingsMarkup() {
-  const categories = ordered(config.categories);
+  const categories = directoryCategories();
   return '<section class="settings-section"><div class="section-heading">' + icon('settings', 22) + '<h2>检测设置</h2></div><form class="settings-card settings-form" id="settings-form"><div class="field-row">' +
     '<label class="field"><span class="field-label">检测间隔（秒）</span><input class="form-input" type="number" name="checkInterval" min="10" max="86400" value="' + esc(config.settings.checkInterval) + '" required></label>' +
     '<label class="field"><span class="field-label">连续异常次数</span><input class="form-input" type="number" name="failureThreshold" min="1" max="10" value="' + esc(config.settings.failureThreshold) + '" required></label>' +
     '<label class="field"><span class="field-label">请求超时（秒）</span><input class="form-input" type="number" name="timeout" min="1" max="30" value="' + esc(config.settings.timeout) + '" required></label></div>' +
     '<p class="field-hint">后台会持续检测已开启监控的服务，关闭页面后也会继续。</p><div class="settings-actions"><button class="btn btn-primary" type="submit">保存设置</button></div></form></section>' +
-    '<section class="settings-section"><div class="section-heading">' + icon('folder', 22) + '<h2>网址分类</h2><button class="btn btn-secondary" data-action="add-category">' + icon('plus', 16) + '新建分类</button></div><div class="settings-card">' +
-    categories.map((category) => '<div class="category-settings-row"><span class="category-settings-name">' + icon(category.icon, 19) + '<span>' + esc(category.name) + '</span></span><span class="category-settings-count">' + config.links.filter((link) => link.kind === 'website' && link.categoryId === category.id).length + ' 个网址</span>' +
+    '<section class="settings-section"><div class="section-heading">' + icon('folder', 22) + '<h2>网址分类</h2><button class="btn btn-secondary" data-action="add-category">' + icon('plus', 16) + '新建分类</button></div><div class="settings-card category-settings-list"><p class="settings-description">拖动左侧把手调整分类顺序，首页和侧边栏会同步更新。</p>' +
+    categories.map((category) => '<div class="category-settings-row" draggable="true" data-drag-kind="category" data-resource="' + esc(category.id) + '"><span class="drag-handle" title="拖动调整顺序" aria-hidden="true">' + icon('grip', 16) + '</span><span class="category-settings-name">' + icon(category.icon, 19) + '<span>' + esc(category.name) + '</span></span><span class="category-settings-count">' + config.links.filter((link) => link.kind === 'website' && link.categoryId === category.id).length + ' 个网址</span>' +
       '<label class="column-picker"><span class="sr-only">' + esc(category.name) + '所在列</span><select class="form-select" data-category-column="' + esc(category.id) + '">' + [0, 1, 2].map((n) => '<option value="' + n + '" ' + (Number(category.column) === n ? 'selected' : '') + '>第 ' + (n + 1) + ' 列</option>').join('') + '</select></label>' +
       '<button class="icon-button" data-action="edit-category" data-id="' + esc(category.id) + '" aria-label="编辑分类 ' + esc(category.name) + '">' + icon('edit', 16) + '</button><button class="icon-button danger" data-action="delete-category" data-id="' + esc(category.id) + '" aria-label="删除分类 ' + esc(category.name) + '">' + icon('trash', 16) + '</button></div>').join('') + '</div></section>' +
     '<section class="settings-section"><div class="section-heading">' + icon('download', 22) + '<h2>数据备份</h2></div><div class="settings-card"><p class="settings-description">导出网址、分类与服务配置，方便备份或迁移。</p><div class="settings-actions"><button class="btn btn-secondary" data-action="export">' + icon('upload', 16) + '导出备份</button><button class="btn btn-secondary" data-action="import">' + icon('download', 16) + '导入备份</button></div></div></section>';
@@ -200,7 +201,7 @@ function render() {
   const previousScroll = window.scrollY;
   app.innerHTML = '<div class="app-shell ' + (editMode ? 'edit-mode' : '') + '">' + sidebarMarkup() +
     '<main class="workspace"><header class="topbar"><h1 class="page-title">' + titles[view] + '</h1><div class="topbar-actions"><span id="service-alert">' + alertMarkup() + '</span>' +
-    (view === 'home' ? '<button class="btn ' + (editMode ? 'btn-secondary is-editing' : 'btn-secondary') + '" data-action="toggle-edit">' + (editMode ? icon('check', 16) + '完成整理' : '整理') + '</button>' : '') +
+    (view === 'home' || view === 'services' ? '<button class="btn ' + (editMode ? 'btn-secondary is-editing' : 'btn-secondary') + '" data-action="toggle-edit">' + (editMode ? icon('check', 16) + '完成整理' : '整理') + '</button>' : '') +
     (view === 'tools' ? '' : '<button class="btn btn-primary" data-action="' + (view === 'services' ? 'add-service' : 'add-link') + '">' + icon('plus', 18) + '添加' + (view === 'services' ? '服务' : '') + '</button>') + '</div></header>' +
     '<div class="page-content">' + (view === 'services' ? servicesMarkup() : view === 'settings' ? settingsMarkup() : view === 'tools' ? toolsMarkup(activeTool) : homeMarkup()) + '</div></main></div>';
   if (view === 'tools') mountTools(app, { toast });
@@ -603,45 +604,144 @@ document.querySelector('#import-file').addEventListener('change', async (event) 
   } catch (error) { toast(error instanceof SyntaxError ? '备份文件不是有效的 JSON' : error.message); }
 });
 
+const DROP_CLASSES = ['drag-over', 'drop-before', 'drop-after', 'drop-zone'];
+const clearDropMarks = () => document.querySelectorAll(DROP_CLASSES.map((name) => '.' + name).join(',')).forEach((element) => element.classList.remove(...DROP_CLASSES));
+const precedes = (a, b) => Boolean(a.compareDocumentPosition(b) & Node.DOCUMENT_POSITION_FOLLOWING);
+// Within one list an item takes the target's place; from another list it lands before the target.
+const itemPosition = (target, sameList) => sameList && precedes(dragged.element, target) ? 'after' : 'before';
+const halfPosition = (target, event) => {
+  const rect = target.getBoundingClientRect();
+  return event.clientY > rect.top + rect.height / 2 ? 'after' : 'before';
+};
+
+function findDropTarget(event) {
+  const { kind } = dragged;
+  if (kind === 'category') {
+    const item = event.target.closest('[data-drag-kind="category"]');
+    if (item) {
+      if (item.dataset.resource === dragged.id) return null;
+      const category = config.categories.find((entry) => entry.id === item.dataset.resource);
+      if (!category) return null;
+      const position = halfPosition(item, event);
+      return { mark: item, markClass: 'drop-' + position, targetId: category.id, column: Number(category.column), position };
+    }
+    const column = event.target.closest('.directory-column');
+    return column ? { mark: column, markClass: 'drop-zone', targetId: null, column: Number(column.dataset.column), position: 'end' } : null;
+  }
+  if (kind === 'link') {
+    const item = event.target.closest('[data-drag-kind="link"]');
+    const zone = event.target.closest('[data-link-drop]');
+    const scope = item?.dataset.scope || zone?.dataset.linkDrop;
+    if (!scope || (dragged.scope === 'favorites') !== (scope === 'favorites')) return null;
+    if (item?.dataset.resource === dragged.id) return null;
+    if (item) return { mark: item, markClass: 'drag-over', scope, targetId: item.dataset.resource, position: itemPosition(item, scope === dragged.scope) };
+    if (scope === dragged.scope && scope === 'favorites') return null;
+    return { mark: zone, markClass: 'drop-zone', scope, targetId: null, position: 'end' };
+  }
+  if (kind === 'service') {
+    const item = event.target.closest('[data-drag-kind="service"]');
+    if (!item || item.dataset.resource === dragged.id) return null;
+    return { mark: item, markClass: 'drag-over', targetId: item.dataset.resource, position: itemPosition(item, true) };
+  }
+  return null;
+}
+
+function placeItem(list, item, targetId, position) {
+  const rest = list.filter((entry) => entry !== item);
+  let index = targetId ? rest.findIndex((entry) => entry.id === targetId) : -1;
+  if (index < 0) index = rest.length;
+  else if (position === 'after') index += 1;
+  rest.splice(index, 0, item);
+  return rest;
+}
+
+function applyDrop(state, source, target) {
+  if (source.kind === 'category') {
+    const all = [0, 1, 2].flatMap((column) => ordered(state.categories).filter((category) => Number(category.column) === column));
+    const item = all.find((category) => category.id === source.id);
+    if (!item) return null;
+    let list;
+    if (target.targetId) list = placeItem(all, item, target.targetId, target.position);
+    else {
+      const rest = all.filter((category) => category !== item);
+      const next = rest.findIndex((category) => Number(category.column) > target.column);
+      rest.splice(next < 0 ? rest.length : next, 0, item);
+      list = rest;
+    }
+    const moved = Number(item.column) !== target.column;
+    item.column = target.column;
+    list.forEach((category, index) => { category.order = index; });
+    return moved ? '已将「' + item.name + '」移到第 ' + (target.column + 1) + ' 列' : '';
+  }
+  if (source.kind === 'service') {
+    const services = ordered(state.links.filter((link) => link.kind === 'service'));
+    const item = services.find((link) => link.id === source.id);
+    if (item) placeItem(services, item, target.targetId, target.position).forEach((link, index) => { link.order = index; });
+    return '';
+  }
+  const item = state.links.find((link) => link.id === source.id);
+  if (!item) return null;
+  if (target.scope === 'favorites') {
+    const pinned = state.links.filter((link) => link.pinned).sort((a, b) => (a.pinnedOrder ?? a.order) - (b.pinnedOrder ?? b.order));
+    placeItem(pinned, item, target.targetId, target.position).forEach((link, index) => { link.pinnedOrder = index; });
+    return '';
+  }
+  const categoryId = target.scope.slice('category-'.length);
+  const category = state.categories.find((entry) => entry.id === categoryId);
+  if (!category) return null;
+  const moved = item.categoryId !== categoryId;
+  const siblings = ordered(state.links.filter((link) => link.kind === 'website' && link.categoryId === categoryId));
+  item.categoryId = categoryId;
+  placeItem(siblings, item, target.targetId, target.position).forEach((link, index) => { link.order = index; });
+  return moved ? '已将「' + item.name + '」移到「' + category.name + '」' : '';
+}
+
+let dropTarget = null;
 document.addEventListener('dragstart', (event) => {
-  const item = event.target.closest('.editable-item');
-  if (!item || !editMode) return;
-  dragged = { id: item.dataset.resource, scope: item.dataset.scope };
+  const item = event.target.closest?.('[data-drag-kind]');
+  if (!item || item.getAttribute('draggable') !== 'true') return;
+  event.stopPropagation();
+  dragged = { kind: item.dataset.dragKind, id: item.dataset.resource, scope: item.dataset.scope, element: item };
   event.dataTransfer.effectAllowed = 'move';
-  event.dataTransfer.setData('text/plain', dragged.id);
-  item.classList.add('dragging');
+  event.dataTransfer.setData('text/plain', item.textContent.trim() || dragged.id);
+  requestAnimationFrame(() => item.classList.add('dragging'));
 });
 document.addEventListener('dragover', (event) => {
-  const item = event.target.closest('.editable-item');
-  if (!item || !dragged || item.dataset.scope !== dragged.scope || item.dataset.resource === dragged.id) return;
+  if (!dragged) return;
+  const next = findDropTarget(event);
+  if (!next) {
+    if (dropTarget) { clearDropMarks(); dropTarget = null; }
+    return;
+  }
   event.preventDefault();
   event.dataTransfer.dropEffect = 'move';
-  document.querySelectorAll('.drag-over').forEach((element) => element.classList.remove('drag-over'));
-  item.classList.add('drag-over');
+  if (dropTarget?.mark !== next.mark || dropTarget?.markClass !== next.markClass) {
+    clearDropMarks();
+    next.mark.classList.add(next.markClass);
+  }
+  dropTarget = next;
 });
 document.addEventListener('drop', async (event) => {
-  const target = event.target.closest('.editable-item');
-  if (!target || !dragged || target.dataset.scope !== dragged.scope) return;
-  event.preventDefault();
+  if (!dragged) return;
+  const target = findDropTarget(event);
   const source = dragged;
   dragged = null;
+  dropTarget = null;
+  clearDropMarks();
+  source.element.classList.remove('dragging');
+  if (!target) return;
+  event.preventDefault();
+  let message = '';
   try {
-    await mutate((state) => {
-      const list = source.scope === 'favorites'
-        ? state.links.filter((link) => link.pinned).sort((a, b) => (a.pinnedOrder ?? a.order) - (b.pinnedOrder ?? b.order))
-        : ordered(state.links.filter((link) => link.kind === 'website' && 'category-' + link.categoryId === source.scope));
-      const from = list.findIndex((link) => link.id === source.id);
-      const to = list.findIndex((link) => link.id === target.dataset.resource);
-      if (from < 0 || to < 0 || from === to) return;
-      const item = list.splice(from, 1)[0];
-      list.splice(to, 0, item);
-      list.forEach((link, index) => { link[source.scope === 'favorites' ? 'pinnedOrder' : 'order'] = index; });
-    });
+    await mutate((state) => { message = applyDrop(state, source, target) || ''; });
+    if (message) toast(message);
   } catch (error) { toast(error.message); }
 });
 document.addEventListener('dragend', () => {
   dragged = null;
-  document.querySelectorAll('.dragging,.drag-over').forEach((element) => element.classList.remove('dragging', 'drag-over'));
+  dropTarget = null;
+  document.querySelectorAll('.dragging').forEach((element) => element.classList.remove('dragging'));
+  clearDropMarks();
 });
 
 window.addEventListener('hashchange', route);
