@@ -10,7 +10,9 @@ import json
 import logging
 import mimetypes
 import re
+import socket
 import sqlite3
+import ssl
 import threading
 import time
 from contextlib import contextmanager
@@ -184,6 +186,7 @@ class Store:
             db.execute("PRAGMA journal_mode=WAL")
             db.execute("CREATE TABLE IF NOT EXISTS config (id INTEGER PRIMARY KEY CHECK(id=1), revision INTEGER NOT NULL, document TEXT NOT NULL)")
             db.execute("CREATE TABLE IF NOT EXISTS health (id TEXT PRIMARY KEY, document TEXT NOT NULL)")
+            db.execute("CREATE TABLE IF NOT EXISTS link_check (id TEXT PRIMARY KEY, document TEXT NOT NULL)")
             if not db.execute("SELECT 1 FROM config WHERE id=1").fetchone():
                 path = Path(seed_path) if seed_path else ROOT / "seed.json"
                 initial = json.loads(path.read_text("utf-8")) if path.exists() else {
@@ -229,6 +232,12 @@ class Store:
             for (health_id,) in db.execute("SELECT id FROM health").fetchall():
                 if health_id not in live_ids:
                     db.execute("DELETE FROM health WHERE id=?", (health_id,))
+            # A link check describes one address: drop it when the address changes. Results of deleted
+            # links stay until the next check so that undoing a deletion brings its result back.
+            link_urls = {link["id"]: link["url"] for link in cleaned["links"]}
+            for check_id, check_document in db.execute("SELECT id,document FROM link_check").fetchall():
+                if check_id in link_urls and link_urls[check_id] != json.loads(check_document).get("url"):
+                    db.execute("DELETE FROM link_check WHERE id=?", (check_id,))
         return {"revision": current_revision + 1, **cleaned}
 
     def health(self) -> dict:
@@ -270,6 +279,33 @@ class Store:
                 "httpStatus": result.get("httpStatus"),
             }
             db.execute("INSERT INTO health(id,document) VALUES (?,?) ON CONFLICT(id) DO UPDATE SET document=excluded.document",
+                       (link["id"], json.dumps(document, ensure_ascii=False)))
+
+
+    def link_checks(self) -> dict:
+        with self.lock, self.connect() as db:
+            records = {key: json.loads(value) for key, value in db.execute("SELECT id,document FROM link_check")}
+            links = json.loads(db.execute("SELECT document FROM config WHERE id=1").fetchone()[0])["links"]
+        urls = {link["id"]: link["url"] for link in links if link["kind"] == "website"}
+        return {key: value for key, value in records.items() if urls.get(key) == value.get("url")}
+
+    def prune_link_checks(self):
+        with self.lock, self.connect() as db:
+            links = json.loads(db.execute("SELECT document FROM config WHERE id=1").fetchone()[0])["links"]
+            urls = {link["id"]: link["url"] for link in links if link["kind"] == "website"}
+            for check_id, check_document in db.execute("SELECT id,document FROM link_check").fetchall():
+                if urls.get(check_id) != json.loads(check_document).get("url"):
+                    db.execute("DELETE FROM link_check WHERE id=?", (check_id,))
+
+    def record_link_check(self, link: dict, result: dict):
+        with self.lock, self.connect() as db:
+            db.execute("BEGIN IMMEDIATE")
+            current = json.loads(db.execute("SELECT document FROM config WHERE id=1").fetchone()[0])
+            live = next((entry for entry in current["links"] if entry["id"] == link["id"]), None)
+            if not live or live["kind"] != "website" or live["url"] != link["url"]:
+                return
+            document = {**result, "url": link["url"], "checkedAt": datetime.now(timezone.utc).isoformat(timespec="seconds")}
+            db.execute("INSERT INTO link_check(id,document) VALUES (?,?) ON CONFLICT(id) DO UPDATE SET document=excluded.document",
                        (link["id"], json.dumps(document, ensure_ascii=False)))
 
 
@@ -355,6 +391,159 @@ class Monitor:
                         # A service may be deleted between snapshot and scheduling.
                         continue
             self.stop_event.wait(2)
+
+
+BROWSER_HEADERS = {
+    # Many sites turn away unknown clients, so present an ordinary browser to keep live sites from looking broken.
+    "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/126.0 Safari/537.36",
+    "Accept": "text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8",
+    "Accept-Language": "zh-CN,zh;q=0.9,en;q=0.8",
+}
+
+
+def site_host(url: str) -> str:
+    return (urlsplit(url).hostname or "").lower().removeprefix("www.")
+
+
+SHARED_SUFFIXES = {"com.cn", "net.cn", "org.cn", "gov.cn", "edu.cn", "ac.cn", "com.hk", "com.tw", "co.jp", "co.uk", "org.uk", "com.au", "co.kr"}
+LOGIN_PATH = re.compile(r"(^|[/._-])(login|signin|sign-in|sso|oauth|auth|passport|account)s?([/._?-]|$)", re.I)
+
+
+def base_domain(host: str) -> str:
+    """Rough registrable domain: mail.google.com → google.com, www.bbc.co.uk → bbc.co.uk."""
+    try:
+        ipaddress.ip_address(host.strip("[]"))
+        return host
+    except ValueError:
+        pass
+    labels = host.split(".")
+    size = 3 if len(labels) >= 3 and ".".join(labels[-2:]) in SHARED_SUFFIXES else 2
+    return ".".join(labels[-size:])
+
+
+def moved_elsewhere(url: str, final_url: str | None) -> bool:
+    """A redirect counts only when it leaves the site, and not when it merely asks you to sign in."""
+    if not final_url or base_domain(site_host(final_url)) == base_domain(site_host(url)):
+        return False
+    final = urlsplit(final_url)
+    return not LOGIN_PATH.search(final.hostname or "") and not LOGIN_PATH.search(final.path)
+
+
+def link_status(url: str, timeout: int = 8) -> dict:
+    """Classify one website address as ok, redirected, broken, unreachable or restricted (one attempt)."""
+    def fetch(method: str):
+        request = Request(url, headers=BROWSER_HEADERS, method=method)
+        try:
+            with urlopen(request, timeout=timeout) as response:
+                return response.status, response.geturl(), response.headers
+        except HTTPError as error:
+            try:
+                return error.code, error.geturl() or url, error.headers
+            finally:
+                error.close()
+
+    try:
+        status, final_url, headers = fetch("HEAD")
+        # Plenty of servers mishandle HEAD; only trust a non-success answer after a real GET.
+        if not 200 <= status < 300:
+            status, final_url, headers = fetch("GET")
+    except URLError as error:
+        reason = error.reason
+        if isinstance(reason, socket.gaierror):
+            return {"status": "broken", "httpStatus": None, "finalUrl": None, "message": "域名无法解析"}
+        if isinstance(reason, ssl.SSLError):
+            return {"status": "unreachable", "httpStatus": None, "finalUrl": None, "message": "证书无效或加密连接失败"}
+        if isinstance(reason, (TimeoutError, socket.timeout)):
+            return {"status": "unreachable", "httpStatus": None, "finalUrl": None, "message": "请求超时"}
+        if isinstance(reason, ConnectionRefusedError):
+            return {"status": "unreachable", "httpStatus": None, "finalUrl": None, "message": "连接被拒绝"}
+        return {"status": "unreachable", "httpStatus": None, "finalUrl": None, "message": "连接失败"}
+    except ssl.SSLError:
+        return {"status": "unreachable", "httpStatus": None, "finalUrl": None, "message": "证书无效或加密连接失败"}
+    except (TimeoutError, socket.timeout):
+        return {"status": "unreachable", "httpStatus": None, "finalUrl": None, "message": "请求超时"}
+    except (OSError, ValueError):
+        return {"status": "unreachable", "httpStatus": None, "finalUrl": None, "message": "连接失败"}
+
+    moved = final_url if moved_elsewhere(url, final_url) else None
+    if 200 <= status < 400:
+        if moved:
+            return {"status": "redirected", "httpStatus": status, "finalUrl": moved, "message": "已跳转到 " + site_host(moved)}
+        return {"status": "ok", "httpStatus": status, "finalUrl": None, "message": "可以访问"}
+    if status in (404, 410):
+        return {"status": "broken", "httpStatus": status, "finalUrl": moved, "message": "页面不存在（HTTP " + str(status) + "）"}
+    challenged = headers is not None and (headers.get("cf-mitigated") or "cloudflare" in (headers.get("Server") or "").lower())
+    if status in (401, 403, 429) or (status == 503 and challenged):
+        return {"status": "restricted", "httpStatus": status, "finalUrl": None, "message": "网站可达，但拒绝了自动访问（HTTP " + str(status) + "）"}
+    return {"status": "unreachable", "httpStatus": status, "finalUrl": None, "message": "网站返回错误（HTTP " + str(status) + "）"}
+
+
+def check_link(url: str, timeout: int = 8, retry_delay: float = 1.5) -> dict:
+    result = link_status(url, timeout)
+    if result["status"] in ("broken", "unreachable"):
+        # One retry keeps a brief hiccup from labelling a site dead.
+        time.sleep(retry_delay)
+        result = link_status(url, timeout)
+    return result
+
+
+class LinkChecker:
+    """Runs one manual check of website links at a time, in the background."""
+
+    def __init__(self, store: Store, workers: int = 8):
+        self.store = store
+        self.workers = workers
+        self.lock = threading.Lock()
+        self.job = {"running": False, "total": 0, "done": 0, "startedAt": None, "finishedAt": None}
+        self.thread: threading.Thread | None = None
+        self.stop_event = threading.Event()
+
+    def status(self) -> dict:
+        with self.lock:
+            return dict(self.job)
+
+    def start(self, ids: list | None = None) -> dict:
+        if ids is not None and (not isinstance(ids, list) or not all(isinstance(item, str) for item in ids)):
+            raise APIError("网址 ID 格式不正确")
+        state = self.store.state()
+        links = [link for link in state["links"] if link["kind"] == "website" and (ids is None or link["id"] in ids)]
+        if not links:
+            raise APIError("没有可检测的网址")
+        with self.lock:
+            if self.job["running"]:
+                raise APIError("正在检测中，请等待本次检测完成", 409)
+            self.job = {"running": True, "total": len(links), "done": 0,
+                        "startedAt": datetime.now(timezone.utc).isoformat(timespec="seconds"), "finishedAt": None}
+            timeout = max(8, int(state["settings"]["timeout"]))
+            self.store.prune_link_checks()
+            self.thread = threading.Thread(target=self._run, args=(copy.deepcopy(links), timeout), name="link-check", daemon=True)
+            self.thread.start()
+            return dict(self.job)
+
+    def _run(self, links: list, timeout: int):
+        def one(link):
+            if self.stop_event.is_set():
+                return
+            try:
+                self.store.record_link_check(link, check_link(link["url"], timeout))
+            except Exception:
+                LOG.exception("Link check failed")
+            finally:
+                with self.lock:
+                    self.job["done"] += 1
+
+        try:
+            with ThreadPoolExecutor(max_workers=self.workers, thread_name_prefix="link-check") as pool:
+                list(pool.map(one, links))
+        finally:
+            with self.lock:
+                self.job["running"] = False
+                self.job["finishedAt"] = datetime.now(timezone.utc).isoformat(timespec="seconds")
+
+    def close(self):
+        self.stop_event.set()
+        if self.thread and self.thread.is_alive():
+            self.thread.join(timeout=2)
 
 
 KNOWN_SITES = {
@@ -478,6 +667,7 @@ class AppServer(ThreadingHTTPServer):
     def __init__(self, address, store: Store, public_dir: Path | str = ROOT / "public"):
         self.store = store
         self.monitor = Monitor(store)
+        self.link_checker = LinkChecker(store)
         self.public_dir = Path(public_dir).resolve()
         super().__init__(address, Handler)
 
@@ -528,6 +718,8 @@ class Handler(BaseHTTPRequestHandler):
                 self.json_response(self.server.store.state())
             elif path == "/api/health":
                 self.json_response(self.server.store.health())
+            elif path == "/api/link-check":
+                self.json_response({"job": self.server.link_checker.status(), "results": self.server.store.link_checks()})
             elif path.startswith("/api/"):
                 raise APIError("接口不存在", 404)
             else:
@@ -568,6 +760,9 @@ class Handler(BaseHTTPRequestHandler):
             elif method == "POST" and path == "/api/metadata":
                 state = self.server.store.state()
                 self.json_response(metadata(body.get("url"), state["categories"]))
+            elif method == "POST" and path == "/api/link-check":
+                job = self.server.link_checker.start(body.get("ids"))
+                self.json_response({"job": job, "results": self.server.store.link_checks()}, 202)
             elif method == "POST" and path == "/api/check":
                 service_id = body.get("id")
                 if service_id is not None and not isinstance(service_id, str):
@@ -623,6 +818,7 @@ def main():
     finally:
         app.server_close()
         app.monitor.close()
+        app.link_checker.close()
 
 
 if __name__ == "__main__":

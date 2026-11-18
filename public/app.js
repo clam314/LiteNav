@@ -23,6 +23,8 @@ let checkTimer = null;
 let searchQuery = '';
 let searchIndex = 0;
 let searchResults = [];
+let linkCheck = { job: null, results: {} };
+let linkCheckTimer = null;
 
 const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const uid = () => globalThis.crypto?.randomUUID?.() || 'item-' + Date.now() + '-' + Math.random().toString(36).slice(2, 9);
@@ -121,14 +123,23 @@ function itemActions(link, scope) {
       : '<button class="icon-button danger" data-action="delete-link" data-id="' + esc(link.id) + '" aria-label="删除 ' + esc(link.name) + '" title="删除">' + icon('trash', 14) + '</button>') + '</div>';
 }
 
+const brokenCheck = (link) => {
+  const result = linkCheck.results?.[link.id];
+  return link.kind === 'website' && result?.status === 'broken' && result.url === link.url ? result : null;
+};
+const brokenFlag = (link) => {
+  const result = brokenCheck(link);
+  return result ? '<span class="link-flag" title="' + esc('上次体检：' + result.message) + '" aria-label="' + esc('上次体检疑似失效：' + result.message) + '"></span>' : '';
+};
+
 function shortcutMarkup(link) {
-  const content = brandIcon(link.icon, link.name) + '<span class="shortcut-name">' + esc(link.name).replace(/([a-z])([A-Z])/g, '$1<wbr>$2') + '</span>';
+  const content = brokenFlag(link) + brandIcon(link.icon, link.name) + '<span class="shortcut-name">' + esc(link.name).replace(/([a-z])([A-Z])/g, '$1<wbr>$2') + '</span>';
   if (editMode) return '<div class="shortcut editable-item" draggable="true" data-drag-kind="link" data-resource="' + esc(link.id) + '" data-scope="favorites" tabindex="0" aria-label="' + esc(link.name) + '，可拖动排序；按回车编辑">' + content + itemActions(link, 'favorites') + '</div>';
   return '<a class="shortcut" href="' + esc(link.url) + '" target="_blank" rel="noopener noreferrer" aria-label="打开 ' + esc(link.name) + '" title="' + esc(link.name) + '\n' + esc(link.url) + '">' + content + '</a>';
 }
 
 function siteMarkup(link, categoryId) {
-  const content = brandIcon(link.icon, link.name) + '<span class="site-copy"><span class="site-name">' + esc(link.name) + '</span><span class="site-domain">' + esc(domain(link.url)) + '</span></span>';
+  const content = brokenFlag(link) + brandIcon(link.icon, link.name) + '<span class="site-copy"><span class="site-name">' + esc(link.name) + '</span><span class="site-domain">' + esc(domain(link.url)) + '</span></span>';
   if (editMode) return '<div class="site-link editable-item" draggable="true" data-drag-kind="link" data-resource="' + esc(link.id) + '" data-scope="category-' + esc(categoryId) + '" tabindex="0" aria-label="' + esc(link.name) + '，可拖动排序或拖到其他分类；按回车编辑">' + content + itemActions(link, 'category') + '</div>';
   return '<a class="site-link" href="' + esc(link.url) + '" target="_blank" rel="noopener noreferrer" title="' + esc(link.name) + '\n' + esc(link.url) + '">' + content + '<span class="link-arrow">' + icon('arrow-up-right', 13) + '</span></a>';
 }
@@ -197,6 +208,7 @@ function settingsMarkup() {
     categories.map((category) => '<div class="category-settings-row" draggable="true" data-drag-kind="category" data-resource="' + esc(category.id) + '"><span class="drag-handle" title="拖动调整顺序" aria-hidden="true">' + icon('grip', 16) + '</span><span class="category-settings-name">' + icon(category.icon, 19) + '<span>' + esc(category.name) + '</span></span><span class="category-settings-count">' + config.links.filter((link) => link.kind === 'website' && link.categoryId === category.id).length + ' 个网址</span>' +
       '<label class="column-picker"><span class="sr-only">' + esc(category.name) + '所在列</span><select class="form-select" data-category-column="' + esc(category.id) + '">' + [0, 1, 2].map((n) => '<option value="' + n + '" ' + (Number(category.column) === n ? 'selected' : '') + '>第 ' + (n + 1) + ' 列</option>').join('') + '</select></label>' +
       '<button class="icon-button" data-action="edit-category" data-id="' + esc(category.id) + '" aria-label="编辑分类 ' + esc(category.name) + '">' + icon('edit', 16) + '</button><button class="icon-button danger" data-action="delete-category" data-id="' + esc(category.id) + '" aria-label="删除分类 ' + esc(category.name) + '">' + icon('trash', 16) + '</button></div>').join('') + '</div></section>' +
+    '<section class="settings-section" id="link-check"><div class="section-heading">' + icon('check-circle', 22) + '<h2>网址体检</h2></div><div class="settings-card" id="link-check-card">' + linkCheckMarkup() + '</div></section>' +
     '<section class="settings-section"><div class="section-heading">' + icon('download', 22) + '<h2>数据备份</h2></div><div class="settings-card"><p class="settings-description">导出网址、分类与服务配置，方便备份或迁移。</p><div class="settings-actions"><button class="btn btn-secondary" data-action="export">' + icon('upload', 16) + '导出备份</button><button class="btn btn-secondary" data-action="import">' + icon('download', 16) + '导入备份</button></div></div></section>' +
     '<section class="settings-section"><div class="section-heading">' + icon('bookmark', 22) + '<h2>导入浏览器书签</h2></div><div class="settings-card"><p class="settings-description">在 Chrome、Edge、Firefox 或 Safari 中把书签导出为 HTML 文件，再在这里导入。每个顶层文件夹会成为一个分类，已添加过的网址会自动跳过，导入前可以先预览。</p><div class="settings-actions"><button class="btn btn-secondary" data-action="import-bookmarks">' + icon('bookmark', 16) + '选择书签文件</button></div></div></section>';
 }
@@ -247,6 +259,118 @@ function openSearchResult(index, newTab = true) {
   if (entry && newTab) window.open(entry.url, '_blank', 'noopener,noreferrer');
   else if (newTab) return;
   resetSearch();
+}
+
+const LINK_CHECK_GROUPS = [
+  { status: 'broken', title: '疑似失效', note: '域名已无法解析，或页面已不存在。', bulk: 'delete-broken', bulkLabel: '全部删除' },
+  { status: 'redirected', title: '已跳转到其他网站', note: '网站可能已经换了地址，可以把入口更新为新地址。', bulk: 'apply-all-redirects', bulkLabel: '全部更新为新地址' },
+  { status: 'unreachable', title: '暂时无法访问', note: '可能是网站临时故障，也可能是运行轻航的服务器无法访问它（例如需要代理）。请先在浏览器中打开确认。' },
+];
+
+const shortTime = (value) => value ? new Date(value).toLocaleString('zh-CN', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }) : '';
+
+function currentLinkChecks() {
+  const checks = [];
+  for (const link of config.links) {
+    const result = linkCheck.results?.[link.id];
+    if (link.kind === 'website' && result && result.url === link.url) checks.push({ link, result });
+  }
+  return checks;
+}
+
+function linkCheckRowMarkup({ link, result }) {
+  const category = config.categories.find((item) => item.id === link.categoryId)?.name || '';
+  return '<div class="link-check-row">' + brandIcon(link.icon, link.name) +
+    '<span class="link-check-copy"><span class="link-check-name">' + esc(link.name) + (category ? '<span class="link-check-category">' + esc(category) + '</span>' : '') + '</span>' +
+    '<span class="link-check-reason" title="' + esc(link.url) + '">' + esc(domain(link.url)) + ' · ' + esc(result.message || '') + (result.status === 'redirected' && result.finalUrl ? ' → <span class="link-check-target">' + esc(result.finalUrl) + '</span>' : '') + '</span></span>' +
+    '<span class="link-check-actions"><a class="icon-button" href="' + esc(link.url) + '" target="_blank" rel="noopener noreferrer" title="在浏览器中打开" aria-label="打开 ' + esc(link.name) + '">' + icon('external-link', 15) + '</a>' +
+    (result.status === 'redirected' ? '<button class="btn btn-secondary btn-small" data-action="apply-redirect" data-id="' + esc(link.id) + '">更新地址</button>' : '') +
+    '<button class="icon-button" data-action="edit-link" data-id="' + esc(link.id) + '" title="编辑" aria-label="编辑 ' + esc(link.name) + '">' + icon('edit', 15) + '</button>' +
+    '<button class="icon-button danger" data-action="delete-link" data-id="' + esc(link.id) + '" title="删除" aria-label="删除 ' + esc(link.name) + '">' + icon('trash', 15) + '</button></span></div>';
+}
+
+function linkCheckMarkup() {
+  const job = linkCheck.job;
+  const total = config.links.filter((link) => link.kind === 'website').length;
+  const running = Boolean(job?.running);
+  const button = '<button class="btn btn-primary" data-action="start-link-check" ' + (running || !total ? 'disabled' : '') + '>' + icon('refresh', 16) + (running ? '检测中…' : '检测全部网址') + '</button>';
+  const intro = '<p class="settings-description">检查目录里的网址是否还能打开。检测从运行轻航的服务器发出，一般需要几十秒；离开本页也会继续。</p>';
+  if (running) {
+    const percent = job.total ? Math.round((job.done / job.total) * 100) : 0;
+    return '<div class="link-check-head">' + intro + button + '</div><div class="link-check-progress" role="progressbar" aria-valuemin="0" aria-valuemax="' + job.total + '" aria-valuenow="' + job.done + '" aria-label="检测进度"><span style="width:' + percent + '%"></span></div><p class="field-hint">正在检测 ' + job.done + ' / ' + job.total + '</p>';
+  }
+  const checks = currentLinkChecks();
+  if (!checks.length) return '<div class="link-check-head">' + intro + button + '</div>';
+  const count = (status) => checks.filter((entry) => entry.result.status === status).length;
+  const checkedAt = checks.map((entry) => entry.result.checkedAt).filter(Boolean).sort().pop();
+  const problems = LINK_CHECK_GROUPS.reduce((sum, group) => sum + count(group.status), 0);
+  const summary = '<p class="link-check-summary">' + (checkedAt ? '上次检测于 ' + esc(shortTime(checkedAt)) + '，' : '') + '已检测 ' + checks.length + ' 个网址：' +
+    '<span class="ok">' + count('ok') + ' 个正常</span>' + (count('restricted') ? '，' + count('restricted') + ' 个拒绝自动访问（不算问题）' : '') +
+    (problems ? '，<strong>' + problems + ' 个需要处理</strong>' : '，没有发现问题') + '。</p>';
+  const groups = LINK_CHECK_GROUPS.map((group) => {
+    const entries = checks.filter((entry) => entry.result.status === group.status);
+    if (!entries.length) return '';
+    return '<div class="link-check-group is-' + group.status + '"><header class="link-check-group-head"><div><h3>' + group.title + '<span>' + entries.length + '</span></h3><p>' + group.note + '</p></div>' +
+      (group.bulk ? '<button class="btn btn-secondary btn-small' + (group.status === 'broken' ? ' btn-danger' : '') + '" data-action="' + group.bulk + '">' + group.bulkLabel + '</button>' : '') + '</header>' +
+      entries.map(linkCheckRowMarkup).join('') + '</div>';
+  }).join('');
+  return '<div class="link-check-head">' + intro + button + '</div>' + summary + groups;
+}
+
+function updateLinkCheckCard() {
+  const card = document.querySelector('#link-check-card');
+  if (card) card.innerHTML = linkCheckMarkup();
+}
+
+async function refreshLinkCheck() {
+  const wasRunning = Boolean(linkCheck.job?.running);
+  linkCheck = await api('/api/link-check');
+  clearTimeout(linkCheckTimer);
+  if (linkCheck.job?.running) {
+    updateLinkCheckCard();
+    linkCheckTimer = setTimeout(() => refreshLinkCheck().catch(() => {}), 1000);
+  } else if (wasRunning) {
+    const problems = currentLinkChecks().filter((entry) => ['broken', 'redirected', 'unreachable'].includes(entry.result.status)).length;
+    toast(problems ? '网址体检完成，发现 ' + problems + ' 个需要处理' : '网址体检完成，没有发现问题', view === 'settings' ? null : { label: '查看', run: () => { location.hash = '#settings'; requestAnimationFrame(() => document.querySelector('#link-check')?.scrollIntoView({ behavior: 'smooth', block: 'start' })); } });
+    if (!currentDialog) render();
+  }
+}
+
+async function startLinkCheck() {
+  linkCheck = await api('/api/link-check', { method: 'POST', body: JSON.stringify({}) });
+  updateLinkCheckCard();
+  clearTimeout(linkCheckTimer);
+  linkCheckTimer = setTimeout(() => refreshLinkCheck().catch(() => {}), 800);
+}
+
+function sameUrlTaken(state, link, url) {
+  const key = url.replace(/\/$/, '');
+  return state.links.find((item) => item.id !== link.id && (() => { try { return safeUrl(item.url).replace(/\/$/, '') === key; } catch { return false; } })());
+}
+
+async function applyRedirects(ids) {
+  const targets = ids.map((id) => ({ id, result: linkCheck.results[id] })).filter((entry) => entry.result?.finalUrl);
+  const previous = new Map();
+  const conflicts = [];
+  await mutate((state) => {
+    previous.clear();
+    conflicts.length = 0;
+    for (const { id, result } of targets) {
+      const link = state.links.find((item) => item.id === id);
+      if (!link || link.url !== result.url) continue;
+      let url;
+      try { url = safeUrl(result.finalUrl); } catch { continue; }
+      const taken = sameUrlTaken(state, link, url);
+      if (taken) { conflicts.push(taken.name); continue; }
+      previous.set(id, link.url);
+      link.url = url;
+    }
+  });
+  if (!previous.size) throw new Error(conflicts.length ? '新地址已经作为「' + conflicts[0] + '」添加过，可以直接删除旧入口' : '没有可更新的地址');
+  toast('已更新 ' + previous.size + ' 个网址' + (conflicts.length ? '，' + conflicts.length + ' 个的新地址已存在，已跳过' : ''), {
+    label: '撤销',
+    run: () => mutate((state) => { for (const [id, url] of previous) { const link = state.links.find((item) => item.id === id); if (link) link.url = url; } }),
+  });
 }
 
 function render() {
@@ -600,6 +724,21 @@ async function handleAction(button) {
       break;
     }
     case 'export': await exportBackup(); break;
+    case 'start-link-check': button.disabled = true; await startLinkCheck(); break;
+    case 'apply-redirect': await applyRedirects([id]); break;
+    case 'apply-all-redirects': {
+      const ids = currentLinkChecks().filter((entry) => entry.result.status === 'redirected').map((entry) => entry.link.id);
+      if (ids.length && await confirmDialog('更新网址', '把 ' + ids.length + ' 个已跳转的网址更新为新地址？更新后可以撤销。', '全部更新')) await applyRedirects(ids);
+      break;
+    }
+    case 'delete-broken': {
+      const removed = currentLinkChecks().filter((entry) => entry.result.status === 'broken').map((entry) => structuredClone(entry.link));
+      if (!removed.length || !await confirmDialog('删除疑似失效的网址', '删除 ' + removed.length + ' 个疑似失效的网址？删除后可以撤销。', '全部删除')) break;
+      const ids = new Set(removed.map((link) => link.id));
+      await mutate((state) => { state.links = state.links.filter((link) => !ids.has(link.id)); });
+      toast('已删除 ' + removed.length + ' 个网址', { label: '撤销', run: () => mutate((state) => { for (const link of removed) if (!state.links.some((item) => item.id === link.id)) state.links.push(link); }) });
+      break;
+    }
     case 'import': document.querySelector('#import-file').click(); break;
     case 'import-bookmarks': document.querySelector('#bookmark-file').click(); break;
     case 'reload': location.reload(); break;
@@ -1004,7 +1143,9 @@ async function boot() {
   try {
     config = await api('/api/state');
     health = await api('/api/health').catch(() => ({ services: {} }));
+    linkCheck = await api('/api/link-check').catch(() => linkCheck);
     route();
+    if (linkCheck.job?.running) refreshLinkCheck().catch(() => {});
     setInterval(() => { if (!document.hidden) refreshHealth().catch(() => {}); }, 10000);
   } catch (error) {
     app.innerHTML = '<main class="boot-error">' + icon('alert', 32) + '<h1>暂时无法连接轻航</h1><p>' + esc(error.message) + '</p><button class="btn btn-primary" data-action="reload">重新连接</button></main>';

@@ -1,13 +1,17 @@
 """配置、监控与 HTTP API 的行为回归。"""
 import copy
 import json
+import socket
+import ssl
 import tempfile
 import threading
+import time
 import unittest
 from email.message import Message
+from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
 from unittest.mock import patch
-from urllib.error import HTTPError
+from urllib.error import HTTPError, URLError
 from urllib.request import Request, urlopen
 
 import server
@@ -373,6 +377,7 @@ class HTTPCase(DataFixture):
         self.app.shutdown()
         self.app.server_close()
         self.app.monitor.close()
+        self.app.link_checker.close()
         self.worker.join(timeout=2)
         super().tearDown()
 
@@ -401,6 +406,21 @@ class HTTPCase(DataFixture):
         self.assertEqual(json.loads(body)["categoryId"], "dev")
         self.assertEqual(self.request("/api/check", {}, "POST")[0], 202)
 
+    def test_link_check_endpoints(self):
+        result = {"status": "redirected", "httpStatus": 200, "finalUrl": "https://example.org/", "message": "已跳转到 example.org"}
+        with patch("server.check_link", return_value=result):
+            status, body = self.request("/api/link-check", {}, "POST")
+            self.assertEqual(status, 202)
+            self.assertEqual(json.loads(body)["job"]["total"], 1)
+            for _ in range(100):
+                payload = json.loads(self.request("/api/link-check")[1])
+                if not payload["job"]["running"]:
+                    break
+                time.sleep(0.02)
+        self.assertEqual(payload["job"]["done"], 1)
+        self.assertEqual(payload["results"]["github"]["finalUrl"], "https://example.org/")
+        self.assertEqual(self.request("/api/link-check", {"ids": "github"}, "POST")[0], 400)
+
     def test_batch_metadata_uses_known_sites_only(self):
         with patch("server.urlopen") as request:
             status, body = self.request("/api/metadata", {"urls": ["github.com", "https://example.org/a", "javascript:alert(1)"]}, "POST")
@@ -421,6 +441,172 @@ class HTTPCase(DataFixture):
         status, body = self.request("/api/state", self.store.state(), "PUT", {"Origin": "https://evil.example"})
         self.assertEqual(status, 403)
         self.assertIn("不允许跨站", json.loads(body)["error"])
+
+
+
+class FakeSite(BaseHTTPRequestHandler):
+    """Local stand-in for websites in various states of health."""
+
+    def log_message(self, *args):
+        pass
+
+    def answer(self, body=True):
+        port = self.server.server_port
+        routes = {
+            "/ok": (200, {}),
+            "/gone": (404, {}),
+            "/removed": (410, {}),
+            "/moved": (301, {"Location": "http://localhost:%d/ok" % port}),
+            "/same-site": (302, {"Location": "/ok"}),
+            "/login": (302, {"Location": "http://localhost:%d/accounts/login" % port}),
+            "/accounts/login": (200, {}),
+            "/forbidden": (403, {}),
+            "/challenge": (503, {"cf-mitigated": "challenge"}),
+            "/error": (500, {}),
+        }
+        if self.path == "/no-head" and self.command == "HEAD":
+            status, headers = 405, {}
+        elif self.path == "/no-head":
+            status, headers = 200, {}
+        else:
+            status, headers = routes.get(self.path, (404, {}))
+        self.send_response(status)
+        for key, value in headers.items():
+            self.send_header(key, value)
+        self.send_header("Content-Length", "0")
+        self.end_headers()
+
+    def do_HEAD(self):
+        self.answer()
+
+    def do_GET(self):
+        self.answer()
+
+
+class LinkStatusCase(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        cls.site = ThreadingHTTPServer(("127.0.0.1", 0), FakeSite)
+        cls.thread = threading.Thread(target=cls.site.serve_forever, daemon=True)
+        cls.thread.start()
+        cls.base = "http://127.0.0.1:%d" % cls.site.server_port
+
+    @classmethod
+    def tearDownClass(cls):
+        cls.site.shutdown()
+        cls.site.server_close()
+
+    def status(self, path):
+        return server.link_status(self.base + path, timeout=2)
+
+    def test_classifies_responses(self):
+        expectations = {
+            "/ok": "ok", "/same-site": "ok", "/no-head": "ok",
+            "/gone": "broken", "/removed": "broken",
+            "/moved": "redirected", "/login": "ok",
+            "/forbidden": "restricted", "/challenge": "restricted",
+            "/error": "unreachable",
+        }
+        for path, expected in expectations.items():
+            with self.subTest(path=path):
+                self.assertEqual(self.status(path)["status"], expected)
+        moved = self.status("/moved")
+        self.assertEqual(moved["finalUrl"], "http://localhost:%d/ok" % self.site.server_port)
+        self.assertEqual(self.status("/gone")["httpStatus"], 404)
+
+    def test_network_failures(self):
+        cases = (
+            (URLError(socket.gaierror(8, "nodename nor servname provided")), "broken", "域名无法解析"),
+            (URLError(TimeoutError("timed out")), "unreachable", "请求超时"),
+            (URLError(ConnectionRefusedError(61, "refused")), "unreachable", "连接被拒绝"),
+            (URLError(ssl.SSLError("bad cert")), "unreachable", "证书无效或加密连接失败"),
+            (TimeoutError("timed out"), "unreachable", "请求超时"),
+        )
+        for error, status, message in cases:
+            with self.subTest(message=message), patch("server.urlopen", side_effect=error):
+                result = server.link_status("https://example.invalid")
+            self.assertEqual((result["status"], result["message"]), (status, message))
+
+    def test_failures_are_retried_once(self):
+        answers = iter([{"status": "unreachable"}, {"status": "ok"}])
+        with patch("server.link_status", side_effect=lambda *args: next(answers)) as status, patch("server.time.sleep"):
+            self.assertEqual(server.check_link("https://example.org")["status"], "ok")
+        self.assertEqual(status.call_count, 2)
+        with patch("server.link_status", return_value={"status": "restricted"}) as status:
+            server.check_link("https://example.org")
+        self.assertEqual(status.call_count, 1)
+
+    def test_redirect_rules(self):
+        self.assertFalse(server.moved_elsewhere("https://mail.google.com/", "https://accounts.google.com/ServiceLogin"))
+        self.assertFalse(server.moved_elsewhere("https://www.bbc.co.uk/", "https://news.bbc.co.uk/"))
+        self.assertFalse(server.moved_elsewhere("https://a.com/", "https://sso.b.com/"))
+        self.assertTrue(server.moved_elsewhere("https://old.com/", "https://new.com/home"))
+
+
+class LinkCheckCase(DataFixture):
+    def wait(self, checker):
+        for _ in range(100):
+            if not checker.status()["running"]:
+                return
+            time.sleep(0.02)
+        self.fail("link check did not finish")
+
+    def test_job_records_results_and_rejects_overlap(self):
+        checker = server.LinkChecker(self.store)
+        release = threading.Event()
+
+        def slow(url, timeout):
+            release.wait(2)
+            return {"status": "broken", "httpStatus": 404, "finalUrl": None, "message": "页面不存在（HTTP 404）"}
+
+        with patch("server.check_link", side_effect=slow):
+            job = checker.start()
+            self.assertEqual((job["running"], job["total"]), (True, 1))
+            with self.assertRaises(server.APIError) as raised:
+                checker.start()
+            self.assertEqual(raised.exception.status, 409)
+            release.set()
+            self.wait(checker)
+        self.assertEqual(checker.status()["done"], 1)
+        result = self.store.link_checks()["github"]
+        self.assertEqual((result["status"], result["url"]), ("broken", "https://github.com"))
+        self.assertIsNotNone(result["checkedAt"])
+        self.assertNotIn("nas", self.store.link_checks())
+
+    def test_results_follow_link_edits(self):
+        self.store.record_link_check(self.store.state()["links"][0], {"status": "broken"})
+        value = self.store.state()
+        value["links"][0]["name"] = "GitHub 主页"
+        value = self.store.save(value)
+        self.assertIn("github", self.store.link_checks())
+        value["links"][0]["url"] = "https://github.com/explore"
+        value = self.store.save(value)
+        self.assertEqual(self.store.link_checks(), {})
+        self.store.record_link_check({"id": "github", "url": "https://github.com"}, {"status": "broken"})
+        self.assertEqual(self.store.link_checks(), {})
+
+    def test_deleted_link_result_returns_with_undo_until_next_check(self):
+        original = self.store.state()
+        self.store.record_link_check(original["links"][0], {"status": "broken"})
+        removed = copy.deepcopy(original)
+        removed["links"] = removed["links"][1:]
+        removed = self.store.save(removed)
+        self.assertEqual(self.store.link_checks(), {})
+        restored = copy.deepcopy(original)
+        restored["revision"] = removed["revision"]
+        restored = self.store.save(restored)
+        self.assertEqual(self.store.link_checks()["github"]["status"], "broken")
+        removed["revision"] = restored["revision"]
+        self.store.save(removed)
+        self.store.prune_link_checks()
+        with self.store.connect() as db:
+            self.assertEqual(db.execute("SELECT COUNT(*) FROM link_check").fetchone()[0], 0)
+
+    def test_rejects_bad_selection(self):
+        checker = server.LinkChecker(self.store)
+        for ids in ("github", [1], ["missing"]):
+            with self.subTest(ids=ids), self.assertRaises(server.APIError):
+                checker.start(ids)
 
 
 if __name__ == "__main__":
