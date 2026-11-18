@@ -1,4 +1,4 @@
-import { PREFERENCES_KEY, LEGACY_KEY, ROTATION_CHOICES, normalizePreferences, displayOf, withDisplay, costumeKey,
+import { PREFERENCES_KEY, LEGACY_KEY, ROTATION_CHOICES, normalizePreferences, displayOf, withDisplay, costumeKey, gameOf,
   availableCharacters, paddedView, placeView,
   chooseCharacter, atlasPages, playableAnimations, configureViewports, presentationForCostume,
   isLoopingSkill, selectSkillAnimation } from './companion-model.js';
@@ -8,33 +8,47 @@ import { isExcludedCharacter } from './companion-exclusions.js';
 import { composeSkillAttachments } from './companion-composition.js';
 import { queuePortraitMotion } from './companion-portrait.js';
 import { createAssetFetcher } from './companion-assets.js';
-import { GAMES, selectedGames } from './companion-games.js';
-const RUNTIME_JS = '/vendor/spine/spine-player-4.1.56.js';
+import { GAMES, gameById } from './companion-games.js';
+import { fireAnimations, queueFireCycle } from './companion-fire.js';
+// Spine binaries only load in the runtime version that exported them, and
+// each build declares the same global. Load builds one at a time, keep each
+// one, and leave window.spine on 4.1 for code that looks for it there.
+const RUNTIMES = { '4.1': '/vendor/spine/spine-player-4.1.56.js', '4.0': '/vendor/spine/spine-player-4.0.30.js' };
 const RUNTIME_CSS = '/vendor/spine/spine-player-4.1.56.css';
 
-let runtimePromise;
+const runtimePromises = {};
+const loadedRuntimes = {};
+let runtimeQueue = Promise.resolve();
 let currentCompanion;
 const disposedPlayers = new WeakSet();
 
 // Keep the runtime shared, even if the switch is turned off while it downloads.
 // Each model load has a separate abort signal and generation check.
-function loadRuntime() {
-  if (runtimePromise) return runtimePromise;
-  runtimePromise = Promise.all([
-    loadRuntimeFile('link', RUNTIME_CSS),
-    window.spine?.SpinePlayer ? Promise.resolve() : loadRuntimeFile('script', RUNTIME_JS),
-  ]).then(() => {
-    if (!window.spine?.SpinePlayer) throw new Error('角色播放器未能载入');
-    return window.spine;
-  }).catch(error => {
-    runtimePromise = undefined;
+function loadRuntime(version = '4.1') {
+  if (!RUNTIMES[version]) version = '4.1';
+  if (runtimePromises[version]) return runtimePromises[version];
+  const task = runtimeQueue.catch(() => {}).then(async () => {
+    await loadRuntimeFile('link', RUNTIME_CSS);
+    const previous = window.spine;
+    // A runtime that is already present (or a test double) serves 4.1 directly.
+    if (version === '4.1' && previous?.SpinePlayer && !Object.values(loadedRuntimes).includes(previous)) return previous;
+    await loadRuntimeFile('script', RUNTIMES[version], 'script-' + version);
+    const runtime = window.spine;
+    if (!runtime?.SpinePlayer) throw new Error('角色播放器未能载入');
+    loadedRuntimes[version] = runtime;
+    if (version !== '4.1' && previous?.SpinePlayer) window.spine = previous;
+    return runtime;
+  });
+  runtimeQueue = task;
+  runtimePromises[version] = task.catch(error => {
+    delete runtimePromises[version];
     throw error;
   });
-  return runtimePromise;
+  return runtimePromises[version];
 }
 
-function loadRuntimeFile(tag, url) {
-  const existing = document.querySelector(`[data-companion-resource="${tag}"]`);
+function loadRuntimeFile(tag, url, key = tag) {
+  const existing = document.querySelector(`[data-companion-resource="${key}"]`);
   if (existing?.dataset.loaded === 'true') return Promise.resolve();
   return new Promise((resolve, reject) => {
     const element = existing || document.createElement(tag);
@@ -57,7 +71,7 @@ function loadRuntimeFile(tag, url) {
     element.addEventListener('error', failed, { once: true });
     timer = setTimeout(failed, 15000);
     if (!existing) {
-      element.dataset.companionResource = tag;
+      element.dataset.companionResource = key;
       if (tag === 'link') {
         element.rel = 'stylesheet';
         element.href = url;
@@ -188,11 +202,14 @@ function withAbort(promise, signal) {
   });
 }
 
+const partFor = (selection, mode) => mode === 'skill' ? selection.costume.cutscene : selection.costume.idle;
+
 async function loadCharacter(catalog, selection, mode, signal) {
-  const part = mode === 'skill' ? selection.costume.cutscene : selection.costume.idle;
+  const part = partFor(selection, mode);
   if (!part) throw new Error('这套服装没有对应的动画');
   const local = mode === 'portrait' && part.skeleton === LOCAL_FALLBACK_CHARACTER.costumes[0].idle.skeleton;
-  const remote = catalog.assetBase + catalog.commit + '/';
+  const source = catalog.games[gameOf(selection.character)];
+  const remote = source.assetBase + source.commit + '/';
   const skelUrl = local ? '/companion/assets/' + part.skeleton.split('/').pop() : remote + part.skeleton;
   const atlasUrl = local ? '/companion/assets/' + part.atlas.split('/').pop() : remote + part.atlas;
   const [skeleton, atlas] = await Promise.all([
@@ -201,15 +218,16 @@ async function loadCharacter(catalog, selection, mode, signal) {
   ]);
   const baseUrl = new URL(atlasUrl, location.href);
   const textureUrls = atlasPages(atlas).map(page => new URL(page, baseUrl).href);
-  const [textures, skeletonData, atlasData] = await Promise.all([
+  const [textures, skeletonData] = await Promise.all([
     Promise.all(textureUrls.map(async url => [url, await (await fetchAsset(url, signal)).blob()])),
     readDataURI(skeleton, signal),
-    readDataURI(new Blob([atlas], { type: 'text/plain' }), signal),
   ]);
   // Spine reads the skeleton and atlas only from data URIs, but textures load
   // through <img>. Blob URLs skip base64 for the largest files; the owner of
-  // these assets revokes them once no new player can use them.
-  const rawDataURIs = { [skelUrl]: skeletonData, [atlasUrl]: atlasData };
+  // these assets revokes them once no new player can use them. Spine decodes
+  // base64 text with atob, which garbles UTF-8 region names (NIKKE atlases use
+  // Korean ones), while a plain data URI hands back the text after the comma.
+  const rawDataURIs = { [skelUrl]: skeletonData, [atlasUrl]: 'data:text/plain;charset=utf-8,' + atlas };
   const objectUrls = textures.map(([url, blob]) => (rawDataURIs[url] = URL.createObjectURL(blob)));
   // Runtime joins relative local atlas paths without expanding them to location.origin.
   if (local) {
@@ -274,7 +292,7 @@ export function initCompanion() {
       </div>
       <fieldset class="companion-field">
         <legend>展示</legend>
-        <div class="companion-segmented">${segment('companion-display', 'portrait', '立绘')}${segment('companion-display', 'skill', '技能')}${segment('companion-display', 'both', '轮流')}</div>
+        <div class="companion-segmented">${segment('companion-display', 'portrait', '立绘')}${segment('companion-display', 'skill', '动作')}${segment('companion-display', 'both', '轮流')}</div>
       </fieldset>
       <fieldset class="companion-field">
         <legend>人物</legend>
@@ -429,7 +447,8 @@ export function initCompanion() {
     pause.setAttribute('aria-label', pauseText);
     pause.dataset.tip = pauseText;
     pause.setAttribute('aria-pressed', String(!motionAllowed));
-    skillPickerLabel.hidden = preferences.random || !preferences.skills;
+    // NIKKE has one firing loop, so only Brown Dust 2 offers a choice of action.
+    skillPickerLabel.hidden = preferences.random || !preferences.skills || gameOf(selection?.character) !== 'bd2';
     skillPicker.disabled = !skillAnimations.length;
     const skillSignature = skillAnimations.map(animation => animation.name).join('|');
     if (skillSignature !== skillPickerSignature) {
@@ -449,19 +468,20 @@ export function initCompanion() {
       });
     }
     if (skillAnimations.length) skillPicker.value = preferences.skillAction;
+    const severalGames = preferences.games.length > 1;
     if (selection) {
       currentName.textContent = selection.character.name;
-      currentLabel.textContent = selection.costume.label;
+      currentLabel.textContent = selection.costume.label + (severalGames ? ` · ${gameById(gameOf(selection.character)).name}` : '');
     }
     if (active) root.dataset.mode = active.mode;
     if (catalog) {
-      const signature = `${preferences.portraits}:${preferences.skills}`;
+      const signature = `${preferences.portraits}:${preferences.skills}:${preferences.games}`;
       if (signature !== pickerSignature) {
         pickerSignature = signature;
         picker.replaceChildren();
         for (const character of availableCharacters(catalog, preferences)) {
           const group = document.createElement('optgroup');
-          group.label = character.name;
+          group.label = severalGames ? `${gameById(gameOf(character)).name} · ${character.name}` : character.name;
           for (const costume of character.costumes) {
             const option = document.createElement('option');
             option.value = costumeKey(costume);
@@ -620,7 +640,7 @@ export function initCompanion() {
     const signal = record.controller.signal;
     loadError = '';
     status.hidden = true;
-    statusText.textContent = `正在准备${record.selection.character.name}的${record.mode === 'skill' ? '技能' : '立绘'}…`;
+    statusText.textContent = `正在准备${record.selection.character.name}的${record.mode === 'skill' ? gameById(gameOf(record.selection.character)).action : '立绘'}…`;
     retry.hidden = true;
     fallback.hidden = true;
     // Only an initial, genuinely slow load gets a stage-level placeholder.
@@ -637,7 +657,7 @@ export function initCompanion() {
     }, 45000);
     try {
       const [spine, assets] = await withAbort(Promise.all([
-        loadRuntime(), assetsFor(record.selection, record.mode),
+        loadRuntime(partFor(record.selection, record.mode)?.runtime), assetsFor(record.selection, record.mode),
       ]), signal);
       if (signal.aborted || stage.pending !== record || disposed) return;
       await new Promise((resolve, reject) => {
@@ -650,16 +670,18 @@ export function initCompanion() {
           premultipliedAlpha: assets.premultipliedAlpha,
           alpha: true, backgroundColor: '#00000000', showControls: false, showLoading: false,
           preserveDrawingBuffer: false, defaultMix: 0,
+          ...(partFor(record.selection, record.mode)?.skin ? { skin: partFor(record.selection, record.mode).skin } : {}),
           success(loadedPlayer) {
             if (stage.pending !== record || signal.aborted || disposed) return;
             try {
               record.player = loadedPlayer;
               const presentation = presentationForCostume(presentations, record.selection.costume);
               const data = loadedPlayer.skeleton.data;
-              record.animations = playableAnimations(data.animations, record.mode, presentation);
+              const firing = record.mode === 'skill' && gameOf(record.selection.character) === 'nikke' ? fireAnimations(data) : null;
+              record.animations = firing ? [firing.idle] : playableAnimations(data.animations, record.mode, presentation);
               if (!record.animations.length) throw new Error('这套服装暂无可播放动画');
               record.animation = record.animations[0];
-              if (record.mode === 'skill') {
+              if (record.mode === 'skill' && !firing) {
                 // Random rotation also varies the action unless one was chosen.
                 const saved = record.skillAction || (preferences.random && record.animations.length > 1 ?
                   record.animations[Math.floor(Math.random() * record.animations.length)].name : '');
@@ -668,12 +690,15 @@ export function initCompanion() {
                 record.animation = composeSkillAttachments(spine, data, record.animation, action?.attachmentLayers);
                 if (action?.framing === 'full') layer.classList.add('fit-artwork');
               }
-              configureViewports(loadedPlayer, [record.animation], record.mode, presentation);
+              configureViewports(loadedPlayer, [record.animation], record.mode, presentation,
+                firing ? [firing.fire, ...firing.overlays] : []);
               loadedPlayer.animationState.clearTracks();
               loadedPlayer.skeleton.setToSetupPose();
               loadedPlayer.setAnimation(record.animation, record.mode === 'portrait' || isLoopingSkill(record.animation, presentation));
               if (record.mode === 'portrait') {
                 record.portraitMotion = queuePortraitMotion(loadedPlayer.animationState, record.animation);
+              } else if (firing) {
+                queueFireCycle(loadedPlayer.animationState, firing);
               }
               // The camera is laid out against the rail on every frame from here on.
               record.view = paddedView(loadedPlayer.currentViewport);
@@ -780,8 +805,19 @@ export function initCompanion() {
   const onRotation = () => { updatePreference({ rotation: Number(rotationPicker.value) }); scheduleRotation(); };
   const onGame = () => {
     const games = gameInputs.filter(input => input.checked).map(input => input.value);
-    if (games.length) updatePreference({ games });
-    else updateUI();
+    if (!games.length) { updateUI(); return; }
+    updatePreference({ games });
+    // A person from a game that was just turned off makes way at once.
+    if (selection && !games.includes(gameOf(selection.character)) && catalog) {
+      try {
+        selectCharacter(true);
+        void start();
+      } catch (error) {
+        noteHold = true;
+        note.textContent = `${error.message}。`;
+        updateUI();
+      }
+    }
   };
   const onShuffle = () => { selectCharacter(true); void start(); };
   const onPick = () => {
@@ -839,35 +875,58 @@ export function initCompanion() {
 
   const catalogController = new AbortController();
   const catalogTimeout = setTimeout(() => catalogController.abort(), 15000);
-  // Only one game is registered so far. A second one will merge its catalog
-  // into the same pool here, with ids namespaced by game.
-  const game = selectedGames(preferences.games)[0];
-  Promise.all([
-    fetchResource(game.catalogUrl, catalogController.signal).then(response => response.json()),
-    fetchResource(game.presentationsUrl, catalogController.signal, 'no-cache').then(response => response.json()).catch(() => ({})),
-  ]).then(([data, reference]) => {
-    if (disposed) return;
+  // Every registered game loads its own catalog and fails on its own. Brown
+  // Dust 2 falls back to the bundled portrait when its catalog is unreachable.
+  const loadGame = async game => {
+    const [data, reference] = await Promise.all([
+      fetchResource(game.catalogUrl, catalogController.signal).then(response => response.json()),
+      game.presentationsUrl ? fetchResource(game.presentationsUrl, catalogController.signal, 'no-cache')
+        .then(response => response.json()).catch(() => ({})) : null,
+    ]);
     if (!/^[a-f0-9]{12,40}$/.test(data.commit) || !Array.isArray(data.characters) || !data.characters.length) {
       throw new Error('角色索引不完整');
     }
-    presentations = reference;
-    catalog = { ...data, game: game.id, assetBase: game.assetBase, characters: data.characters.filter(character => !isExcludedCharacter(character)).map(character => {
-      const costumes = character.costumes.map(costume => {
-        const presentation = presentationForCostume(presentations, costume);
-        return { ...costume, label: presentation?.label || costume.label };
-      });
-      const named = character.costumes.map(costume => presentationForCostume(presentations, costume)).find(preset => preset?.name);
-      return { ...character, name: named?.name || character.name, costumes };
-    }) };
-    selectCharacter(preferences.random);
-    void start();
-  }).catch(() => {
+    return { data, reference };
+  };
+  Promise.allSettled(GAMES.map(loadGame)).then(results => {
     if (disposed) return;
+    const games = {};
+    const characters = [];
+    results.forEach((result, index) => {
+      const game = GAMES[index];
+      if (result.status === 'rejected') {
+        if (game.id !== 'bd2') return;
+        games.bd2 = { assetBase: game.assetBase, commit: LOCAL_FALLBACK_COMMIT };
+        characters.push({ ...LOCAL_FALLBACK_CHARACTER, game: 'bd2' });
+        return;
+      }
+      const { data, reference } = result.value;
+      if (reference) presentations = reference;
+      games[game.id] = { assetBase: game.assetBase, commit: data.commit };
+      characters.push(...data.characters.map(character => {
+        if (!reference) return { ...character, game: game.id };
+        const costumes = character.costumes.map(costume => {
+          const presentation = presentationForCostume(reference, costume);
+          return { ...costume, label: presentation?.label || costume.label };
+        });
+        const named = character.costumes.map(costume => presentationForCostume(reference, costume)).find(preset => preset?.name);
+        return { ...character, game: game.id, name: named?.name || character.name, costumes };
+      }));
+    });
     // The same exclusion rules apply to the offline fallback.
-    catalog = { commit: LOCAL_FALLBACK_COMMIT, game: game.id, assetBase: game.assetBase, characters: [LOCAL_FALLBACK_CHARACTER].filter(character => !isExcludedCharacter(character)) };
-    preferences.portraits ||= preferences.skills;
-    preferences.skills = false;
-    selectCharacter();
+    catalog = { games, characters: characters.filter(character => !isExcludedCharacter(character)) };
+    if (results.every(result => result.status === 'rejected')) {
+      // Only the bundled portrait is left.
+      preferences.portraits ||= preferences.skills;
+      preferences.skills = false;
+    }
+    try {
+      selectCharacter(preferences.random);
+    } catch {
+      // The chosen games may all be unavailable; fall back to what loaded.
+      preferences.games = Object.keys(games);
+      selectCharacter(preferences.random);
+    }
     void start();
   }).finally(() => clearTimeout(catalogTimeout));
 

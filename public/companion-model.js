@@ -19,12 +19,23 @@ export function normalizePreferences(value, legacyEnabled = false) {
     rotation: ROTATION_CHOICES.includes(data.rotation) ? data.rotation : DEFAULT_ROTATION,
     // The display to restore when the master switch turns the companion back on.
     resume: DISPLAY_MODES.includes(data.resume) ? data.resume : 'portrait',
-    games: Array.isArray(data.games) ? selectedGames(data.games).map(game => game.id) : [...DEFAULT_GAMES],
+    games: normalizeGames(data),
+    // Games the viewer has been offered; a newly added game starts selected once.
+    knownGames: [...DEFAULT_GAMES],
     characterId: typeof data.characterId === 'string' ? data.characterId : '',
     costumeKey: typeof data.costumeKey === 'string' ? data.costumeKey : '',
     skillAction: typeof data.skillAction === 'string' ? data.skillAction : '',
   };
 }
+
+function normalizeGames(data) {
+  if (!Array.isArray(data.games)) return [...DEFAULT_GAMES];
+  const known = Array.isArray(data.knownGames) ? data.knownGames : ['bd2'];
+  const games = [...data.games, ...DEFAULT_GAMES.filter(id => !known.includes(id))];
+  return selectedGames(games).map(game => game.id);
+}
+
+export const gameOf = character => character?.game || 'bd2';
 
 export function displayOf(preferences) {
   if (preferences.portraits && preferences.skills) return 'both';
@@ -45,7 +56,8 @@ export function withDisplay(preferences, display) {
 export const costumeKey = costume => costume.idle?.skeleton || costume.cutscene?.skeleton || '';
 
 export function availableCharacters(catalog, preferences) {
-  return catalog.characters.filter(character => !isExcludedCharacter(character)).map(character => ({
+  const games = preferences.games || DEFAULT_GAMES;
+  return catalog.characters.filter(character => !isExcludedCharacter(character) && games.includes(gameOf(character))).map(character => ({
     ...character,
     costumes: character.costumes.filter(costume =>
       (!preferences.portraits || costume.idle) && (!preferences.skills || costume.cutscene) &&
@@ -53,15 +65,18 @@ export function availableCharacters(catalog, preferences) {
   })).filter(character => character.costumes.length);
 }
 
-// Draw people first so a character with many costumes is not more likely.
-// An explicit redraw avoids repeating the current person when possible.
+// Draw a game, then a person, so neither a large roster nor a character with
+// many costumes is more likely. A redraw avoids repeating the current person.
 export function chooseCharacter(catalog, preferences, redraw = false, random = Math.random) {
   const characters = availableCharacters(catalog, preferences);
   if (!characters.length) throw new Error('没有符合展示选项的角色');
   const current = characters.find(character => character.id === preferences.characterId);
   let character = current;
   if (redraw) {
-    const pool = characters.length > 1 ? characters.filter(item => item.id !== current?.id) : characters;
+    const others = characters.length > 1 ? characters.filter(item => item.id !== current?.id) : characters;
+    const games = DEFAULT_GAMES.filter(id => others.some(item => gameOf(item) === id));
+    const game = games[Math.floor(random() * games.length)];
+    const pool = others.filter(item => gameOf(item) === game);
     character = pool[Math.floor(random() * pool.length)];
   }
   character ||= characters[0];
@@ -150,7 +165,8 @@ export function visibleArtBounds(skeleton, animations, steps = 60) {
           if (vertices.length < count) vertices = new Float32Array(count);
           attachment.computeWorldVertices(slot, 0, count, vertices, 0, 2);
         } else {
-          attachment.computeWorldVertices(slot, vertices, 0, 2);
+          // Spine 4.1 regions take the slot (and carry a sequence); 4.0 regions take the bone.
+          attachment.computeWorldVertices('sequence' in attachment ? slot : slot.bone, vertices, 0, 2);
         }
         for (let v = 0; v < count; v += 2) {
           bounds.minX = Math.min(bounds.minX, vertices[v]);
@@ -179,7 +195,8 @@ export function trimViewportToArt(box, art) {
   return { ...box, x: width === box.width ? box.x : left, y: height === box.height ? box.y : bottom, width, height };
 }
 
-export function configureViewports(player, animations, mode, presentation) {
+// extra animations (a firing loop around an aim pose) share the view's floor.
+export function configureViewports(player, animations, mode, presentation, extra = []) {
   const definitions = mode === 'portrait' ? [presentation?.portrait] : presentation?.skills || [];
   // The portrait viewer also plays its "motion" reaction inside the same view.
   const motion = mode === 'portrait' ? player.skeleton.data.findAnimation('motion') : null;
@@ -197,7 +214,7 @@ export function configureViewports(player, animations, mode, presentation) {
       box = {};
       player.calculateAnimationViewport(animation, box);
     }
-    box = trimViewportToArt(box, visibleArtBounds(player.skeleton, [animation, motion]));
+    box = trimViewportToArt(box, visibleArtBounds(player.skeleton, [animation, motion, ...extra]));
     // The floor is now the artwork (or cuts through it); padding would lift it off the edge.
     box.padBottom = 0;
     if (mode === 'portrait') Object.assign(player.config.viewport, box);

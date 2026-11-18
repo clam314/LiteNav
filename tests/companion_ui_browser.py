@@ -109,6 +109,8 @@ def run_cases(browser, origin, case_filter=None):
         page.route("**/companion-ui-fixture", lambda route: route.fulfill(content_type="text/html", body=FIXTURE))
         page.route("**/companion/catalog.json", lambda route: route.abort() if offline else route.fulfill(json=CATALOG))
         page.route("**/companion/gamekee-presets.json", lambda route: route.fulfill(json={}))
+        # Keep cases hermetic: only the fixture catalog provides people.
+        page.route("**/companion/nikke/catalog.json", lambda route: route.abort())
 
         def asset(route):
             if route.request.url.endswith(".atlas"):
@@ -157,8 +159,8 @@ def run_cases(browser, origin, case_filter=None):
     def unavailable_skill(page):
         page.wait_for_function("document.querySelector('#companion-root').dataset.state === 'ready'")
         open_menu(page)
-        page.get_by_role("radio", name="技能", exact=True).click()
-        expect(page.get_by_role("radio", name="技能", exact=True)).not_to_be_checked()
+        page.get_by_role("radio", name="动作", exact=True).click()
+        expect(page.get_by_role("radio", name="动作", exact=True)).not_to_be_checked()
         expect(page.get_by_role("radio", name="立绘", exact=True)).to_be_checked()
         expect(page.locator(".companion-menu-note")).to_contain_text("没有符合展示选项的角色")
         page.get_by_role("switch", name="角色陪伴", exact=True).click()

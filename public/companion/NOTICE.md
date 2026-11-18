@@ -1,5 +1,7 @@
 # 角色资源来源
 
+角色陪伴目前收录《棕色尘埃 2》与《NIKKE：胜利女神》两个来源，两份角色目录都固定在上游的某次提交上，并由 `scripts/update_companion.py` 每周自动刷新（`.github/workflows/companion-catalogs.yml`）。以下先说明棕色尘埃 2，NIKKE 见文末。
+
 此目录包含角色索引 `catalog.json`，以及一套本地待机后备资源：**悠丝缇亚（Justia）· 血骑士**，资源 ID `char000201`。随机角色及技能使用索引中的素材路径，只在选中时从固定版本的上游按需加载；没有将全部角色、技能或声音素材打包进项目。
 
 ## 参考页面与索引
@@ -68,4 +70,25 @@ SHA-256：
 | `char000201.png` | `843615cb5f071bca8374faf97999ecfdaef8e636ea545d1ad86b3ed13344c038` |
 | `spine-player-4.1.56.js` | `28d83fdbae0af5965d568d9607e9e20710dcce8b984c0a24e9d2a1d0915938bc` |
 | `spine-player-4.1.56.css` | `2ce8e4f63557164fa77205aa4469c74950cf834f1ac91c222d794e6e66ae7e0c` |
+| `spine-player-4.0.30.js` | `06eaacbe8fc6da5b03df1d5642130603794e15bcd8ea99319473d10abc7ef741` |
 
+## 持续更新
+
+`scripts/update_companion.py` 只使用 Python 标准库，可在本地运行，也由 GitHub Actions 每周一自动运行；有变化时提交到 `main` 并重新构建镜像。
+
+- 棕色尘埃 2：读取 [clam314/bd2web](https://github.com/clam314/bd2web) 的 `data/roster.json`。该名册由作者随上游素材仓库同步，本项目原样使用并校验其固定提交与角色列表。
+- NIKKE：见下一节。
+
+## NIKKE：胜利女神
+
+- 素材来源：[Nikke-db/Nikke-db.github.io](https://github.com/Nikke-db/Nikke-db.github.io)，目录 `nikke/catalog.json` 固定其某次提交，只在选中时按需加载 `l2d/` 下的立绘（`{id}_00`）与瞄准（`aim/{id}_aim_00`）骨骼，未打包任何素材。上游仅有剧情图等无关提交时沿用原固定提交。
+- 时装以上游 `l2d` 文件树中实际存在的骨骼为准；上游 `js/json/l2d.json` 索引漏收了部分时装（例如 `c016_03`），因此只用它补充英文名。每个骨骼的 Spine 版本读取自文件头，4.0 与 4.1 素材分别由对应运行时播放。
+- 中文名：`scripts/nikke-names.json`，初始内容取自 [clam314/Nikkiweb](https://github.com/clam314/Nikkiweb) 的 `data/name-locales.js`（其说明为整理自 GameKee 公开页面），可手工补充。无中文名时使用上游英文名；已知人物的未命名时装显示为「未命名时装」；完全没有名字的新编号暂不展示并在更新时列出，以免把 NPC 或男性角色放进随机池。
+- 不展示：NPC（`c9xx`）、量产型敌人（`c250`–`c259`）、旧版模型（英文名以 `_old` 结尾）以及联动男性角色电次、早川秋、9S。
+- 部分立绘需要指定皮肤（`acc`、`bg`），名单沿用 Nikkiweb。
+- 展示方式：立绘播放站立骨骼的 `idle`；「动作」为开火循环，在瞄准骨骼上交替播放 `aim_idle` 与 `aim_fire`，开火时叠加 `aim_fire_hair`、`aim_fire_hip`（如有）。
+- NIKKE 部分 atlas 的区域名含韩文。运行时以纯文本 data URI 交给 Spine，避免其 `atob` 解码破坏 UTF-8。
+
+Spine 4.0 运行时 `/vendor/spine/spine-player-4.0.30.js` 下载自官方 npm 包 [`@esotericsoftware/spine-player@4.0.30`](https://www.npmjs.com/package/@esotericsoftware/spine-player/v/4.0.30)（`dist/iife/spine-player.js`），保持原始字节；其样式与 4.1.56 版完全相同，共用同一份 CSS。许可证同样为上文的 Spine Runtimes License Agreement。
+
+素材相关权利归 SHIFT UP 及原权利人所有。此收录仅用于个人学习与展示，不用于商业用途。

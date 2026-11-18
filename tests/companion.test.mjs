@@ -5,6 +5,7 @@ import { isExcludedCharacter } from '../public/companion-exclusions.js';
 import { LOCAL_FALLBACK_CHARACTER } from '../public/companion-fallback.js';
 import {
   normalizePreferences,
+  gameOf,
   displayOf,
   withDisplay,
   costumeKey,
@@ -38,7 +39,7 @@ const catalog = {
 };
 const preferences = overrides => normalizePreferences({ portraits: true, ...overrides });
 
-const DEFAULTS = { rotation: 3, resume: 'portrait', games: ['bd2'] };
+const DEFAULTS = { rotation: 3, resume: 'portrait', games: ['bd2', 'nikke'], knownGames: ['bd2', 'nikke'] };
 
 test('new preferences default to random people with display off; legacy enabled migrates only portrait visibility', () => {
   assert.deepEqual(normalizePreferences(null), {
@@ -56,13 +57,18 @@ test('preferences reject truthy strings, numbers, and non-string selection IDs',
     characterId: 42, costumeKey: { skeleton: 'bad' }, skillAction: 2,
   }), normalizePreferences(null));
   assert.deepEqual(normalizePreferences({
-    random: false, portraits: true, skills: true, rotation: 0, resume: 'both', games: ['bd2'], info: false,
+    random: false, portraits: true, skills: true, rotation: 0, resume: 'both', games: ['bd2'], knownGames: ['bd2', 'nikke'], info: false,
     characterId: 'two', costumeKey: 'two-a/idle', skillAction: 'loop_2',
   }), {
-    random: false, portraits: true, skills: true, rotation: 0, resume: 'both', games: ['bd2'],
+    random: false, portraits: true, skills: true, rotation: 0, resume: 'both', games: ['bd2'], knownGames: ['bd2', 'nikke'],
     characterId: 'two', costumeKey: 'two-a/idle', skillAction: 'loop_2',
   }, 'the retired info option is dropped');
-  assert.deepEqual(normalizePreferences({ games: ['unknown'] }).games, ['bd2'], 'unknown games fall back to all known ones');
+  assert.deepEqual(normalizePreferences({ games: ['unknown'], knownGames: ['bd2', 'nikke'] }).games, ['bd2', 'nikke'],
+    'unknown games fall back to all known ones');
+  assert.deepEqual(normalizePreferences({ games: ['bd2'] }).games, ['bd2', 'nikke'],
+    'a game added after the choice was saved starts selected');
+  assert.deepEqual(normalizePreferences({ games: ['nikke'], knownGames: ['bd2', 'nikke'] }).games, ['nikke'],
+    'a game the viewer turned off stays off');
 });
 
 test('eligibility checks actual portrait and skill resources, including null entries and both displays off', () => {
@@ -451,4 +457,33 @@ test('one display choice maps to both switches and the master switch restores th
   const on = withDisplay(off, 'on');
   assert.deepEqual([on.portraits, on.skills, displayOf(on)], [false, true, 'skill']);
   assert.equal(on.characterId, base.characterId, 'display changes keep the person');
+});
+
+test('the pool follows the selected games and a redraw picks a game before a person', () => {
+  const mixed = {
+    characters: [
+      ...Array.from({ length: 9 }, (_, index) => ({ id: `nikke:c0${index}0`, name: `N${index}`, game: 'nikke', costumes: [outfit(`n${index}`)] })),
+      { id: 'one', name: '人物一', costumes: [outfit('one-a')] },
+    ],
+  };
+  assert.equal(gameOf(mixed.characters.at(-1)), 'bd2', 'catalog entries without a game are Brown Dust 2');
+  const only = games => availableCharacters(mixed, preferences({ games, knownGames: ['bd2', 'nikke'] })).map(person => person.id);
+  assert.deepEqual(only(['bd2']), ['one']);
+  assert.equal(only(['nikke']).length, 9);
+  // Two games: half of the redraws land on the single Brown Dust 2 person.
+  const prefs = preferences({ games: ['bd2', 'nikke'], characterId: 'nikke:c000' });
+  assert.equal(chooseCharacter(mixed, prefs, true, () => 0).character.id, 'one');
+  assert.equal(chooseCharacter(mixed, prefs, true, () => 0.99).character.game, 'nikke');
+});
+
+test('Spine 4.0 regions are measured from their bone and 4.1 regions from their slot', () => {
+  const seen = [];
+  const region = sequence => ({
+    region: {}, color: { a: 1 }, ...(sequence ? { sequence: null } : {}),
+    computeWorldVertices(target, out) { seen.push(target.kind); out.set([0, -10, 1, -10, 1, 0, 0, 0]); },
+  });
+  const slot = attachment => ({ kind: 'slot', bone: { kind: 'bone', active: true }, color: { a: 1 }, getAttachment: () => attachment });
+  const skeleton = stillSkeleton({ drawOrder: [slot(region(false)), slot(region(true))] });
+  assert.equal(visibleArtBounds(skeleton, [{ duration: 0, apply() {} }]).minY, -10);
+  assert.deepEqual(seen, ['bone', 'slot']);
 });

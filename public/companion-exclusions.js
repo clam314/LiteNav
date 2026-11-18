@@ -239,7 +239,11 @@ export const EXCLUDED_MALE_CHARACTERS = [
       "隊長",
       "The Captain"
     ]
-  }
+  },
+  // NIKKE collaboration characters; scripts/update_companion.py also leaves them out.
+  { "ids": ["nikke:c803", "nikke:c803_01"], "names": ["Denji", "电次", "電次"] },
+  { "ids": ["nikke:c804"], "names": ["Aki Hayakawa", "早川秋"] },
+  { "ids": ["nikke:c813"], "names": ["9S"] }
 ];
 
 const normalName = value => String(value ?? '').normalize('NFKC').toLowerCase().replace(/[\s_-]+/g, '');
