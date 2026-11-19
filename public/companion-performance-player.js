@@ -35,30 +35,25 @@ export function readExternalSkeleton(spine, context, external) {
   }
 }
 
-// The actions a skill menu offers on top of the cutscene's own animations.
-// A layered loop ("loop_2_all") stands in for the plain loop it completes;
-// every other performance is a full performance, listed first.
+// The skill menu: the cutscene's own showcase loops, where a layered loop
+// ("loop_2_all": the loop with the parts it plays over itself) stands in for
+// the plain loop it completes. Full performances of the cuts are not offered:
+// they are framed for the game's skill scene (its background, particles and
+// post-processing are not in the skeletons), so on their own they show
+// figures cut off at the waist or floating in empty space.
 export function performanceMenu(definitions, animations, durationOf, labelOf = name => name) {
-  const playable = performanceActions(definitions).filter(name => {
-    try {
-      const plan = schedulePerformance(compilePerformance(definitions, name), durationOf);
-      return !plan.missing.length && plan.duration > 0;
-    } catch { return false; }
-  });
   const names = new Set(animations.map(animation => animation.name));
   const replacements = new Map();
-  const full = [];
-  for (const name of playable) {
+  for (const name of performanceActions(definitions)) {
     const base = name.match(/^(loop\w*?)_all$/)?.[1];
-    if (base && names.has(base)) replacements.set(base, name);
-    else full.push(name);
+    if (!base || !names.has(base)) continue;
+    try {
+      const plan = schedulePerformance(compilePerformance(definitions, name), durationOf);
+      if (!plan.missing.length && plan.duration > 0) replacements.set(base, name);
+    } catch { /* An unreadable composition keeps the plain loop. */ }
   }
-  const entry = (name, label, replaces) => ({ name, label, replaces, performance: true });
-  return [
-    ...full.map((name, index) => entry(name, full.length > 1 ? `完整演出 ${index + 1}` : '完整演出')),
-    ...animations.map(animation => replacements.has(animation.name) ?
-      entry(replacements.get(animation.name), labelOf(animation.name), animation.name) : animation),
-  ];
+  return animations.map(animation => replacements.has(animation.name) ?
+    { name: replacements.get(animation.name), label: labelOf(animation.name), replaces: animation.name, performance: true } : animation);
 }
 
 // Slots that carry effects rather than the figure: ground shadows and

@@ -754,8 +754,10 @@ export function initCompanion() {
     }
     const record = {
       layer, selection, mode: nextMode, skillAction: preferences.skillAction,
-      // The skill display of a costume with a 有缘之客 scene can show that scene instead.
-      assetMode: nextMode === 'skill' && preferences.skillAction === DATING_ACTION && selection.costume.dating ? 'dating' : nextMode,
+      // A costume with a 有缘之客 scene shows it as its action display during
+      // random rotation, and when picked from the menu of a fixed person.
+      assetMode: nextMode === 'skill' && selection.costume.dating &&
+        (preferences.random || preferences.skillAction === DATING_ACTION) ? 'dating' : nextMode,
       controller: new AbortController(), elapsed: 0, advancing: false,
     };
     stage.begin(record);
@@ -840,11 +842,9 @@ export function initCompanion() {
                   name => presentation?.skills?.find(action => action.animation === name)?.label);
               }
               if (record.mode === 'skill' && !firing) {
-                // Random rotation shows the full performance when there is one,
-                // and otherwise varies the action, unless one was chosen.
-                const full = record.animations.find(animation => animation.performance && !animation.replaces);
-                let saved = record.skillAction || (preferences.random ? full?.name || (record.animations.length > 1 ?
-                  record.animations[Math.floor(Math.random() * record.animations.length)].name : '') : '');
+                // Random rotation also varies the action unless one was chosen.
+                let saved = record.skillAction || (preferences.random && record.animations.length > 1 ?
+                  record.animations[Math.floor(Math.random() * record.animations.length)].name : '');
                 // A loop saved before its layered version existed picks that version.
                 saved = record.animations.find(animation => animation.replaces === saved)?.name || saved;
                 record.animation = selectSkillAnimation(record.animations, saved, presentation);
@@ -853,7 +853,7 @@ export function initCompanion() {
                   record.animation = composeSkillAttachments(spine, data, record.animation, action?.attachmentLayers);
                   if (action?.framing === 'full') layer.classList.add('fit-artwork');
                 }
-                // The scene is offered after the choice above, so only a pick shows it.
+                // The scene is offered after the choice above, so a fixed person only shows it when picked.
                 if (record.selection.costume.dating) record.animations = [...record.animations, datingEntry()];
                 skillMenus.set(costumeKey(record.selection.costume), record.animations);
               }

@@ -102,20 +102,19 @@ test('effect slots are told apart from the figure by name', () => {
     assert.doesNotMatch(name, EFFECT_SLOT, name);
 });
 
-test('the skill menu offers full performances first and layered loops in place of their plain loop', () => {
+test('the skill menu keeps the showcase loops, with layered loops in place of their plain loop', () => {
   const definitions = [
     { name: 'cut_all', composite: ['cut_1', 'cut_2'] },
     { name: 'loop_2_all', composite: [['loop_2', 'loop_2_glow']] },
-    { name: 'broken_all', composite: ['missing'] },
+    { name: 'loop_all', composite: [['loop', 'missing']] },
   ];
   const lengths = { cut_1: 1, cut_2: 1, loop_2: 2, loop_2_glow: 2, loop: 2 };
   const menu = performanceMenu(definitions, [{ name: 'loop' }, { name: 'loop_2' }], name => lengths[name],
     name => ({ loop_2: '技能动作 2' })[name]);
   assert.deepEqual(menu, [
-    { name: 'cut_all', label: '完整演出', replaces: undefined, performance: true },
     { name: 'loop' },
     { name: 'loop_2_all', label: '技能动作 2', replaces: 'loop_2', performance: true },
-  ], 'a performance naming a missing animation is left out');
+  ], 'full performances of the cuts are not offered, and a composition naming a missing animation keeps the plain loop');
 });
 
 test('performance ids and borrowed skeletons are read from the data', () => {
