@@ -89,3 +89,26 @@ test('every game asset origin is cached while other URLs pass through', async ()
   assert.deepEqual([...cacheStorage.entries.keys()], [other + 'b.png']);
   assert.deepEqual(calls.map(call => call.cache), ['force-cache', 'default']);
 });
+
+test('the store also keeps within a total size, dropping the oldest entries first', async () => {
+  const cacheStorage = fakeCacheStorage();
+  const sized = { a: 400, b: 300, c: 500 };
+  const fetchResource = async url => {
+    const name = url.slice(BASE.length);
+    const headers = { get: header => header === 'content-length' ? String(sized[name]) : null };
+    return { url, body: 'network', headers, clone() { return { url, body: 'stored', headers }; } };
+  };
+  const fetchAsset = createAssetFetcher({ base: BASE, fetchResource, cacheStorage, maxBytes: 1000 });
+  for (const name of ['a', 'b', 'c']) {
+    await fetchAsset(BASE + name);
+    await settle();
+    await settle();
+  }
+  assert.deepEqual([...cacheStorage.entries.keys()], [BASE + 'b', BASE + 'c'], '400 + 300 + 500 is over 1000, so a goes');
+
+  // Entries left by an earlier visit are measured from their stored headers.
+  const later = createAssetFetcher({ base: BASE, fetchResource, cacheStorage, maxBytes: 600 });
+  await later(BASE + 'a');
+  for (let i = 0; i < 6; i++) await settle();
+  assert.deepEqual([...cacheStorage.entries.keys()], [BASE + 'a'], 'the newest entry stays even when the rest must go');
+});

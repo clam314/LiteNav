@@ -123,7 +123,9 @@ def run_cases(browser, origin, case_filter=None):
         page.route("https://raw.githubusercontent.com/**", asset)
         try:
             page.goto(origin + "/companion-ui-fixture")
-            expect(page.get_by_role("button", name="角色设置", exact=True)).to_be_visible()
+            # The first check also waits for the module graph to load, which can
+            # take longer than the 5 s default on a busy machine.
+            expect(page.get_by_role("button", name="角色设置", exact=True)).to_be_visible(timeout=15000)
             run(page)
             assert errors == [], f"uncaught page errors: {errors}"
             assert page.evaluate("window.initializationError || null") is None

@@ -17,6 +17,18 @@ export function createPaintingPlayer({ spine, layer, layers, space, frame }) {
   layer.append(dom);
   // The textures carry straight alpha, so the page composites it as such.
   const context = new spine.webgl.ManagedWebGLRenderingContext(canvas, { alpha: true, premultipliedAlpha: false });
+  try {
+    return paint({ spine, dom, canvas, context, layers, space, frame });
+  } catch (error) {
+    // A painting that cannot be read gives its context back at once: browsers
+    // only keep a handful of WebGL contexts alive.
+    try { context.gl?.getExtension('WEBGL_lose_context')?.loseContext(); } catch { /* Optional extension. */ }
+    dom.remove();
+    throw error;
+  }
+}
+
+function paint({ spine, dom, canvas, context, layers, space, frame }) {
   const renderer = new spine.webgl.SceneRenderer(canvas, context, true);
 
   const loaded = layers.map(file => {
