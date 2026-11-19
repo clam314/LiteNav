@@ -30,6 +30,13 @@ test('the tour plays a few reactions per stage and moves on, never past the last
     { stage: 2, idle: 'idle3' },
     { stage: 2, reaction: ['mix3_1_1'] },
   ]);
+  assert.deepEqual(datingTour(datingScript(names), 1, () => 0, 1), [
+    { stage: 1, idle: 'idle2' },
+    { stage: 1, reaction: ['mix2_1_1'] },
+    { stage: 1, motion: 'motion2_22' },
+    { stage: 2, idle: 'idle3' },
+    { stage: 2, reaction: ['mix3_1_1'] },
+  ], 'a resumed tour starts at its stage and runs to the last');
   const picked = datingTour(datingScript(names), 3, () => .99).filter(step => step.stage === 0 && step.reaction);
   assert.equal(new Set(picked.map(step => step.reaction[0])).size, 3, 'a stage never repeats a reaction');
 });

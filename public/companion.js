@@ -546,6 +546,8 @@ export function initCompanion() {
   const assetCache = new Map();
   // The skill menu last built for each costume, kept for its 有缘之客 scene.
   const skillMenus = new Map();
+  // The 有缘之客 stage each costume's scene last began, while the page is open.
+  const sceneStages = new Map();
   const enabled = () => preferences.portraits || preferences.skills;
   const initialMode = () => preferences.portraits ? 'portrait' : 'skill';
   const stage = createCompanionStage({
@@ -864,7 +866,10 @@ export function initCompanion() {
               const presentation = presentationForCostume(presentations, record.selection.costume);
               const data = loadedPlayer.skeleton.data;
               if (record.assetMode === 'dating') {
-                record.performance = createDatingTour({ spine, player: loadedPlayer, tracks: record.selection.costume.dating.tracks });
+                // A scene left at a stage break resumes there on its next visit.
+                const scene = costumeKey(record.selection.costume);
+                record.performance = createDatingTour({ spine, player: loadedPlayer, tracks: record.selection.costume.dating.tracks,
+                  startStage: sceneStages.get(scene) || 0, onStage: stageIndex => sceneStages.set(scene, stageIndex) });
                 if (!record.performance) throw new Error('有缘之客暂时无法播放');
                 record.animations = skillMenus.get(costumeKey(record.selection.costume)) || [skillsBack(), datingEntry()];
                 record.animation = { ...datingEntry(), duration: record.performance.duration };
@@ -1007,7 +1012,8 @@ export function initCompanion() {
               if (rotate) advance(record, 'rotate');
               else if (preferences.skills && record.elapsed >= 16) advance(record, 'skill');
             } else if (record.performance) {
-              // A performance is only left between two complete plays.
+              // A loop or scene is only left at a natural break: a layered
+              // loop between two plays, a scene when one of its stages begins.
               if (!wrapped) return;
               if (rotate) advance(record, 'rotate');
               else if (preferences.portraits && record.elapsed >= 12) advance(record, 'portrait');

@@ -42,10 +42,12 @@ export function datingScript(names) {
 
 // The tour as a list of steps: { stage, idle } starts a stage, { stage,
 // reaction: [parts] } plays one reaction, { stage, motion } moves on. A
-// stage's transition is skipped when it is the last stage or has none.
-export function datingTour(script, reactionsPerStage = 3, random = Math.random) {
+// stage's transition is skipped when it is the last stage or has none. The
+// tour starts at stage from (an index) and ends with the last stage.
+export function datingTour(script, reactionsPerStage = 3, random = Math.random, from = 0) {
   const steps = [];
   script.forEach((stage, index) => {
+    if (index < from) return;
     steps.push({ stage: index, idle: stage.idle });
     const pool = [...stage.reactions];
     for (let i = 0; i < reactionsPerStage && pool.length; i++) {
@@ -92,9 +94,12 @@ const SAMPLES = 24;
 
 // Tours a scene on a SpinePlayer whose skeleton is the scene. tracks plays
 // reactions over the idle on a second track, as the game does for these
-// scenes. Same shape as a skill performance: advance(delta) is true when the
-// tour wrapped around, and view() is the camera of the current stage.
-export function createDatingTour({ spine, player, tracks = true, random = Math.random }) {
+// scenes. Same shape as a skill performance: advance(delta) is true at a
+// natural break, here every time a stage begins (after its transition, or
+// back at the first), and view() is the camera of the current stage.
+// startStage resumes the tour at a later stage; onStage(index) reports each
+// stage as it begins, so a later visit can resume there.
+export function createDatingTour({ spine, player, tracks = true, random = Math.random, startStage = 0, onStage = () => {} }) {
   const data = player.skeleton.data;
   const script = datingScript(data.animations.map(animation => animation.name));
   if (!script.length) return null;
@@ -181,15 +186,28 @@ export function createDatingTour({ spine, player, tracks = true, random = Math.r
     else state.addAnimation(0, script[step.stage].idle, true, 0);
     return step.reaction.reduce((sum, part) => sum + length(part), 0) + GAP;
   };
-  const restart = () => {
+  // Start at a stage: the transitions of the stages before it leave their
+  // last pose (clothes shed, a turn), so pose the skeleton through them first.
+  const restart = (from = 0) => {
     state.clearTracks();
-    player.skeleton.setToSetupPose();
-    steps = datingTour(script, 3, random);
+    const skeleton = player.skeleton;
+    skeleton.setToSetupPose();
+    if (skins[from] && skeleton.skin !== skins[from]) {
+      skeleton.setSkin(skins[from]);
+      skeleton.setSlotsToSetupPose();
+    }
+    for (const stage of script.slice(0, from)) {
+      const motion = stage.motion && data.findAnimation(stage.motion);
+      motion?.apply(skeleton, motion.duration, motion.duration, false, [], 1, spine.MixBlend.setup, spine.MixDirection.mixIn);
+    }
+    steps = datingTour(script, 3, random, from);
     index = 0;
     wait = run(steps[0]);
   };
-  restart();
-  const tourLength = steps.reduce((sum, step) => sum + (step.idle ? GAP : step.motion ? length(step.motion) :
+  const startAt = Number.isInteger(startStage) && startStage > 0 && startStage < script.length ? startStage : 0;
+  restart(startAt);
+  onStage(startAt);
+  const tourLength = datingTour(script, 3, random).reduce((sum, step) => sum + (step.idle ? GAP : step.motion ? length(step.motion) :
     step.reaction.reduce((total, part) => total + length(part), 0) + GAP), 0);
   return {
     duration: tourLength,
@@ -197,17 +215,19 @@ export function createDatingTour({ spine, player, tracks = true, random = Math.r
     advance(delta) {
       if (!(delta > 0)) return false;
       wait -= delta;
-      let wrapped = false;
+      let begun = false;
       while (wait <= 0) {
         index += 1;
         if (index >= steps.length) {
-          restart();
-          wrapped = true;
+          restart(0);
+          begun = true;
           break;
         }
         wait += run(steps[index]);
+        if (steps[index].idle) begun = true;
       }
-      return wrapped;
+      if (begun) onStage(stage);
+      return begun;
     },
     stage: () => stage,
     // Runs after the pose is applied and before drawing.

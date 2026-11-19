@@ -26,3 +26,5 @@ litenav-backup-*.json
 *.sqlite3
 *.sqlite3-*
 *.db
+# Local Claude Code settings (launch configs and the like)
+.claude/
