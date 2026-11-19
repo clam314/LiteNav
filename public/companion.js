@@ -11,6 +11,8 @@ import { createAssetFetcher } from './companion-assets.js';
 import { GAMES, gameById } from './companion-games.js';
 import { fireAnimations, queueFireCycle } from './companion-fire.js';
 import { combatAnimations, createCombatCycle } from './companion-combat.js';
+import { live2dMotionPlan, live2dFiles } from './companion-live2d.js';
+import { createLive2DPlayer, separateShaderContexts } from './companion-live2d-player.js';
 // Spine binaries only load in the runtime version that exported them, and
 // each build declares the same global. Load builds one at a time, keep each
 // one, and leave window.spine on 4.1 for code that looks for it there.
@@ -46,6 +48,29 @@ function loadRuntime(version = '4.1') {
     throw error;
   });
   return runtimePromises[version];
+}
+
+// Azur Lane's Live2D models need Cubism Core, PixiJS and pixi-live2d-display,
+// loaded in this order since each builds on the previous global.
+const LIVE2D_RUNTIME = [
+  '/vendor/live2d/live2dcubismcore.min.js',
+  '/vendor/live2d/pixi-6.5.10.min.js',
+  '/vendor/live2d/pixi-live2d-display-0.4.0-cubism4.min.js',
+];
+let live2dRuntime;
+
+function loadLive2DRuntime() {
+  live2dRuntime ||= (async () => {
+    for (const [index, url] of LIVE2D_RUNTIME.entries()) await loadRuntimeFile('script', url, 'live2d-' + index);
+    const PIXI = window.PIXI;
+    if (!window.Live2DCubismCore || !PIXI?.live2d?.Live2DModel) throw new Error('角色播放器未能载入');
+    separateShaderContexts(PIXI.live2d);
+    return PIXI;
+  })().catch(error => {
+    live2dRuntime = undefined;
+    throw error;
+  });
+  return live2dRuntime;
 }
 
 function loadRuntimeFile(tag, url, key = tag) {
@@ -167,7 +192,7 @@ async function fetchResource(url, signal, cache = 'default') {
   return response;
 }
 
-const fetchAsset = createAssetFetcher({ base: GAMES.map(game => game.assetBase), fetchResource });
+const fetchAsset = createAssetFetcher({ base: GAMES.flatMap(game => [game.assetBase, game.lfsBase].filter(Boolean)), fetchResource });
 
 function readDataURI(blob, signal) {
   return new Promise((resolve, reject) => {
@@ -206,9 +231,28 @@ function withAbort(promise, signal) {
 const partFor = (selection, mode) => mode === 'skill' ? selection.costume.cutscene :
   mode === 'cover' ? selection.costume.cover : selection.costume.idle;
 
+// A Live2D model's settings, moc, textures, physics and the motions it plays,
+// fetched through the asset cache. Each player makes its own blob URLs from
+// these blobs: PixiJS caches textures by URL, and a shared URL let one player
+// destroy the textures of the next (the same ship in its other display).
+async function loadLive2D(catalog, selection, part, signal) {
+  const id = gameOf(selection.character);
+  const source = catalog.games[id];
+  const folder = part.model.slice(0, part.model.lastIndexOf('/') + 1);
+  const raw = source.assetBase + source.commit + '/';
+  const lfs = gameById(id).lfsBase + source.commit + '/';
+  const settings = await (await fetchAsset(raw + part.model, signal)).json();
+  const plan = live2dMotionPlan(settings.FileReferences?.Motions);
+  if (!plan.idle) throw new Error('这套服装暂无可播放动画');
+  const blobs = Object.fromEntries(await Promise.all(live2dFiles(settings, plan).map(async file =>
+    [file.path, await (await fetchAsset((file.lfs ? lfs : raw) + folder + file.path, signal)).blob()])));
+  return { live2d: true, settings: { ...settings, url: raw + part.model }, plan, blobs, objectUrls: [] };
+}
+
 async function loadCharacter(catalog, selection, mode, signal) {
   const part = partFor(selection, mode);
   if (!part) throw new Error('这套服装没有对应的动画');
+  if (part.runtime === 'live2d') return loadLive2D(catalog, selection, part, signal);
   const local = mode === 'portrait' && part.skeleton === LOCAL_FALLBACK_CHARACTER.costumes[0].idle.skeleton;
   const source = catalog.games[gameOf(selection.character)];
   const remote = source.assetBase + source.commit + '/';
@@ -571,7 +615,9 @@ export function initCompanion() {
   }
 
   function assetsFor(characterSelection, requestedMode) {
-    const key = costumeKey(characterSelection.costume) + ':' + requestedMode;
+    // A Live2D model serves both displays, so both share one download.
+    const live2d = partFor(characterSelection, requestedMode)?.runtime === 'live2d';
+    const key = costumeKey(characterSelection.costume) + ':' + (live2d ? 'live2d' : requestedMode);
     if (assetCache.has(key)) return assetCache.get(key).promise;
     const task = { controller: new AbortController() };
     const timeout = setTimeout(() => task.controller.abort(), 45000);
@@ -689,6 +735,10 @@ export function initCompanion() {
       showError(record, '角色载入较慢');
     }, 45000);
     try {
+      if (partFor(record.selection, record.mode)?.runtime === 'live2d') {
+        await startLive2D(record, signal);
+        return;
+      }
       // NIKKE's combat loop also needs the cover skeleton.
       const coverPart = record.mode === 'skill' && gameOf(record.selection.character) === 'nikke' ? record.selection.costume.cover : null;
       const [spine, assets, coverSpine, coverAssets] = await withAbort(Promise.all([
@@ -831,6 +881,45 @@ export function initCompanion() {
     } finally {
       clearTimeout(record.timeout);
       clearTimeout(record.loadingTimer);
+    }
+  }
+
+  // Azur Lane: the portrait loops the model's idle; the action display plays
+  // its reactions with a short idle in between. Each model is its own canvas.
+  async function startLive2D(record, signal) {
+    const [PIXI, assets] = await withAbort(Promise.all([loadLive2DRuntime(), assetsFor(record.selection, record.mode)]), signal);
+    if (signal.aborted || stage.pending !== record || disposed) return;
+    const { layer } = record;
+    const player = await createLive2DPlayer({
+      PIXI, layer, settings: assets.settings, plan: assets.plan, blobs: assets.blobs, mode: record.mode,
+      space: () => parseFloat(getComputedStyle(layer).getPropertyValue('--companion-space')) || layer.clientWidth / 2,
+      frame: delta => live2dFrame(record, delta),
+    });
+    record.player = player;
+    // The model kept loading after this record was replaced or released.
+    if (signal.aborted || stage.pending !== record || disposed) { disposePlayer(player); return; }
+    clearTimeout(record.loadingTimer);
+    clearTimeout(record.timeout);
+    if (!stage.present(record)) return;
+    layer.classList.add('is-visible');
+    loadError = '';
+    status.hidden = true;
+    updatePlayback();
+    prefetchOtherMode(record);
+  }
+
+  // The same breaks as the Spine displays: the portrait hands over after a
+  // while, the action display only between two reactions.
+  function live2dFrame(record, delta) {
+    if (stage.active !== record || stage.pending || record.advancing || delta <= 0) return;
+    record.elapsed += delta;
+    const rotate = performance.now() >= rotationDue;
+    if (record.mode === 'portrait') {
+      if (rotate) advance(record, 'rotate');
+      else if (preferences.skills && record.elapsed >= 16) advance(record, 'skill');
+    } else if (record.player?.betweenActions) {
+      if (rotate) advance(record, 'rotate');
+      else if (preferences.portraits && record.elapsed >= 12) advance(record, 'portrait');
     }
   }
 

@@ -119,6 +119,42 @@ class NikkeCatalogTests(unittest.TestCase):
         self.assertNotIn("skin", people["白雪公主"]["costumes"][0]["cutscene"])
 
 
+class AzurLaneCatalogTests(unittest.TestCase):
+    SKINS = {
+        "z23": {"z23": {"painting": "z23", "name": "Z23"}, "z23_2": {"painting": "z23_2", "name": "海风轻抚的乐园"}},
+        "aersasi": {"aersasi": {"name": "阿尔萨斯"}, "aersasi_3": {"name": "圣宵之鬼的微醺"}},
+        "tiancheng": {"tiancheng": {"name": "天城"}}, "tiancheng_cv": {"tiancheng_cv_3": {"name": "碧波绮尾"}},
+    }
+    SHIPS = {"z23": {"name": "Z23"}, "aersasi": {"name": "阿尔萨斯"}, "tiancheng": {"name": "天城"}, "tiancheng_cv": {"name": "天城"}}
+
+    def test_models_need_their_settings_and_moc_named_after_the_folder(self):
+        paths = {"Live2D/Z23/Z23.model3.json", "Live2D/Z23/Z23.moc3", "Live2D/Z23/textures/texture_00.png",
+                 "Live2D/broken/broken.model3.json", "Live2D/other/model.model3.json", "Live2D/other/model.moc3"}
+        self.assertEqual(update.azurlane_models(paths), ["Z23"])
+
+    def test_skins_group_under_the_ship_name_with_the_default_first(self):
+        people = update.build_azurlane(["aersasi_3", "z23_2", "Z23", "tiancheng_cv_3"], self.SKINS, self.SHIPS)
+        named = {person["name"]: [(costume["label"], costume["outfit"]) for costume in person["costumes"]] for person in people}
+        self.assertEqual(named, {"Z23": [("默认", "Z23"), ("海风轻抚的乐园", "z23_2")],
+                                 "阿尔萨斯": [("圣宵之鬼的微醺", "aersasi_3")],
+                                 "天城": [("碧波绮尾", "tiancheng_cv_3")]})
+        z23 = next(person for person in people if person["name"] == "Z23")
+        self.assertEqual(z23["id"], "azurlane:z23")
+        part = {"model": "Live2D/Z23/Z23.model3.json", "runtime": "live2d"}
+        self.assertEqual(z23["costumes"][0], {"label": "默认", "outfit": "Z23", "idle": part, "cutscene": part})
+
+    def test_censored_copies_are_used_only_without_the_original(self):
+        people = update.build_azurlane(["Z23", "z23_hx", "aersasi_3_hx"], self.SKINS, self.SHIPS)
+        outfits = sorted(costume["outfit"] for person in people for costume in person["costumes"])
+        self.assertEqual(outfits, ["Z23", "aersasi_3_hx"])
+
+    def test_models_without_a_chinese_name_are_reported(self):
+        skipped = []
+        people = update.build_azurlane(["Z23", "newship_2"], self.SKINS, self.SHIPS, skipped)
+        self.assertEqual([person["name"] for person in people], ["Z23"])
+        self.assertEqual(skipped, ["newship_2"])
+
+
 class Bd2RosterTests(unittest.TestCase):
     def test_accepts_a_pinned_roster(self):
         roster = {"commit": "424622b8c4fd", "characters": [{"id": "0002", "costumes": [{}]}]}

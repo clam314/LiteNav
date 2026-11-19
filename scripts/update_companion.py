@@ -11,10 +11,15 @@ supplies Simplified Chinese (cn) and English names. scripts/nikke-names.json
 holds manual names that take precedence. A person needs a Chinese name to be
 shown; the index leaves male characters and server-only entries without one.
 
-Both catalogs pin an upstream commit, so the browser never loads moving
+Azur Lane: bungaku-moe/AzurLaneLive2D is read at its latest commit. Each
+Live2D/<name>/<name>.model3.json is one skin; censored *_hx copies are left
+out when the original exists. Pelom777/AzurLaneData, rebuilt hourly from the
+Chinese server, maps each painting name to its ship and Chinese skin name.
+
+Every catalog pins an upstream commit, so the browser never loads moving
 assets. Standard library only; set GITHUB_TOKEN to raise the API rate limit.
 
-    python3 scripts/update_companion.py            # update both catalogs
+    python3 scripts/update_companion.py            # update every catalog
     python3 scripts/update_companion.py --game nikke
     python3 scripts/update_companion.py --check    # exit 1 if anything would change
 """
@@ -42,6 +47,10 @@ NIKKE_REPO = "Nikke-db/Nikke-db.github.io"
 NIKKE_RAW = "https://raw.githubusercontent.com/" + NIKKE_REPO + "/{commit}/"
 NIKKE_NAMES_REPO = "Nikke-db/nikke-db-vue"
 NIKKE_NAMES_INDEX = "https://raw.githubusercontent.com/" + NIKKE_NAMES_REPO + "/{commit}/src/utils/json/l2d.json"
+AZURLANE_CATALOG = ROOT / "public/companion/azurlane/catalog.json"
+AZURLANE_REPO = "bungaku-moe/AzurLaneLive2D"
+AZURLANE_NAMES_REPO = "Pelom777/AzurLaneData"
+AZURLANE_NAMES = "https://raw.githubusercontent.com/" + AZURLANE_NAMES_REPO + "/{commit}/public/data/{table}.json"
 
 PLAYABLE_ID = re.compile(r"c(\d{3})(?:_(\d{2}))?")
 # NPCs (c9xx), mass-produced enemies (c25x), soldiers, products and iDolls
@@ -285,12 +294,85 @@ def update_nikke() -> tuple[Path, str]:
                                 "commit": commit, "characters": characters})
 
 
+# --- Azur Lane ---------------------------------------------------------------
+
+AZURLANE_MODEL = re.compile(r"Live2D/([^/]+)/\1\.model3\.json")
+
+
+def azurlane_models(tree_paths: set[str]) -> list[str]:
+    """Model folders that hold a model3.json and moc3 named after the folder."""
+    return sorted(match.group(1) for path in tree_paths if (match := AZURLANE_MODEL.fullmatch(path))
+                  and f"Live2D/{match.group(1)}/{match.group(1)}.moc3" in tree_paths)
+
+
+def build_azurlane(models: list[str], skins: dict, ships: dict, skipped: list | None = None) -> list:
+    """Group skins into people by their ship's Chinese name.
+
+    skins maps a ship's painting name to {skin painting: {"name": ...}} and
+    ships maps it to {"name": ...}, as in Pelom777/AzurLaneData. Painting names
+    are matched without case; a skin painted as the ship itself is its default.
+    """
+    owners = {painting.lower(): (ship, str(skin.get("name") or ""))
+              for ship, entries in skins.items() for painting, skin in entries.items()}
+    folders = {model.lower() for model in models}
+    people: dict[str, dict] = {}
+    for model in models:
+        painting = model.lower()
+        if painting.endswith("_hx"):
+            # Censored copies made for the Chinese release; prefer the original.
+            if painting[:-3] in folders:
+                continue
+            painting = painting[:-3]
+        owner = owners.get(painting)
+        person = owner and str(ships.get(owner[0], {}).get("name") or skins[owner[0]].get(owner[0], {}).get("name") or "")
+        if not person:
+            if skipped is not None:
+                skipped.append(model)
+            continue
+        ship, skin = owner
+        entry = people.setdefault(person, {"id": f"azurlane:{ship.lower()}", "name": person, "costumes": []})
+        part = {"model": f"Live2D/{model}/{model}.model3.json", "runtime": "live2d"}
+        # One model serves both displays: idle for the portrait, its reactions for the action.
+        entry["costumes"].append({"label": "默认" if painting == ship.lower() else skin or model,
+                                  "outfit": model, "idle": part, "cutscene": part})
+    characters = sorted(people.values(), key=lambda person: person["id"])
+    for person in characters:
+        person["costumes"].sort(key=lambda costume: (costume["label"] != "默认", costume["outfit"].lower()))
+    return characters
+
+
+def update_azurlane() -> tuple[Path, str]:
+    api = "https://api.github.com/repos/"
+    commit = get_json(api + AZURLANE_REPO + "/commits/main")["sha"]
+    tree = get_json(f"{api}{AZURLANE_REPO}/git/trees/{commit}?recursive=1")
+    if tree.get("truncated"):
+        raise ValueError("AzurLaneLive2D tree was truncated")
+    models = azurlane_models({item["path"] for item in tree["tree"]})
+    names_commit = get_json(api + AZURLANE_NAMES_REPO + "/commits/main")["sha"]
+    skins = get_json(AZURLANE_NAMES.format(commit=names_commit, table="skin"))
+    ships = get_json(AZURLANE_NAMES.format(commit=names_commit, table="ship"))
+    skipped: list[str] = []
+    characters = build_azurlane(models, skins, ships, skipped)
+    if not characters:
+        raise ValueError("no Azur Lane Live2D model could be named")
+    if skipped:
+        print(f"azurlane: {len(skipped)} models without a Chinese name left out "
+              f"(not yet in {AZURLANE_NAMES_REPO}): " + ", ".join(skipped))
+    previous = json.loads(AZURLANE_CATALOG.read_text(encoding="utf-8")) if AZURLANE_CATALOG.exists() else {}
+    if previous.get("characters") == characters:
+        return AZURLANE_CATALOG, dump(previous)
+    return AZURLANE_CATALOG, dump({"generatedAt": now(), "source": f"{AZURLANE_REPO}@{commit[:12]}",
+                                   "names": f"{AZURLANE_NAMES_REPO}@{names_commit[:12]}",
+                                   "commit": commit, "characters": characters})
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--game", choices=["bd2", "nikke", "all"], default="all")
+    parser.add_argument("--game", choices=["bd2", "nikke", "azurlane", "all"], default="all")
     parser.add_argument("--check", action="store_true", help="report changes without writing")
     args = parser.parse_args()
-    updates = [update for game, update in (("bd2", update_bd2), ("nikke", update_nikke)) if args.game in (game, "all")]
+    updates = [update for game, update in (("bd2", update_bd2), ("nikke", update_nikke), ("azurlane", update_azurlane))
+               if args.game in (game, "all")]
     changed = []
     for update in updates:
         path, content = update()

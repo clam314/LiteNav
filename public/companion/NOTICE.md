@@ -1,6 +1,6 @@
 # 角色资源来源
 
-角色陪伴目前收录《棕色尘埃 2》与《NIKKE：胜利女神》两个来源，两份角色目录都固定在上游的某次提交上，并由 `scripts/update_companion.py` 每周自动刷新（`.github/workflows/companion-catalogs.yml`）。以下先说明棕色尘埃 2，NIKKE 见文末。
+角色陪伴目前收录《棕色尘埃 2》《NIKKE：胜利女神》与《碧蓝航线》三个来源，各份角色目录都固定在上游的某次提交上，并由 `scripts/update_companion.py` 每周自动刷新（`.github/workflows/companion-catalogs.yml`）。以下先说明棕色尘埃 2，NIKKE 与碧蓝航线见文末。
 
 此目录包含角色索引 `catalog.json`，以及一套本地待机后备资源：**悠丝缇亚（Justia）· 血骑士**，资源 ID `char000201`。随机角色及技能使用索引中的素材路径，只在选中时从固定版本的上游按需加载；没有将全部角色、技能或声音素材打包进项目。
 
@@ -78,6 +78,7 @@ SHA-256：
 
 - 棕色尘埃 2：读取 [clam314/bd2web](https://github.com/clam314/bd2web) 的 `data/roster.json`。该名册由作者随上游素材仓库同步，本项目原样使用并校验其固定提交与角色列表。
 - NIKKE：见下一节。
+- 碧蓝航线：见文末一节。
 
 ## NIKKE：胜利女神
 
@@ -92,3 +93,31 @@ SHA-256：
 Spine 4.0 运行时 `/vendor/spine/spine-player-4.0.30.js` 下载自官方 npm 包 [`@esotericsoftware/spine-player@4.0.30`](https://www.npmjs.com/package/@esotericsoftware/spine-player/v/4.0.30)（`dist/iife/spine-player.js`），保持原始字节；其样式与 4.1.56 版完全相同，共用同一份 CSS。许可证同样为上文的 Spine Runtimes License Agreement。
 
 素材相关权利归 SHIFT UP 及原权利人所有。此收录仅用于个人学习与展示，不用于商业用途。
+
+## 碧蓝航线
+
+- 素材来源：[bungaku-moe/AzurLaneLive2D](https://github.com/bungaku-moe/AzurLaneLive2D)，目录 `azurlane/catalog.json` 固定其某次提交，只在选中时按需加载 `Live2D/{名称}/` 下的模型，未打包任何素材。每个 `{名称}.model3.json` 与同名 `.moc3` 构成一套皮肤；国服的和谐版本（`_hx`）在原版存在时不收录。上游仅有无关提交时沿用原固定提交。
+- `.moc3` 与贴图存放在 Git LFS 中，`raw.githubusercontent.com` 只返回指针文件，因此改从 `media.githubusercontent.com/media/…` 按同一固定提交读取；`model3.json`、物理与动作文件仍从 raw 读取。LFS 下载计入上游仓库的流量额度，额度用尽时 GitHub 会暂停其下载。
+- 名字：舰船与皮肤的中文名取自 [Pelom777/AzurLaneData](https://github.com/Pelom777/AzurLaneData) 的 `public/data/ship.json` 与 `skin.json`（每小时从国服客户端重新生成），按立绘名（不区分大小写）对应，目录记录所用提交。立绘名与舰船同名的皮肤显示为「默认」；同名舰船（例如天城与天城·航母）合并为一位人物。数据源暂未收录的新模型会在更新时列出并跳过。
+- 展示方式：立绘循环模型的 `idle` 动作；「互动」按随机顺序依次播放主界面与触摸动作（`home`、`login`、`mail`、`mission`、`mission_complete`、`complete`、`touch_head`、`touch_body`、`touch_special`、`main_N`），每段之间回到 `idle` 约 1.5 秒。L2D+ 模型的拖拽状态（`idleN`、`touch_idleN`、`touch_dragN`）与誓约动作 `wedding` 不播放。多数模型自带的 `effect`（飘带、光效等环境动画）在单独的动作队列上与其他动作同时循环。
+- 取景：在 8 秒的 `idle` 中采样可见网格的范围（限制在模型画布内，并排除 `Touch` 开头的触摸判定网格，部分模型把它们放在画布外很远处），按此范围填满侧栏高度、贴住底边，水平居中于导航留出的空白区域。带整幅场景的模型会超出两侧，左侧由侧栏渐隐遮住。
+
+### Live2D 运行时
+
+均保持下载时的原始字节，存放于 `/vendor/live2d/`：
+
+- `live2dcubismcore.min.js`：Live2D Cubism Core 5.1.0（`05.01.0000`），下载自官方地址 <https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js>。该文件是 [Live2D Proprietary Software License Agreement](https://www.live2d.com/eula/live2d-proprietary-software-license-agreement_en.html) 中的 Redistributable Code，使用须遵守该协议；个人及小规模用途另见 Live2D 的 SDK 发布许可。
+- `pixi-6.5.10.min.js`：[PixiJS](https://github.com/pixijs/pixijs) 6.5.10（npm `pixi.js@6.5.10` 的 `dist/browser/pixi.min.js`），MIT 许可，原文见 `LICENSE.pixijs`。
+- `pixi-live2d-display-0.4.0-cubism4.min.js`：[pixi-live2d-display](https://github.com/guansss/pixi-live2d-display) 0.4.0（npm 包的 `dist/cubism4.min.js`），MIT 许可，原文见 `LICENSE.pixi-live2d-display`。其中打包的 Cubism 4 Framework 受 [Live2D Open Software License](https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html) 约束。
+
+该版本的框架把编译好的着色器作为单例在所有 WebGL 上下文间共用，切换人物时新旧两个画布同时存在会使旧画布变成空白。运行时（`companion-live2d-player.js`）为每个上下文单独保存一套着色器，未修改上述文件。
+
+本地验证：上游 271 个模型的 `.moc3` 格式版本分布为 46 / 128 / 1 / 35 / 61（3.0 / 3.3 / 4.0 / 4.2 / 5.0），每种格式各取至少一个模型（Z23、雷根斯堡·暗之龙，光之岸、伴尔维·清凉的甜蜜滋味、埃吉尔·私密闲暇时、阿尔萨斯·圣宵之鬼的微醺）在页面中由 Core 5.1.0 载入并正常绘制。
+
+| 文件 | SHA-256 |
+| --- | --- |
+| `live2dcubismcore.min.js` | `25ae938cb4fe282ce189b357bcc97e603d1e1f7ec78bf04150d401c23cdc792f` |
+| `pixi-6.5.10.min.js` | `403f2f2ee8145fa17f60c5c89403056efe2680e5096ec2762036486914ed19c5` |
+| `pixi-live2d-display-0.4.0-cubism4.min.js` | `af1267e6d52759b245766c578d905bfa025b532d5c3cc727c370957c4409e21b` |
+
+素材相关权利归蛮啾网络、勇仕网络、Yostar 及原权利人所有。上游仓库声明与上述公司无合作或背书关系。此收录仅用于个人学习与展示，不用于商业用途。

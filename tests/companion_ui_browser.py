@@ -111,6 +111,7 @@ def run_cases(browser, origin, case_filter=None):
         page.route("**/companion/gamekee-presets.json", lambda route: route.fulfill(json={}))
         # Keep cases hermetic: only the fixture catalog provides people.
         page.route("**/companion/nikke/catalog.json", lambda route: route.abort())
+        page.route("**/companion/azurlane/catalog.json", lambda route: route.abort())
 
         def asset(route):
             if route.request.url.endswith(".atlas"):

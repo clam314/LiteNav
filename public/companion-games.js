@@ -2,7 +2,8 @@
 // optional camera presets and asset origin; the menu lists them as sources,
 // and the selected ones form the pool for random rotation. Catalogs share one
 // character/costume shape and are refreshed by scripts/update_companion.py.
-// action names the second display: BD2 skill cut-ins, NIKKE's firing loop.
+// action names the second display: BD2 skill cut-ins, NIKKE's firing loop,
+// Azur Lane's Live2D reactions.
 export const GAMES = [
   {
     id: 'bd2',
@@ -18,6 +19,15 @@ export const GAMES = [
     action: '开火循环',
     catalogUrl: '/companion/nikke/catalog.json',
     assetBase: 'https://raw.githubusercontent.com/Nikke-db/Nikke-db.github.io/',
+  },
+  {
+    id: 'azurlane',
+    name: '碧蓝航线',
+    action: '互动',
+    catalogUrl: '/companion/azurlane/catalog.json',
+    assetBase: 'https://raw.githubusercontent.com/bungaku-moe/AzurLaneLive2D/',
+    // The moc and textures are Git LFS objects; raw only serves their pointers.
+    lfsBase: 'https://media.githubusercontent.com/media/bungaku-moe/AzurLaneLive2D/',
   },
 ];
 

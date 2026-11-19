@@ -1,0 +1,3956 @@
+{
+ "generatedAt": "2026-11-19T03:53:29+00:00",
+ "source": "bungaku-moe/AzurLaneLive2D@5435d971c655",
+ "names": "Pelom777/AzurLaneData@a2c932c56ca5",
+ "commit": "5435d971c655ff6f2efb40d13de33e815fe6c199",
+ "characters": [
+  {
+   "id": "azurlane:abeikelongbi",
+   "name": "阿贝克隆比",
+   "costumes": [
+    {
+     "label": "坏坏兔的恶作剧！",
+     "outfit": "abeikelongbi_3",
+     "idle": {
+      "model": "Live2D/abeikelongbi_3/abeikelongbi_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/abeikelongbi_3/abeikelongbi_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:adaerbote",
+   "name": "阿达尔伯特亲王",
+   "costumes": [
+    {
+     "label": "闭店后的特别时光",
+     "outfit": "adaerbote_2",
+     "idle": {
+      "model": "Live2D/adaerbote_2/adaerbote_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/adaerbote_2/adaerbote_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "浴室中的小小意外",
+     "outfit": "adaerbote_3",
+     "idle": {
+      "model": "Live2D/adaerbote_3/adaerbote_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/adaerbote_3/adaerbote_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:aerbien",
+   "name": "阿尔比恩",
+   "costumes": [
+    {
+     "label": "香气来朱阁",
+     "outfit": "aerbien_3",
+     "idle": {
+      "model": "Live2D/aerbien_3/aerbien_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/aerbien_3/aerbien_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:aersasi",
+   "name": "阿尔萨斯",
+   "costumes": [
+    {
+     "label": "盛夏的圣迹",
+     "outfit": "aersasi_2",
+     "idle": {
+      "model": "Live2D/aersasi_2/aersasi_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/aersasi_2/aersasi_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "圣宵之鬼的微醺",
+     "outfit": "aersasi_3",
+     "idle": {
+      "model": "Live2D/aersasi_3/aersasi_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/aersasi_3/aersasi_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:aidang",
+   "name": "爱宕",
+   "costumes": [
+    {
+     "label": "盛夏进行曲",
+     "outfit": "aidang_2",
+     "idle": {
+      "model": "Live2D/aidang_2/aidang_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/aidang_2/aidang_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:aierdeliqi",
+   "name": "埃尔德里奇",
+   "costumes": [
+    {
+     "label": "正月的牵手",
+     "outfit": "aierdeliqi_4",
+     "idle": {
+      "model": "Live2D/aierdeliqi_4/aierdeliqi_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/aierdeliqi_4/aierdeliqi_4.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "喵喵偶像团？",
+     "outfit": "aierdeliqi_5",
+     "idle": {
+      "model": "Live2D/aierdeliqi_5/aierdeliqi_5.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/aierdeliqi_5/aierdeliqi_5.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:aijier",
+   "name": "埃吉尔",
+   "costumes": [
+    {
+     "label": "港区的龙女仆",
+     "outfit": "aijier_2",
+     "idle": {
+      "model": "Live2D/aijier_2/aijier_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/aijier_2/aijier_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "金龙腾祥云",
+     "outfit": "aijier_3",
+     "idle": {
+      "model": "Live2D/aijier_3/aijier_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/aijier_3/aijier_3.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "私密闲暇时",
+     "outfit": "aijier_4",
+     "idle": {
+      "model": "Live2D/aijier_4/aijier_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/aijier_4/aijier_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:ailunsamuna",
+   "name": "艾伦·萨姆纳",
+   "costumes": [
+    {
+     "label": "Charming Rabbit",
+     "outfit": "ailunsamuna_2",
+     "idle": {
+      "model": "Live2D/ailunsamuna_2/ailunsamuna_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/ailunsamuna_2/ailunsamuna_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "双面侠盗",
+     "outfit": "ailunsamuna_3",
+     "idle": {
+      "model": "Live2D/ailunsamuna_3/ailunsamuna_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/ailunsamuna_3/ailunsamuna_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:aimierbeierding",
+   "name": "埃米尔·贝尔汀",
+   "costumes": [
+    {
+     "label": "蓝色海岸",
+     "outfit": "aimierbeierding_2",
+     "idle": {
+      "model": "Live2D/aimierbeierding_2/aimierbeierding_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/aimierbeierding_2/aimierbeierding_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "「女仆」浪漫",
+     "outfit": "aimierbeierding_3",
+     "idle": {
+      "model": "Live2D/aimierbeierding_3/aimierbeierding_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/aimierbeierding_3/aimierbeierding_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:aimudeng",
+   "name": "埃姆登",
+   "costumes": [
+    {
+     "label": "黑白的夜之主",
+     "outfit": "aimudeng_2",
+     "idle": {
+      "model": "Live2D/aimudeng_2/aimudeng_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/aimudeng_2/aimudeng_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:aisaikesi",
+   "name": "埃塞克斯",
+   "costumes": [
+    {
+     "label": "Craft Fairytail",
+     "outfit": "aisaikesi_4",
+     "idle": {
+      "model": "Live2D/aisaikesi_4/aisaikesi_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/aisaikesi_4/aisaikesi_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:ankeleiqi",
+   "name": "安克雷奇",
+   "costumes": [
+    {
+     "label": "海豚、海洋、游泳课",
+     "outfit": "ankeleiqi_2",
+     "idle": {
+      "model": "Live2D/ankeleiqi_2/ankeleiqi_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/ankeleiqi_2/ankeleiqi_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "舟畔共明月",
+     "outfit": "ankeleiqi_3",
+     "idle": {
+      "model": "Live2D/ankeleiqi_3/ankeleiqi_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/ankeleiqi_3/ankeleiqi_3.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "香甜牛奶味之夜",
+     "outfit": "ankeleiqi_4",
+     "idle": {
+      "model": "Live2D/ankeleiqi_4/ankeleiqi_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/ankeleiqi_4/ankeleiqi_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:anninvwang",
+   "name": "安妮女王复仇号",
+   "costumes": [
+    {
+     "label": "隐秘之拥的呼唤",
+     "outfit": "anninvwang_2",
+     "idle": {
+      "model": "Live2D/anninvwang_2/anninvwang_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/anninvwang_2/anninvwang_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:antu",
+   "name": "安土",
+   "costumes": [
+    {
+     "label": "午夜的瑰色电梯",
+     "outfit": "antu_2",
+     "idle": {
+      "model": "Live2D/antu_2/antu_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/antu_2/antu_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:aogusite",
+   "name": "奥古斯特·冯·帕塞瓦尔",
+   "costumes": [
+    {
+     "label": "与“魔女”的星夜之约",
+     "outfit": "aogusite_4",
+     "idle": {
+      "model": "Live2D/aogusite_4/aogusite_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/aogusite_4/aogusite_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:baerdimo",
+   "name": "巴尔的摩",
+   "costumes": [
+    {
+     "label": "夜风Minuet",
+     "outfit": "baerdimo_5",
+     "idle": {
+      "model": "Live2D/baerdimo_5/baerdimo_5.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/baerdimo_5/baerdimo_5.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "迅疾的蓝星",
+     "outfit": "baerdimo_6",
+     "idle": {
+      "model": "Live2D/baerdimo_6/baerdimo_6.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/baerdimo_6/baerdimo_6.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:baifeng",
+   "name": "白凤",
+   "costumes": [
+    {
+     "label": "缭乱之花的忍者游戏",
+     "outfit": "baifeng_2",
+     "idle": {
+      "model": "Live2D/baifeng_2/baifeng_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/baifeng_2/baifeng_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "晴雨狐嫁",
+     "outfit": "baifeng_3",
+     "idle": {
+      "model": "Live2D/baifeng_3/baifeng_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/baifeng_3/baifeng_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:bailong",
+   "name": "白龙",
+   "costumes": [
+    {
+     "label": "丝竹喧阗",
+     "outfit": "bailong_3",
+     "idle": {
+      "model": "Live2D/bailong_3/bailong_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/bailong_3/bailong_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:baiyanjuren",
+   "name": "百眼巨人",
+   "costumes": [
+    {
+     "label": "特训中的威严之人",
+     "outfit": "baiyanjuren_4",
+     "idle": {
+      "model": "Live2D/baiyanjuren_4/baiyanjuren_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/baiyanjuren_4/baiyanjuren_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:banerwei",
+   "name": "伴尔维",
+   "costumes": [
+    {
+     "label": "清凉的甜蜜滋味",
+     "outfit": "banerwei_3",
+     "idle": {
+      "model": "Live2D/banerwei_3/banerwei_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/banerwei_3/banerwei_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:banrenma",
+   "name": "半人马",
+   "costumes": [
+    {
+     "label": "沙滨的水之精灵",
+     "outfit": "banrenma_2",
+     "idle": {
+      "model": "Live2D/banrenma_2/banrenma_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/banrenma_2/banrenma_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:beianpudunii",
+   "name": "北安普敦II",
+   "costumes": [
+    {
+     "label": "竞泳之星",
+     "outfit": "beianpudunII_2",
+     "idle": {
+      "model": "Live2D/beianpudunII_2/beianpudunII_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/beianpudunII_2/beianpudunII_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:beierfasite",
+   "name": "贝尔法斯特",
+   "costumes": [
+    {
+     "label": "彩云之玫瑰",
+     "outfit": "beierfasite_2",
+     "idle": {
+      "model": "Live2D/beierfasite_2/beierfasite_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/beierfasite_2/beierfasite_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:beikaluolaina",
+   "name": "北卡罗来纳",
+   "costumes": [
+    {
+     "label": "秘密的换装练习？",
+     "outfit": "beikaluolaina_2",
+     "idle": {
+      "model": "Live2D/beikaluolaina_2/beikaluolaina_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/beikaluolaina_2/beikaluolaina_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:beilaosenlin",
+   "name": "贝劳森林",
+   "costumes": [
+    {
+     "label": "水色疗愈",
+     "outfit": "beilaosenlin_2",
+     "idle": {
+      "model": "Live2D/beilaosenlin_2/beilaosenlin_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/beilaosenlin_2/beilaosenlin_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:benningdun",
+   "name": "本宁顿",
+   "costumes": [
+    {
+     "label": "全速！盛夏逐光企划",
+     "outfit": "benningdun_2",
+     "idle": {
+      "model": "Live2D/benningdun_2/benningdun_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/benningdun_2/benningdun_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:biaoqiang",
+   "name": "标枪",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "biaoqiang",
+     "idle": {
+      "model": "Live2D/biaoqiang/biaoqiang.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/biaoqiang/biaoqiang.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "沙滩野餐会",
+     "outfit": "biaoqiang_3",
+     "idle": {
+      "model": "Live2D/biaoqiang_3/biaoqiang_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/biaoqiang_3/biaoqiang_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:bisimai",
+   "name": "俾斯麦",
+   "costumes": [
+    {
+     "label": "铁血的辉光",
+     "outfit": "bisimai_2",
+     "idle": {
+      "model": "Live2D/bisimai_2/bisimai_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/bisimai_2/bisimai_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "未完成的圣诞惊喜",
+     "outfit": "bisimai_4",
+     "idle": {
+      "model": "Live2D/bisimai_4/bisimai_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/bisimai_4/bisimai_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:bola",
+   "name": "波拉",
+   "costumes": [
+    {
+     "label": "水边的事故？",
+     "outfit": "bola_2",
+     "idle": {
+      "model": "Live2D/bola_2/bola_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/bola_2/bola_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:boyixi",
+   "name": "博伊西",
+   "costumes": [
+    {
+     "label": "羞怯的蓝宝石",
+     "outfit": "boyixi_2",
+     "idle": {
+      "model": "Live2D/boyixi_2/boyixi_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/boyixi_2/boyixi_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:bulaimodun",
+   "name": "布莱默顿",
+   "costumes": [
+    {
+     "label": "Happy Dating！",
+     "outfit": "bulaimodun_2",
+     "idle": {
+      "model": "Live2D/bulaimodun_2/bulaimodun_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/bulaimodun_2/bulaimodun_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "功夫少女！",
+     "outfit": "bulaimodun_4",
+     "idle": {
+      "model": "Live2D/bulaimodun_4/bulaimodun_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/bulaimodun_4/bulaimodun_4.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "悠然放松时光",
+     "outfit": "bulaimodun_5",
+     "idle": {
+      "model": "Live2D/bulaimodun_5/bulaimodun_5.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/bulaimodun_5/bulaimodun_5.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:buleisite",
+   "name": "布雷斯特",
+   "costumes": [
+    {
+     "label": "苍海织歌",
+     "outfit": "buleisite_2",
+     "idle": {
+      "model": "Live2D/buleisite_2/buleisite_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/buleisite_2/buleisite_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "良夜春景",
+     "outfit": "buleisite_3",
+     "idle": {
+      "model": "Live2D/buleisite_3/buleisite_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/buleisite_3/buleisite_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:bunao",
+   "name": "不挠",
+   "costumes": [
+    {
+     "label": "慵懒的领航员小姐",
+     "outfit": "bunao_3",
+     "idle": {
+      "model": "Live2D/bunao_3/bunao_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/bunao_3/bunao_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:chaijun",
+   "name": "柴郡",
+   "costumes": [
+    {
+     "label": "音乐绚烂CaitSith",
+     "outfit": "chaijun_3",
+     "idle": {
+      "model": "Live2D/chaijun_3/chaijun_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/chaijun_3/chaijun_3.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "冰雪公主",
+     "outfit": "chaijun_4",
+     "idle": {
+      "model": "Live2D/chaijun_4/chaijun_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/chaijun_4/chaijun_4.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "绚烂夜梦",
+     "outfit": "chaijun_5",
+     "idle": {
+      "model": "Live2D/chaijun_5/chaijun_5.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/chaijun_5/chaijun_5.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "柴郡猫的童话书迷宫",
+     "outfit": "chaijun_6",
+     "idle": {
+      "model": "Live2D/chaijun_6/chaijun_6.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/chaijun_6/chaijun_6.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:chicheng",
+   "name": "赤城",
+   "costumes": [
+    {
+     "label": "朝凰来仪",
+     "outfit": "chicheng_5",
+     "idle": {
+      "model": "Live2D/chicheng_5/chicheng_5.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/chicheng_5/chicheng_5.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:chuixue",
+   "name": "吹雪",
+   "costumes": [
+    {
+     "label": "Music Pixy",
+     "outfit": "chuixue_3",
+     "idle": {
+      "model": "Live2D/chuixue_3/chuixue_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/chuixue_3/chuixue_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:chuyue",
+   "name": "初月",
+   "costumes": [
+    {
+     "label": "八月恋夏",
+     "outfit": "chuyue_2",
+     "idle": {
+      "model": "Live2D/chuyue_2/chuyue_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/chuyue_2/chuyue_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:dafeng",
+   "name": "大凤",
+   "costumes": [
+    {
+     "label": "毒苹果",
+     "outfit": "dafeng_2",
+     "idle": {
+      "model": "Live2D/dafeng_2/dafeng_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/dafeng_2/dafeng_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "放学后的甜蜜时光",
+     "outfit": "dafeng_3",
+     "idle": {
+      "model": "Live2D/dafeng_3/dafeng_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/dafeng_3/dafeng_3.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "凤鸣春晓",
+     "outfit": "dafeng_4",
+     "idle": {
+      "model": "Live2D/dafeng_4/dafeng_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/dafeng_4/dafeng_4.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "海滨的白日美梦",
+     "outfit": "dafeng_6",
+     "idle": {
+      "model": "Live2D/dafeng_6/dafeng_6.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/dafeng_6/dafeng_6.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "绮愿良宵",
+     "outfit": "dafeng_7",
+     "idle": {
+      "model": "Live2D/dafeng_7/dafeng_7.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/dafeng_7/dafeng_7.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:daofeng",
+   "name": "岛风",
+   "costumes": [
+    {
+     "label": "最速兔兔的邀请函(?)",
+     "outfit": "daofeng_4",
+     "idle": {
+      "model": "Live2D/daofeng_4/daofeng_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/daofeng_4/daofeng_4.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "不思议国度的白兔",
+     "outfit": "daofeng_5",
+     "idle": {
+      "model": "Live2D/daofeng_5/daofeng_5.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/daofeng_5/daofeng_5.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:dewenjun",
+   "name": "德文郡",
+   "costumes": [
+    {
+     "label": "红月下的恶魔",
+     "outfit": "dewenjun_2",
+     "idle": {
+      "model": "Live2D/dewenjun_2/dewenjun_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/dewenjun_2/dewenjun_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:deyizhi",
+   "name": "德意志",
+   "costumes": [
+    {
+     "label": "艳阳下的“福利”时间",
+     "outfit": "deyizhi_3",
+     "idle": {
+      "model": "Live2D/deyizhi_3/deyizhi_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/deyizhi_3/deyizhi_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:dujiaoshou",
+   "name": "独角兽",
+   "costumes": [
+    {
+     "label": "憧憬的约会日",
+     "outfit": "dujiaoshou_4",
+     "idle": {
+      "model": "Live2D/dujiaoshou_4/dujiaoshou_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/dujiaoshou_4/dujiaoshou_4.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "天使的My Night",
+     "outfit": "dujiaoshou_6",
+     "idle": {
+      "model": "Live2D/dujiaoshou_6/dujiaoshou_6.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/dujiaoshou_6/dujiaoshou_6.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:dulianglai",
+   "name": "渡良濑",
+   "costumes": [
+    {
+     "label": "不会消失的换装魔法",
+     "outfit": "dulianglai_2",
+     "idle": {
+      "model": "Live2D/dulianglai_2/dulianglai_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/dulianglai_2/dulianglai_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:dunkeerke",
+   "name": "敦刻尔克",
+   "costumes": [
+    {
+     "label": "“甜蜜”夏日",
+     "outfit": "dunkeerke_2",
+     "idle": {
+      "model": "Live2D/dunkeerke_2/dunkeerke_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/dunkeerke_2/dunkeerke_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:edu",
+   "name": "恶毒",
+   "costumes": [
+    {
+     "label": "秘密基地的Mercredi",
+     "outfit": "edu_3",
+     "idle": {
+      "model": "Live2D/edu_3/edu_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/edu_3/edu_3.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "懒懒的白兔",
+     "outfit": "edu_4",
+     "idle": {
+      "model": "Live2D/edu_4/edu_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/edu_4/edu_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:feiteliedadi",
+   "name": "腓特烈大帝",
+   "costumes": [
+    {
+     "label": "相会于盛夏之夜",
+     "outfit": "feiteliedadi_3",
+     "idle": {
+      "model": "Live2D/feiteliedadi_3/feiteliedadi_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/feiteliedadi_3/feiteliedadi_3.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "红封之礼",
+     "outfit": "feiteliedadi_4",
+     "idle": {
+      "model": "Live2D/feiteliedadi_4/feiteliedadi_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/feiteliedadi_4/feiteliedadi_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:feiteliekaer",
+   "name": "腓特烈·卡尔",
+   "costumes": [
+    {
+     "label": "夏日防晒计划",
+     "outfit": "feiteliekaer_3",
+     "idle": {
+      "model": "Live2D/feiteliekaer_3/feiteliekaer_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/feiteliekaer_3/feiteliekaer_3.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "午夜频道",
+     "outfit": "feiteliekaer_4",
+     "idle": {
+      "model": "Live2D/feiteliekaer_4/feiteliekaer_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/feiteliekaer_4/feiteliekaer_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:fengyun",
+   "name": "风云",
+   "costumes": [
+    {
+     "label": "热茶与女仆修行",
+     "outfit": "fengyun_4",
+     "idle": {
+      "model": "Live2D/fengyun_4/fengyun_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/fengyun_4/fengyun_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:fulici",
+   "name": "弗里茨·鲁梅",
+   "costumes": [
+    {
+     "label": "Schwarzes Kaninchen",
+     "outfit": "fulici_2",
+     "idle": {
+      "model": "Live2D/fulici_2/fulici_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/fulici_2/fulici_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:gangyishawa",
+   "name": "冈依沙瓦号",
+   "costumes": [
+    {
+     "label": "真我的显影",
+     "outfit": "gangyishawa_3",
+     "idle": {
+      "model": "Live2D/gangyishawa_3/gangyishawa_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/gangyishawa_3/gangyishawa_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:gaoxiong",
+   "name": "高雄",
+   "costumes": [
+    {
+     "label": "武者的“内在”修养",
+     "outfit": "gaoxiong_7",
+     "idle": {
+      "model": "Live2D/gaoxiong_7/gaoxiong_7.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/gaoxiong_7/gaoxiong_7.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:geliqiya",
+   "name": "戈里齐亚",
+   "costumes": [
+    {
+     "label": "办公室的“隔阂”",
+     "outfit": "geliqiya_2",
+     "idle": {
+      "model": "Live2D/geliqiya_2/geliqiya_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/geliqiya_2/geliqiya_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:genaisennao",
+   "name": "格奈森瑙",
+   "costumes": [
+    {
+     "label": "梦魇魅影",
+     "outfit": "genaisennao_2",
+     "idle": {
+      "model": "Live2D/genaisennao_2/genaisennao_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/genaisennao_2/genaisennao_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:gezi",
+   "name": "葛兹·冯·伯利欣根",
+   "costumes": [
+    {
+     "label": "赤红之月的幻想",
+     "outfit": "gezi_2",
+     "idle": {
+      "model": "Live2D/gezi_2/gezi_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/gezi_2/gezi_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:guandao",
+   "name": "关岛",
+   "costumes": [
+    {
+     "label": "魅力舞台",
+     "outfit": "guandao_2",
+     "idle": {
+      "model": "Live2D/guandao_2/guandao_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/guandao_2/guandao_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "女忍者的危险综艺秀",
+     "outfit": "guandao_3",
+     "idle": {
+      "model": "Live2D/guandao_3/guandao_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/guandao_3/guandao_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:guanghui",
+   "name": "光辉",
+   "costumes": [
+    {
+     "label": "二人的学习时间",
+     "outfit": "guanghui_7",
+     "idle": {
+      "model": "Live2D/guanghui_7/guanghui_7.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/guanghui_7/guanghui_7.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "幽影徘徊之夜",
+     "outfit": "guanghui_9",
+     "idle": {
+      "model": "Live2D/guanghui_9/guanghui_9.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/guanghui_9/guanghui_9.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:guangrong",
+   "name": "光荣",
+   "costumes": [
+    {
+     "label": "凉夜香雪",
+     "outfit": "guangrong_3",
+     "idle": {
+      "model": "Live2D/guangrong_3/guangrong_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/guangrong_3/guangrong_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:hailunna",
+   "name": "海伦娜",
+   "costumes": [
+    {
+     "label": "耀眼的波纹",
+     "outfit": "hailunna_4",
+     "idle": {
+      "model": "Live2D/hailunna_4/hailunna_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/hailunna_4/hailunna_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:haiyinlixi",
+   "name": "海因里希亲王",
+   "costumes": [
+    {
+     "label": "泳池边的救生兔(?)",
+     "outfit": "haiyinlixi_2",
+     "idle": {
+      "model": "Live2D/haiyinlixi_2/haiyinlixi_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/haiyinlixi_2/haiyinlixi_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:heitaizi",
+   "name": "黑太子",
+   "costumes": [
+    {
+     "label": "White Princess",
+     "outfit": "heitaizi_2",
+     "idle": {
+      "model": "Live2D/heitaizi_2/heitaizi_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/heitaizi_2/heitaizi_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:hemin",
+   "name": "赫敏",
+   "costumes": [
+    {
+     "label": "纯白的悠闲假日",
+     "outfit": "hemin_2",
+     "idle": {
+      "model": "Live2D/hemin_2/hemin_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/hemin_2/hemin_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "温柔的纯白天使",
+     "outfit": "hemin_3",
+     "idle": {
+      "model": "Live2D/hemin_3/hemin_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/hemin_3/hemin_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:huangjiafangzhou",
+   "name": "皇家方舟",
+   "costumes": [
+    {
+     "label": "晚会的守护者",
+     "outfit": "huangjiafangzhou_3",
+     "idle": {
+      "model": "Live2D/huangjiafangzhou_3/huangjiafangzhou_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/huangjiafangzhou_3/huangjiafangzhou_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:huonululu",
+   "name": "火奴鲁鲁",
+   "costumes": [
+    {
+     "label": "盛夏的「灾难」",
+     "outfit": "huonululu_3",
+     "idle": {
+      "model": "Live2D/huonululu_3/huonululu_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/huonululu_3/huonululu_3.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "两人的夏日祭",
+     "outfit": "huonululu_5",
+     "idle": {
+      "model": "Live2D/huonululu_5/huonululu_5.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/huonululu_5/huonululu_5.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:jialisuoniye",
+   "name": "拉·加利索尼埃",
+   "costumes": [
+    {
+     "label": "黑猫与南瓜之夜",
+     "outfit": "jialisuoniye_3",
+     "idle": {
+      "model": "Live2D/jialisuoniye_3/jialisuoniye_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/jialisuoniye_3/jialisuoniye_3.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "春晓醉梦",
+     "outfit": "jialisuoniye_4",
+     "idle": {
+      "model": "Live2D/jialisuoniye_4/jialisuoniye_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/jialisuoniye_4/jialisuoniye_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:jian",
+   "name": "济安",
+   "costumes": [
+    {
+     "label": "异域绮梦",
+     "outfit": "jian_3",
+     "idle": {
+      "model": "Live2D/jian_3/jian_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/jian_3/jian_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:jianwu",
+   "name": "建武",
+   "costumes": [
+    {
+     "label": "妆点，只为今夜",
+     "outfit": "jianwu_2",
+     "idle": {
+      "model": "Live2D/jianwu_2/jianwu_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/jianwu_2/jianwu_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:jianye",
+   "name": "樫野",
+   "costumes": [
+    {
+     "label": "温泉放松时间",
+     "outfit": "jianye_2",
+     "idle": {
+      "model": "Live2D/jianye_2/jianye_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/jianye_2/jianye_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "绊倒的迷糊女仆",
+     "outfit": "jianye_3",
+     "idle": {
+      "model": "Live2D/jianye_3/jianye_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/jianye_3/jianye_3.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "花绽之乐章",
+     "outfit": "jianye_4",
+     "idle": {
+      "model": "Live2D/jianye_4/jianye_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/jianye_4/jianye_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:jiluofu",
+   "name": "基洛夫",
+   "costumes": [
+    {
+     "label": "疾速截击",
+     "outfit": "jiluofu_3",
+     "idle": {
+      "model": "Live2D/jiluofu_3/jiluofu_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/jiluofu_3/jiluofu_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:jinjiang",
+   "name": "近江",
+   "costumes": [
+    {
+     "label": "逃脱失败……？",
+     "outfit": "jinjiang_2",
+     "idle": {
+      "model": "Live2D/jinjiang_2/jinjiang_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/jinjiang_2/jinjiang_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:jinluhao",
+   "name": "金鹿号",
+   "costumes": [
+    {
+     "label": "古堡中的恐怖淑女",
+     "outfit": "jinluhao_2",
+     "idle": {
+      "model": "Live2D/jinluhao_2/jinluhao_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/jinluhao_2/jinluhao_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "微笑的白色魅影",
+     "outfit": "jinluhao_3",
+     "idle": {
+      "model": "Live2D/jinluhao_3/jinluhao_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/jinluhao_3/jinluhao_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:jinshi",
+   "name": "金狮",
+   "costumes": [
+    {
+     "label": "朦胧的宠溺时刻",
+     "outfit": "jinshi_2",
+     "idle": {
+      "model": "Live2D/jinshi_2/jinshi_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/jinshi_2/jinshi_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:jiuyun",
+   "name": "酒匂",
+   "costumes": [
+    {
+     "label": "团子的诱惑",
+     "outfit": "jiuyun_2",
+     "idle": {
+      "model": "Live2D/jiuyun_2/jiuyun_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/jiuyun_2/jiuyun_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:junhe",
+   "name": "骏河",
+   "costumes": [
+    {
+     "label": "“不情愿”的圣夜祭",
+     "outfit": "junhe_4",
+     "idle": {
+      "model": "Live2D/junhe_4/junhe_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/junhe_4/junhe_4.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "百花庆云",
+     "outfit": "junhe_5",
+     "idle": {
+      "model": "Live2D/junhe_5/junhe_5.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/junhe_5/junhe_5.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:junzhu",
+   "name": "君主",
+   "costumes": [
+    {
+     "label": "海滩享受计划",
+     "outfit": "junzhu_5",
+     "idle": {
+      "model": "Live2D/junzhu_5/junzhu_5.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/junzhu_5/junzhu_5.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:kalangshitade",
+   "name": "喀琅施塔得",
+   "costumes": [
+    {
+     "label": "突击行动开始！",
+     "outfit": "kalangshitade_2",
+     "idle": {
+      "model": "Live2D/kalangshitade_2/kalangshitade_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/kalangshitade_2/kalangshitade_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:kalvbudisi",
+   "name": "卡律布狄斯",
+   "costumes": [
+    {
+     "label": "治愈的红闺",
+     "outfit": "kalvbudisi_2",
+     "idle": {
+      "model": "Live2D/kalvbudisi_2/kalvbudisi_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/kalvbudisi_2/kalvbudisi_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:kebensi",
+   "name": "科本斯",
+   "costumes": [
+    {
+     "label": "心动营养灌输中",
+     "outfit": "kebensi_2",
+     "idle": {
+      "model": "Live2D/kebensi_2/kebensi_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/kebensi_2/kebensi_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:kelaimengsuo",
+   "name": "克莱蒙梭",
+   "costumes": [
+    {
+     "label": "金日煦风",
+     "outfit": "kelaimengsuo_2",
+     "idle": {
+      "model": "Live2D/kelaimengsuo_2/kelaimengsuo_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/kelaimengsuo_2/kelaimengsuo_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:kelifulan",
+   "name": "克利夫兰",
+   "costumes": [
+    {
+     "label": "骑士之夜",
+     "outfit": "kelifulan_3",
+     "idle": {
+      "model": "Live2D/kelifulan_3/kelifulan_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/kelifulan_3/kelifulan_3.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "休息室的意外邂逅？",
+     "outfit": "kelifulan_8",
+     "idle": {
+      "model": "Live2D/kelifulan_8/kelifulan_8.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/kelifulan_8/kelifulan_8.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:kewei",
+   "name": "可畏",
+   "costumes": [
+    {
+     "label": "值日时的春心萌动",
+     "outfit": "kewei_4",
+     "idle": {
+      "model": "Live2D/kewei_4/kewei_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/kewei_4/kewei_4.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "纪念印记",
+     "outfit": "kewei_6",
+     "idle": {
+      "model": "Live2D/kewei_6/kewei_6.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/kewei_6/kewei_6.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:kubo",
+   "name": "库珀",
+   "costumes": [
+    {
+     "label": "烈日的网球场",
+     "outfit": "kubo_2",
+     "idle": {
+      "model": "Live2D/kubo_2/kubo_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/kubo_2/kubo_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:kuersike",
+   "name": "库尔斯克",
+   "costumes": [
+    {
+     "label": "雾中雪狼",
+     "outfit": "kuersike_2",
+     "idle": {
+      "model": "Live2D/kuersike_2/kuersike_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/kuersike_2/kuersike_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:lafei",
+   "name": "拉菲",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "lafei",
+     "idle": {
+      "model": "Live2D/lafei/lafei.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/lafei/lafei.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "白兔迎春",
+     "outfit": "lafei_4",
+     "idle": {
+      "model": "Live2D/lafei_4/lafei_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/lafei_4/lafei_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:lafeier",
+   "name": "拉斐尔",
+   "costumes": [
+    {
+     "label": "爱与美的秘密珍藏",
+     "outfit": "lafeier_2",
+     "idle": {
+      "model": "Live2D/lafeier_2/lafeier_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/lafeier_2/lafeier_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:lafeiii",
+   "name": "拉菲II",
+   "costumes": [
+    {
+     "label": "睡意满满忙碌DAY",
+     "outfit": "lafeiII_3",
+     "idle": {
+      "model": "Live2D/lafeiII_3/lafeiII_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/lafeiII_3/lafeiII_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:leigensibao",
+   "name": "雷根斯堡",
+   "costumes": [
+    {
+     "label": "暗之龙，光之岸",
+     "outfit": "Leigensibao_2",
+     "idle": {
+      "model": "Live2D/Leigensibao_2/Leigensibao_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/Leigensibao_2/Leigensibao_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:liekexingdunii",
+   "name": "列克星敦II",
+   "costumes": [
+    {
+     "label": "轻飘飘的拂拭时光",
+     "outfit": "liekexingdunII_2",
+     "idle": {
+      "model": "Live2D/liekexingdunII_2/liekexingdunII_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/liekexingdunII_2/liekexingdunII_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:lingbo",
+   "name": "绫波",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "lingbo",
+     "idle": {
+      "model": "Live2D/lingbo/lingbo.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/lingbo/lingbo.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "黯然礼装",
+     "outfit": "lingbo_10",
+     "idle": {
+      "model": "Live2D/lingbo_10/lingbo_10.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/lingbo_10/lingbo_10.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:linuo",
+   "name": "里诺",
+   "costumes": [
+    {
+     "label": "bunny·reno！",
+     "outfit": "linuo_3",
+     "idle": {
+      "model": "Live2D/linuo_3/linuo_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/linuo_3/linuo_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:lisailiu",
+   "name": "黎塞留",
+   "costumes": [
+    {
+     "label": "潮风的Fleuron",
+     "outfit": "lisailiu_2",
+     "idle": {
+      "model": "Live2D/lisailiu_2/lisailiu_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/lisailiu_2/lisailiu_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "常緑Rêve prophétique",
+     "outfit": "lisailiu_3",
+     "idle": {
+      "model": "Live2D/lisailiu_3/lisailiu_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/lisailiu_3/lisailiu_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:longfeng",
+   "name": "龙凤",
+   "costumes": [
+    {
+     "label": "凤舞新年",
+     "outfit": "longfeng_2",
+     "idle": {
+      "model": "Live2D/longfeng_2/longfeng_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/longfeng_2/longfeng_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:longwu",
+   "name": "龙武",
+   "costumes": [
+    {
+     "label": "腾龙新春宴",
+     "outfit": "longwu_2",
+     "idle": {
+      "model": "Live2D/longwu_2/longwu_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/longwu_2/longwu_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:luoen",
+   "name": "罗恩",
+   "costumes": [
+    {
+     "label": "苍翠的安眠曲",
+     "outfit": "luoen_4",
+     "idle": {
+      "model": "Live2D/luoen_4/luoen_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/luoen_4/luoen_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:luoma",
+   "name": "罗马",
+   "costumes": [
+    {
+     "label": "午夜的白天鹅",
+     "outfit": "luoma_2",
+     "idle": {
+      "model": "Live2D/luoma_2/luoma_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/luoma_2/luoma_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:lupuleixite",
+   "name": "鲁普雷希特亲王",
+   "costumes": [
+    {
+     "label": "腾龙戏春？",
+     "outfit": "lupuleixite_2",
+     "idle": {
+      "model": "Live2D/lupuleixite_2/lupuleixite_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/lupuleixite_2/lupuleixite_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:luyijiushi",
+   "name": "路易九世",
+   "costumes": [
+    {
+     "label": "华服的圣骑士",
+     "outfit": "luyijiushi_2",
+     "idle": {
+      "model": "Live2D/luyijiushi_2/luyijiushi_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/luyijiushi_2/luyijiushi_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "微醺的静谧时光",
+     "outfit": "luyijiushi_4",
+     "idle": {
+      "model": "Live2D/luyijiushi_4/luyijiushi_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/luyijiushi_4/luyijiushi_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:lvzuofu",
+   "name": "吕佐夫",
+   "costumes": [
+    {
+     "label": "永夜的赤之贵族",
+     "outfit": "lvzuofu_2",
+     "idle": {
+      "model": "Live2D/lvzuofu_2/lvzuofu_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/lvzuofu_2/lvzuofu_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:maliluosi_doa",
+   "name": "玛莉萝丝",
+   "costumes": [
+    {
+     "label": "热气蒸腾的女神",
+     "outfit": "maliluosi_3_doa",
+     "idle": {
+      "model": "Live2D/maliluosi_3_doa/maliluosi_3_doa.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/maliluosi_3_doa/maliluosi_3_doa.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:masaina",
+   "name": "马塞纳",
+   "costumes": [
+    {
+     "label": "醉甜之泉",
+     "outfit": "masaina_2",
+     "idle": {
+      "model": "Live2D/masaina_2/masaina_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/masaina_2/masaina_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:meikelunbao",
+   "name": "梅克伦堡",
+   "costumes": [
+    {
+     "label": "作茧自缚",
+     "outfit": "meikelunbao_2",
+     "idle": {
+      "model": "Live2D/meikelunbao_2/meikelunbao_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/meikelunbao_2/meikelunbao_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:meiyinci",
+   "name": "美因茨",
+   "costumes": [
+    {
+     "label": "静雅之所的安逸",
+     "outfit": "meiyinci_3",
+     "idle": {
+      "model": "Live2D/meiyinci_3/meiyinci_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/meiyinci_3/meiyinci_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:mingji",
+   "name": "名寄",
+   "costumes": [
+    {
+     "label": "Electric Affection",
+     "outfit": "mingji_2",
+     "idle": {
+      "model": "Live2D/mingji_2/mingji_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/mingji_2/mingji_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:mingshi",
+   "name": "明石",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "mingshi",
+     "idle": {
+      "model": "Live2D/mingshi/mingshi.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/mingshi/mingshi.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:mojiaduoer",
+   "name": "莫加多尔",
+   "costumes": [
+    {
+     "label": "静谧一隅的燥热",
+     "outfit": "mojiaduoer_2",
+     "idle": {
+      "model": "Live2D/mojiaduoer_2/mojiaduoer_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/mojiaduoer_2/mojiaduoer_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "嗅诊的护理天使",
+     "outfit": "mojiaduoer_3",
+     "idle": {
+      "model": "Live2D/mojiaduoer_3/mojiaduoer_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/mojiaduoer_3/mojiaduoer_3.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "共坠的渴慕",
+     "outfit": "mojiaduoer_4",
+     "idle": {
+      "model": "Live2D/mojiaduoer_4/mojiaduoer_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/mojiaduoer_4/mojiaduoer_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:nabulesi",
+   "name": "那不勒斯",
+   "costumes": [
+    {
+     "label": "Dreamy Night",
+     "outfit": "nabulesi_2",
+     "idle": {
+      "model": "Live2D/nabulesi_2/nabulesi_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/nabulesi_2/nabulesi_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:naximofu",
+   "name": "纳希莫夫海军上将",
+   "costumes": [
+    {
+     "label": "聚光灯下的初体验",
+     "outfit": "naximofu_2",
+     "idle": {
+      "model": "Live2D/naximofu_2/naximofu_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/naximofu_2/naximofu_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:nengdai",
+   "name": "能代",
+   "costumes": [
+    {
+     "label": "祭典的秘境?",
+     "outfit": "nengdai_2",
+     "idle": {
+      "model": "Live2D/nengdai_2/nengdai_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/nengdai_2/nengdai_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "阳光·沙滩·假日",
+     "outfit": "nengdai_3",
+     "idle": {
+      "model": "Live2D/nengdai_3/nengdai_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/nengdai_3/nengdai_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:ninghai",
+   "name": "宁海",
+   "costumes": [
+    {
+     "label": "东煌姐妹！·N",
+     "outfit": "ninghai_4",
+     "idle": {
+      "model": "Live2D/ninghai_4/ninghai_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/ninghai_4/ninghai_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:ougen",
+   "name": "欧根亲王",
+   "costumes": [
+    {
+     "label": "Final Lap",
+     "outfit": "ougen_5",
+     "idle": {
+      "model": "Live2D/ougen_5/ougen_5.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/ougen_5/ougen_5.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "沉醉于夜",
+     "outfit": "ougen_6",
+     "idle": {
+      "model": "Live2D/ougen_6/ougen_6.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/ougen_6/ougen_6.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "微醺与试探的距离",
+     "outfit": "ougen_8",
+     "idle": {
+      "model": "Live2D/ougen_8/ougen_8.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/ougen_8/ougen_8.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:ouruola",
+   "name": "欧若拉",
+   "costumes": [
+    {
+     "label": "渝城秘技",
+     "outfit": "ouruola_4",
+     "idle": {
+      "model": "Live2D/ouruola_4/ouruola_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/ouruola_4/ouruola_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:pinghai",
+   "name": "平海",
+   "costumes": [
+    {
+     "label": "东煌姐妹！·P",
+     "outfit": "pinghai_4",
+     "idle": {
+      "model": "Live2D/pinghai_4/pinghai_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/pinghai_4/pinghai_4.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "甜蜜嫣红",
+     "outfit": "pinghai_6",
+     "idle": {
+      "model": "Live2D/pinghai_6/pinghai_6.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/pinghai_6/pinghai_6.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:pizibao",
+   "name": "匹兹堡",
+   "costumes": [
+    {
+     "label": "斟酒女郎的赌局",
+     "outfit": "pizibao_2",
+     "idle": {
+      "model": "Live2D/pizibao_2/pizibao_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/pizibao_2/pizibao_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:pulimaosi",
+   "name": "普利茅斯",
+   "costumes": [
+    {
+     "label": "纯白天使的全身检查",
+     "outfit": "pulimaosi_3",
+     "idle": {
+      "model": "Live2D/pulimaosi_3/pulimaosi_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/pulimaosi_3/pulimaosi_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:qianjian",
+   "name": "浅间",
+   "costumes": [
+    {
+     "label": "绽放于至深之夜",
+     "outfit": "qianjian_2",
+     "idle": {
+      "model": "Live2D/qianjian_2/qianjian_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/qianjian_2/qianjian_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:qianwei",
+   "name": "前卫",
+   "costumes": [
+    {
+     "label": "摇摆不定的伪装",
+     "outfit": "qianwei_2",
+     "idle": {
+      "model": "Live2D/qianwei_2/qianwei_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/qianwei_2/qianwei_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:qibolin",
+   "name": "齐柏林伯爵",
+   "costumes": [
+    {
+     "label": "沙滩上的乌尔德",
+     "outfit": "qibolin_2",
+     "idle": {
+      "model": "Live2D/qibolin_2/qibolin_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/qibolin_2/qibolin_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:qiershazhi",
+   "name": "奇尔沙治",
+   "costumes": [
+    {
+     "label": "Allnight Charge",
+     "outfit": "qiershazhi_2",
+     "idle": {
+      "model": "Live2D/qiershazhi_2/qiershazhi_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/qiershazhi_2/qiershazhi_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:qisheng",
+   "name": "七省",
+   "costumes": [
+    {
+     "label": "相依偎的温度",
+     "outfit": "qisheng_2",
+     "idle": {
+      "model": "Live2D/qisheng_2/qisheng_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/qisheng_2/qisheng_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:qiye",
+   "name": "企业",
+   "costumes": [
+    {
+     "label": "雨霁于心晴之时",
+     "outfit": "qiye_10",
+     "idle": {
+      "model": "Live2D/qiye_10/qiye_10.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/qiye_10/qiye_10.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "Wind Catcher",
+     "outfit": "qiye_7",
+     "idle": {
+      "model": "Live2D/qiye_7/qiye_7.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/qiye_7/qiye_7.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "天际的潜水者",
+     "outfit": "qiye_9",
+     "idle": {
+      "model": "Live2D/qiye_9/qiye_9.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/qiye_9/qiye_9.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:rangbaer",
+   "name": "让·巴尔",
+   "costumes": [
+    {
+     "label": "秘密的Après midi",
+     "outfit": "rangbaer_3",
+     "idle": {
+      "model": "Live2D/rangbaer_3/rangbaer_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/rangbaer_3/rangbaer_3.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "舶刀Première neige",
+     "outfit": "rangbaer_4",
+     "idle": {
+      "model": "Live2D/rangbaer_4/rangbaer_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/rangbaer_4/rangbaer_4.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "灯映星展",
+     "outfit": "rangbaer_5",
+     "idle": {
+      "model": "Live2D/rangbaer_5/rangbaer_5.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/rangbaer_5/rangbaer_5.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:sailimiye",
+   "name": "塞利米耶号",
+   "costumes": [
+    {
+     "label": "自投罗网的预言家？",
+     "outfit": "sailimiye_2",
+     "idle": {
+      "model": "Live2D/sailimiye_2/sailimiye_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/sailimiye_2/sailimiye_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:sebao",
+   "name": "瑟堡",
+   "costumes": [
+    {
+     "label": "布偶熊里面的是……？",
+     "outfit": "sebao_2",
+     "idle": {
+      "model": "Live2D/sebao_2/sebao_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/sebao_2/sebao_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:shengluyisi",
+   "name": "圣路易斯",
+   "costumes": [
+    {
+     "label": "春之华",
+     "outfit": "shengluyisi_2",
+     "idle": {
+      "model": "Live2D/shengluyisi_2/shengluyisi_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/shengluyisi_2/shengluyisi_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "雪下之饮",
+     "outfit": "shengluyisi_3",
+     "idle": {
+      "model": "Live2D/shengluyisi_3/shengluyisi_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/shengluyisi_3/shengluyisi_3.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "Luxury Handle",
+     "outfit": "shengluyisi_4",
+     "idle": {
+      "model": "Live2D/shengluyisi_4/shengluyisi_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/shengluyisi_4/shengluyisi_4.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "邮轮上的诱人午后",
+     "outfit": "shengluyisi_5",
+     "idle": {
+      "model": "Live2D/shengluyisi_5/shengluyisi_5.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/shengluyisi_5/shengluyisi_5.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:shi",
+   "name": "狮",
+   "costumes": [
+    {
+     "label": "沙滩的慵懒主宰",
+     "outfit": "shi_2",
+     "idle": {
+      "model": "Live2D/shi_2/shi_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/shi_2/shi_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "夜巷中的诱引者",
+     "outfit": "shi_3",
+     "idle": {
+      "model": "Live2D/shi_3/shi_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/shi_3/shi_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:shitelasai",
+   "name": "彼得·史特拉塞",
+   "costumes": [
+    {
+     "label": "节庆的Chronos",
+     "outfit": "shitelasai_2",
+     "idle": {
+      "model": "Live2D/shitelasai_2/shitelasai_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/shitelasai_2/shitelasai_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:shuixinghao",
+   "name": "水星号",
+   "costumes": [
+    {
+     "label": "天使降临之日",
+     "outfit": "shuixinghao_2",
+     "idle": {
+      "model": "Live2D/shuixinghao_2/shuixinghao_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/shuixinghao_2/shuixinghao_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:sipeibojue",
+   "name": "斯佩伯爵海军上将",
+   "costumes": [
+    {
+     "label": "铁血♥最可爱",
+     "outfit": "sipeibojue_5",
+     "idle": {
+      "model": "Live2D/sipeibojue_5/sipeibojue_5.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/sipeibojue_5/sipeibojue_5.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:sitelasibao",
+   "name": "斯特拉斯堡",
+   "costumes": [
+    {
+     "label": "赛场上的电子妖精",
+     "outfit": "sitelasibao_2",
+     "idle": {
+      "model": "Live2D/sitelasibao_2/sitelasibao_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/sitelasibao_2/sitelasibao_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:siwanshi",
+   "name": "四万十",
+   "costumes": [
+    {
+     "label": "优哉游哉的龙神大人",
+     "outfit": "siwanshi_3",
+     "idle": {
+      "model": "Live2D/siwanshi_3/siwanshi_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/siwanshi_3/siwanshi_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:suweiaitongmengnew",
+   "name": "苏维埃同盟",
+   "costumes": [
+    {
+     "label": "天幕危机",
+     "outfit": "suweiaitongmeng_2",
+     "idle": {
+      "model": "Live2D/suweiaitongmeng_2/suweiaitongmeng_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/suweiaitongmeng_2/suweiaitongmeng_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "缠丝审讯",
+     "outfit": "suweiaitongmeng_3",
+     "idle": {
+      "model": "Live2D/suweiaitongmeng_3/suweiaitongmeng_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/suweiaitongmeng_3/suweiaitongmeng_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:taiyuan",
+   "name": "太原",
+   "costumes": [
+    {
+     "label": "金蛇闹春",
+     "outfit": "taiyuan_2",
+     "idle": {
+      "model": "Live2D/taiyuan_2/taiyuan_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/taiyuan_2/taiyuan_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:telafaerjia",
+   "name": "特拉法尔加",
+   "costumes": [
+    {
+     "label": "海风与夜语",
+     "outfit": "telafaerjia_2",
+     "idle": {
+      "model": "Live2D/telafaerjia_2/telafaerjia_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/telafaerjia_2/telafaerjia_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:tiancheng",
+   "name": "天城",
+   "costumes": [
+    {
+     "label": "红鸢的闲暇片刻",
+     "outfit": "tiancheng_3",
+     "idle": {
+      "model": "Live2D/tiancheng_3/tiancheng_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/tiancheng_3/tiancheng_3.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "落于王座之花",
+     "outfit": "tiancheng_cv_2",
+     "idle": {
+      "model": "Live2D/tiancheng_cv_2/tiancheng_cv_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/tiancheng_cv_2/tiancheng_cv_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "碧波绮尾",
+     "outfit": "tiancheng_cv_3",
+     "idle": {
+      "model": "Live2D/tiancheng_cv_3/tiancheng_cv_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/tiancheng_cv_3/tiancheng_cv_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:tianlangxing",
+   "name": "天狼星",
+   "costumes": [
+    {
+     "label": "盛夏的Seirios ",
+     "outfit": "tianlangxing_3",
+     "idle": {
+      "model": "Live2D/tianlangxing_3/tianlangxing_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/tianlangxing_3/tianlangxing_3.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "至高乐园的白兔",
+     "outfit": "tianlangxing_5",
+     "idle": {
+      "model": "Live2D/tianlangxing_5/tianlangxing_5.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/tianlangxing_5/tianlangxing_5.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:tierbici",
+   "name": "提尔比茨",
+   "costumes": [
+    {
+     "label": "冰雪消融的夏日",
+     "outfit": "tierbici_2",
+     "idle": {
+      "model": "Live2D/tierbici_2/tierbici_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/tierbici_2/tierbici_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:u2501",
+   "name": "U-2501",
+   "costumes": [
+    {
+     "label": "水幕后的珍宝",
+     "outfit": "u2501_2",
+     "idle": {
+      "model": "Live2D/u2501_2/u2501_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/u2501_2/u2501_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:weineituo",
+   "name": "维托里奥·维内托",
+   "costumes": [
+    {
+     "label": "拉斯佩齐亚之花",
+     "outfit": "weineituo_2",
+     "idle": {
+      "model": "Live2D/weineituo_2/weineituo_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/weineituo_2/weineituo_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:weixi",
+   "name": "威悉",
+   "costumes": [
+    {
+     "label": "黯调铅华",
+     "outfit": "weixi_2",
+     "idle": {
+      "model": "Live2D/weixi_2/weixi_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/weixi_2/weixi_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:weiyan",
+   "name": "威严",
+   "costumes": [
+    {
+     "label": "囚牢里的危险兔",
+     "outfit": "weiyan_2",
+     "idle": {
+      "model": "Live2D/weiyan_2/weiyan_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/weiyan_2/weiyan_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "突袭！暗黑基地！",
+     "outfit": "weiyan_4",
+     "idle": {
+      "model": "Live2D/weiyan_4/weiyan_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/weiyan_4/weiyan_4.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "野兔和蒸汽房",
+     "outfit": "weiyan_6",
+     "idle": {
+      "model": "Live2D/weiyan_6/weiyan_6.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/weiyan_6/weiyan_6.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:weizhang",
+   "name": "尾张",
+   "costumes": [
+    {
+     "label": "愿望为“爱”",
+     "outfit": "weizhang_3",
+     "idle": {
+      "model": "Live2D/weizhang_3/weizhang_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/weizhang_3/weizhang_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:wuerlixi",
+   "name": "乌尔里希·冯·胡滕",
+   "costumes": [
+    {
+     "label": "Mädchen Trümmer",
+     "outfit": "wuerlixi_2",
+     "idle": {
+      "model": "Live2D/wuerlixi_2/wuerlixi_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/wuerlixi_2/wuerlixi_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "一骑绝尘",
+     "outfit": "wuerlixi_3",
+     "idle": {
+      "model": "Live2D/wuerlixi_3/wuerlixi_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/wuerlixi_3/wuerlixi_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:wuqi",
+   "name": "吾妻",
+   "costumes": [
+    {
+     "label": "细语春霞",
+     "outfit": "wuqi_2",
+     "idle": {
+      "model": "Live2D/wuqi_2/wuqi_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/wuqi_2/wuqi_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "心向何方的指导课",
+     "outfit": "wuqi_3",
+     "idle": {
+      "model": "Live2D/wuqi_3/wuqi_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/wuqi_3/wuqi_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:wuzang",
+   "name": "武藏",
+   "costumes": [
+    {
+     "label": "堇色兔的狙击游戏",
+     "outfit": "wuzang_3",
+     "idle": {
+      "model": "Live2D/wuzang_3/wuzang_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/wuzang_3/wuzang_3.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "只为你献上的应援",
+     "outfit": "wuzang_4",
+     "idle": {
+      "model": "Live2D/wuzang_4/wuzang_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/wuzang_4/wuzang_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:xiafei",
+   "name": "霞飞",
+   "costumes": [
+    {
+     "label": "祝福的起步冲刺",
+     "outfit": "xiafei_4",
+     "idle": {
+      "model": "Live2D/xiafei_4/xiafei_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/xiafei_4/xiafei_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:xianghe",
+   "name": "翔鹤",
+   "costumes": [
+    {
+     "label": "散花舞鹤",
+     "outfit": "xianghe_2",
+     "idle": {
+      "model": "Live2D/xianghe_2/xianghe_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/xianghe_2/xianghe_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:xingdengbao",
+   "name": "兴登堡",
+   "costumes": [
+    {
+     "label": "微醺胜负",
+     "outfit": "xingdengbao_2",
+     "idle": {
+      "model": "Live2D/xingdengbao_2/xingdengbao_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/xingdengbao_2/xingdengbao_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "深阁舞戏",
+     "outfit": "xingdengbao_3",
+     "idle": {
+      "model": "Live2D/xingdengbao_3/xingdengbao_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/xingdengbao_3/xingdengbao_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:xinnong",
+   "name": "信浓",
+   "costumes": [
+    {
+     "label": "轰鸣的银轮",
+     "outfit": "xinnong_3",
+     "idle": {
+      "model": "Live2D/xinnong_3/xinnong_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/xinnong_3/xinnong_3.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "白沙幽梦",
+     "outfit": "xinnong_4",
+     "idle": {
+      "model": "Live2D/xinnong_4/xinnong_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/xinnong_4/xinnong_4.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "幻梦奇术",
+     "outfit": "xinnong_5",
+     "idle": {
+      "model": "Live2D/xinnong_5/xinnong_5.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/xinnong_5/xinnong_5.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "相融一梦",
+     "outfit": "xinnong_6",
+     "idle": {
+      "model": "Live2D/xinnong_6/xinnong_6.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/xinnong_6/xinnong_6.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:xinzexi",
+   "name": "新泽西",
+   "costumes": [
+    {
+     "label": "盛夏的闲暇",
+     "outfit": "xinzexi_3",
+     "idle": {
+      "model": "Live2D/xinzexi_3/xinzexi_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/xinzexi_3/xinzexi_3.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "漆黑的超极速前奏",
+     "outfit": "xinzexi_5",
+     "idle": {
+      "model": "Live2D/xinzexi_5/xinzexi_5.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/xinzexi_5/xinzexi_5.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:xixuegui",
+   "name": "吸血鬼",
+   "costumes": [
+    {
+     "label": "夜姬的正装?",
+     "outfit": "xixuegui_4",
+     "idle": {
+      "model": "Live2D/xixuegui_4/xixuegui_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/xixuegui_4/xixuegui_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:xuefeng",
+   "name": "雪风",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "xuefeng",
+     "idle": {
+      "model": "Live2D/xuefeng/xuefeng.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/xuefeng/xuefeng.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "冬之雪风",
+     "outfit": "xuefeng_3",
+     "idle": {
+      "model": "Live2D/xuefeng_3/xuefeng_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/xuefeng_3/xuefeng_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:xukufu",
+   "name": "絮库夫",
+   "costumes": [
+    {
+     "label": "购物时光！",
+     "outfit": "xukufu_2",
+     "idle": {
+      "model": "Live2D/xukufu_2/xukufu_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/xukufu_2/xukufu_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "Loisirs balnéaires",
+     "outfit": "xukufu_3",
+     "idle": {
+      "model": "Live2D/xukufu_3/xukufu_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/xukufu_3/xukufu_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:yanusi",
+   "name": "雅努斯",
+   "costumes": [
+    {
+     "label": "万圣喵喵惊悚夜",
+     "outfit": "yanusi_3",
+     "idle": {
+      "model": "Live2D/yanusi_3/yanusi_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/yanusi_3/yanusi_3.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "云端的水光",
+     "outfit": "yanusi_7",
+     "idle": {
+      "model": "Live2D/yanusi_7/yanusi_7.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/yanusi_7/yanusi_7.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:yibei",
+   "name": "易北",
+   "costumes": [
+    {
+     "label": "清纯的“反派小姐”？",
+     "outfit": "yibei_3",
+     "idle": {
+      "model": "Live2D/yibei_3/yibei_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/yibei_3/yibei_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:yichui",
+   "name": "伊吹",
+   "costumes": [
+    {
+     "label": "永梦的青女",
+     "outfit": "yichui_2",
+     "idle": {
+      "model": "Live2D/yichui_2/yichui_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/yichui_2/yichui_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:yilishabai",
+   "name": "伊丽莎白女王",
+   "costumes": [
+    {
+     "label": "Maid·My·Highness",
+     "outfit": "yilishabai_6",
+     "idle": {
+      "model": "Live2D/yilishabai_6/yilishabai_6.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/yilishabai_6/yilishabai_6.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:yingrui",
+   "name": "应瑞",
+   "costumes": [
+    {
+     "label": "松戏梅·其上",
+     "outfit": "yingrui_3",
+     "idle": {
+      "model": "Live2D/yingrui_3/yingrui_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/yingrui_3/yingrui_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:yingxianzuo",
+   "name": "英仙座",
+   "costumes": [
+    {
+     "label": "慵懒的春光",
+     "outfit": "yingxianzuo_3",
+     "idle": {
+      "model": "Live2D/yingxianzuo_3/yingxianzuo_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/yingxianzuo_3/yingxianzuo_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:yuanchou",
+   "name": "怨仇",
+   "costumes": [
+    {
+     "label": "杯盏盈芳华",
+     "outfit": "yuanchou_3",
+     "idle": {
+      "model": "Live2D/yuanchou_3/yuanchou_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/yuanchou_3/yuanchou_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:yuekechengii",
+   "name": "约克城II",
+   "costumes": [
+    {
+     "label": "交错的温柔时光",
+     "outfit": "yuekechengII_3",
+     "idle": {
+      "model": "Live2D/yuekechengII_3/yuekechengII_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/yuekechengII_3/yuekechengII_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:yunxian",
+   "name": "云仙",
+   "costumes": [
+    {
+     "label": "嬉水碧海",
+     "outfit": "yunxian_2",
+     "idle": {
+      "model": "Live2D/yunxian_2/yunxian_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/yunxian_2/yunxian_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "万船集怀",
+     "outfit": "yunxian_3",
+     "idle": {
+      "model": "Live2D/yunxian_3/yunxian_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/yunxian_3/yunxian_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:z13",
+   "name": "Z13",
+   "costumes": [
+    {
+     "label": "战略性约会进行时 ",
+     "outfit": "z13_2",
+     "idle": {
+      "model": "Live2D/z13_2/z13_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/z13_2/z13_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:z23",
+   "name": "Z23",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "Z23",
+     "idle": {
+      "model": "Live2D/Z23/Z23.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/Z23/Z23.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:z46",
+   "name": "Z46",
+   "costumes": [
+    {
+     "label": "夏之初体验",
+     "outfit": "Z46_2",
+     "idle": {
+      "model": "Live2D/Z46_2/Z46_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/Z46_2/Z46_2.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "少女的借物竞赛",
+     "outfit": "Z46_3",
+     "idle": {
+      "model": "Live2D/Z46_3/Z46_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/Z46_3/Z46_3.model3.json",
+      "runtime": "live2d"
+     }
+    },
+    {
+     "label": "未知的闪亮舞台",
+     "outfit": "z46_4",
+     "idle": {
+      "model": "Live2D/z46_4/z46_4.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/z46_4/z46_4.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:zengkehaijunshangjiang",
+   "name": "曾克海军上将",
+   "costumes": [
+    {
+     "label": "心动审讯练习中 ",
+     "outfit": "zengkehaijunshangjiang_2",
+     "idle": {
+      "model": "Live2D/zengkehaijunshangjiang_2/zengkehaijunshangjiang_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/zengkehaijunshangjiang_2/zengkehaijunshangjiang_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:zhala",
+   "name": "扎拉",
+   "costumes": [
+    {
+     "label": "泳池边的“偶遇”",
+     "outfit": "zhala_2",
+     "idle": {
+      "model": "Live2D/zhala_2/zhala_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/zhala_2/zhala_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:zhangwu",
+   "name": "彰武",
+   "costumes": [
+    {
+     "label": "一枝春欲放",
+     "outfit": "zhangwu_2",
+     "idle": {
+      "model": "Live2D/zhangwu_2/zhangwu_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/zhangwu_2/zhangwu_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:zhaohe",
+   "name": "肇和",
+   "costumes": [
+    {
+     "label": "松戏梅·其下",
+     "outfit": "zhaohe_3",
+     "idle": {
+      "model": "Live2D/zhaohe_3/zhaohe_3.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/zhaohe_3/zhaohe_3.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:zhenzhuhao",
+   "name": "珍珠号",
+   "costumes": [
+    {
+     "label": "魔堡中的堕天使",
+     "outfit": "zhenzhuhao_2",
+     "idle": {
+      "model": "Live2D/zhenzhuhao_2/zhenzhuhao_2.model3.json",
+      "runtime": "live2d"
+     },
+     "cutscene": {
+      "model": "Live2D/zhenzhuhao_2/zhenzhuhao_2.model3.json",
+      "runtime": "live2d"
+     }
+    }
+   ]
+  }
+ ]
+}

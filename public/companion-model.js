@@ -53,7 +53,9 @@ export function withDisplay(preferences, display) {
   return { ...preferences, portraits: mode !== 'skill', skills: mode !== 'portrait', resume: mode };
 }
 
-export const costumeKey = costume => costume.idle?.skeleton || costume.cutscene?.skeleton || '';
+// Spine parts name a skeleton; Azur Lane's Live2D parts name a model.
+export const costumeKey = costume => costume.idle?.skeleton || costume.idle?.model ||
+  costume.cutscene?.skeleton || costume.cutscene?.model || '';
 
 export function availableCharacters(catalog, preferences) {
   const games = preferences.games || DEFAULT_GAMES;

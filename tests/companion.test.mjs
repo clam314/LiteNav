@@ -40,7 +40,8 @@ const catalog = {
 };
 const preferences = overrides => normalizePreferences({ portraits: true, ...overrides });
 
-const DEFAULTS = { rotation: 3, resume: 'portrait', games: ['bd2', 'nikke'], knownGames: ['bd2', 'nikke'] };
+const ALL_GAMES = ['bd2', 'nikke', 'azurlane'];
+const DEFAULTS = { rotation: 3, resume: 'portrait', games: ALL_GAMES, knownGames: ALL_GAMES };
 
 test('new preferences default to random people with display off; legacy enabled migrates only portrait visibility', () => {
   assert.deepEqual(normalizePreferences(null), {
@@ -58,17 +59,19 @@ test('preferences reject truthy strings, numbers, and non-string selection IDs',
     characterId: 42, costumeKey: { skeleton: 'bad' }, skillAction: 2,
   }), normalizePreferences(null));
   assert.deepEqual(normalizePreferences({
-    random: false, portraits: true, skills: true, rotation: 0, resume: 'both', games: ['bd2'], knownGames: ['bd2', 'nikke'], info: false,
+    random: false, portraits: true, skills: true, rotation: 0, resume: 'both', games: ['bd2'], knownGames: ALL_GAMES, info: false,
     characterId: 'two', costumeKey: 'two-a/idle', skillAction: 'loop_2',
   }), {
-    random: false, portraits: true, skills: true, rotation: 0, resume: 'both', games: ['bd2'], knownGames: ['bd2', 'nikke'],
+    random: false, portraits: true, skills: true, rotation: 0, resume: 'both', games: ['bd2'], knownGames: ALL_GAMES,
     characterId: 'two', costumeKey: 'two-a/idle', skillAction: 'loop_2',
   }, 'the retired info option is dropped');
-  assert.deepEqual(normalizePreferences({ games: ['unknown'], knownGames: ['bd2', 'nikke'] }).games, ['bd2', 'nikke'],
+  assert.deepEqual(normalizePreferences({ games: ['unknown'], knownGames: ALL_GAMES }).games, ALL_GAMES,
     'unknown games fall back to all known ones');
-  assert.deepEqual(normalizePreferences({ games: ['bd2'] }).games, ['bd2', 'nikke'],
+  assert.deepEqual(normalizePreferences({ games: ['bd2'] }).games, ALL_GAMES,
     'a game added after the choice was saved starts selected');
-  assert.deepEqual(normalizePreferences({ games: ['nikke'], knownGames: ['bd2', 'nikke'] }).games, ['nikke'],
+  assert.deepEqual(normalizePreferences({ games: ['bd2'], knownGames: ['bd2', 'nikke'] }).games, ['bd2', 'azurlane'],
+    'Azur Lane joins a choice saved before it was offered');
+  assert.deepEqual(normalizePreferences({ games: ['nikke'], knownGames: ALL_GAMES }).games, ['nikke'],
     'a game the viewer turned off stays off');
 });
 
@@ -114,6 +117,8 @@ test('a mode change keeps the same person and falls back to their compatible out
   assert.equal(selected.character.id, 'one');
   assert.equal(selected.costume.name, 'one-a');
   assert.equal(costumeKey(outfit('skill-only', false, true)), 'skill-only/skill');
+  const model = { model: 'Live2D/z23/z23.model3.json', runtime: 'live2d' };
+  assert.equal(costumeKey({ idle: model, cutscene: model }), model.model, 'Live2D costumes are keyed by their model');
 });
 
 test('missing saved people fall back to an eligible person; an empty pool reports a useful error', () => {
