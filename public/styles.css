@@ -358,6 +358,9 @@ input, select, textarea { min-width: 0; }
 .recognition-copy p, .recognition-copy span { color: var(--muted); font-size: 11px; line-height: 17px; }
 .dialog-preview-icon { width: 30px; height: 30px; object-fit: contain; }
 .dialog-preview-icon .brand-icon { width: 28px; height: 28px; }
+.link-icon-controls { display: flex; gap: 8px; }
+.link-icon-controls .form-input { min-width: 0; }
+.link-icon-controls .btn { flex-shrink: 0; }
 .checkbox-row { display: flex; align-items: flex-start; gap: 8px; color: var(--text); font-size: 13px; line-height: 20px; cursor: pointer; }
 .checkbox-row input { width: 15px; height: 15px; margin: 2px 0 0; accent-color: var(--blue); flex: 0 0 auto; }
 .checkbox-row .field-hint { display: block; margin-top: 2px; }

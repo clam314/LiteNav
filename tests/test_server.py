@@ -1,5 +1,6 @@
 """配置、监控与 HTTP API 的行为回归。"""
 import copy
+import io
 import json
 import socket
 import ssl
@@ -74,6 +75,17 @@ class StoreCase(DataFixture):
         reopened = server.Store(self.directory / "data", self.seed)
         self.assertEqual(reopened.state(), updated)
         self.assertEqual(updated["revision"], 2)
+
+    def test_manual_icon_survives_save_and_can_return_to_automatic(self):
+        state = self.store.state()
+        state["links"][0].update(icon="https://example.org/logo.png", iconManual=True)
+        self.store.save(state)
+        restored = server.Store(self.directory / "data", self.seed).state()
+        self.assertEqual(restored["links"][0]["icon"], "https://example.org/logo.png")
+        self.assertIs(restored["links"][0]["iconManual"], True)
+        self.assertNotIn("iconManual", restored["links"][1])
+        restored["links"][0].update(icon="github", iconManual=False)
+        self.assertNotIn("iconManual", self.store.save(restored)["links"][0])
 
     def test_optional_service_metadata_survives_save_export_and_import(self):
         metadata = {
@@ -235,6 +247,16 @@ class MetadataCase(unittest.TestCase):
         self.assertEqual(result["categoryId"], "dev")
         self.assertEqual(result["url"], "https://github.com")
 
+    def test_outlook_recognized_before_redirect_to_sign_in(self):
+        categories = [{"id": "mail", "name": "邮箱"}]
+        with patch("server.urlopen") as request:
+            for host in ("outlook.live.com", "outlook.office.com", "outlook.office365.com", "outlook.com"):
+                with self.subTest(host=host):
+                    result = server.metadata(host + "/mail/0/inbox", categories)
+                    self.assertEqual((result["name"], result["icon"], result["categoryId"]),
+                                     ("Outlook", "/icons/outlook.svg", "mail"))
+        request.assert_not_called()
+
     def test_known_sites_use_personal_categories_and_legacy_aliases(self):
         categories = [{"id": name, "name": name} for name in ("AI", "邮箱", "购物", "科技社区", "漫画", "效率办公", "生活工具")]
         expectations = (
@@ -320,6 +342,7 @@ class MetadataCase(unittest.TestCase):
         self.assertEqual(result["kind"], "website")
         self.assertEqual(result["name"], "unrecognized.example")
         self.assertIsNone(result["categoryId"])
+        self.assertEqual(result["icon"], "https://unrecognized.example/favicon.ico")
 
     def test_known_site_with_missing_category_remains_uncategorized(self):
         only_ai = sample()["categories"][:1]
@@ -330,24 +353,24 @@ class MetadataCase(unittest.TestCase):
         self.assertIsNone(result["categoryId"])
 
     def test_html_title_and_relative_icon(self):
-        headers = Message()
-        headers["Content-Type"] = "text/html; charset=utf-8"
-        class Response:
-            url = "https://example.org/folder"
-            status = 200
-            def __enter__(self):
-                return self
-            def __exit__(self, *_):
-                return False
-            def read(self, limit):
-                return b'<title>Example &amp; Tools</title><link rel="icon" href="/icon.svg">'
-        response = Response()
-        response.headers = headers
-        with patch("server.urlopen", return_value=response):
-            result = server.metadata("https://example.org/folder", sample()["categories"])
-        self.assertEqual(result["name"], "Example & Tools")
-        self.assertEqual(result["icon"], "https://example.org/icon.svg")
-        self.assertIsNone(result["categoryId"])
+        cases = (
+            ('<link rel="apple-touch-icon" href="/touch.png"><link rel="shortcut icon" href="/icon.svg">',
+             "https://www.example.org/icon.svg"),
+            ('<base href="../assets/"><link rel="icon" href="data:123">'
+             '<link rel="APPLE-TOUCH-ICON-PRECOMPOSED" href="touch.png">', "https://www.example.org/assets/touch.png"),
+            ('<link rel><link rel="icon" href="file:///tmp/icon.png">', "https://www.example.org/favicon.ico"),
+        )
+        for markup, expected_icon in cases:
+            with self.subTest(markup=markup):
+                response = io.BytesIO(('<title>Example &amp; Tools</title>' + markup).encode())
+                response.url = "https://www.example.org/pages/home"
+                response.headers = Message()
+                response.headers["Content-Type"] = "text/html; charset=utf-8"
+                with patch("server.urlopen", return_value=response):
+                    result = server.metadata("https://example.org/folder", sample()["categories"])
+                self.assertEqual(result["name"], "Example & Tools")
+                self.assertEqual(result["icon"], expected_icon)
+                self.assertIsNone(result["categoryId"])
 
     def test_login_required_response_is_reachable(self):
         error = HTTPError("http://nas.home", 401, "Unauthorized", {}, None)

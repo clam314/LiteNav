@@ -1,6 +1,6 @@
 # Icon sources
 
-The bundled brand SVGs below were downloaded on 2026-11-16 from the
+The bundled brand SVGs below are from the
 [selfh.st icons collection](https://github.com/selfhst/icons), maintained by
 selfh.st and its contributors. The collection is published under
 [Creative Commons Attribution 4.0 International](https://creativecommons.org/licenses/by/4.0/);
@@ -9,8 +9,8 @@ These files are provided as-is, without warranties, under that license.
 Brand names and logos remain the property of their respective owners;
 trademark rights are not granted by the collection's license.
 
-The downloaded SVG content is unchanged. Two local filenames have been
-renamed to match the navigation site's brand slugs.
+The original SVGs were downloaded on 2026-11-16 and the Outlook SVG on
+2026-11-19. The downloaded SVG content is unchanged.
 
 | Local file | Upstream file in `selfhst/icons/main/svg/` |
 | --- | --- |
@@ -35,6 +35,7 @@ renamed to match the navigation site's brand slugs.
 | midjourney.svg | midjourney.svg |
 | notion.svg | notion.svg |
 | obsidian.svg | obsidian.svg |
+| outlook.svg | [microsoft-outlook.svg](https://github.com/selfhst/icons/blob/main/svg/microsoft-outlook.svg) |
 | perplexity.svg | perplexity-ai.svg |
 | portainer.svg | portainer.svg |
 | spotify.svg | spotify.svg |

@@ -152,6 +152,8 @@ def validate_state(value: object) -> dict:
             "pinnedOrder": integer(item.get("pinnedOrder", item.get("order", index)), "常用顺序", 0, 100000),
             "monitorEnabled": kind == "service" and bool(item.get("monitorEnabled", False)),
         }
+        if item.get("iconManual") is True:
+            cleaned["iconManual"] = True
         if item.get("checkUrl"):
             cleaned["checkUrl"] = normalize_url(item["checkUrl"])
         for field, label, maximum in (
@@ -565,6 +567,10 @@ KNOWN_SITES = {
     "docs.qq.com": ("腾讯文档", "tencent-docs", "办公"), "kdocs.cn": ("金山文档", "kdocs", "办公"),
     "deepl.com": ("DeepL", "deepl", "办公"),
     "mail.google.com": ("Gmail", "gmail", "邮箱"), "feishu.cn": ("飞书", "feishu", "效率办公"),
+    "outlook.live.com": ("Outlook", "/icons/outlook.svg", "邮箱"),
+    "outlook.office.com": ("Outlook", "/icons/outlook.svg", "邮箱"),
+    "outlook.office365.com": ("Outlook", "/icons/outlook.svg", "邮箱"),
+    "outlook.com": ("Outlook", "/icons/outlook.svg", "邮箱"),
     "mail.163.com": ("163邮箱", "mdi-email", "邮箱"), "mail.10086.cn": ("139邮箱", "mdi-email", "办公"),
     "linear.app": ("Linear", "linear", "效率办公"), "obsidian.md": ("Obsidian", "obsidian", "效率办公"),
     "sspai.com": ("少数派", "sspai", "阅读资讯"), "zhihu.com": ("知乎", "zhihu", "阅读资讯"),
@@ -594,15 +600,24 @@ class MetadataParser(HTMLParser):
         super().__init__(convert_charrefs=True)
         self.in_title = False
         self.title_parts = []
-        self.icon = ""
+        self.base_href = ""
+        self.icons = []
+        self.touch_icons = []
         self.site_name = ""
 
     def handle_starttag(self, tag, attrs):
-        attrs = dict(attrs)
+        attrs = {key: value or "" for key, value in attrs}
         if tag == "title":
             self.in_title = True
-        if tag == "link" and "icon" in attrs.get("rel", "").lower().split() and not self.icon:
-            self.icon = attrs.get("href", "")
+        href = attrs.get("href", "").strip()
+        if tag == "base" and href and not self.base_href:
+            self.base_href = href
+        if tag == "link" and href and not href.startswith("#"):
+            rel = attrs.get("rel", "").lower().split()
+            if "icon" in rel:
+                self.icons.append(href)
+            elif "apple-touch-icon" in rel or "apple-touch-icon-precomposed" in rel:
+                self.touch_icons.append(href)
         if tag == "meta" and attrs.get("property", "").lower() == "og:site_name":
             self.site_name = attrs.get("content", "")
 
@@ -613,6 +628,23 @@ class MetadataParser(HTMLParser):
     def handle_data(self, data):
         if self.in_title and sum(map(len, self.title_parts)) < 512:
             self.title_parts.append(data)
+
+    def icon_url(self, page_url):
+        def resolve(base, href):
+            try:
+                target = urljoin(base, href)
+                if urlsplit(target).scheme in ("http", "https"):
+                    return normalize_url(target)
+            except ValueError:
+                pass
+            return ""
+
+        base = resolve(page_url, self.base_href) or page_url
+        for href in self.icons + self.touch_icons:
+            icon = resolve(base, href)
+            if icon:
+                return icon
+        return resolve(page_url, "/favicon.ico")
 
 
 def metadata(url: str, categories: list[dict], remote: bool = True) -> dict:
@@ -632,6 +664,8 @@ def metadata(url: str, categories: list[dict], remote: bool = True) -> dict:
     # Familiar sites can be recognized immediately, without waiting for a network request.
     if known or not remote:
         return result
+    # The browser may still reach the site's favicon when the server cannot read the page.
+    result["icon"] = urljoin(url, "/favicon.ico")
     try:
         request = Request(url, headers={"User-Agent": "Mozilla/5.0 (compatible; LiteNav/1.0)", "Accept": "text/html"})
         with urlopen(request, timeout=4) as response:
@@ -649,10 +683,7 @@ def metadata(url: str, categories: list[dict], remote: bool = True) -> dict:
             name = parser.site_name or " ".join("".join(parser.title_parts).split())
             if name:
                 result["name"] = name[:120]
-            try:
-                result["icon"] = normalize_url(urljoin(response.url, parser.icon or "/favicon.ico"))
-            except APIError:
-                pass
+            result["icon"] = parser.icon_url(response.url) or result["icon"]
     except HTTPError as error:
         error.close()
     except (OSError, URLError, ValueError, TimeoutError):

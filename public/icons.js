@@ -78,8 +78,18 @@ const aliases = {
   'stack-overflow': 'stackoverflow',
 };
 
-/** Known brands are local; optional custom favicons accept only HTTP(S) URLs. */
-export function brandIcon(slug, name = '', className = '') {
+function httpUrl(value) {
+  try {
+    const parsed = new URL(value);
+    if (['http:', 'https:'].includes(parsed.protocol) && !parsed.username && !parsed.password) return parsed;
+  } catch {
+    // Only complete HTTP(S) addresses can supply a remote image.
+  }
+  return null;
+}
+
+/** Pass the site URL for automatic icons so a broken page icon can fall back to /favicon.ico. */
+export function brandIcon(slug, name = '', className = '', siteUrl = '') {
   const source = String(slug ?? '').trim();
   const key = source.toLowerCase();
   const candidate = Object.prototype.hasOwnProperty.call(aliases, key) ? aliases[key] : key;
@@ -90,24 +100,29 @@ export function brandIcon(slug, name = '', className = '') {
     url = source;
   }
   if (/^https?:\/\//i.test(source)) {
-    try {
-      const parsed = new URL(source);
-      if (['http:', 'https:'].includes(parsed.protocol) && !parsed.username && !parsed.password) url = parsed.href;
-    } catch {
-      // Invalid custom URLs use the same local fallback as unknown brands.
+    url = httpUrl(source)?.href || url;
+  }
+  let fallback = '';
+  if (siteUrl && (url === '/icons/link.svg' || /^https?:\/\//i.test(url))) {
+    const site = httpUrl(siteUrl);
+    if (site) {
+      const rootIcon = new URL('/favicon.ico', site).href;
+      if (url === '/icons/link.svg') url = rootIcon;
+      else if (url !== rootIcon) fallback = ` data-site-icon="${escapeAttribute(rootIcon)}"`;
     }
   }
   const lightBackplate = ['github', 'midjourney', 'docker hub'].includes(String(name).trim().toLowerCase()) ? 'on-light' : '';
   const classes = escapeAttribute(`brand-icon ${className} ${lightBackplate}`.trim());
-  return `<img src="${escapeAttribute(url)}" alt="" class="${classes}" loading="lazy">`;
+  return `<img src="${escapeAttribute(url)}"${fallback} alt="" class="${classes}" loading="lazy">`;
 }
 
-// Capture resource failures; one local fallback attempt per image prevents loops.
+// Consume the site's fallback once, then use the bundled generic icon.
 if (typeof document !== 'undefined') {
   document.addEventListener('error', (event) => {
     const target = event.target;
-    if (target?.tagName !== 'IMG' || !target.classList.contains('brand-icon') || target.dataset.iconFallback) return;
-    target.dataset.iconFallback = 'true';
-    if (target.getAttribute('src') !== '/icons/link.svg') target.src = '/icons/link.svg';
+    if (target?.tagName !== 'IMG' || !target.classList.contains('brand-icon')) return;
+    if (target.getAttribute('src') === '/icons/link.svg') return;
+    target.src = target.dataset.siteIcon || '/icons/link.svg';
+    delete target.dataset.siteIcon;
   }, true);
 }

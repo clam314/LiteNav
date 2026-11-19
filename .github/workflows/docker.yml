@@ -51,8 +51,10 @@ jobs:
           python -m pip install -r tests/requirements-browser.txt
           python -m playwright install --with-deps chromium
 
-      - name: Verify companion controls in a real browser
-        run: python tests/companion_ui_browser.py
+      - name: Run browser regressions
+        run: |
+          python tests/companion_ui_browser.py
+          python tests/link_icons_browser.py
 
   build-pr:
     name: Build pull request image

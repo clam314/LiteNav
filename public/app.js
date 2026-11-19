@@ -132,14 +132,18 @@ const brokenFlag = (link) => {
   return result ? '<span class="link-flag" title="' + esc('上次体检：' + result.message) + '" aria-label="' + esc('上次体检疑似失效：' + result.message) + '"></span>' : '';
 };
 
+function linkIcon(link) {
+  return brandIcon(link.icon, link.name, '', link.iconManual ? '' : link.url);
+}
+
 function shortcutMarkup(link) {
-  const content = brokenFlag(link) + brandIcon(link.icon, link.name) + '<span class="shortcut-name">' + esc(link.name).replace(/([a-z])([A-Z])/g, '$1<wbr>$2') + '</span>';
+  const content = brokenFlag(link) + linkIcon(link) + '<span class="shortcut-name">' + esc(link.name).replace(/([a-z])([A-Z])/g, '$1<wbr>$2') + '</span>';
   if (editMode) return '<div class="shortcut editable-item" draggable="true" data-drag-kind="link" data-resource="' + esc(link.id) + '" data-scope="favorites" tabindex="0" aria-label="' + esc(link.name) + '，可拖动排序；按回车编辑">' + content + itemActions(link, 'favorites') + '</div>';
   return '<a class="shortcut" href="' + esc(link.url) + '" target="_blank" rel="noopener noreferrer" aria-label="打开 ' + esc(link.name) + '" title="' + esc(link.name) + '\n' + esc(link.url) + '">' + content + '</a>';
 }
 
 function siteMarkup(link, categoryId) {
-  const content = brokenFlag(link) + brandIcon(link.icon, link.name) + '<span class="site-copy"><span class="site-name">' + esc(link.name) + '</span><span class="site-domain">' + esc(domain(link.url)) + '</span></span>';
+  const content = brokenFlag(link) + linkIcon(link) + '<span class="site-copy"><span class="site-name">' + esc(link.name) + '</span><span class="site-domain">' + esc(domain(link.url)) + '</span></span>';
   if (editMode) return '<div class="site-link editable-item" draggable="true" data-drag-kind="link" data-resource="' + esc(link.id) + '" data-scope="category-' + esc(categoryId) + '" tabindex="0" aria-label="' + esc(link.name) + '，可拖动排序或拖到其他分类；按回车编辑">' + content + itemActions(link, 'category') + '</div>';
   return '<a class="site-link" href="' + esc(link.url) + '" target="_blank" rel="noopener noreferrer" title="' + esc(link.name) + '\n' + esc(link.url) + '">' + content + '<span class="link-arrow">' + icon('arrow-up-right', 13) + '</span></a>';
 }
@@ -178,7 +182,7 @@ function serviceMarkup(link) {
   if (status === 'offline' || status === 'degraded') detail = '连续 ' + (state.consecutiveFailures || 1) + ' 次未响应' + (status === 'degraded' ? '，正在确认' : '');
   const lastChecked = state.lastChecked ? new Date(typeof state.lastChecked === 'number' && state.lastChecked < 1e12 ? state.lastChecked * 1000 : state.lastChecked).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '尚未检测';
   return '<article class="service-card ' + (status === 'offline' ? 'has-error' : '') + (editMode ? ' is-sortable' : '') + '" data-service="' + esc(link.id) + '"' + (editMode ? ' draggable="true" data-drag-kind="service" data-resource="' + esc(link.id) + '"' : '') + '><header class="service-card-header">' +
-    '<a class="service-identity"' + (editMode ? ' draggable="false"' : '') + ' href="' + esc(link.url) + '" target="_blank" rel="noopener noreferrer">' + brandIcon(link.icon, link.name) + '<span class="service-copy"><h3>' + esc(link.name) + '</h3><span class="site-domain">' + esc(domain(link.url)) + '</span></span></a>' +
+    '<a class="service-identity"' + (editMode ? ' draggable="false"' : '') + ' href="' + esc(link.url) + '" target="_blank" rel="noopener noreferrer">' + linkIcon(link) + '<span class="service-copy"><h3>' + esc(link.name) + '</h3><span class="site-domain">' + esc(domain(link.url)) + '</span></span></a>' +
     '<span class="status-badge ' + status + '">' + statusLabels[status] + '</span></header>' +
     (link.description ? '<p class="service-description">' + esc(link.description) + '</p>' : '') +
     '<div class="service-details"><p>' + esc(detail) + '</p><div class="service-meta">最近检测：' + esc(lastChecked) + '</div>' +
@@ -226,7 +230,7 @@ function searchOptionMarkup(entry, index) {
   if (entry.google) return '<a' + attributes + '><span class="quick-search-google">' + icon('search', 16) + '</span><span class="quick-search-copy"><span class="quick-search-name">用 Google 搜索“' + esc(searchQuery.trim()) + '”</span><span class="quick-search-meta">google.com</span></span></a>';
   const link = entry.link;
   const place = link.kind === 'service' ? '服务' : config.categories.find((category) => category.id === link.categoryId)?.name || '';
-  return '<a' + attributes + '>' + brandIcon(link.icon, link.name) + '<span class="quick-search-copy"><span class="quick-search-name">' + esc(link.name) + '</span><span class="quick-search-meta">' + esc(domain(link.url)) + '</span></span>' +
+  return '<a' + attributes + '>' + linkIcon(link) + '<span class="quick-search-copy"><span class="quick-search-name">' + esc(link.name) + '</span><span class="quick-search-meta">' + esc(domain(link.url)) + '</span></span>' +
     (link.pinned ? '<span class="quick-search-tag">常用</span>' : '') + (place ? '<span class="quick-search-tag">' + esc(place) + '</span>' : '') + '</a>';
 }
 
@@ -280,7 +284,7 @@ function currentLinkChecks() {
 
 function linkCheckRowMarkup({ link, result }) {
   const category = config.categories.find((item) => item.id === link.categoryId)?.name || '';
-  return '<div class="link-check-row">' + brandIcon(link.icon, link.name) +
+  return '<div class="link-check-row">' + linkIcon(link) +
     '<span class="link-check-copy"><span class="link-check-name">' + esc(link.name) + (category ? '<span class="link-check-category">' + esc(category) + '</span>' : '') + '</span>' +
     '<span class="link-check-reason" title="' + esc(link.url) + '">' + esc(domain(link.url)) + ' · ' + esc(result.message || '') + (result.status === 'redirected' && result.finalUrl ? ' → <span class="link-check-target">' + esc(result.finalUrl) + '</span>' : '') + '</span></span>' +
     '<span class="link-check-actions"><a class="icon-button" href="' + esc(link.url) + '" target="_blank" rel="noopener noreferrer" title="在浏览器中打开" aria-label="打开 ' + esc(link.name) + '">' + icon('external-link', 15) + '</a>' +
@@ -442,6 +446,13 @@ function inferService(url) {
   } catch { return false; }
 }
 
+function customIconUrl(input) {
+  const value = input.trim();
+  if (!value || /^\/icons\/(?:[\w-]+\/)*[\w-]+\.(?:svg|png|ico|webp)$/i.test(value)) return value;
+  if (/^https?:\/\//i.test(value) && !/[\s\\]/.test(value)) return safeUrl(value);
+  throw new Error('请填写 HTTP 或 HTTPS 图片地址，或 /icons/ 下的图标路径');
+}
+
 function openLinkDialog({ id, kind = 'website', categoryId = '', pinned = false } = {}) {
   const existing = config.links.find((link) => link.id === id);
   const draft = existing ? structuredClone(existing) : {
@@ -456,7 +467,8 @@ function openLinkDialog({ id, kind = 'website', categoryId = '', pinned = false 
     '<form class="dialog-form" id="link-form"><header class="dialog-header"><h2>' + (existing ? '编辑入口' : '添加入口') + '</h2><button type="button" class="icon-button" data-action="close-dialog" aria-label="关闭">' + icon('x', 21) + '</button></header>',
     '<div class="dialog-body"><div class="type-switch" aria-label="入口类型"><button type="button" data-kind="website" class="' + (draft.kind === 'website' ? 'is-active' : '') + '">' + icon('link', 15) + '网址</button><button type="button" data-kind="service" class="' + (draft.kind === 'service' ? 'is-active' : '') + '">' + icon('server', 15) + '服务</button></div>',
     '<label class="field"><span class="field-label">网址</span><input id="link-url" name="url" class="form-input" inputmode="url" autocomplete="url" spellcheck="false" placeholder="粘贴网址，例如 https://github.com" value="' + esc(draft.url) + '" required autofocus></label>',
-    '<div class="recognition-row"><div class="dialog-preview-icon" id="link-preview">' + brandIcon(draft.icon, draft.name) + '</div><label class="recognition-copy"><span class="sr-only">名称</span><input class="form-input recognition-name" id="link-name" name="name" placeholder="自动识别名称，也可以修改" maxlength="120" value="' + esc(draft.name) + '" required><span class="recognition-status" id="metadata-status">' + (existing ? '名称和图标均可修改' : '粘贴后自动识别名称和分类') + '</span></label></div>',
+    '<div class="recognition-row"><div class="dialog-preview-icon" id="link-preview">' + linkIcon(draft) + '</div><label class="recognition-copy"><span class="sr-only">名称</span><input class="form-input recognition-name" id="link-name" name="name" placeholder="自动识别名称，也可以修改" maxlength="120" value="' + esc(draft.name) + '" required><span class="recognition-status" id="metadata-status">' + (existing ? '名称和图标均可修改' : '粘贴网址后自动识别名称、图标和分类') + '</span></label></div>',
+    '<div class="field"><label class="field-label" for="link-icon">图标地址</label><div class="link-icon-controls"><input class="form-input" id="link-icon" name="icon" inputmode="url" autocomplete="off" spellcheck="false" maxlength="4096" aria-describedby="link-icon-error" placeholder="自动识别，也可粘贴图片地址" value="' + esc(draft.iconManual ? draft.icon : '') + '"><button type="button" class="btn btn-secondary" id="reset-link-icon">恢复自动</button></div><span class="field-hint" id="link-icon-error" role="status" hidden>图片预览失败，请检查图标地址。</span></div>',
     '<label class="field" id="link-category-field"><span class="field-label">分类</span><select class="form-select" id="link-category" name="categoryId">' + categoryNames + '</select></label>',
     '<label class="checkbox-row"><input type="checkbox" id="link-pinned" name="pinned" ' + (draft.pinned ? 'checked' : '') + '>加入常用</label>',
     existing && existing.pinned ? '<label class="field"><span class="field-label">常用排序</span><input class="form-input" id="link-position" type="number" min="1" max="' + favorites().length + '" value="' + (favorites().findIndex((link) => link.id === draft.id) + 1) + '"><span class="field-hint">也可以在首页整理模式下拖动排序</span></label>' : '',
@@ -468,11 +480,23 @@ function openLinkDialog({ id, kind = 'website', categoryId = '', pinned = false 
   const form = dialog.querySelector('form');
   const urlInput = form.querySelector('#link-url');
   const nameInput = form.querySelector('#link-name');
+  const iconInput = form.querySelector('#link-icon');
+  const iconError = form.querySelector('#link-icon-error');
+  const preview = form.querySelector('#link-preview');
   const categorySelect = form.querySelector('#link-category');
   const status = form.querySelector('#metadata-status');
   const monitor = form.querySelector('#link-monitor');
   let metadataTimer;
+  let metadataRequest;
+  let metadataUrl = existing ? safeUrl(draft.url) : '';
+  let automaticIcon = draft.iconManual ? '' : draft.icon;
   let submitted = false;
+  const updatePreview = () => {
+    const manual = iconInput.value.trim();
+    iconError.hidden = true;
+    preview.innerHTML = brandIcon(manual || automaticIcon, nameInput.value, '', !manual && automaticIcon ? metadataUrl : '');
+  };
+  preview.addEventListener('error', () => { iconError.hidden = !iconInput.value.trim(); }, true);
   const updateKind = () => {
     dialog.querySelectorAll('[data-kind]').forEach((button) => {
       button.classList.toggle('is-active', button.dataset.kind === draft.kind);
@@ -484,7 +508,7 @@ function openLinkDialog({ id, kind = 'website', categoryId = '', pinned = false 
     form.querySelector('#link-check-url-field').hidden = !monitor.checked;
   };
   updateKind();
-  nameInput.addEventListener('input', () => { locked.name = true; });
+  nameInput.addEventListener('input', () => { locked.name = true; updatePreview(); });
   categorySelect.addEventListener('change', () => { locked.category = true; });
   monitor.addEventListener('change', () => { locked.monitor = true; updateKind(); });
   dialog.querySelectorAll('[data-kind]').forEach((button) => button.addEventListener('click', () => {
@@ -493,16 +517,15 @@ function openLinkDialog({ id, kind = 'website', categoryId = '', pinned = false 
     if (!locked.monitor) monitor.checked = draft.kind === 'service';
     updateKind();
   }));
-  const recognize = async () => {
-    let url;
-    try { url = safeUrl(urlInput.value); } catch { return; }
-    dialog._abort?.abort();
+  const recognize = (url) => {
+    if (metadataUrl === url) return metadataRequest;
+    metadataUrl = url;
     const controller = new AbortController();
     dialog._abort = controller;
-    status.textContent = '正在识别名称和分类…';
-    try {
-      const metadata = await api('/api/metadata', { method: 'POST', body: JSON.stringify({ url }), signal: controller.signal });
-      if (!dialog.open || submitted) return;
+    const timeout = setTimeout(() => controller.abort(), 6000);
+    status.textContent = '正在识别名称、图标和分类…';
+    metadataRequest = api('/api/metadata', { method: 'POST', body: JSON.stringify({ url }), signal: controller.signal }).then((metadata) => {
+      if (!dialog.open || controller.signal.aborted) return;
       if (!locked.name && metadata.name) nameInput.value = metadata.name;
       if (!locked.category) categorySelect.value = config.categories.some((category) => category.id === metadata.categoryId) ? metadata.categoryId : '';
       if (!locked.kind && metadata.kind) {
@@ -510,17 +533,42 @@ function openLinkDialog({ id, kind = 'website', categoryId = '', pinned = false 
         if (!locked.monitor) monitor.checked = draft.kind === 'service';
         updateKind();
       }
-      draft.icon = metadata.icon || draft.icon || 'link';
-      form.querySelector('#link-preview').innerHTML = brandIcon(draft.icon, nameInput.value);
+      automaticIcon = metadata.icon || new URL('/favicon.ico', url).href;
+      updatePreview();
       status.textContent = draft.kind === 'website' && !categorySelect.value ? '名称已识别，可存入未分类或选择分类' : '已识别，可直接' + (existing ? '保存' : '添加');
-    } catch (error) {
-      if (error.name !== 'AbortError') status.textContent = '可以直接保存，也可以修改名称和分类';
-    }
+    }).catch(() => {
+      if (!dialog.open || dialog._abort !== controller) return;
+      automaticIcon = new URL('/favicon.ico', url).href;
+      updatePreview();
+      status.textContent = '可以直接保存，也可以修改名称、图标和分类';
+    }).finally(() => clearTimeout(timeout));
+    return metadataRequest;
   };
-  urlInput.addEventListener('input', () => {
+  const invalidateMetadata = () => {
     clearTimeout(metadataTimer);
     dialog._abort?.abort();
-    status.textContent = '粘贴后自动识别名称和分类';
+    dialog._abort = null;
+    metadataUrl = '';
+    automaticIcon = '';
+  };
+  const restoreAutomaticIcon = () => {
+    iconInput.value = '';
+    invalidateMetadata();
+    updatePreview();
+    let url;
+    try { url = safeUrl(urlInput.value); } catch { return; }
+    recognize(url);
+  };
+  iconInput.addEventListener('input', () => {
+    if (iconInput.value.trim()) updatePreview();
+    else restoreAutomaticIcon();
+  });
+  form.querySelector('#reset-link-icon').addEventListener('click', restoreAutomaticIcon);
+  urlInput.addEventListener('input', () => {
+    invalidateMetadata();
+    status.textContent = '粘贴网址后自动识别名称、图标和分类';
+    if (!locked.name) nameInput.value = '';
+    updatePreview();
     let url;
     try { url = safeUrl(urlInput.value); } catch { return; }
     if (!locked.name) nameInput.value = domain(url);
@@ -529,7 +577,7 @@ function openLinkDialog({ id, kind = 'website', categoryId = '', pinned = false 
       if (!locked.monitor) monitor.checked = draft.kind === 'service';
       updateKind();
     }
-    metadataTimer = setTimeout(recognize, 350);
+    metadataTimer = setTimeout(() => recognize(url), 350);
   });
   dialog.addEventListener('close', () => clearTimeout(metadataTimer), { once: true });
   form.addEventListener('submit', async (event) => {
@@ -541,8 +589,19 @@ function openLinkDialog({ id, kind = 'website', categoryId = '', pinned = false 
       const url = safeUrl(urlInput.value);
       const duplicate = config.links.find((link) => link.id !== draft.id && safeUrl(link.url).replace(/\/$/, '') === url.replace(/\/$/, ''));
       if (duplicate) throw new Error('这个地址已添加为「' + duplicate.name + '」，请直接编辑已有入口');
+      const manualIcon = customIconUrl(iconInput.value);
+      submitted = true;
+      form.querySelector('.dialog-body').inert = true;
+      const submit = form.querySelector('[type="submit"]');
+      submit.disabled = true;
+      submit.textContent = '保存中…';
+      clearTimeout(metadataTimer);
+      await recognize(url);
+      if (!dialog.open) return;
       draft.url = url;
       draft.name = nameInput.value.trim() || domain(url);
+      draft.icon = manualIcon || automaticIcon || new URL('/favicon.ico', url).href;
+      draft.iconManual = Boolean(manualIcon);
       draft.categoryId = draft.kind === 'website' ? categorySelect.value : '';
       const needsDefaultCategory = draft.kind === 'website' && !draft.categoryId;
       draft.pinned = form.querySelector('#link-pinned').checked;
@@ -553,11 +612,6 @@ function openLinkDialog({ id, kind = 'website', categoryId = '', pinned = false 
         draft.server = form.querySelector('#link-server').value.trim();
         draft.container = form.querySelector('#link-container').value.trim();
       }
-      submitted = true;
-      dialog._abort?.abort();
-      const submit = form.querySelector('[type="submit"]');
-      submit.disabled = true;
-      submit.textContent = '保存中…';
       const positionInput = form.querySelector('#link-position');
       const requestedPosition = positionInput ? Math.max(0, Number(positionInput.value) - 1) : null;
       await mutate((state) => {
@@ -587,6 +641,7 @@ function openLinkDialog({ id, kind = 'website', categoryId = '', pinned = false 
       else await refreshHealth();
     } catch (error) {
       submitted = false;
+      form.querySelector('.dialog-body').inert = false;
       const submit = form.querySelector('[type="submit"]');
       submit.disabled = false;
       submit.textContent = existing ? '保存' : '添加';
