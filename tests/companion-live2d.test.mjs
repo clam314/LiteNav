@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { costumeKey } from '../public/companion-model.js';
 import {
-  live2dMotionPlan, live2dFiles, withLive2DFiles, live2dArtBounds, placeLive2D, createActionOrder,
+  live2dMotionPlan, live2dFiles, withLive2DFiles, live2dArtBounds, placeLive2D, createActionOrder, gazeFocus,
 } from '../public/companion-live2d.js';
 
 const motion = name => [{ File: `motions/${name}.motion3.json` }];
@@ -110,13 +110,14 @@ test('reactions play once per round in a shuffled order that never repeats acros
   assert.deepEqual([single(), single()], ['home', 'home']);
 });
 
-test('the Azur Lane catalog pins its upstreams: Live2D models for both displays, dynamic paintings as portraits', () => {
+test('the Azur Lane catalog pins its upstreams: Live2D models for both displays, dynamic paintings as portraits or with their reactions', () => {
   const catalog = JSON.parse(readFileSync(new URL('../public/companion/azurlane/catalog.json', import.meta.url), 'utf8'));
   assert.match(catalog.commit, /^[a-f0-9]{40}$/);
   assert.match(catalog.paintingCommit, /^[a-f0-9]{40}$/);
   assert.ok(catalog.characters.length > 100);
   const keys = new Set();
   let paintings = 0;
+  let reacting = 0;
   for (const person of catalog.characters) {
     assert.match(person.id, /^azurlane:[a-z0-9_]+$/);
     assert.ok(person.name && person.costumes.length);
@@ -137,7 +138,12 @@ test('the Azur Lane catalog pins its upstreams: Live2D models for both displays,
           assert.doesNotMatch(layer.skeleton, /_hx\.skel$/, 'censored layers are left out');
           assert.match(layer.atlas, /^[\w.-]+\.atlas$/);
         }
-        assert.equal(costume.cutscene, null, 'a dynamic painting is a portrait only');
+        if (costume.cutscene) {
+          reacting += 1;
+          const { actions, ...part } = costume.cutscene;
+          assert.deepEqual(part, costume.idle, 'reactions play on the same painting');
+          assert.ok(actions.length && actions.every(steps => steps.length && steps.every(name => typeof name === 'string')));
+        }
       }
       const key = costumeKey(costume);
       assert.ok(!keys.has(key), 'each model or painting appears once');
@@ -145,6 +151,7 @@ test('the Azur Lane catalog pins its upstreams: Live2D models for both displays,
     }
   }
   assert.ok(paintings > 100);
+  assert.ok(reacting >= 10 && reacting < paintings, 'only the paintings with reactions get an action display');
 });
 
 test('painting helpers repair 3.8 region names, pick the loop and place the camera', async () => {
@@ -163,4 +170,16 @@ test('painting helpers repair 3.8 region names, pick the loop and place the came
   // pixel, centred 300 px from the right edge, standing on the floor.
   const camera = placePainting({ x: -500, y: 0, width: 1000, height: 2000 }, { width: 800, height: 1000 }, 600);
   assert.deepEqual(camera, { zoom: 2, x: 0 - (500 - 400) * 2, y: 1000 });
+});
+
+test('the gaze turns toward the pointer from the face, growing with distance up to most of the range', () => {
+  const bounds = { minX: 0, maxX: 1000, minY: 0, maxY: 2000 };
+  // The face is at (500, 400); the reach is 1200 px.
+  assert.deepEqual(gazeFocus({ x: 500, y: 400 }, bounds), { x: 0, y: 0 });
+  const near = gazeFocus({ x: 800, y: 400 }, bounds);
+  assert.ok(Math.abs(near.x - 0.2) < 1e-9 && near.y === 0, 'a pointer close by turns the head a little');
+  const far = gazeFocus({ x: -10000, y: 400 }, bounds);
+  assert.ok(Math.abs(far.x + 0.8) < 1e-9, 'far away the turn stops at 80% of the range');
+  assert.ok(gazeFocus({ x: 500, y: -5000 }, bounds).y > 0.79, 'above the face looks up');
+  assert.deepEqual(gazeFocus({ x: 1, y: 1 }, { minX: Infinity }), { x: 0, y: 0 });
 });

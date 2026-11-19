@@ -108,3 +108,23 @@ export function createActionOrder(actions, random = Math.random) {
     return last;
   };
 }
+
+// Where the eyes look, as the focus the model's head and eyes turn toward
+// (-1…1, y up). pointer and bounds are in model pixels (y down). The face
+// sits near the top of the figure; the turn grows with the pointer's
+// distance from it and stays below the model's full range, so a pointer
+// resting on the navigation does not wrench the head aside.
+export function gazeFocus(pointer, bounds, strength = 0.8) {
+  if (![bounds?.minX, bounds?.maxX, bounds?.minY, bounds?.maxY].every(Number.isFinite)) return { x: 0, y: 0 };
+  const height = bounds.maxY - bounds.minY;
+  const reach = height * 0.6;
+  if (!(reach > 0)) return { x: 0, y: 0 };
+  let x = (pointer.x - (bounds.minX + bounds.maxX) / 2) / reach;
+  let y = (bounds.minY + height * 0.2 - pointer.y) / reach;
+  const length = Math.hypot(x, y);
+  if (length > 1) {
+    x /= length;
+    y /= length;
+  }
+  return { x: x * strength, y: y * strength };
+}

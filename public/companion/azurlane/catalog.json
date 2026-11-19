@@ -1,7 +1,7 @@
 {
- "generatedAt": "2026-11-19T09:44:05+00:00",
+ "generatedAt": "2026-11-19T15:34:17+00:00",
  "source": "bungaku-moe/AzurLaneLive2D@5435d971c655",
- "names": "Pelom777/AzurLaneData@a2c932c56ca5",
+ "names": "Pelom777/AzurLaneData@323e02209bb6",
  "paintings": "ww-rm/azurlane_spinepainting@d37b5bd58b11",
  "commit": "5435d971c655ff6f2efb40d13de33e815fe6c199",
  "paintingCommit": "d37b5bd58b1140c2395bb2d22cf9bc80fda504d5",
@@ -435,7 +435,31 @@
       ],
       "runtime": "3.8"
      },
-     "cutscene": null
+     "cutscene": {
+      "painting": "docs/aimudeng/aimudeng_4",
+      "layers": [
+       {
+        "skeleton": "aimudeng_4T.skel",
+        "atlas": "aimudeng_4T.atlas"
+       },
+       {
+        "skeleton": "aimudeng_4M.skel",
+        "atlas": "aimudeng_4M.atlas"
+       },
+       {
+        "skeleton": "aimudeng_4B.skel",
+        "atlas": "aimudeng_4B.atlas"
+       }
+      ],
+      "runtime": "3.8",
+      "actions": [
+       [
+        "drag",
+        "ex",
+        "drag_ex"
+       ]
+      ]
+     }
     }
    ]
   },
@@ -2018,7 +2042,27 @@
       ],
       "runtime": "3.8"
      },
-     "cutscene": null
+     "cutscene": {
+      "painting": "docs/gaoxiong/gaoxiong_6",
+      "layers": [
+       {
+        "skeleton": "gaoxiong_6T.skel",
+        "atlas": "gaoxiong_6T.atlas"
+       },
+       {
+        "skeleton": "gaoxiong_6B.skel",
+        "atlas": "gaoxiong_6B.atlas"
+       }
+      ],
+      "runtime": "3.8",
+      "actions": [
+       [
+        "drag",
+        "ex",
+        "drag_ex"
+       ]
+      ]
+     }
     },
     {
      "label": "武者的“内在”修养",
@@ -2626,7 +2670,21 @@
       ],
       "runtime": "3.8"
      },
-     "cutscene": null
+     "cutscene": {
+      "painting": "docs/i404/i404_2",
+      "layers": [
+       {
+        "skeleton": "i404_2.skel",
+        "atlas": "i404_2.atlas"
+       }
+      ],
+      "runtime": "3.8",
+      "actions": [
+       [
+        "login"
+       ]
+      ]
+     }
     },
     {
      "label": "绛縢华舞（动态立绘 2）",
@@ -2641,7 +2699,21 @@
       ],
       "runtime": "3.8"
      },
-     "cutscene": null
+     "cutscene": {
+      "painting": "docs/i404/i404_3",
+      "layers": [
+       {
+        "skeleton": "i404_3.skel",
+        "atlas": "i404_3.atlas"
+       }
+      ],
+      "runtime": "3.8",
+      "actions": [
+       [
+        "login"
+       ]
+      ]
+     }
     }
    ]
   },
@@ -2722,7 +2794,30 @@
       ],
       "runtime": "3.8"
      },
-     "cutscene": null
+     "cutscene": {
+      "painting": "docs/jianwu/jianwu_3",
+      "layers": [
+       {
+        "skeleton": "jianwu_3.skel",
+        "atlas": "jianwu_3.atlas"
+       }
+      ],
+      "runtime": "3.8",
+      "actions": [
+       [
+        "login"
+       ],
+       [
+        "touch_head"
+       ],
+       [
+        "touch_body"
+       ],
+       [
+        "touch_special"
+       ]
+      ]
+     }
     }
    ]
   },
@@ -2779,7 +2874,23 @@
       ],
       "runtime": "3.8"
      },
-     "cutscene": null
+     "cutscene": {
+      "painting": "docs/jianye/jianye_5",
+      "layers": [
+       {
+        "skeleton": "jianye_5.skel",
+        "atlas": "jianye_5.atlas"
+       }
+      ],
+      "runtime": "3.8",
+      "actions": [
+       [
+        "drag",
+        "ex",
+        "drag_ex"
+       ]
+      ]
+     }
     }
    ]
   },
@@ -3001,7 +3112,23 @@
       ],
       "runtime": "3.8"
      },
-     "cutscene": null
+     "cutscene": {
+      "painting": "docs/kaiersheng/kaiersheng_3",
+      "layers": [
+       {
+        "skeleton": "kaiersheng_3.skel",
+        "atlas": "kaiersheng_3.atlas"
+       }
+      ],
+      "runtime": "3.8",
+      "actions": [
+       [
+        "drag",
+        "ex",
+        "drag_ex"
+       ]
+      ]
+     }
     }
    ]
   },
@@ -3419,7 +3546,23 @@
       ],
       "runtime": "3.8"
      },
-     "cutscene": null
+     "cutscene": {
+      "painting": "docs/laimuhao/laimuhao_2",
+      "layers": [
+       {
+        "skeleton": "laimuhao_2.skel",
+        "atlas": "laimuhao_2.atlas"
+       }
+      ],
+      "runtime": "3.8",
+      "actions": [
+       [
+        "drag",
+        "ex",
+        "drag_ex"
+       ]
+      ]
+     }
     }
    ]
   },
@@ -3903,7 +4046,21 @@
       ],
       "runtime": "3.8"
      },
-     "cutscene": null
+     "cutscene": {
+      "painting": "docs/maoxianhao/maoxianhao_2",
+      "layers": [
+       {
+        "skeleton": "maoxianhao_2.skel",
+        "atlas": "maoxianhao_2.atlas"
+       }
+      ],
+      "runtime": "3.8",
+      "actions": [
+       [
+        "touch_special"
+       ]
+      ]
+     }
     }
    ]
   },
@@ -4132,7 +4289,29 @@
       ],
       "runtime": "3.8"
      },
-     "cutscene": null
+     "cutscene": {
+      "painting": "docs/molisen/molisen_3",
+      "layers": [
+       {
+        "skeleton": "molisen_3.skel",
+        "atlas": "molisen_3.atlas"
+       }
+      ],
+      "runtime": "3.8",
+      "actions": [
+       [
+        "drag",
+        "ex",
+        "drag_ex"
+       ],
+       [
+        "touch_random1"
+       ],
+       [
+        "touch_random2"
+       ]
+      ]
+     }
     }
    ]
   },
@@ -4243,7 +4422,21 @@
       ],
       "runtime": "3.8"
      },
-     "cutscene": null
+     "cutscene": {
+      "painting": "docs/nengdai/nengdai_9",
+      "layers": [
+       {
+        "skeleton": "nengdai_9.skel",
+        "atlas": "nengdai_9.atlas"
+       }
+      ],
+      "runtime": "3.8",
+      "actions": [
+       [
+        "login"
+       ]
+      ]
+     }
     }
    ]
   },
@@ -4976,7 +5169,33 @@
       ],
       "runtime": "3.8"
      },
-     "cutscene": null
+     "cutscene": {
+      "painting": "docs/siwanshi/siwanshi_4",
+      "layers": [
+       {
+        "skeleton": "siwanshi_4.skel",
+        "atlas": "siwanshi_4.atlas"
+       }
+      ],
+      "runtime": "3.8",
+      "actions": [
+       [
+        "login"
+       ],
+       [
+        "touch_head"
+       ],
+       [
+        "touch_body"
+       ],
+       [
+        "touch_special"
+       ],
+       [
+        "touch_special_2"
+       ]
+      ]
+     }
     }
    ]
   },
@@ -5036,7 +5255,33 @@
       ],
       "runtime": "3.8"
      },
-     "cutscene": null
+     "cutscene": {
+      "painting": "docs/suweiaitongmeng/suweiaitongmeng_4",
+      "layers": [
+       {
+        "skeleton": "suweiaitongmeng_4.skel",
+        "atlas": "suweiaitongmeng_4.atlas"
+       }
+      ],
+      "runtime": "3.8",
+      "actions": [
+       [
+        "login"
+       ],
+       [
+        "touch_head"
+       ],
+       [
+        "touch_body"
+       ],
+       [
+        "touch_special"
+       ],
+       [
+        "touch_special_2"
+       ]
+      ]
+     }
     }
    ]
   },
@@ -5150,7 +5395,23 @@
       ],
       "runtime": "3.8"
      },
-     "cutscene": null
+     "cutscene": {
+      "painting": "docs/telinida/telinida_2",
+      "layers": [
+       {
+        "skeleton": "telinida_2.skel",
+        "atlas": "telinida_2.atlas"
+       }
+      ],
+      "runtime": "3.8",
+      "actions": [
+       [
+        "drag",
+        "ex",
+        "drag_ex"
+       ]
+      ]
+     }
     }
    ]
   },
@@ -5336,7 +5597,21 @@
       ],
       "runtime": "3.8"
      },
-     "cutscene": null
+     "cutscene": {
+      "painting": "docs/weida/weida_2",
+      "layers": [
+       {
+        "skeleton": "weida_2.skel",
+        "atlas": "weida_2.atlas"
+       }
+      ],
+      "runtime": "3.8",
+      "actions": [
+       [
+        "click"
+       ]
+      ]
+     }
     }
    ]
   },
@@ -6003,7 +6278,21 @@
       ],
       "runtime": "3.8"
      },
-     "cutscene": null
+     "cutscene": {
+      "painting": "docs/yaerweite/yaerweite_2",
+      "layers": [
+       {
+        "skeleton": "yaerweite_2.skel",
+        "atlas": "yaerweite_2.atlas"
+       }
+      ],
+      "runtime": "3.8",
+      "actions": [
+       [
+        "touch"
+       ]
+      ]
+     }
     }
    ]
   },

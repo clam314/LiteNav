@@ -57,6 +57,7 @@ AZURLANE_NAMES_REPO = "Pelom777/AzurLaneData"
 AZURLANE_NAMES = "https://raw.githubusercontent.com/" + AZURLANE_NAMES_REPO + "/{commit}/public/data/{table}.json"
 AZURLANE_PAINTINGS_REPO = "ww-rm/azurlane_spinepainting"
 AZURLANE_PAINTINGS_INDEX = "https://raw.githubusercontent.com/" + AZURLANE_PAINTINGS_REPO + "/{commit}/docs/index.json"
+AZURLANE_PAINTING_ACTIONS = ROOT / "scripts/azurlane-painting-actions.json"
 
 PLAYABLE_ID = re.compile(r"c(\d{3})(?:_(\d{2}))?")
 # NPCs (c9xx), mass-produced enemies (c25x), soldiers, products and iDolls
@@ -511,7 +512,7 @@ def painting_label(person: str, skin: str, default: bool) -> str:
 
 
 def build_azurlane(models: list[str], skins: dict, ships: dict, skipped: list | None = None,
-                   paintings: dict | None = None) -> list:
+                   paintings: dict | None = None, actions: dict | None = None) -> list:
     """Group skins into people by their ship's Chinese name.
 
     skins maps a ship's painting name to {skin painting: {"name": ...}} and
@@ -522,7 +523,8 @@ def build_azurlane(models: list[str], skins: dict, ships: dict, skipped: list | 
     "skins": {skin: {"chName", "spines": [{"skelName", "atlasName", ...}]}}}}.
     Each dynamic painting is a portrait made of Spine 3.8 layers, listed top
     first; censored *_hx layers are left out. A painting the names miss uses
-    the index's own names.
+    the index's own names. actions maps a painting to its reactions (lists of
+    animations played in order); those paintings also get an action display.
     """
     owners = {painting.lower(): (ship, str(skin.get("name") or ""))
               for ship, entries in skins.items() for painting, skin in entries.items()}
@@ -567,9 +569,11 @@ def build_azurlane(models: list[str], skins: dict, ships: dict, skipped: list | 
                 continue
             entry = people.setdefault(person, {"id": f"azurlane:{ship.lower()}", "name": person, "costumes": []})
             part = {"painting": f"docs/{folder}/{key}", "layers": layers, "runtime": "3.8"}
-            # A dynamic painting is a portrait only: it has no reactions to play.
+            # Most dynamic paintings only loop; the few with reactions play them as their action.
+            reactions = (actions or {}).get(key)
             entry["costumes"].append({"label": painting_label(person, skin, key.lower() == ship.lower()),
-                                      "outfit": key, "idle": part, "cutscene": None})
+                                      "outfit": key, "idle": part,
+                                      "cutscene": {**part, "actions": reactions} if reactions else None})
     characters = sorted(people.values(), key=lambda person: person["id"])
     for person in characters:
         person["costumes"].sort(key=lambda costume: (costume["label"] != "默认", costume["outfit"].lower()))
@@ -597,8 +601,18 @@ def update_azurlane() -> tuple[Path, str]:
     ships = get_json(AZURLANE_NAMES.format(commit=names_commit, table="ship"))
     painting_commit = get_json(api + AZURLANE_PAINTINGS_REPO + "/commits/main")["sha"]
     paintings = get_json(AZURLANE_PAINTINGS_INDEX.format(commit=painting_commit))
+    actions = {key: value for key, value in json.loads(AZURLANE_PAINTING_ACTIONS.read_text(encoding="utf-8")).items()
+               if not key.startswith("_")}
+    if not all(isinstance(value, list) and value and all(isinstance(step, list) and step and
+               all(isinstance(name, str) and SAFE_FILE.fullmatch(name) for name in step) for step in value)
+               for value in actions.values()):
+        raise ValueError(f"unexpected reactions in {AZURLANE_PAINTING_ACTIONS.name}")
+    known = {key for entry in paintings.values() for key in entry.get("skins", {})}
+    missing = sorted(set(actions) - known)
+    if missing:
+        print(f"azurlane: reactions listed for paintings the index no longer has: {', '.join(missing)}")
     skipped: list[str] = []
-    characters = build_azurlane(models, skins, ships, skipped, paintings)
+    characters = build_azurlane(models, skins, ships, skipped, paintings, actions)
     if not characters:
         raise ValueError("no Azur Lane Live2D model could be named")
     if skipped:

@@ -704,9 +704,9 @@ export function initCompanion() {
   }
 
   function assetsFor(characterSelection, requestedMode) {
-    // A Live2D model serves both displays, so both share one download.
-    const live2d = partFor(characterSelection, requestedMode)?.runtime === 'live2d';
-    const key = costumeKey(characterSelection.costume) + ':' + (live2d ? 'live2d' : requestedMode);
+    // A Live2D model or dynamic painting serves both displays, so both share one download.
+    const runtime = partFor(characterSelection, requestedMode)?.runtime;
+    const key = costumeKey(characterSelection.costume) + ':' + (runtime === 'live2d' || runtime === '3.8' ? runtime : requestedMode);
     if (assetCache.has(key)) return assetCache.get(key).promise;
     const task = { controller: new AbortController() };
     const timeout = setTimeout(() => task.controller.abort(), 45000);
@@ -1067,13 +1067,14 @@ export function initCompanion() {
     prefetchOtherMode(record);
   }
 
-  // An Azur Lane dynamic painting: a portrait on its own canvas, like Live2D.
+  // An Azur Lane dynamic painting on its own canvas, like Live2D: the loop as
+  // a portrait, and for the few with reactions, those as the action display.
   async function startPainting(record, signal) {
     const [spine, assets] = await withAbort(Promise.all([loadSpine38(), assetsFor(record.selection, record.mode)]), signal);
     if (signal.aborted || stage.pending !== record || disposed) return;
     const { layer } = record;
     const player = createPaintingPlayer({
-      spine, layer, layers: assets.layers,
+      spine, layer, layers: assets.layers, mode: record.mode, actions: partFor(record.selection, record.mode)?.actions,
       space: () => parseFloat(getComputedStyle(layer).getPropertyValue('--companion-space')) || layer.clientWidth / 2,
       frame: delta => live2dFrame(record, delta),
     });

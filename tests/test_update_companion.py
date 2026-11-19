@@ -173,6 +173,13 @@ class AzurLaneCatalogTests(unittest.TestCase):
                          "the retrofit painting joins the Live2D default")
         self.assertEqual(people["领洋者"]["costumes"][0]["label"], "入浴的小恶魔", "the index names a painting the names miss")
 
+    def test_paintings_with_reactions_get_an_action_display(self):
+        paintings = {"weida": {"chName": "维达号", "skins": {"weida_2": {"chName": "慵懒的黑天使", "spines": [
+            {"skelName": "weida_2.skel", "atlasName": "weida_2.atlas", "pages": []}]}}}}
+        people = update.build_azurlane([], {}, {}, paintings=paintings, actions={"weida_2": [["click"]]})
+        costume = people[0]["costumes"][0]
+        self.assertEqual(costume["cutscene"], {**costume["idle"], "actions": [["click"]]})
+
     def test_double_form_paintings_say_so(self):
         paintings = {"aersasi": {"chName": "阿尔萨斯", "skins": {"aersasi_3": {"chName": "圣宵之鬼的微醺", "spines": [
             {"skelName": "aersasi_3.skel", "atlasName": "aersasi_3.atlas", "pages": []}]}}}}

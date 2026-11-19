@@ -2,7 +2,7 @@
 // framework on Cubism Core 5). The player mirrors the parts of SpinePlayer the
 // companion uses: dom, pause(), play(), stopRendering(), dispose() and
 // context.gl.
-import { live2dArtBounds, placeLive2D, createActionOrder, withLive2DFiles } from './companion-live2d.js';
+import { live2dArtBounds, placeLive2D, createActionOrder, withLive2DFiles, gazeFocus } from './companion-live2d.js';
 
 // The framework keeps one set of compiled shaders for every WebGL context, so
 // a second canvas (the next person fading in) left the first one blank. Give
@@ -156,6 +156,23 @@ export async function createLive2DPlayer({ PIXI, layer, settings, plan, blobs, m
       frame(seconds);
     });
     place();
+    // The eyes and head follow the pointer anywhere on the page, back to the
+    // front when it leaves the window. The rail itself takes no pointer input.
+    const look = event => {
+      const rect = canvas.getBoundingClientRect();
+      const pointer = { x: (event.clientX - rect.left - model.x) / model.scale.x, y: (event.clientY - rect.top - model.y) / model.scale.y };
+      const focus = gazeFocus(pointer, bounds);
+      internal.focusController.focus(focus.x, focus.y);
+    };
+    const away = event => { if (!event.relatedTarget) internal.focusController.focus(0, 0); };
+    window.addEventListener('pointermove', look, { passive: true });
+    document.addEventListener('pointerout', away);
+    const dispose = player.dispose;
+    player.dispose = () => {
+      window.removeEventListener('pointermove', look);
+      document.removeEventListener('pointerout', away);
+      dispose();
+    };
     app.render();
     return player;
   } catch (error) {

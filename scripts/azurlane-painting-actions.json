@@ -1,0 +1,136 @@
+{
+ "_comment": "Reactions of Azur Lane dynamic paintings, played in the action display. Each entry is a list of reactions; a reaction is a list of animations played in order on every layer that has them. Read from the skeletons with the Spine 3.8 runtime (2026-11-19); Python cannot parse them, so scripts/update_companion.py takes this list as is and reports entries the painting index no longer has.",
+ "aimudeng_4": [
+  [
+   "drag",
+   "ex",
+   "drag_ex"
+  ]
+ ],
+ "gaoxiong_6": [
+  [
+   "drag",
+   "ex",
+   "drag_ex"
+  ]
+ ],
+ "jianye_5": [
+  [
+   "drag",
+   "ex",
+   "drag_ex"
+  ]
+ ],
+ "kaiersheng_3": [
+  [
+   "drag",
+   "ex",
+   "drag_ex"
+  ]
+ ],
+ "laimuhao_2": [
+  [
+   "drag",
+   "ex",
+   "drag_ex"
+  ]
+ ],
+ "telinida_2": [
+  [
+   "drag",
+   "ex",
+   "drag_ex"
+  ]
+ ],
+ "molisen_3": [
+  [
+   "drag",
+   "ex",
+   "drag_ex"
+  ],
+  [
+   "touch_random1"
+  ],
+  [
+   "touch_random2"
+  ]
+ ],
+ "i404_2": [
+  [
+   "login"
+  ]
+ ],
+ "i404_3": [
+  [
+   "login"
+  ]
+ ],
+ "nengdai_9": [
+  [
+   "login"
+  ]
+ ],
+ "jianwu_3": [
+  [
+   "login"
+  ],
+  [
+   "touch_head"
+  ],
+  [
+   "touch_body"
+  ],
+  [
+   "touch_special"
+  ]
+ ],
+ "siwanshi_4": [
+  [
+   "login"
+  ],
+  [
+   "touch_head"
+  ],
+  [
+   "touch_body"
+  ],
+  [
+   "touch_special"
+  ],
+  [
+   "touch_special_2"
+  ]
+ ],
+ "suweiaitongmeng_4": [
+  [
+   "login"
+  ],
+  [
+   "touch_head"
+  ],
+  [
+   "touch_body"
+  ],
+  [
+   "touch_special"
+  ],
+  [
+   "touch_special_2"
+  ]
+ ],
+ "maoxianhao_2": [
+  [
+   "touch_special"
+  ]
+ ],
+ "weida_2": [
+  [
+   "click"
+  ]
+ ],
+ "yaerweite_2": [
+  [
+   "touch"
+  ]
+ ]
+}
