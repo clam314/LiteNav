@@ -145,8 +145,14 @@ export function selectSkillAnimation(animations, savedName, presentation) {
 // Extent drawn by visible regions and meshes while the animations play.
 // Skeleton bounds also count transparent attachments, and reference viewports
 // often reserve floor space for a backdrop this page does not draw.
+//
+// floor is where the artwork's lowest point sits in most frames (the 80th
+// percentile of each frame's lowest point): artwork cut off at the thighs
+// has a hem that swings, and its single lowest moment would leave the cut
+// edge hanging above the rail for the rest of the loop.
 export function visibleArtBounds(skeleton, animations, steps = 60) {
   const bounds = { minX: Infinity, maxX: -Infinity, minY: Infinity };
+  const lowest = [];
   let vertices = new Float32Array(1024);
   for (const animation of animations) {
     if (!animation) continue;
@@ -156,6 +162,7 @@ export function visibleArtBounds(skeleton, animations, steps = 60) {
       const time = i * stepTime;
       animation.apply(skeleton, time, time, false, [], 1, 0 /* setup */, 0 /* mixIn */);
       skeleton.updateWorldTransform();
+      let frameLowest = Infinity;
       for (const slot of skeleton.drawOrder) {
         const attachment = slot.bone.active ? slot.getAttachment() : null;
         // Only regions and meshes carry texture; clipping and bounding boxes do not draw.
@@ -175,11 +182,15 @@ export function visibleArtBounds(skeleton, animations, steps = 60) {
           bounds.minX = Math.min(bounds.minX, vertices[v]);
           bounds.maxX = Math.max(bounds.maxX, vertices[v]);
           bounds.minY = Math.min(bounds.minY, vertices[v + 1]);
+          frameLowest = Math.min(frameLowest, vertices[v + 1]);
         }
       }
+      if (Number.isFinite(frameLowest)) lowest.push(frameLowest);
     }
   }
   skeleton.setToSetupPose();
+  lowest.sort((a, b) => a - b);
+  if (lowest.length) bounds.floor = lowest[Math.round((lowest.length - 1) * .8)];
   return bounds;
 }
 
@@ -217,7 +228,11 @@ export function configureViewports(player, animations, mode, presentation, extra
       box = {};
       player.calculateAnimationViewport(animation, box);
     }
-    box = trimViewportToArt(box, visibleArtBounds(player.skeleton, [animation, motion, ...extra]));
+    const art = visibleArtBounds(player.skeleton, [animation, motion, ...extra]);
+    // Skill loops come from cutscene skeletons, often cut off below the waist:
+    // stand them on the floor they keep most of the time. Portraits are whole
+    // figures, and their floor must also hold the motion reaction's lowest pose.
+    box = trimViewportToArt(box, mode === 'portrait' || !Number.isFinite(art.floor) ? art : { ...art, minY: art.floor });
     // The floor is now the artwork (or cuts through it); padding would lift it off the edge.
     box.padBottom = 0;
     if (mode === 'portrait') Object.assign(player.config.viewport, box);

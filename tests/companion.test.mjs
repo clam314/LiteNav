@@ -388,7 +388,20 @@ test('visible artwork bounds ignore transparent and non-drawing attachments acro
     ],
   });
   const animation = { duration: 2, apply(target, time) { clock.value = -100 - time * 50; } };
-  assert.deepEqual(visibleArtBounds(skeleton, [animation, null]), { minX: 0, maxX: 20, minY: -240 });
+  assert.deepEqual(visibleArtBounds(skeleton, [animation, null]), { minX: 0, maxX: 20, minY: -240, floor: -160 });
+});
+
+test('a skill loop stands on the floor its swinging hem keeps most of the time; a portrait on its lowest pose', () => {
+  const clock = { value: 0 };
+  const skeleton = stillSkeleton({ drawOrder: [drawnSlot(clock)] });
+  // The hem dips to -400 for a fifth of the loop and stays near -200 otherwise.
+  const swing = { name: 'loop', duration: 1, apply(target, time) { clock.value = time < .2 ? -400 : -200; } };
+  const viewport = { padLeft: 0, padRight: 0, padTop: 0, padBottom: 0, animations: {} };
+  const player = { skeleton, config: { viewport }, calculateAnimationViewport(animation, box) { Object.assign(box, { x: 0, y: -1000, width: 10, height: 1200 }); } };
+  configureViewports(player, [swing], 'skill');
+  assert.equal(viewport.animations.loop.y, -200);
+  configureViewports(player, [swing], 'portrait');
+  assert.equal(viewport.y, -400);
 });
 
 test('empty floor and side margins shrink to the artwork while the top keeps its headroom', () => {
