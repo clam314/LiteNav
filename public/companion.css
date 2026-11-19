@@ -39,9 +39,9 @@ body[data-companion] .toast-root { bottom: 82px; }
   position: absolute !important; inset: 0;
 }
 .companion-player .spine-player-error { display: none !important; }
-/* Azur Lane's Live2D models draw on their own canvas, also filling the rail. */
-.companion-layer > .live2d-player { position: absolute; inset: 0; }
-.companion-layer > .live2d-player > canvas { display: block; width: 100%; height: 100%; }
+/* Azur Lane's Live2D models and dynamic paintings draw on their own canvas, also filling the rail. */
+.companion-layer > :is(.live2d-player, .painting-player) { position: absolute; inset: 0; }
+.companion-layer > :is(.live2d-player, .painting-player) > canvas { display: block; width: 100%; height: 100%; }
 .companion-status {
   position: absolute; top: 50%; left: 50%; right: 24px; transform: translateY(-50%);
   display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 18px 12px;

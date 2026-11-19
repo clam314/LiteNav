@@ -1,6 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
+import { costumeKey } from '../public/companion-model.js';
 import {
   live2dMotionPlan, live2dFiles, withLive2DFiles, live2dArtBounds, placeLive2D, createActionOrder,
 } from '../public/companion-live2d.js';
@@ -109,21 +110,57 @@ test('reactions play once per round in a shuffled order that never repeats acros
   assert.deepEqual([single(), single()], ['home', 'home']);
 });
 
-test('the Azur Lane catalog pins its upstream and uses Live2D parts for both displays', () => {
+test('the Azur Lane catalog pins its upstreams: Live2D models for both displays, dynamic paintings as portraits', () => {
   const catalog = JSON.parse(readFileSync(new URL('../public/companion/azurlane/catalog.json', import.meta.url), 'utf8'));
   assert.match(catalog.commit, /^[a-f0-9]{40}$/);
+  assert.match(catalog.paintingCommit, /^[a-f0-9]{40}$/);
   assert.ok(catalog.characters.length > 100);
-  const ids = new Set();
+  const keys = new Set();
+  let paintings = 0;
   for (const person of catalog.characters) {
     assert.match(person.id, /^azurlane:[a-z0-9_]+$/);
     assert.ok(person.name && person.costumes.length);
+    const labels = person.costumes.map(costume => costume.label);
+    assert.equal(new Set(labels).size, labels.length, `${person.name} has no two costumes with one label`);
     for (const costume of person.costumes) {
       assert.ok(costume.label);
-      assert.match(costume.idle.model, /^Live2D\/([^/]+)\/\1\.model3\.json$/);
-      assert.equal(costume.idle.runtime, 'live2d');
-      assert.deepEqual(costume.cutscene, costume.idle);
-      assert.ok(!ids.has(costume.idle.model), 'each model appears once');
-      ids.add(costume.idle.model);
+      if (costume.idle.runtime === 'live2d') {
+        assert.match(costume.idle.model, /^Live2D\/([^/]+)\/\1\.model3\.json$/);
+        assert.deepEqual(costume.cutscene, costume.idle);
+      } else {
+        paintings += 1;
+        assert.equal(costume.idle.runtime, '3.8');
+        assert.match(costume.idle.painting, /^docs\/[\w.-]+\/[\w.-]+$/);
+        assert.ok(costume.idle.layers.length >= 1);
+        for (const layer of costume.idle.layers) {
+          assert.match(layer.skeleton, /^[\w.-]+\.skel$/);
+          assert.doesNotMatch(layer.skeleton, /_hx\.skel$/, 'censored layers are left out');
+          assert.match(layer.atlas, /^[\w.-]+\.atlas$/);
+        }
+        assert.equal(costume.cutscene, null, 'a dynamic painting is a portrait only');
+      }
+      const key = costumeKey(costume);
+      assert.ok(!keys.has(key), 'each model or painting appears once');
+      keys.add(key);
     }
   }
+  assert.ok(paintings > 100);
+});
+
+test('painting helpers repair 3.8 region names, pick the loop and place the camera', async () => {
+  const { recoverUtf8, regionCandidates, paintingAnimation, placePainting } = await import('../public/companion-painting.js');
+  // How the 3.8 reader garbles "图层": every UTF-8 byte becomes U+FF00 + byte.
+  const garbled = [...new TextEncoder().encode('图层 664')].map(byte => String.fromCharCode(byte < 0x80 ? byte : 0xFF00 + byte)).join('');
+  assert.equal(recoverUtf8(garbled), '图层 664');
+  assert.equal(recoverUtf8('ab_sync_3_1'), 'ab_sync_3_1');
+  assert.equal(recoverUtf8('图层'), '图层', 'correctly read names stay as they are');
+  assert.deepEqual(regionCandidates('ab_sync_3_1_zuoxiong_1_2 '), ['ab_sync_3_1_zuoxiong_1_2 ', 'ab_sync_3_1_zuoxiong_1_2']);
+  assert.equal(paintingAnimation(['1', '2', 'drag', 'normal']), 'normal');
+  assert.equal(paintingAnimation(['click', 'idle']), 'idle');
+  assert.equal(paintingAnimation(['a', 'b']), 'b');
+  assert.equal(paintingAnimation([]), null);
+  // A 1000 × 2000 view on an 800 × 1000 rail with 600 px free: two units per
+  // pixel, centred 300 px from the right edge, standing on the floor.
+  const camera = placePainting({ x: -500, y: 0, width: 1000, height: 2000 }, { width: 800, height: 1000 }, 600);
+  assert.deepEqual(camera, { zoom: 2, x: 0 - (500 - 400) * 2, y: 1000 });
 });

@@ -112,6 +112,17 @@ Spine 4.0 运行时 `/vendor/spine/spine-player-4.0.30.js` 下载自官方 npm �
 - 展示方式：立绘循环模型的 `idle` 动作；「互动」按随机顺序依次播放主界面与触摸动作（`home`、`login`、`mail`、`mission`、`mission_complete`、`complete`、`touch_head`、`touch_body`、`touch_special`、`main_N`），每段之间回到 `idle` 约 1.5 秒。L2D+ 模型的拖拽状态（`idleN`、`touch_idleN`、`touch_dragN`）与誓约动作 `wedding` 不播放。多数模型自带的 `effect`（飘带、光效等环境动画）在单独的动作队列上与其他动作同时循环。
 - 取景：在 8 秒的 `idle` 中采样可见网格的范围（限制在模型画布内，并排除 `Touch` 开头的触摸判定网格，部分模型把它们放在画布外很远处），按此范围填满侧栏高度、贴住底边，水平居中于导航留出的空白区域。带整幅场景的模型会超出两侧，左侧由侧栏渐隐遮住。
 
+### 动态立绘
+
+- 素材来源：[ww-rm/azurlane_spinepainting](https://github.com/ww-rm/azurlane_spinepainting)，目录记录其固定提交（`paintingCommit`），只在选中时按需加载 `docs/<舰船>/<皮肤>/` 下的文件。仓库索引 `docs/index.json` 共 141 套皮肤，每套由一至七层 Spine 3.8.99 骨架组成（人物、背景、道具等）。名字同样取自 Pelom777/AzurLaneData，索引中缺失的（如领洋者「入浴的小恶魔」）沿用索引自带的中文名；舰船自身的立绘显示为「默认」，改造显示为「改造」。同一皮肤另有 Live2D 或多种形态时，动态立绘一项标注「（动态立绘）」。
+- 展示方式：仅作立绘（没有互动动作，因此不出现在「互动」与「轮流」中），参照其作者的[网页播放器](https://ww-rm.github.io/azurlane/)：图层按索引顺序叠放，第一层在最上；去掉文件名以 `_hx` 结尾的和谐图层；各层同时循环 `normal`（没有时用 `idle`，再没有时用最后一个动作）。取景为各层在循环中可见部件的范围，与 Live2D 一样填满侧栏高度、贴住底边，并水平居中于导航留出的空白区域。
+- 运行时：`/vendor/spine/spine-webgl-3.8.js` 下载自官方仓库 3.8 分支的固定提交 [`8b4844bd4b19`](https://github.com/EsotericSoftware/spine-runtimes/blob/8b4844bd4b193ba9e54487ed397a777993cbad56/spine-ts/build/spine-webgl.js)，保持原始字节；许可证原文（3.8 分支版本）保存为 `/vendor/spine/LICENSE-3.8`。3.8 版没有本页使用的播放器回调，因此由 `companion-painting-player.js` 直接调用其 WebGL 渲染器。该版本的全局对象 `spine` 会并入已有的同名对象，载入时先清空全局、载入后恢复，避免与 4.1 运行时混合。
+- 3.8 的二进制读取器按有符号字节解码 UTF-8 名称，中文区域名会变成乱码而在 atlas 中找不到（例如怨仇的背景层）。本页不修改运行时，而是在查找区域时把乱码还原为原本的 UTF-8 名称再查一次；另有个别导出在区域名末尾带空格（苏维埃同盟「缠丝审讯」），也一并去掉后再查。
+
+| 文件 | SHA-256 |
+| --- | --- |
+| `spine-webgl-3.8.js` | `4b108bad314c152bf0ff7a7f56fce5c98073f05a2bfa53e880d6c24b6f7c3aa5` |
+
 ### Live2D 运行时
 
 均保持下载时的原始字节，存放于 `/vendor/live2d/`：

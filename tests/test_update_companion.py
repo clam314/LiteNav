@@ -148,6 +148,43 @@ class AzurLaneCatalogTests(unittest.TestCase):
         outfits = sorted(costume["outfit"] for person in people for costume in person["costumes"])
         self.assertEqual(outfits, ["Z23", "aersasi_3_hx"])
 
+    def test_dynamic_paintings_join_their_ship_as_portraits(self):
+        paintings = {
+            "lafei": {"chName": "拉菲", "skins": {"lafei_12": {"chName": "白日慵懒", "spines": [
+                {"skelName": "lafei_12T.skel", "atlasName": "lafei_12T.atlas", "pages": ["lafei_12T.png"]},
+                {"skelName": "lafei_12B.skel", "atlasName": "lafei_12B.atlas", "pages": ["lafei_12B.png"]},
+                {"skelName": "lafei_12_hx.skel", "atlasName": "lafei_12_hx.atlas", "pages": []}]}}},
+            "z23": {"chName": "Z23", "skins": {"z23_g": {"chName": "Z23.改", "spines": [
+                {"skelName": "z23_g.skel", "atlasName": "z23_g.atlas", "pages": []}]}}},
+            "lingyangzhe3": {"chName": "领洋者", "skins": {"lingyangzhe3_2": {"chName": "入浴的小恶魔", "spines": [
+                {"skelName": "a.skel", "atlasName": "a.atlas", "pages": []}]}}},
+        }
+        skins = {**self.SKINS, "z23": {**self.SKINS["z23"], "z23_g": {"name": "Z23.改"}},
+                 "lafei": {"lafei": {"name": "拉菲"}, "lafei_12": {"name": "白日慵懒"}}}
+        ships = {**self.SHIPS, "lafei": {"name": "拉菲"}}
+        people = {person["name"]: person for person in update.build_azurlane(["Z23"], skins, ships, paintings=paintings)}
+        lafei = people["拉菲"]["costumes"][0]
+        self.assertEqual(lafei["label"], "白日慵懒")
+        self.assertIsNone(lafei["cutscene"], "a dynamic painting is a portrait only")
+        self.assertEqual(lafei["idle"], {"painting": "docs/lafei/lafei_12", "runtime": "3.8", "layers": [
+            {"skeleton": "lafei_12T.skel", "atlas": "lafei_12T.atlas"},
+            {"skeleton": "lafei_12B.skel", "atlas": "lafei_12B.atlas"}]}, "layers keep their order, censored ones are left out")
+        self.assertEqual([costume["label"] for costume in people["Z23"]["costumes"]], ["默认", "改造"],
+                         "the retrofit painting joins the Live2D default")
+        self.assertEqual(people["领洋者"]["costumes"][0]["label"], "入浴的小恶魔", "the index names a painting the names miss")
+
+    def test_double_form_paintings_say_so(self):
+        paintings = {"aersasi": {"chName": "阿尔萨斯", "skins": {"aersasi_3": {"chName": "圣宵之鬼的微醺", "spines": [
+            {"skelName": "aersasi_3.skel", "atlasName": "aersasi_3.atlas", "pages": []}]}}}}
+        people = update.build_azurlane(["aersasi_3"], self.SKINS, self.SHIPS, paintings=paintings)
+        self.assertEqual([costume["label"] for costume in people[0]["costumes"]], ["圣宵之鬼的微醺", "圣宵之鬼的微醺（动态立绘）"])
+
+    def test_painting_paths_must_be_plain_names(self):
+        for paintings in ({"../x": {"skins": {"a": {"spines": [{"skelName": "a.skel", "atlasName": "a.atlas"}]}}}},
+                          {"a": {"skins": {"a": {"spines": [{"skelName": "../a.skel", "atlasName": "a.atlas"}]}}}}):
+            with self.assertRaises(ValueError):
+                update.build_azurlane([], self.SKINS, self.SHIPS, paintings=paintings)
+
     def test_models_without_a_chinese_name_are_reported(self):
         skipped = []
         people = update.build_azurlane(["Z23", "newship_2"], self.SKINS, self.SHIPS, skipped)

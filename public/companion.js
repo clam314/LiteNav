@@ -16,6 +16,7 @@ import { createLive2DPlayer, separateShaderContexts } from './companion-live2d-p
 import { performanceId, performanceSources, readExternalSkeleton, performanceMenu, createPerformance }
   from './companion-performance-player.js';
 import { createDatingTour } from './companion-dating.js';
+import { createPaintingPlayer } from './companion-painting-player.js';
 // Spine binaries only load in the runtime version that exported them, and
 // each build declares the same global. Load builds one at a time, keep each
 // one, and leave window.spine on 4.1 for code that looks for it there.
@@ -51,6 +52,32 @@ function loadRuntime(version = '4.1') {
     throw error;
   });
   return runtimePromises[version];
+}
+
+// Azur Lane's dynamic paintings are Spine 3.8 skeletons, drawn with the 3.8
+// WebGL runtime (it has no player). That build adds its classes to whatever
+// global spine object exists instead of making its own, which would mix them
+// into 4.1: clear the global while it loads, then put the previous one back.
+let spine38Runtime;
+
+function loadSpine38() {
+  spine38Runtime ||= (runtimeQueue = runtimeQueue.catch(() => {}).then(async () => {
+    const previous = window.spine;
+    let runtime;
+    window.spine = undefined;
+    try {
+      await loadRuntimeFile('script', '/vendor/spine/spine-webgl-3.8.js', 'script-3.8');
+      runtime = window.spine;
+    } finally {
+      window.spine = previous;
+    }
+    if (!runtime?.webgl?.SceneRenderer) throw new Error('角色播放器未能载入');
+    return runtime;
+  })).catch(error => {
+    spine38Runtime = undefined;
+    throw error;
+  });
+  return spine38Runtime;
 }
 
 // Azur Lane's Live2D models need Cubism Core, PixiJS and pixi-live2d-display,
@@ -195,7 +222,7 @@ async function fetchResource(url, signal, cache = 'default') {
   return response;
 }
 
-const fetchAsset = createAssetFetcher({ base: GAMES.flatMap(game => [game.assetBase, game.lfsBase].filter(Boolean)), fetchResource });
+const fetchAsset = createAssetFetcher({ base: GAMES.flatMap(game => [game.assetBase, game.lfsBase, game.paintingBase].filter(Boolean)), fetchResource });
 
 function readDataURI(blob, signal) {
   return new Promise((resolve, reject) => {
@@ -259,10 +286,28 @@ async function loadLive2D(catalog, selection, part, signal) {
   return { live2d: true, settings: { ...settings, url: raw + part.model }, plan, blobs, objectUrls: [] };
 }
 
+// An Azur Lane dynamic painting: every layer's binary skeleton, atlas text
+// and decoded pages (straight alpha), top layer first.
+async function loadPainting(catalog, selection, part, signal) {
+  const id = gameOf(selection.character);
+  const folder = gameById(id).paintingBase + catalog.games[id].paintingCommit + '/' + part.painting + '/';
+  const layers = await Promise.all(part.layers.map(async layer => {
+    const [skeleton, atlas] = await Promise.all([
+      fetchAsset(folder + layer.skeleton, signal).then(response => response.arrayBuffer()),
+      fetchAsset(folder + layer.atlas, signal).then(response => response.text()),
+    ]);
+    const images = Object.fromEntries(await Promise.all(atlasPages(atlas).map(async page =>
+      [page, await createImageBitmap(await (await fetchAsset(folder + page, signal)).blob(), { premultiplyAlpha: 'none' })])));
+    return { skeleton: new Uint8Array(skeleton), atlas, images };
+  }));
+  return { painting: true, layers, objectUrls: [] };
+}
+
 async function loadCharacter(catalog, selection, mode, signal) {
   const part = partFor(selection, mode);
   if (!part) throw new Error('这套服装没有对应的动画');
   if (part.runtime === 'live2d') return loadLive2D(catalog, selection, part, signal);
+  if (part.runtime === '3.8') return loadPainting(catalog, selection, part, signal);
   const local = mode === 'portrait' && part.skeleton === LOCAL_FALLBACK_CHARACTER.costumes[0].idle.skeleton;
   const source = catalog.games[gameOf(selection.character)];
   const remote = source.assetBase + source.commit + '/';
@@ -785,6 +830,10 @@ export function initCompanion() {
         await startLive2D(record, signal);
         return;
       }
+      if (partFor(record.selection, record.mode)?.runtime === '3.8') {
+        await startPainting(record, signal);
+        return;
+      }
       // NIKKE's combat loop also needs the cover skeleton.
       const coverPart = record.mode === 'skill' && gameOf(record.selection.character) === 'nikke' ? record.selection.costume.cover : null;
       const [spine, assets, coverSpine, coverAssets] = await withAbort(Promise.all([
@@ -1012,6 +1061,26 @@ export function initCompanion() {
     prefetchOtherMode(record);
   }
 
+  // An Azur Lane dynamic painting: a portrait on its own canvas, like Live2D.
+  async function startPainting(record, signal) {
+    const [spine, assets] = await withAbort(Promise.all([loadSpine38(), assetsFor(record.selection, record.mode)]), signal);
+    if (signal.aborted || stage.pending !== record || disposed) return;
+    const { layer } = record;
+    const player = createPaintingPlayer({
+      spine, layer, layers: assets.layers,
+      space: () => parseFloat(getComputedStyle(layer).getPropertyValue('--companion-space')) || layer.clientWidth / 2,
+      frame: delta => live2dFrame(record, delta),
+    });
+    record.player = player;
+    clearTimeout(record.loadingTimer);
+    clearTimeout(record.timeout);
+    if (!stage.present(record)) return;
+    layer.classList.add('is-visible');
+    loadError = '';
+    status.hidden = true;
+    updatePlayback();
+  }
+
   // The same breaks as the Spine displays: the portrait hands over after a
   // while, the action display only between two reactions.
   function live2dFrame(record, delta) {
@@ -1163,7 +1232,8 @@ export function initCompanion() {
       }
       const { data, reference, performances } = result.value;
       if (reference) presentations = reference;
-      games[game.id] = { assetBase: game.assetBase, commit: data.commit, performances: performances?.costumes };
+      games[game.id] = { assetBase: game.assetBase, commit: data.commit, performances: performances?.costumes,
+        paintingCommit: data.paintingCommit };
       // A costume's 有缘之客 scene, keyed like the presets by its portrait skeleton.
       const scene = costume => {
         const found = performances?.dating?.[costumeKey(costume).match(/(?:^|\/)(char\d{6})\.skel$/i)?.[1]?.toLowerCase()];

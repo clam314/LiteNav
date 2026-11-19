@@ -30,6 +30,8 @@ export const GAMES = [
     assetBase: 'https://raw.githubusercontent.com/bungaku-moe/AzurLaneLive2D/',
     // The moc and textures are Git LFS objects; raw only serves their pointers.
     lfsBase: 'https://media.githubusercontent.com/media/bungaku-moe/AzurLaneLive2D/',
+    // Dynamic paintings (Spine 3.8 layers) come from another repository.
+    paintingBase: 'https://raw.githubusercontent.com/ww-rm/azurlane_spinepainting/',
   },
 ];
 

@@ -159,7 +159,8 @@ export function drawnParts(skeletons, skip = null) {
         if (vertices.length < count) vertices = new Float32Array(count);
         attachment.computeWorldVertices(slot, 0, count, vertices, 0, 2);
       } else {
-        attachment.computeWorldVertices(slot, vertices, 0, 2);
+        // Spine 4.1 regions take the slot (and carry a sequence); 3.8 and 4.0 regions take the bone.
+        attachment.computeWorldVertices('sequence' in attachment ? slot : slot.bone, vertices, 0, 2);
       }
       const part = { slot: slot.data.name, minX: Infinity, maxX: -Infinity, minY: Infinity, maxY: -Infinity };
       for (let i = 0; i < count; i += 2) {

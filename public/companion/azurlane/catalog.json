@@ -1,8 +1,10 @@
 {
- "generatedAt": "2026-11-19T03:53:29+00:00",
+ "generatedAt": "2026-11-19T09:44:05+00:00",
  "source": "bungaku-moe/AzurLaneLive2D@5435d971c655",
  "names": "Pelom777/AzurLaneData@a2c932c56ca5",
+ "paintings": "ww-rm/azurlane_spinepainting@d37b5bd58b11",
  "commit": "5435d971c655ff6f2efb40d13de33e815fe6c199",
+ "paintingCommit": "d37b5bd58b1140c2395bb2d22cf9bc80fda504d5",
  "characters": [
   {
    "id": "azurlane:abeikelongbi",
@@ -67,6 +69,42 @@
       "model": "Live2D/aerbien_3/aerbien_3.model3.json",
       "runtime": "live2d"
      }
+    },
+    {
+     "label": "晨光里的事故",
+     "outfit": "aerbien_4",
+     "idle": {
+      "painting": "docs/aerbien/aerbien_4",
+      "layers": [
+       {
+        "skeleton": "aerbien_4.skel",
+        "atlas": "aerbien_4.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "azurlane:aerhangeersike",
+   "name": "阿尔汉格尔斯克",
+   "costumes": [
+    {
+     "label": "与魔女同行",
+     "outfit": "aerhangeersike_3",
+     "idle": {
+      "painting": "docs/aerhangeersike/aerhangeersike_3",
+      "layers": [
+       {
+        "skeleton": "aerhangeersike_3.skel",
+        "atlas": "aerhangeersike_3.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -74,6 +112,21 @@
    "id": "azurlane:aersasi",
    "name": "阿尔萨斯",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "aersasi",
+     "idle": {
+      "painting": "docs/aersasi/aersasi",
+      "layers": [
+       {
+        "skeleton": "aersasi.skel",
+        "atlas": "aersasi.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "盛夏的圣迹",
      "outfit": "aersasi_2",
@@ -115,6 +168,21 @@
       "model": "Live2D/aidang_2/aidang_2.model3.json",
       "runtime": "live2d"
      }
+    },
+    {
+     "label": "满月之夜的狼",
+     "outfit": "aidang_6",
+     "idle": {
+      "painting": "docs/aidang/aidang_6",
+      "layers": [
+       {
+        "skeleton": "aidang_6.skel",
+        "atlas": "aidang_6.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -145,6 +213,42 @@
       "model": "Live2D/aierdeliqi_5/aierdeliqi_5.model3.json",
       "runtime": "live2d"
      }
+    },
+    {
+     "label": "改造",
+     "outfit": "aierdeliqi_g",
+     "idle": {
+      "painting": "docs/aierdeliqi/aierdeliqi_g",
+      "layers": [
+       {
+        "skeleton": "aierdeliqi_g.skel",
+        "atlas": "aierdeliqi_g.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "azurlane:aifosen",
+   "name": "埃佛森",
+   "costumes": [
+    {
+     "label": "落于窗台的暖阳",
+     "outfit": "aifosen_2",
+     "idle": {
+      "painting": "docs/aifosen/aifosen_2",
+      "layers": [
+       {
+        "skeleton": "aifosen_2.skel",
+        "atlas": "aifosen_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -152,6 +256,29 @@
    "id": "azurlane:aijier",
    "name": "埃吉尔",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "aijier",
+     "idle": {
+      "painting": "docs/aijier/aijier",
+      "layers": [
+       {
+        "skeleton": "aijierT.skel",
+        "atlas": "aijierT.atlas"
+       },
+       {
+        "skeleton": "aijierM.skel",
+        "atlas": "aijierM.atlas"
+       },
+       {
+        "skeleton": "aijierB.skel",
+        "atlas": "aijierB.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "港区的龙女仆",
      "outfit": "aijier_2",
@@ -187,6 +314,27 @@
       "model": "Live2D/aijier_4/aijier_4.model3.json",
       "runtime": "live2d"
      }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:aila",
+   "name": "艾菈·冯·杜勒",
+   "costumes": [
+    {
+     "label": "假日的户外风格",
+     "outfit": "aila_2",
+     "idle": {
+      "painting": "docs/aila/aila_2",
+      "layers": [
+       {
+        "skeleton": "aila_2.skel",
+        "atlas": "aila_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -265,6 +413,29 @@
       "model": "Live2D/aimudeng_2/aimudeng_2.model3.json",
       "runtime": "live2d"
      }
+    },
+    {
+     "label": "引路的双轨极星",
+     "outfit": "aimudeng_4",
+     "idle": {
+      "painting": "docs/aimudeng/aimudeng_4",
+      "layers": [
+       {
+        "skeleton": "aimudeng_4T.skel",
+        "atlas": "aimudeng_4T.atlas"
+       },
+       {
+        "skeleton": "aimudeng_4M.skel",
+        "atlas": "aimudeng_4M.atlas"
+       },
+       {
+        "skeleton": "aimudeng_4B.skel",
+        "atlas": "aimudeng_4B.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -283,6 +454,40 @@
       "model": "Live2D/aisaikesi_4/aisaikesi_4.model3.json",
       "runtime": "live2d"
      }
+    },
+    {
+     "label": "碧海之梦",
+     "outfit": "aisaikesi_7",
+     "idle": {
+      "painting": "docs/aisaikesi/aisaikesi_7",
+      "layers": [
+       {
+        "skeleton": "aisaikesi_7T.skel",
+        "atlas": "aisaikesi_7T.atlas"
+       },
+       {
+        "skeleton": "aisaikesi_7B.skel",
+        "atlas": "aisaikesi_7B.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
+     "label": "改造",
+     "outfit": "aisaikesi_g",
+     "idle": {
+      "painting": "docs/aisaikesi/aisaikesi_g",
+      "layers": [
+       {
+        "skeleton": "aisaikesi_g.skel",
+        "atlas": "aisaikesi_g.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -369,6 +574,21 @@
    "name": "奥古斯特·冯·帕塞瓦尔",
    "costumes": [
     {
+     "label": "被阳光照亮之时",
+     "outfit": "aogusite_3",
+     "idle": {
+      "painting": "docs/aogusite/aogusite_3",
+      "layers": [
+       {
+        "skeleton": "aogusite_3.skel",
+        "atlas": "aogusite_3.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
      "label": "与“魔女”的星夜之约",
      "outfit": "aogusite_4",
      "idle": {
@@ -417,6 +637,21 @@
    "name": "白凤",
    "costumes": [
     {
+     "label": "默认",
+     "outfit": "baifeng",
+     "idle": {
+      "painting": "docs/baifeng/baifeng",
+      "layers": [
+       {
+        "skeleton": "baifeng.skel",
+        "atlas": "baifeng.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
      "label": "缭乱之花的忍者游戏",
      "outfit": "baifeng_2",
      "idle": {
@@ -446,6 +681,29 @@
    "id": "azurlane:bailong",
    "name": "白龙",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "bailong",
+     "idle": {
+      "painting": "docs/bailong/bailong",
+      "layers": [
+       {
+        "skeleton": "bailongT.skel",
+        "atlas": "bailongT.atlas"
+       },
+       {
+        "skeleton": "bailongM.skel",
+        "atlas": "bailongM.atlas"
+       },
+       {
+        "skeleton": "bailongB.skel",
+        "atlas": "bailongB.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "丝竹喧阗",
      "outfit": "bailong_3",
@@ -479,9 +737,45 @@
    ]
   },
   {
+   "id": "azurlane:balaka",
+   "name": "巴拉卡少校",
+   "costumes": [
+    {
+     "label": "死亡之神的戏谑",
+     "outfit": "balaka_2",
+     "idle": {
+      "painting": "docs/balaka/balaka_2",
+      "layers": [
+       {
+        "skeleton": "balaka_2.skel",
+        "atlas": "balaka_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:banerwei",
    "name": "伴尔维",
    "costumes": [
+    {
+     "label": "俩人的柔软体操",
+     "outfit": "banerwei_2",
+     "idle": {
+      "painting": "docs/banerwei/banerwei_2",
+      "layers": [
+       {
+        "skeleton": "banerwei_2.skel",
+        "atlas": "banerwei_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "清凉的甜蜜滋味",
      "outfit": "banerwei_3",
@@ -547,6 +841,21 @@
       "model": "Live2D/beierfasite_2/beierfasite_2.model3.json",
       "runtime": "live2d"
      }
+    },
+    {
+     "label": "至福的侍奉",
+     "outfit": "beierfasite_9",
+     "idle": {
+      "painting": "docs/beierfasite/beierfasite_9",
+      "layers": [
+       {
+        "skeleton": "beierfasite_9.skel",
+        "atlas": "beierfasite_9.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -665,6 +974,50 @@
    ]
   },
   {
+   "id": "azurlane:bisimaiz",
+   "name": "俾斯麦Zwei",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "bisimaiz",
+     "idle": {
+      "painting": "docs/bisimaiz/bisimaiz",
+      "layers": [
+       {
+        "skeleton": "bisimaiZT.skel",
+        "atlas": "bisimaiZT.atlas"
+       },
+       {
+        "skeleton": "bisimaiZM.skel",
+        "atlas": "bisimaiZM.atlas"
+       },
+       {
+        "skeleton": "bisimaiZB.skel",
+        "atlas": "bisimaiZB.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
+     "label": "清澈假日",
+     "outfit": "bisimaiz_2",
+     "idle": {
+      "painting": "docs/bisimaiz/bisimaiz_2",
+      "layers": [
+       {
+        "skeleton": "bisimaiZ_2T.skel",
+        "atlas": "bisimaiZ_2T.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:bola",
    "name": "波拉",
    "costumes": [
@@ -739,6 +1092,21 @@
       "model": "Live2D/bulaimodun_5/bulaimodun_5.model3.json",
       "runtime": "live2d"
      }
+    },
+    {
+     "label": "特别的治愈时间",
+     "outfit": "bulaimodun_6",
+     "idle": {
+      "painting": "docs/bulaimodun/bulaimodun_6",
+      "layers": [
+       {
+        "skeleton": "bulaimodun_6.skel",
+        "atlas": "bulaimodun_6.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -746,6 +1114,25 @@
    "id": "azurlane:buleisite",
    "name": "布雷斯特",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "buleisite",
+     "idle": {
+      "painting": "docs/buleisite/buleisite",
+      "layers": [
+       {
+        "skeleton": "buleisite_T.skel",
+        "atlas": "buleisite_T.atlas"
+       },
+       {
+        "skeleton": "buleisite_B.skel",
+        "atlas": "buleisite_B.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "苍海织歌",
      "outfit": "buleisite_2",
@@ -769,6 +1156,27 @@
       "model": "Live2D/buleisite_3/buleisite_3.model3.json",
       "runtime": "live2d"
      }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:buli_super",
+   "name": "特装型布里MKIII",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "buli_super",
+     "idle": {
+      "painting": "docs/buli/buli_super",
+      "layers": [
+       {
+        "skeleton": "buli_super.skel",
+        "atlas": "buli_super.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -845,6 +1253,27 @@
    ]
   },
   {
+   "id": "azurlane:changmen",
+   "name": "长门",
+   "costumes": [
+    {
+     "label": "牵心结缘",
+     "outfit": "changmen_6",
+     "idle": {
+      "painting": "docs/changmen/changmen_6",
+      "layers": [
+       {
+        "skeleton": "changmen_6.skel",
+        "atlas": "changmen_6.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:chicheng",
    "name": "赤城",
    "costumes": [
@@ -895,6 +1324,27 @@
       "model": "Live2D/chuyue_2/chuyue_2.model3.json",
       "runtime": "live2d"
      }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:chuyun",
+   "name": "出云",
+   "costumes": [
+    {
+     "label": "尾尖的心跳特调",
+     "outfit": "chuyun_3",
+     "idle": {
+      "painting": "docs/chuyun/chuyun_3",
+      "layers": [
+       {
+        "skeleton": "chuyun_3.skel",
+        "atlas": "chuyun_3.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -965,9 +1415,53 @@
    ]
   },
   {
+   "id": "azurlane:dahuangfengii",
+   "name": "大黄蜂II",
+   "costumes": [
+    {
+     "label": "驰骋于大海之上！",
+     "outfit": "dahuangfengii_2",
+     "idle": {
+      "painting": "docs/dahuangfengii/dahuangfengii_2",
+      "layers": [
+       {
+        "skeleton": "dahuangfengII_2_T.skel",
+        "atlas": "dahuangfengII_2_T.atlas"
+       },
+       {
+        "skeleton": "dahuangfengII_2_B.skel",
+        "atlas": "dahuangfengII_2_B.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:daofeng",
    "name": "岛风",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "daofeng",
+     "idle": {
+      "painting": "docs/daofeng/daofeng",
+      "layers": [
+       {
+        "skeleton": "daofengT.skel",
+        "atlas": "daofengT.atlas"
+       },
+       {
+        "skeleton": "daofengB.skel",
+        "atlas": "daofengB.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "最速兔兔的邀请函(?)",
      "outfit": "daofeng_4",
@@ -991,6 +1485,52 @@
       "model": "Live2D/daofeng_5/daofeng_5.model3.json",
       "runtime": "live2d"
      }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:dashan",
+   "name": "大山",
+   "costumes": [
+    {
+     "label": "祈愿的巫女兔",
+     "outfit": "dashan_2",
+     "idle": {
+      "painting": "docs/dashan/dashan_2",
+      "layers": [
+       {
+        "skeleton": "dashan_2.skel",
+        "atlas": "dashan_2.atlas"
+       },
+       {
+        "skeleton": "dashan_2T.skel",
+        "atlas": "dashan_2T.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "azurlane:deleike",
+   "name": "德雷克",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "deleike",
+     "idle": {
+      "painting": "docs/deleike/deleike",
+      "layers": [
+       {
+        "skeleton": "deleike.skel",
+        "atlas": "deleike.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -1027,6 +1567,56 @@
       "model": "Live2D/deyizhi_3/deyizhi_3.model3.json",
       "runtime": "live2d"
      }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:digaiteluyin",
+   "name": "迪盖·特鲁因 ",
+   "costumes": [
+    {
+     "label": "温泉边的捕食者",
+     "outfit": "digaiteluyin_2",
+     "idle": {
+      "painting": "docs/digaiteluyin/digaiteluyin_2",
+      "layers": [
+       {
+        "skeleton": "digaiteluyin_2.skel",
+        "atlas": "digaiteluyin_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "azurlane:diliyasite",
+   "name": "的里雅斯特",
+   "costumes": [
+    {
+     "label": "热气蒸腾温泉夜",
+     "outfit": "diliyasite_3",
+     "idle": {
+      "painting": "docs/diliyasite/diliyasite_3",
+      "layers": [
+       {
+        "skeleton": "diliyasite_3T.skel",
+        "atlas": "diliyasite_3T.atlas"
+       },
+       {
+        "skeleton": "diliyasite_3M.skel",
+        "atlas": "diliyasite_3M.atlas"
+       },
+       {
+        "skeleton": "diliyasite_3B.skel",
+        "atlas": "diliyasite_3B.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -1097,6 +1687,31 @@
    ]
   },
   {
+   "id": "azurlane:duyisibao",
+   "name": "杜伊斯堡",
+   "costumes": [
+    {
+     "label": "两人的秘密特训！",
+     "outfit": "duyisibao_2",
+     "idle": {
+      "painting": "docs/duyisibao/duyisibao_2",
+      "layers": [
+       {
+        "skeleton": "duyisibao_2.skel",
+        "atlas": "duyisibao_2.atlas"
+       },
+       {
+        "skeleton": "duyisibao_2B.skel",
+        "atlas": "duyisibao_2B.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:edu",
    "name": "恶毒",
    "costumes": [
@@ -1127,9 +1742,45 @@
    ]
   },
   {
+   "id": "azurlane:fage",
+   "name": "法戈",
+   "costumes": [
+    {
+     "label": "纯白热潮",
+     "outfit": "fage_2",
+     "idle": {
+      "painting": "docs/fage/fage_2",
+      "layers": [
+       {
+        "skeleton": "fage_2.skel",
+        "atlas": "fage_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:feiteliedadi",
    "name": "腓特烈大帝",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "feiteliedadi",
+     "idle": {
+      "painting": "docs/feiteliedadi/feiteliedadi",
+      "layers": [
+       {
+        "skeleton": "feiteliedadi.skel",
+        "atlas": "feiteliedadi.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "相会于盛夏之夜",
      "outfit": "feiteliedadi_3",
@@ -1191,6 +1842,25 @@
    "name": "风云",
    "costumes": [
     {
+     "label": "烟火之夜、静谧之海",
+     "outfit": "fengyun_2",
+     "idle": {
+      "painting": "docs/fengyun/fengyun_2",
+      "layers": [
+       {
+        "skeleton": "fengyun_2_T.skel",
+        "atlas": "fengyun_2_T.atlas"
+       },
+       {
+        "skeleton": "fengyun_2_B.skel",
+        "atlas": "fengyun_2_B.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
      "label": "热茶与女仆修行",
      "outfit": "fengyun_4",
      "idle": {
@@ -1205,9 +1875,45 @@
    ]
   },
   {
+   "id": "azurlane:fulankelin",
+   "name": "富兰克林",
+   "costumes": [
+    {
+     "label": "“护士”小姐的留院日志",
+     "outfit": "fulankelin_2",
+     "idle": {
+      "painting": "docs/fulankelin/fulankelin_2",
+      "layers": [
+       {
+        "skeleton": "fulankelin_2.skel",
+        "atlas": "fulankelin_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:fulici",
    "name": "弗里茨·鲁梅",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "fulici",
+     "idle": {
+      "painting": "docs/fulici/fulici",
+      "layers": [
+       {
+        "skeleton": "fulici.skel",
+        "atlas": "fulici.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "Schwarzes Kaninchen",
      "outfit": "fulici_2",
@@ -1223,9 +1929,60 @@
    ]
   },
   {
+   "id": "azurlane:fuluoxiluofu",
+   "name": "伏罗希洛夫",
+   "costumes": [
+    {
+     "label": "山间暖雪",
+     "outfit": "fuluoxiluofu_2",
+     "idle": {
+      "painting": "docs/fuluoxiluofu/fuluoxiluofu_2",
+      "layers": [
+       {
+        "skeleton": "fuluoxiluofu_2.skel",
+        "atlas": "fuluoxiluofu_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
+     "label": "特殊的亲密预演",
+     "outfit": "fuluoxiluofu_3",
+     "idle": {
+      "painting": "docs/fuluoxiluofu/fuluoxiluofu_3",
+      "layers": [
+       {
+        "skeleton": "fuluoxiluofu_3.skel",
+        "atlas": "fuluoxiluofu_3.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:gangyishawa",
    "name": "冈依沙瓦号",
    "costumes": [
+    {
+     "label": "被封印的美人鱼",
+     "outfit": "gangyishawa_2",
+     "idle": {
+      "painting": "docs/gangyishawa/gangyishawa_2",
+      "layers": [
+       {
+        "skeleton": "gangyishawa_2.skel",
+        "atlas": "gangyishawa_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "真我的显影",
      "outfit": "gangyishawa_3",
@@ -1244,6 +2001,25 @@
    "id": "azurlane:gaoxiong",
    "name": "高雄",
    "costumes": [
+    {
+     "label": "破魔舰术-神护-",
+     "outfit": "gaoxiong_6",
+     "idle": {
+      "painting": "docs/gaoxiong/gaoxiong_6",
+      "layers": [
+       {
+        "skeleton": "gaoxiong_6T.skel",
+        "atlas": "gaoxiong_6T.atlas"
+       },
+       {
+        "skeleton": "gaoxiong_6B.skel",
+        "atlas": "gaoxiong_6B.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "武者的“内在”修养",
      "outfit": "gaoxiong_7",
@@ -1273,6 +2049,27 @@
       "model": "Live2D/geliqiya_2/geliqiya_2.model3.json",
       "runtime": "live2d"
      }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:geluosite",
+   "name": "格罗斯特",
+   "costumes": [
+    {
+     "label": "魅紫旋舞",
+     "outfit": "geluosite_3",
+     "idle": {
+      "painting": "docs/geluosite/geluosite_3",
+      "layers": [
+       {
+        "skeleton": "geluosite_3.skel",
+        "atlas": "geluosite_3.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -1317,6 +2114,25 @@
    "name": "关岛",
    "costumes": [
     {
+     "label": "默认",
+     "outfit": "guandao",
+     "idle": {
+      "painting": "docs/guandao/guandao",
+      "layers": [
+       {
+        "skeleton": "guandaoT.skel",
+        "atlas": "guandaoT.atlas"
+       },
+       {
+        "skeleton": "guandaoB.skel",
+        "atlas": "guandaoB.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
      "label": "魅力舞台",
      "outfit": "guandao_2",
      "idle": {
@@ -1359,6 +2175,21 @@
      }
     },
     {
+     "label": "辉光下的甜蜜",
+     "outfit": "guanghui_8",
+     "idle": {
+      "painting": "docs/guanghui/guanghui_8",
+      "layers": [
+       {
+        "skeleton": "guanghui_8.skel",
+        "atlas": "guanghui_8.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
      "label": "幽影徘徊之夜",
      "outfit": "guanghui_9",
      "idle": {
@@ -1391,6 +2222,48 @@
    ]
   },
   {
+   "id": "azurlane:haerbin",
+   "name": "哈尔滨",
+   "costumes": [
+    {
+     "label": "奢享于盛夏之滨",
+     "outfit": "haerbin_3",
+     "idle": {
+      "painting": "docs/haerbin/haerbin_3",
+      "layers": [
+       {
+        "skeleton": "haerbin_3.skel",
+        "atlas": "haerbin_3.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "azurlane:haerfude",
+   "name": "哈尔福德",
+   "costumes": [
+    {
+     "label": "血族亲王的限定陪伴日",
+     "outfit": "haerfude_2",
+     "idle": {
+      "painting": "docs/haerfude/haerfude_2",
+      "layers": [
+       {
+        "skeleton": "haerfude_2.skel",
+        "atlas": "haerfude_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:hailunna",
    "name": "海伦娜",
    "costumes": [
@@ -1405,6 +2278,21 @@
       "model": "Live2D/hailunna_4/hailunna_4.model3.json",
       "runtime": "live2d"
      }
+    },
+    {
+     "label": "桧木温香，暖意一刻",
+     "outfit": "hailunna_5",
+     "idle": {
+      "painting": "docs/hailunna/hailunna_5",
+      "layers": [
+       {
+        "skeleton": "hailunna_5.skel",
+        "atlas": "hailunna_5.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -1445,6 +2333,27 @@
    ]
   },
   {
+   "id": "azurlane:heiyansheshou",
+   "name": "BLACK★ROCK SHOOTER",
+   "costumes": [
+    {
+     "label": "黑之女神",
+     "outfit": "heiyansheshou_2",
+     "idle": {
+      "painting": "docs/heiyansheshou/heiyansheshou_2",
+      "layers": [
+       {
+        "skeleton": "heiyansheshou_2.skel",
+        "atlas": "heiyansheshou_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:hemin",
    "name": "赫敏",
    "costumes": [
@@ -1475,6 +2384,127 @@
    ]
   },
   {
+   "id": "azurlane:hemuhao",
+   "name": "和睦号",
+   "costumes": [
+    {
+     "label": "友好的弗兰肯",
+     "outfit": "hemuhao_2",
+     "idle": {
+      "painting": "docs/hemuhao/hemuhao_2",
+      "layers": [
+       {
+        "skeleton": "hemuhao_2.skel",
+        "atlas": "hemuhao_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "azurlane:hesitiya",
+   "name": "赫斯缇雅",
+   "costumes": [
+    {
+     "label": "God Vacation！",
+     "outfit": "hesitiya_2",
+     "idle": {
+      "painting": "docs/hesitiya/hesitiya_2",
+      "layers": [
+       {
+        "skeleton": "hesitiya_2.skel",
+        "atlas": "hesitiya_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "azurlane:huajia",
+   "name": "华甲",
+   "costumes": [
+    {
+     "label": "欢乐喜庆僵尸夜",
+     "outfit": "huajia_2",
+     "idle": {
+      "painting": "docs/huajia/huajia_2",
+      "layers": [
+       {
+        "skeleton": "huajia_2T.skel",
+        "atlas": "huajia_2T.atlas"
+       },
+       {
+        "skeleton": "huajia_2M.skel",
+        "atlas": "huajia_2M.atlas"
+       },
+       {
+        "skeleton": "huajia_2B.skel",
+        "atlas": "huajia_2B.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "azurlane:huanchang",
+   "name": "寰昌",
+   "costumes": [
+    {
+     "label": "月下蹁跹",
+     "outfit": "huanchang_2",
+     "idle": {
+      "painting": "docs/huanchang/huanchang_2",
+      "layers": [
+       {
+        "skeleton": "huanchang_2T.skel",
+        "atlas": "huanchang_2T.atlas"
+       },
+       {
+        "skeleton": "huanchang_2B.skel",
+        "atlas": "huanchang_2B.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "azurlane:huangjiacaifu",
+   "name": "皇家财富号",
+   "costumes": [
+    {
+     "label": "海边的约定",
+     "outfit": "huangjiacaifu_3",
+     "idle": {
+      "painting": "docs/huangjiacaifu/huangjiacaifu_3",
+      "layers": [
+       {
+        "skeleton": "huangjiacaifu_3T.skel",
+        "atlas": "huangjiacaifu_3T.atlas"
+       },
+       {
+        "skeleton": "huangjiacaifu_3B.skel",
+        "atlas": "huangjiacaifu_3B.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:huangjiafangzhou",
    "name": "皇家方舟",
    "costumes": [
@@ -1489,6 +2519,48 @@
       "model": "Live2D/huangjiafangzhou_3/huangjiafangzhou_3.model3.json",
       "runtime": "live2d"
      }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:huashengdun",
+   "name": "华盛顿",
+   "costumes": [
+    {
+     "label": "夜间巡诊",
+     "outfit": "huashengdun_3",
+     "idle": {
+      "painting": "docs/huashengdun/huashengdun_3",
+      "layers": [
+       {
+        "skeleton": "huashengdun_3.skel",
+        "atlas": "huashengdun_3.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "azurlane:huben",
+   "name": "虎贲",
+   "costumes": [
+    {
+     "label": "舞虎迎春",
+     "outfit": "huben_2",
+     "idle": {
+      "painting": "docs/huben/huben_2",
+      "layers": [
+       {
+        "skeleton": "huben_2.skel",
+        "atlas": "huben_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -1519,6 +2591,57 @@
       "model": "Live2D/huonululu_5/huonululu_5.model3.json",
       "runtime": "live2d"
      }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:i404",
+   "name": "伊404",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "i404",
+     "idle": {
+      "painting": "docs/i404/i404",
+      "layers": [
+       {
+        "skeleton": "i404.skel",
+        "atlas": "i404.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
+     "label": "绛縢华舞（动态立绘 1）",
+     "outfit": "i404_2",
+     "idle": {
+      "painting": "docs/i404/i404_2",
+      "layers": [
+       {
+        "skeleton": "i404_2.skel",
+        "atlas": "i404_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
+     "label": "绛縢华舞（动态立绘 2）",
+     "outfit": "i404_3",
+     "idle": {
+      "painting": "docs/i404/i404_3",
+      "layers": [
+       {
+        "skeleton": "i404_3.skel",
+        "atlas": "i404_3.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -1585,6 +2708,21 @@
       "model": "Live2D/jianwu_2/jianwu_2.model3.json",
       "runtime": "live2d"
      }
+    },
+    {
+     "label": "妆点，只为今夜（动态立绘）",
+     "outfit": "jianwu_3",
+     "idle": {
+      "painting": "docs/jianwu/jianwu_3",
+      "layers": [
+       {
+        "skeleton": "jianwu_3.skel",
+        "atlas": "jianwu_3.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -1627,6 +2765,21 @@
       "model": "Live2D/jianye_4/jianye_4.model3.json",
       "runtime": "live2d"
      }
+    },
+    {
+     "label": "新鲜与甜蜜！",
+     "outfit": "jianye_5",
+     "idle": {
+      "painting": "docs/jianye/jianye_5",
+      "layers": [
+       {
+        "skeleton": "jianye_5.skel",
+        "atlas": "jianye_5.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -1645,6 +2798,27 @@
       "model": "Live2D/jiluofu_3/jiluofu_3.model3.json",
       "runtime": "live2d"
      }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:jingang",
+   "name": "金刚",
+   "costumes": [
+    {
+     "label": "海浪之下的意外",
+     "outfit": "jingang_5",
+     "idle": {
+      "painting": "docs/jingang/jingang_5",
+      "layers": [
+       {
+        "skeleton": "jingang_5.skel",
+        "atlas": "jingang_5.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -1700,6 +2874,21 @@
    "id": "azurlane:jinshi",
    "name": "金狮",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "jinshi",
+     "idle": {
+      "painting": "docs/jinshi/jinshi",
+      "layers": [
+       {
+        "skeleton": "jinshi.skel",
+        "atlas": "jinshi.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "朦胧的宠溺时刻",
      "outfit": "jinshi_2",
@@ -1781,9 +2970,81 @@
    ]
   },
   {
+   "id": "azurlane:kaiersheng",
+   "name": "凯尔圣",
+   "costumes": [
+    {
+     "label": "阳光下的跑者",
+     "outfit": "kaiersheng_2",
+     "idle": {
+      "painting": "docs/kaiersheng/kaiersheng_2",
+      "layers": [
+       {
+        "skeleton": "kaiersheng_2.skel",
+        "atlas": "kaiersheng_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
+     "label": "神圣的怜悯并非恶事？",
+     "outfit": "kaiersheng_3",
+     "idle": {
+      "painting": "docs/kaiersheng/kaiersheng_3",
+      "layers": [
+       {
+        "skeleton": "kaiersheng_3.skel",
+        "atlas": "kaiersheng_3.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "azurlane:kala",
+   "name": "卡菈·伊迪亚斯",
+   "costumes": [
+    {
+     "label": "族长大厨",
+     "outfit": "kala_2",
+     "idle": {
+      "painting": "docs/kala/kala_2",
+      "layers": [
+       {
+        "skeleton": "kala_2.skel",
+        "atlas": "kala_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:kalangshitade",
    "name": "喀琅施塔得",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "kalangshitade",
+     "idle": {
+      "painting": "docs/kalangshitade/kalangshitade",
+      "layers": [
+       {
+        "skeleton": "kalangshitade.skel",
+        "atlas": "kalangshitade.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "突击行动开始！",
      "outfit": "kalangshitade_2",
@@ -1795,6 +3056,21 @@
       "model": "Live2D/kalangshitade_2/kalangshitade_2.model3.json",
       "runtime": "live2d"
      }
+    },
+    {
+     "label": "动物特工",
+     "outfit": "kalangshitade_3",
+     "idle": {
+      "painting": "docs/kalangshitade/kalangshitade_3",
+      "layers": [
+       {
+        "skeleton": "kalangshitade_3.skel",
+        "atlas": "kalangshitade_3.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -1813,6 +3089,27 @@
       "model": "Live2D/kalvbudisi_2/kalvbudisi_2.model3.json",
       "runtime": "live2d"
      }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:kashan",
+   "name": "喀山",
+   "costumes": [
+    {
+     "label": "温煦晨光",
+     "outfit": "kashan_2",
+     "idle": {
+      "painting": "docs/kashan/kashan_2",
+      "layers": [
+       {
+        "skeleton": "kashan_2.skel",
+        "atlas": "kashan_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -1899,6 +3196,25 @@
      }
     },
     {
+     "label": "凌乱的秘密加演",
+     "outfit": "kewei_5",
+     "idle": {
+      "painting": "docs/kewei/kewei_5",
+      "layers": [
+       {
+        "skeleton": "kewei_5T.skel",
+        "atlas": "kewei_5T.atlas"
+       },
+       {
+        "skeleton": "kewei_5.skel",
+        "atlas": "kewei_5.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
      "label": "纪念印记",
      "outfit": "kewei_6",
      "idle": {
@@ -1965,6 +3281,25 @@
      }
     },
     {
+     "label": "白日慵懒",
+     "outfit": "lafei_12",
+     "idle": {
+      "painting": "docs/lafei/lafei_12",
+      "layers": [
+       {
+        "skeleton": "lafei_12T.skel",
+        "atlas": "lafei_12T.atlas"
+       },
+       {
+        "skeleton": "lafei_12B.skel",
+        "atlas": "lafei_12B.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
      "label": "白兔迎春",
      "outfit": "lafei_4",
      "idle": {
@@ -1982,6 +3317,29 @@
    "id": "azurlane:lafeier",
    "name": "拉斐尔",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "lafeier",
+     "idle": {
+      "painting": "docs/lafeier/lafeier",
+      "layers": [
+       {
+        "skeleton": "lafeierT.skel",
+        "atlas": "lafeierT.atlas"
+       },
+       {
+        "skeleton": "lafeierM.skel",
+        "atlas": "lafeierM.atlas"
+       },
+       {
+        "skeleton": "lafeierB.skel",
+        "atlas": "lafeierB.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "爱与美的秘密珍藏",
      "outfit": "lafeier_2",
@@ -2001,6 +3359,21 @@
    "name": "拉菲II",
    "costumes": [
     {
+     "label": "默认",
+     "outfit": "lafeiii",
+     "idle": {
+      "painting": "docs/lafeiii/lafeiii",
+      "layers": [
+       {
+        "skeleton": "lafeiII.skel",
+        "atlas": "lafeiII.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
      "label": "睡意满满忙碌DAY",
      "outfit": "lafeiII_3",
      "idle": {
@@ -2011,6 +3384,63 @@
       "model": "Live2D/lafeiII_3/lafeiII_3.model3.json",
       "runtime": "live2d"
      }
+    },
+    {
+     "label": "兔兔城主的巡游间隙",
+     "outfit": "lafeiii_4",
+     "idle": {
+      "painting": "docs/lafeiii/lafeiii_4",
+      "layers": [
+       {
+        "skeleton": "lafeiII_4.skel",
+        "atlas": "lafeiII_4.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "azurlane:laimuhao",
+   "name": "莱姆号",
+   "costumes": [
+    {
+     "label": "魔蚀下的悸动",
+     "outfit": "laimuhao_2",
+     "idle": {
+      "painting": "docs/laimuhao/laimuhao_2",
+      "layers": [
+       {
+        "skeleton": "laimuhao_2.skel",
+        "atlas": "laimuhao_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "azurlane:laisha",
+   "name": "莱莎琳·斯托特",
+   "costumes": [
+    {
+     "label": "料理挑战！",
+     "outfit": "laisha_3",
+     "idle": {
+      "painting": "docs/laisha/laisha_3",
+      "layers": [
+       {
+        "skeleton": "laisha_3.skel",
+        "atlas": "laisha_3.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -2029,6 +3459,27 @@
       "model": "Live2D/Leigensibao_2/Leigensibao_2.model3.json",
       "runtime": "live2d"
      }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:leiniya",
+   "name": "蕾妮雅",
+   "costumes": [
+    {
+     "label": "夏日假期",
+     "outfit": "leiniya_2",
+     "idle": {
+      "painting": "docs/leiniya/leiniya_2",
+      "layers": [
+       {
+        "skeleton": "leiniya_2.skel",
+        "atlas": "leiniya_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -2081,6 +3532,48 @@
    ]
   },
   {
+   "id": "azurlane:linglai",
+   "name": "绫濑",
+   "costumes": [
+    {
+     "label": "兔子小姐的更衣时间",
+     "outfit": "linglai_2",
+     "idle": {
+      "painting": "docs/linglai/linglai_2",
+      "layers": [
+       {
+        "skeleton": "linglai_2.skel",
+        "atlas": "linglai_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "azurlane:lingyangzhe3",
+   "name": "领洋者",
+   "costumes": [
+    {
+     "label": "入浴的小恶魔",
+     "outfit": "lingyangzhe3_2",
+     "idle": {
+      "painting": "docs/lingyangzhe3/lingyangzhe3_2",
+      "layers": [
+       {
+        "skeleton": "lingyangzhe3_2.skel",
+        "atlas": "lingyangzhe3_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:linuo",
    "name": "里诺",
    "costumes": [
@@ -2129,6 +3622,27 @@
    ]
   },
   {
+   "id": "azurlane:liuliang",
+   "name": "琉·璃昂",
+   "costumes": [
+    {
+     "label": "在夜晚的酒馆中",
+     "outfit": "liuliang_2",
+     "idle": {
+      "painting": "docs/liuliang/liuliang_2",
+      "layers": [
+       {
+        "skeleton": "liuliang_2.skel",
+        "atlas": "liuliang_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:longfeng",
    "name": "龙凤",
    "costumes": [
@@ -2161,6 +3675,48 @@
       "model": "Live2D/longwu_2/longwu_2.model3.json",
       "runtime": "live2d"
      }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:luna_doa",
+   "name": "露娜",
+   "costumes": [
+    {
+     "label": "沙滩上的女神",
+     "outfit": "luna_2_doa",
+     "idle": {
+      "painting": "docs/luna/luna_2_doa",
+      "layers": [
+       {
+        "skeleton": "luna_2_doa.skel",
+        "atlas": "luna_2_doa.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "azurlane:lundun",
+   "name": "伦敦",
+   "costumes": [
+    {
+     "label": "高效工作时间",
+     "outfit": "lundun_3",
+     "idle": {
+      "painting": "docs/lundun/lundun_3",
+      "layers": [
+       {
+        "skeleton": "lundun_3.skel",
+        "atlas": "lundun_3.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -2249,6 +3805,27 @@
    ]
   },
   {
+   "id": "azurlane:luyisiweier",
+   "name": "路易斯维尔",
+   "costumes": [
+    {
+     "label": "梦幻推荐",
+     "outfit": "luyisiweier_2",
+     "idle": {
+      "painting": "docs/luyisiweier/luyisiweier_2",
+      "layers": [
+       {
+        "skeleton": "luyisiweier_2.skel",
+        "atlas": "luyisiweier_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:lvzuofu",
    "name": "吕佐夫",
    "costumes": [
@@ -2263,6 +3840,31 @@
       "model": "Live2D/lvzuofu_2/lvzuofu_2.model3.json",
       "runtime": "live2d"
      }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:mabuerheide",
+   "name": "马布尔黑德",
+   "costumes": [
+    {
+     "label": "雨天的非偶然相遇?",
+     "outfit": "mabuerheide_5",
+     "idle": {
+      "painting": "docs/mabuerheide/mabuerheide_5",
+      "layers": [
+       {
+        "skeleton": "mabuerheide_5T.skel",
+        "atlas": "mabuerheide_5T.atlas"
+       },
+       {
+        "skeleton": "mabuerheide_5B.skel",
+        "atlas": "mabuerheide_5B.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -2285,6 +3887,27 @@
    ]
   },
   {
+   "id": "azurlane:maoxianhao",
+   "name": "冒险号",
+   "costumes": [
+    {
+     "label": "多疑领主的晚宴",
+     "outfit": "maoxianhao_2",
+     "idle": {
+      "painting": "docs/maoxianhao/maoxianhao_2",
+      "layers": [
+       {
+        "skeleton": "maoxianhao_2.skel",
+        "atlas": "maoxianhao_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:masaina",
    "name": "马塞纳",
    "costumes": [
@@ -2303,9 +3926,45 @@
    ]
   },
   {
+   "id": "azurlane:masaiqu",
+   "name": "马赛曲",
+   "costumes": [
+    {
+     "label": "战斗天使的健身训练",
+     "outfit": "masaiqu_2",
+     "idle": {
+      "painting": "docs/masaiqu/masaiqu_2",
+      "layers": [
+       {
+        "skeleton": "masaiqu_2.skel",
+        "atlas": "masaiqu_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:meikelunbao",
    "name": "梅克伦堡",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "meikelunbao",
+     "idle": {
+      "painting": "docs/meikelunbao/meikelunbao",
+      "layers": [
+       {
+        "skeleton": "meikelunbao.skel",
+        "atlas": "meikelunbao.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "作茧自缚",
      "outfit": "meikelunbao_2",
@@ -2375,9 +4034,49 @@
    ]
   },
   {
+   "id": "azurlane:moermansike",
+   "name": "摩尔曼斯克",
+   "costumes": [
+    {
+     "label": "一室幽香",
+     "outfit": "moermansike_3",
+     "idle": {
+      "painting": "docs/moermansike/moermansike_3",
+      "layers": [
+       {
+        "skeleton": "moermansike_3T.skel",
+        "atlas": "moermansike_3T.atlas"
+       },
+       {
+        "skeleton": "moermansike_3B.skel",
+        "atlas": "moermansike_3B.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:mojiaduoer",
    "name": "莫加多尔",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "mojiaduoer",
+     "idle": {
+      "painting": "docs/mojiaduoer/mojiaduoer",
+      "layers": [
+       {
+        "skeleton": "mojiaduoer.skel",
+        "atlas": "mojiaduoer.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "静谧一隅的燥热",
      "outfit": "mojiaduoer_2",
@@ -2417,9 +4116,45 @@
    ]
   },
   {
+   "id": "azurlane:molisen",
+   "name": "莫里森",
+   "costumes": [
+    {
+     "label": "科技？忍术？",
+     "outfit": "molisen_3",
+     "idle": {
+      "painting": "docs/molisen/molisen_3",
+      "layers": [
+       {
+        "skeleton": "molisen_3.skel",
+        "atlas": "molisen_3.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:nabulesi",
    "name": "那不勒斯",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "nabulesi",
+     "idle": {
+      "painting": "docs/nabulesi/nabulesi",
+      "layers": [
+       {
+        "skeleton": "nabulesi.skel",
+        "atlas": "nabulesi.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "Dreamy Night",
      "outfit": "nabulesi_2",
@@ -2438,6 +4173,21 @@
    "id": "azurlane:naximofu",
    "name": "纳希莫夫海军上将",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "naximofu",
+     "idle": {
+      "painting": "docs/naximofu/naximofu",
+      "layers": [
+       {
+        "skeleton": "naximofu.skel",
+        "atlas": "naximofu.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "聚光灯下的初体验",
      "outfit": "naximofu_2",
@@ -2479,6 +4229,42 @@
       "model": "Live2D/nengdai_3/nengdai_3.model3.json",
       "runtime": "live2d"
      }
+    },
+    {
+     "label": "月夜花泉",
+     "outfit": "nengdai_9",
+     "idle": {
+      "painting": "docs/nengdai/nengdai_9",
+      "layers": [
+       {
+        "skeleton": "nengdai_9.skel",
+        "atlas": "nengdai_9.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "azurlane:nina",
+   "name": "妮娜·弗里德",
+   "costumes": [
+    {
+     "label": "Cafe & Diner mode",
+     "outfit": "nina_2",
+     "idle": {
+      "painting": "docs/nina/nina_2",
+      "layers": [
+       {
+        "skeleton": "nina_2.skel",
+        "atlas": "nina_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -2527,6 +4313,21 @@
       "model": "Live2D/ougen_6/ougen_6.model3.json",
       "runtime": "live2d"
      }
+    },
+    {
+     "label": "闪耀达阵！",
+     "outfit": "ougen_7",
+     "idle": {
+      "painting": "docs/ougen/ougen_7",
+      "layers": [
+       {
+        "skeleton": "ougen_7.skel",
+        "atlas": "ougen_7.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     },
     {
      "label": "微醺与试探的距离",
@@ -2613,6 +4414,29 @@
    "name": "普利茅斯",
    "costumes": [
     {
+     "label": "默认",
+     "outfit": "pulimaosi",
+     "idle": {
+      "painting": "docs/pulimaosi/pulimaosi",
+      "layers": [
+       {
+        "skeleton": "pulimaosi_T.skel",
+        "atlas": "pulimaosi_T.atlas"
+       },
+       {
+        "skeleton": "pulimaosi_M.skel",
+        "atlas": "pulimaosi_M.atlas"
+       },
+       {
+        "skeleton": "pulimaosi_B.skel",
+        "atlas": "pulimaosi_B.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
      "label": "纯白天使的全身检查",
      "outfit": "pulimaosi_3",
      "idle": {
@@ -2648,6 +4472,25 @@
    "id": "azurlane:qianwei",
    "name": "前卫",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "qianwei",
+     "idle": {
+      "painting": "docs/qianwei/qianwei",
+      "layers": [
+       {
+        "skeleton": "qianweiT.skel",
+        "atlas": "qianweiT.atlas"
+       },
+       {
+        "skeleton": "qianweiB.skel",
+        "atlas": "qianweiB.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "摇摆不定的伪装",
      "outfit": "qianwei_2",
@@ -2685,6 +4528,21 @@
    "name": "奇尔沙治",
    "costumes": [
     {
+     "label": "默认",
+     "outfit": "qiershazhi",
+     "idle": {
+      "painting": "docs/qiershazhi/qiershazhi",
+      "layers": [
+       {
+        "skeleton": "qiershazhi.skel",
+        "atlas": "qiershazhi.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
      "label": "Allnight Charge",
      "outfit": "qiershazhi_2",
      "idle": {
@@ -2695,6 +4553,25 @@
       "model": "Live2D/qiershazhi_2/qiershazhi_2.model3.json",
       "runtime": "live2d"
      }
+    },
+    {
+     "label": "Springtime Data",
+     "outfit": "qiershazhi_3",
+     "idle": {
+      "painting": "docs/qiershazhi/qiershazhi_3",
+      "layers": [
+       {
+        "skeleton": "qiershazhi_3T.skel",
+        "atlas": "qiershazhi_3T.atlas"
+       },
+       {
+        "skeleton": "qiershazhi_3B.skel",
+        "atlas": "qiershazhi_3B.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -2837,6 +4714,27 @@
    ]
   },
   {
+   "id": "azurlane:shengdiyage",
+   "name": "圣地亚哥",
+   "costumes": [
+    {
+     "label": "改造",
+     "outfit": "shengdiyage_g",
+     "idle": {
+      "painting": "docs/shengdiyage/shengdiyage_g",
+      "layers": [
+       {
+        "skeleton": "shengdiyage_g.skel",
+        "atlas": "shengdiyage_g.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:shengluyisi",
    "name": "圣路易斯",
    "costumes": [
@@ -2894,6 +4792,21 @@
    "id": "azurlane:shi",
    "name": "狮",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "shi",
+     "idle": {
+      "painting": "docs/shi/shi",
+      "layers": [
+       {
+        "skeleton": "shi.skel",
+        "atlas": "shi.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "沙滩的慵懒主宰",
      "outfit": "shi_2",
@@ -2957,6 +4870,27 @@
    ]
   },
   {
+   "id": "azurlane:sikula",
+   "name": "斯库拉",
+   "costumes": [
+    {
+     "label": "侍女的裁决",
+     "outfit": "sikula_4",
+     "idle": {
+      "painting": "docs/sikula/sikula_4",
+      "layers": [
+       {
+        "skeleton": "sikula_4.skel",
+        "atlas": "sikula_4.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:sipeibojue",
    "name": "斯佩伯爵海军上将",
    "costumes": [
@@ -2993,6 +4927,27 @@
    ]
   },
   {
+   "id": "azurlane:siwangzhuzai",
+   "name": "死亡主宰",
+   "costumes": [
+    {
+     "label": "战士的小憩",
+     "outfit": "siwangzhuzai_2",
+     "idle": {
+      "painting": "docs/siwangzhuzai/siwangzhuzai_2",
+      "layers": [
+       {
+        "skeleton": "siwangzhuzai_2.skel",
+        "atlas": "siwangzhuzai_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:siwanshi",
    "name": "四万十",
    "costumes": [
@@ -3007,6 +4962,21 @@
       "model": "Live2D/siwanshi_3/siwanshi_3.model3.json",
       "runtime": "live2d"
      }
+    },
+    {
+     "label": "优哉游哉的龙神大人（动态立绘）",
+     "outfit": "siwanshi_4",
+     "idle": {
+      "painting": "docs/siwanshi/siwanshi_4",
+      "layers": [
+       {
+        "skeleton": "siwanshi_4.skel",
+        "atlas": "siwanshi_4.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -3014,6 +4984,21 @@
    "id": "azurlane:suweiaitongmengnew",
    "name": "苏维埃同盟",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "suweiaitongmengnew",
+     "idle": {
+      "painting": "docs/suweiaitongmengnew/suweiaitongmengnew",
+      "layers": [
+       {
+        "skeleton": "suweiaitongmengNew.skel",
+        "atlas": "suweiaitongmengNew.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "天幕危机",
      "outfit": "suweiaitongmeng_2",
@@ -3037,6 +5022,21 @@
       "model": "Live2D/suweiaitongmeng_3/suweiaitongmeng_3.model3.json",
       "runtime": "live2d"
      }
+    },
+    {
+     "label": "缠丝审讯（动态立绘）",
+     "outfit": "suweiaitongmeng_4",
+     "idle": {
+      "painting": "docs/suweiaitongmeng/suweiaitongmeng_4",
+      "layers": [
+       {
+        "skeleton": "suweiaitongmeng_4.skel",
+        "atlas": "suweiaitongmeng_4.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -3059,9 +5059,66 @@
    ]
   },
   {
+   "id": "azurlane:talin",
+   "name": "塔林",
+   "costumes": [
+    {
+     "label": "情满月圆",
+     "outfit": "talin_4",
+     "idle": {
+      "painting": "docs/talin/talin_4",
+      "layers": [
+       {
+        "skeleton": "talin_4.skel",
+        "atlas": "talin_4.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "azurlane:tashigan",
+   "name": "塔什干",
+   "costumes": [
+    {
+     "label": "独属于你的邀约",
+     "outfit": "tashigan_4",
+     "idle": {
+      "painting": "docs/tashigan/tashigan_4",
+      "layers": [
+       {
+        "skeleton": "tashigan_4.skel",
+        "atlas": "tashigan_4.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:telafaerjia",
    "name": "特拉法尔加",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "telafaerjia",
+     "idle": {
+      "painting": "docs/telafaerjia/telafaerjia",
+      "layers": [
+       {
+        "skeleton": "telafaerjia.skel",
+        "atlas": "telafaerjia.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "海风与夜语",
      "outfit": "telafaerjia_2",
@@ -3077,9 +5134,45 @@
    ]
   },
   {
+   "id": "azurlane:telinida",
+   "name": "特立尼达",
+   "costumes": [
+    {
+     "label": "更衣室里的捕猎者",
+     "outfit": "telinida_2",
+     "idle": {
+      "painting": "docs/telinida/telinida_2",
+      "layers": [
+       {
+        "skeleton": "telinida_2.skel",
+        "atlas": "telinida_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:tiancheng",
    "name": "天城",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "tiancheng_cv",
+     "idle": {
+      "painting": "docs/tiancheng/tiancheng_cv",
+      "layers": [
+       {
+        "skeleton": "tiancheng_cv.skel",
+        "atlas": "tiancheng_cv.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "红鸢的闲暇片刻",
      "outfit": "tiancheng_3",
@@ -3167,6 +5260,27 @@
    ]
   },
   {
+   "id": "azurlane:tuzuo",
+   "name": "土佐",
+   "costumes": [
+    {
+     "label": "水色间的游曳",
+     "outfit": "tuzuo_3",
+     "idle": {
+      "painting": "docs/tuzuo/tuzuo_3",
+      "layers": [
+       {
+        "skeleton": "tuzuo_3.skel",
+        "atlas": "tuzuo_3.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:u2501",
    "name": "U-2501",
    "costumes": [
@@ -3181,6 +5295,48 @@
       "model": "Live2D/u2501_2/u2501_2.model3.json",
       "runtime": "live2d"
      }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:u96",
+   "name": "U-96",
+   "costumes": [
+    {
+     "label": "wolfen dolly",
+     "outfit": "u96_4",
+     "idle": {
+      "painting": "docs/u96/u96_4",
+      "layers": [
+       {
+        "skeleton": "u96_4.skel",
+        "atlas": "u96_4.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "azurlane:weida",
+   "name": "维达号",
+   "costumes": [
+    {
+     "label": "慵懒的黑天使",
+     "outfit": "weida_2",
+     "idle": {
+      "painting": "docs/weida/weida_2",
+      "layers": [
+       {
+        "skeleton": "weida_2.skel",
+        "atlas": "weida_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -3267,6 +5423,25 @@
    "name": "尾张",
    "costumes": [
     {
+     "label": "波光潋滟",
+     "outfit": "weizhang_2",
+     "idle": {
+      "painting": "docs/weizhang/weizhang_2",
+      "layers": [
+       {
+        "skeleton": "weizhang_2T.skel",
+        "atlas": "weizhang_2T.atlas"
+       },
+       {
+        "skeleton": "weizhang_2B.skel",
+        "atlas": "weizhang_2B.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
      "label": "愿望为“爱”",
      "outfit": "weizhang_3",
      "idle": {
@@ -3284,6 +5459,21 @@
    "id": "azurlane:wuerlixi",
    "name": "乌尔里希·冯·胡滕",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "wuerlixi",
+     "idle": {
+      "painting": "docs/wuerlixi/wuerlixi",
+      "layers": [
+       {
+        "skeleton": "wuerlixi.skel",
+        "atlas": "wuerlixi.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "Mädchen Trümmer",
      "outfit": "wuerlixi_2",
@@ -3307,6 +5497,21 @@
       "model": "Live2D/wuerlixi_3/wuerlixi_3.model3.json",
       "runtime": "live2d"
      }
+    },
+    {
+     "label": "在教室中等待",
+     "outfit": "wuerlixi_4",
+     "idle": {
+      "painting": "docs/wuerlixi/wuerlixi_4",
+      "layers": [
+       {
+        "skeleton": "wuerlixi_4.skel",
+        "atlas": "wuerlixi_4.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -3314,6 +5519,21 @@
    "id": "azurlane:wuqi",
    "name": "吾妻",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "wuqi",
+     "idle": {
+      "painting": "docs/wuqi/wuqi",
+      "layers": [
+       {
+        "skeleton": "wuqi.skel",
+        "atlas": "wuqi.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "细语春霞",
      "outfit": "wuqi_2",
@@ -3345,6 +5565,45 @@
    "name": "武藏",
    "costumes": [
     {
+     "label": "默认",
+     "outfit": "wuzang",
+     "idle": {
+      "painting": "docs/wuzang/wuzang",
+      "layers": [
+       {
+        "skeleton": "wuzang1.skel",
+        "atlas": "wuzang1.atlas"
+       },
+       {
+        "skeleton": "wuzang2.skel",
+        "atlas": "wuzang2.atlas"
+       },
+       {
+        "skeleton": "wuzang3.skel",
+        "atlas": "wuzang3.atlas"
+       },
+       {
+        "skeleton": "wuzang4.skel",
+        "atlas": "wuzang4.atlas"
+       },
+       {
+        "skeleton": "wuzang5.skel",
+        "atlas": "wuzang5.atlas"
+       },
+       {
+        "skeleton": "wuzang6.skel",
+        "atlas": "wuzang6.atlas"
+       },
+       {
+        "skeleton": "wuzang7.skel",
+        "atlas": "wuzang7.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
      "label": "堇色兔的狙击游戏",
      "outfit": "wuzang_3",
      "idle": {
@@ -3374,6 +5633,25 @@
    "id": "azurlane:xiafei",
    "name": "霞飞",
    "costumes": [
+    {
+     "label": "至高乐园",
+     "outfit": "xiafei_3",
+     "idle": {
+      "painting": "docs/xiafei/xiafei_3",
+      "layers": [
+       {
+        "skeleton": "xiafei_3T.skel",
+        "atlas": "xiafei_3T.atlas"
+       },
+       {
+        "skeleton": "xiafei_3B.skel",
+        "atlas": "xiafei_3B.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "祝福的起步冲刺",
      "outfit": "xiafei_4",
@@ -3407,9 +5685,45 @@
    ]
   },
   {
+   "id": "azurlane:xili",
+   "name": "夕立",
+   "costumes": [
+    {
+     "label": "改造",
+     "outfit": "xili_g",
+     "idle": {
+      "painting": "docs/xili/xili_g",
+      "layers": [
+       {
+        "skeleton": "xili_g.skel",
+        "atlas": "xili_g.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:xingdengbao",
    "name": "兴登堡",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "xingdengbao",
+     "idle": {
+      "painting": "docs/xingdengbao/xingdengbao",
+      "layers": [
+       {
+        "skeleton": "xingdengbao.skel",
+        "atlas": "xingdengbao.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "微醺胜负",
      "outfit": "xingdengbao_2",
@@ -3437,9 +5751,49 @@
    ]
   },
   {
+   "id": "azurlane:xingzuo",
+   "name": "星座",
+   "costumes": [
+    {
+     "label": "星选之夜",
+     "outfit": "xingzuo_2",
+     "idle": {
+      "painting": "docs/xingzuo/xingzuo_2",
+      "layers": [
+       {
+        "skeleton": "xingzuo_2.skel",
+        "atlas": "xingzuo_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:xinnong",
    "name": "信浓",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "xinnong",
+     "idle": {
+      "painting": "docs/xinnong/xinnong",
+      "layers": [
+       {
+        "skeleton": "xinnongT.skel",
+        "atlas": "xinnongT.atlas"
+       },
+       {
+        "skeleton": "xinnongB.skel",
+        "atlas": "xinnongB.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "轰鸣的银轮",
      "outfit": "xinnong_3",
@@ -3495,6 +5849,21 @@
    "name": "新泽西",
    "costumes": [
     {
+     "label": "默认",
+     "outfit": "xinzexi",
+     "idle": {
+      "painting": "docs/xinzexi/xinzexi",
+      "layers": [
+       {
+        "skeleton": "xinzexi.skel",
+        "atlas": "xinzexi.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
      "label": "盛夏的闲暇",
      "outfit": "xinzexi_3",
      "idle": {
@@ -3505,6 +5874,25 @@
       "model": "Live2D/xinzexi_3/xinzexi_3.model3.json",
       "runtime": "live2d"
      }
+    },
+    {
+     "label": "Let's Dance！月下起舞！",
+     "outfit": "xinzexi_4",
+     "idle": {
+      "painting": "docs/xinzexi/xinzexi_4",
+      "layers": [
+       {
+        "skeleton": "xinzexi_4T.skel",
+        "atlas": "xinzexi_4T.atlas"
+       },
+       {
+        "skeleton": "xinzexi_4B.skel",
+        "atlas": "xinzexi_4B.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     },
     {
      "label": "漆黑的超极速前奏",
@@ -3599,6 +5987,27 @@
    ]
   },
   {
+   "id": "azurlane:yaerweite",
+   "name": "亚尔薇特",
+   "costumes": [
+    {
+     "label": "灼热中的秘密",
+     "outfit": "yaerweite_2",
+     "idle": {
+      "painting": "docs/yaerweite/yaerweite_2",
+      "layers": [
+       {
+        "skeleton": "yaerweite_2.skel",
+        "atlas": "yaerweite_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:yanusi",
    "name": "雅努斯",
    "costumes": [
@@ -3615,6 +6024,21 @@
      }
     },
     {
+     "label": "踌躇的换衣时间",
+     "outfit": "yanusi_4",
+     "idle": {
+      "painting": "docs/yanusi/yanusi_4",
+      "layers": [
+       {
+        "skeleton": "yanusi_4.skel",
+        "atlas": "yanusi_4.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
      "label": "云端的水光",
      "outfit": "yanusi_7",
      "idle": {
@@ -3625,6 +6049,27 @@
       "model": "Live2D/yanusi_7/yanusi_7.model3.json",
       "runtime": "live2d"
      }
+    }
+   ]
+  },
+  {
+   "id": "azurlane:yanzhan",
+   "name": "厌战",
+   "costumes": [
+    {
+     "label": "改造",
+     "outfit": "yanzhan_g",
+     "idle": {
+      "painting": "docs/yanzhan/yanzhan_g",
+      "layers": [
+       {
+        "skeleton": "yanzhan_g.skel",
+        "atlas": "yanzhan_g.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },
@@ -3683,6 +6128,27 @@
    ]
   },
   {
+   "id": "azurlane:yindianna",
+   "name": "印第安纳",
+   "costumes": [
+    {
+     "label": "酒馆大劫案",
+     "outfit": "yindianna_2",
+     "idle": {
+      "painting": "docs/yindianna/yindianna_2",
+      "layers": [
+       {
+        "skeleton": "yindianna_2.skel",
+        "atlas": "yindianna_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:yingrui",
    "name": "应瑞",
    "costumes": [
@@ -3719,9 +6185,114 @@
    ]
   },
   {
+   "id": "azurlane:yixian",
+   "name": "逸仙",
+   "costumes": [
+    {
+     "label": "膏发凝脂",
+     "outfit": "yixian_2",
+     "idle": {
+      "painting": "docs/yixian/yixian_2",
+      "layers": [
+       {
+        "skeleton": "yixian_2T.skel",
+        "atlas": "yixian_2T.atlas"
+       },
+       {
+        "skeleton": "yixian_2M.skel",
+        "atlas": "yixian_2M.atlas"
+       },
+       {
+        "skeleton": "yixian_2B.skel",
+        "atlas": "yixian_2B.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "azurlane:yongqi",
+   "name": "勇气",
+   "costumes": [
+    {
+     "label": "急送的心意",
+     "outfit": "yongqi_2",
+     "idle": {
+      "painting": "docs/yongqi/yongqi_2",
+      "layers": [
+       {
+        "skeleton": "yongqi_2.skel",
+        "atlas": "yongqi_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
+   "id": "azurlane:youmiya",
+   "name": "优米雅·利斯菲尔德",
+   "costumes": [
+    {
+     "label": "我们家的甜点师",
+     "outfit": "youmiya_2",
+     "idle": {
+      "painting": "docs/youmiya/youmiya_2",
+      "layers": [
+       {
+        "skeleton": "youmiya_2.skel",
+        "atlas": "youmiya_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:yuanchou",
    "name": "怨仇",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "yuanchou",
+     "idle": {
+      "painting": "docs/yuanchou/yuanchou",
+      "layers": [
+       {
+        "skeleton": "yuanchouT.skel",
+        "atlas": "yuanchouT.atlas"
+       },
+       {
+        "skeleton": "yuanchouB.skel",
+        "atlas": "yuanchouB.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
+     "label": "办公室的“意外”",
+     "outfit": "yuanchou_2",
+     "idle": {
+      "painting": "docs/yuanchou/yuanchou_2",
+      "layers": [
+       {
+        "skeleton": "yuanchou_2.skel",
+        "atlas": "yuanchou_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "杯盏盈芳华",
      "outfit": "yuanchou_3",
@@ -3737,9 +6308,72 @@
    ]
   },
   {
+   "id": "azurlane:yueke_ger",
+   "name": "约克",
+   "costumes": [
+    {
+     "label": "相伴于泳池之夜",
+     "outfit": "yueke_ger_3",
+     "idle": {
+      "painting": "docs/yueke/yueke_ger_3",
+      "layers": [
+       {
+        "skeleton": "yueke_ger_3.skel",
+        "atlas": "yueke_ger_3.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:yuekechengii",
    "name": "约克城II",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "yuekechengii",
+     "idle": {
+      "painting": "docs/yuekechengii/yuekechengii",
+      "layers": [
+       {
+        "skeleton": "yukechengIIT.skel",
+        "atlas": "yukechengIIT.atlas"
+       },
+       {
+        "skeleton": "yukechengIIM.skel",
+        "atlas": "yukechengIIM.atlas"
+       },
+       {
+        "skeleton": "yukechengIIB.skel",
+        "atlas": "yukechengIIB.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
+     "label": "白昼美人鱼",
+     "outfit": "yuekechengii_2",
+     "idle": {
+      "painting": "docs/yuekechengii/yuekechengii_2",
+      "layers": [
+       {
+        "skeleton": "yuekechengII_2T.skel",
+        "atlas": "yuekechengII_2T.atlas"
+       },
+       {
+        "skeleton": "yuekechengII_2B.skel",
+        "atlas": "yuekechengII_2B.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "交错的温柔时光",
      "outfit": "yuekechengII_3",
@@ -3755,9 +6389,45 @@
    ]
   },
   {
+   "id": "azurlane:yuekegongjue",
+   "name": "约克公爵",
+   "costumes": [
+    {
+     "label": "渊智的指路人",
+     "outfit": "yuekegongjue_4",
+     "idle": {
+      "painting": "docs/yuekegongjue/yuekegongjue_4",
+      "layers": [
+       {
+        "skeleton": "yuekegongjue_4.skel",
+        "atlas": "yuekegongjue_4.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:yunxian",
    "name": "云仙",
    "costumes": [
+    {
+     "label": "默认",
+     "outfit": "yunxian",
+     "idle": {
+      "painting": "docs/yunxian/yunxian",
+      "layers": [
+       {
+        "skeleton": "yunxian.skel",
+        "atlas": "yunxian.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
     {
      "label": "嬉水碧海",
      "outfit": "yunxian_2",
@@ -3863,6 +6533,42 @@
    ]
   },
   {
+   "id": "azurlane:z52",
+   "name": "Z52",
+   "costumes": [
+    {
+     "label": "默认",
+     "outfit": "z52",
+     "idle": {
+      "painting": "docs/z52/z52",
+      "layers": [
+       {
+        "skeleton": "z52.skel",
+        "atlas": "z52.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    },
+    {
+     "label": "疾驰而来的兔小姐！",
+     "outfit": "z52_2",
+     "idle": {
+      "painting": "docs/z52/z52_2",
+      "layers": [
+       {
+        "skeleton": "z52_2.skel",
+        "atlas": "z52_2.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
+    }
+   ]
+  },
+  {
    "id": "azurlane:zengkehaijunshangjiang",
    "name": "曾克海军上将",
    "costumes": [
@@ -3931,6 +6637,21 @@
       "model": "Live2D/zhaohe_3/zhaohe_3.model3.json",
       "runtime": "live2d"
      }
+    },
+    {
+     "label": "碧波耀阳",
+     "outfit": "zhaohe_4",
+     "idle": {
+      "painting": "docs/zhaohe/zhaohe_4",
+      "layers": [
+       {
+        "skeleton": "zhaohe_4.skel",
+        "atlas": "zhaohe_4.atlas"
+       }
+      ],
+      "runtime": "3.8"
+     },
+     "cutscene": null
     }
    ]
   },

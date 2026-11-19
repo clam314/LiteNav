@@ -15,8 +15,10 @@ shown; the index leaves male characters and server-only entries without one.
 
 Azur Lane: bungaku-moe/AzurLaneLive2D is read at its latest commit. Each
 Live2D/<name>/<name>.model3.json is one skin; censored *_hx copies are left
-out when the original exists. Pelom777/AzurLaneData, rebuilt hourly from the
-Chinese server, maps each painting name to its ship and Chinese skin name.
+out when the original exists. ww-rm/azurlane_spinepainting adds the dynamic
+paintings (Spine 3.8, in layers) as portraits. Pelom777/AzurLaneData, rebuilt
+hourly from the Chinese server, maps each painting name to its ship and
+Chinese skin name.
 
 Every catalog pins an upstream commit, so the browser never loads moving
 assets. Standard library only; set GITHUB_TOKEN to raise the API rate limit.
@@ -53,6 +55,8 @@ AZURLANE_CATALOG = ROOT / "public/companion/azurlane/catalog.json"
 AZURLANE_REPO = "bungaku-moe/AzurLaneLive2D"
 AZURLANE_NAMES_REPO = "Pelom777/AzurLaneData"
 AZURLANE_NAMES = "https://raw.githubusercontent.com/" + AZURLANE_NAMES_REPO + "/{commit}/public/data/{table}.json"
+AZURLANE_PAINTINGS_REPO = "ww-rm/azurlane_spinepainting"
+AZURLANE_PAINTINGS_INDEX = "https://raw.githubusercontent.com/" + AZURLANE_PAINTINGS_REPO + "/{commit}/docs/index.json"
 
 PLAYABLE_ID = re.compile(r"c(\d{3})(?:_(\d{2}))?")
 # NPCs (c9xx), mass-produced enemies (c25x), soldiers, products and iDolls
@@ -494,12 +498,31 @@ def azurlane_models(tree_paths: set[str]) -> list[str]:
                   and f"Live2D/{match.group(1)}/{match.group(1)}.moc3" in tree_paths)
 
 
-def build_azurlane(models: list[str], skins: dict, ships: dict, skipped: list | None = None) -> list:
+SAFE_FILE = re.compile(r"[\w.-]+")
+
+
+def painting_label(person: str, skin: str, default: bool) -> str:
+    """默认 for a ship's own painting, 改造 for its retrofit, else the skin name."""
+    if default or skin == person:
+        return "默认"
+    if skin in (person + ".改", person + "·改"):
+        return "改造"
+    return skin
+
+
+def build_azurlane(models: list[str], skins: dict, ships: dict, skipped: list | None = None,
+                   paintings: dict | None = None) -> list:
     """Group skins into people by their ship's Chinese name.
 
     skins maps a ship's painting name to {skin painting: {"name": ...}} and
     ships maps it to {"name": ...}, as in Pelom777/AzurLaneData. Painting names
     are matched without case; a skin painted as the ship itself is its default.
+
+    paintings is ww-rm/azurlane_spinepainting's index: {ship: {"chName",
+    "skins": {skin: {"chName", "spines": [{"skelName", "atlasName", ...}]}}}}.
+    Each dynamic painting is a portrait made of Spine 3.8 layers, listed top
+    first; censored *_hx layers are left out. A painting the names miss uses
+    the index's own names.
     """
     owners = {painting.lower(): (ship, str(skin.get("name") or ""))
               for ship, entries in skins.items() for painting, skin in entries.items()}
@@ -524,9 +547,41 @@ def build_azurlane(models: list[str], skins: dict, ships: dict, skipped: list | 
         # One model serves both displays: idle for the portrait, its reactions for the action.
         entry["costumes"].append({"label": "默认" if painting == ship.lower() else skin or model,
                                   "outfit": model, "idle": part, "cutscene": part})
+    for folder, ship_entry in (paintings or {}).items():
+        for key, skin_entry in ship_entry.get("skins", {}).items():
+            if not SAFE_FILE.fullmatch(folder) or not SAFE_FILE.fullmatch(key):
+                raise ValueError(f"unexpected painting folder {folder}/{key}")
+            layers = [{"skeleton": spine["skelName"], "atlas": spine["atlasName"]} for spine in skin_entry.get("spines", [])
+                      if not spine["skelName"].rsplit(".", 1)[0].endswith("_hx")]
+            if not layers or not all(SAFE_FILE.fullmatch(name) for layer in layers for name in layer.values()):
+                raise ValueError(f"unexpected painting files in {folder}/{key}")
+            owner = owners.get(key.lower())
+            if owner:
+                ship, skin = owner
+                person = str(ships.get(ship, {}).get("name") or skins[ship].get(ship, {}).get("name") or "")
+            else:
+                ship, skin, person = folder, str(skin_entry.get("chName") or ""), str(ship_entry.get("chName") or "")
+            if not person:
+                if skipped is not None:
+                    skipped.append(key)
+                continue
+            entry = people.setdefault(person, {"id": f"azurlane:{ship.lower()}", "name": person, "costumes": []})
+            part = {"painting": f"docs/{folder}/{key}", "layers": layers, "runtime": "3.8"}
+            # A dynamic painting is a portrait only: it has no reactions to play.
+            entry["costumes"].append({"label": painting_label(person, skin, key.lower() == ship.lower()),
+                                      "outfit": key, "idle": part, "cutscene": None})
     characters = sorted(people.values(), key=lambda person: person["id"])
     for person in characters:
         person["costumes"].sort(key=lambda costume: (costume["label"] != "默认", costume["outfit"].lower()))
+        # Double-form skins exist as Live2D and as dynamic paintings (or as two
+        # paintings) under one name; the paintings say so.
+        counts: dict[str, int] = {}
+        for costume in person["costumes"]:
+            counts[costume["label"]] = counts.get(costume["label"], 0) + 1
+        for label in [label for label, count in counts.items() if count > 1]:
+            forms = [costume for costume in person["costumes"] if costume["label"] == label and costume["idle"].get("painting")]
+            for index, costume in enumerate(forms):
+                costume["label"] = f"{label}（动态立绘{' ' + str(index + 1) if len(forms) > 1 else ''}）"
     return characters
 
 
@@ -540,8 +595,10 @@ def update_azurlane() -> tuple[Path, str]:
     names_commit = get_json(api + AZURLANE_NAMES_REPO + "/commits/main")["sha"]
     skins = get_json(AZURLANE_NAMES.format(commit=names_commit, table="skin"))
     ships = get_json(AZURLANE_NAMES.format(commit=names_commit, table="ship"))
+    painting_commit = get_json(api + AZURLANE_PAINTINGS_REPO + "/commits/main")["sha"]
+    paintings = get_json(AZURLANE_PAINTINGS_INDEX.format(commit=painting_commit))
     skipped: list[str] = []
-    characters = build_azurlane(models, skins, ships, skipped)
+    characters = build_azurlane(models, skins, ships, skipped, paintings)
     if not characters:
         raise ValueError("no Azur Lane Live2D model could be named")
     if skipped:
@@ -552,7 +609,8 @@ def update_azurlane() -> tuple[Path, str]:
         return AZURLANE_CATALOG, dump(previous)
     return AZURLANE_CATALOG, dump({"generatedAt": now(), "source": f"{AZURLANE_REPO}@{commit[:12]}",
                                    "names": f"{AZURLANE_NAMES_REPO}@{names_commit[:12]}",
-                                   "commit": commit, "characters": characters})
+                                   "paintings": f"{AZURLANE_PAINTINGS_REPO}@{painting_commit[:12]}",
+                                   "commit": commit, "paintingCommit": painting_commit, "characters": characters})
 
 
 def main() -> int:
