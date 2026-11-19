@@ -155,6 +155,59 @@ class AzurLaneCatalogTests(unittest.TestCase):
         self.assertEqual(skipped, ["newship_2"])
 
 
+class JsLiteralTests(unittest.TestCase):
+    def test_reads_objects_arrays_comments_and_trailing_commas_as_data(self):
+        text = """const x: Record<string, Entry> = {
+          // a comment
+          "103301": [{ name: "cut_all", composite: ["cut_1", { name: 'cut_2', playDuration: 1.5, hold: true }], }],
+          '000101': { animations: [[ "a", "b" ]] }, /* block */
+          neg: -0.5, nothing: null, no: false,
+        }
+        export default x"""
+        start = text.index("= ") + 2
+        value, end = update.parse_js_literal(text, start)
+        self.assertEqual(value, {
+            "103301": [{"name": "cut_all", "composite": ["cut_1", {"name": "cut_2", "playDuration": 1.5, "hold": True}]}],
+            "000101": {"animations": [["a", "b"]]}, "neg": -0.5, "nothing": None, "no": False})
+        self.assertTrue(text[end:].strip().startswith("export default"))
+
+    def test_rejects_code(self):
+        for text in ("{ a: foo() }", "{ a: `template` }", "{ a: 1 + 2 }", "[1, 2"):
+            with self.assertRaises((ValueError, IndexError)):
+                update.parse_js_literal(text)
+
+
+class Bd2PerformanceTests(unittest.TestCase):
+    def test_entries_become_named_definitions_with_pinned_sources(self):
+        mappings = {
+            "103301": [{"name": "cut_all", "composite": ["cut_1", "cut_2"]}],
+            "000101": ["cut_1", "cut_2"],
+            "067803": {"name": "cut_all", "animations": [[
+                "cut_A", {"name": "cut_A_B", "source": "cutscene/glow/cutscene_char067803_1", "playDuration": 5}]]},
+        }
+        costumes, sources = update.build_bd2_performances(mappings)
+        self.assertEqual(costumes["char000101"], [{"name": "all", "composite": ["cut_1", "cut_2"]}])
+        glow = "spine/cutscenes/cutscene_char067803_1/cutscene_char067803_1"
+        self.assertEqual(costumes["char067803"][0]["composite"][0][1]["source"], glow)
+        self.assertEqual(sources, {glow})
+
+    def test_rejects_unknown_step_options_and_sources(self):
+        for mappings in ({"103301": [{"name": "x", "composite": [{"name": "a", "eval": "1"}]}]},
+                         {"103301": [{"name": "x", "composite": [{"name": "a", "source": "../../etc/passwd"}]}]},
+                         {"abc": ["cut_1"]}, {"103301": [{"name": "x", "composite": []}]}):
+            with self.assertRaises(ValueError):
+                update.build_bd2_performances(mappings)
+
+    def test_scenes_come_from_the_character_list(self):
+        characters = {"000296": {"dating": "illust_dating7", "datingUsesTracks": True},
+                      "000101": {"dating": ""}, "003303": {"dating": "illust_dating1"}}
+        self.assertEqual(update.build_bd2_dating(characters), {
+            "char000296": {"skeleton": "spine/illust/illust_dating/illust_dating7/illust_dating7", "tracks": True},
+            "char003303": {"skeleton": "spine/illust/illust_dating/illust_dating1/illust_dating1", "tracks": False}})
+        with self.assertRaises(ValueError):
+            update.build_bd2_dating({"000296": {"dating": "../x"}})
+
+
 class Bd2RosterTests(unittest.TestCase):
     def test_accepts_a_pinned_roster(self):
         roster = {"commit": "424622b8c4fd", "characters": [{"id": "0002", "costumes": [{}]}]}

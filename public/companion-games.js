@@ -11,6 +11,8 @@ export const GAMES = [
     action: '技能',
     catalogUrl: '/companion/catalog.json',
     presentationsUrl: '/companion/gamekee-presets.json',
+    // Full skill performances choreographed by BD2-L2D-Viewer.
+    performancesUrl: '/companion/bd2-performances.json',
     assetBase: 'https://raw.githubusercontent.com/myssal/Brown-Dust-2-Asset/',
   },
   {

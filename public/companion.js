@@ -13,6 +13,9 @@ import { fireAnimations, queueFireCycle } from './companion-fire.js';
 import { combatAnimations, createCombatCycle } from './companion-combat.js';
 import { live2dMotionPlan, live2dFiles } from './companion-live2d.js';
 import { createLive2DPlayer, separateShaderContexts } from './companion-live2d-player.js';
+import { performanceId, performanceSources, readExternalSkeleton, performanceMenu, createPerformance }
+  from './companion-performance-player.js';
+import { createDatingTour } from './companion-dating.js';
 // Spine binaries only load in the runtime version that exported them, and
 // each build declares the same global. Load builds one at a time, keep each
 // one, and leave window.spine on 4.1 for code that looks for it there.
@@ -228,8 +231,15 @@ function withAbort(promise, signal) {
   });
 }
 
+// 'dating' is Brown Dust 2's 有缘之客 scene, shown in the skill display.
 const partFor = (selection, mode) => mode === 'skill' ? selection.costume.cutscene :
-  mode === 'cover' ? selection.costume.cover : selection.costume.idle;
+  mode === 'cover' ? selection.costume.cover : mode === 'dating' ? selection.costume.dating : selection.costume.idle;
+// The skill menu entry that switches a Brown Dust 2 costume to its 有缘之客 scene.
+const DATING_ACTION = 'dating';
+const datingEntry = () => ({ name: DATING_ACTION, label: '有缘之客' });
+// A menu while the skill display shows a scene: the skills seen last for this
+// costume, or a single entry back to its default skill.
+const skillsBack = () => ({ name: '', label: '技能动作' });
 
 // A Live2D model's settings, moc, textures, physics and the motions it plays,
 // fetched through the asset cache. Each player makes its own blob URLs from
@@ -264,8 +274,16 @@ async function loadCharacter(catalog, selection, mode, signal) {
   ]);
   const baseUrl = new URL(atlasUrl, location.href);
   const textureUrls = atlasPages(atlas).map(page => new URL(page, baseUrl).href);
+  // A few Brown Dust 2 cutscenes are stored as CutScene_Char…png while their
+  // atlas asks for cutscene_char…png; raw GitHub paths are case-sensitive.
+  const stem = part.skeleton.split('/').pop().replace(/\.skel$/i, '');
+  const stored = url => {
+    const page = decodeURIComponent(url.slice(url.lastIndexOf('/') + 1));
+    return page.toLowerCase().startsWith(stem.toLowerCase()) && !page.startsWith(stem) ?
+      url.slice(0, url.lastIndexOf('/') + 1) + encodeURIComponent(stem + page.slice(stem.length)) : url;
+  };
   const [textures, skeletonData] = await Promise.all([
-    Promise.all(textureUrls.map(async url => [url, await (await fetchAsset(url, signal)).blob()])),
+    Promise.all(textureUrls.map(async url => [url, await (await fetchAsset(stored(url), signal)).blob()])),
     readDataURI(skeleton, signal),
   ]);
   // Spine reads the skeleton and atlas only from data URIs, but textures load
@@ -279,7 +297,29 @@ async function loadCharacter(catalog, selection, mode, signal) {
   if (local) {
     for (const url of textureUrls) rawDataURIs[new URL(url).pathname] = rawDataURIs[url];
   }
-  return { skelUrl, atlasUrl, rawDataURIs, objectUrls, premultipliedAlpha: /^pma:\s*true\s*$/m.test(atlas) };
+  // Brown Dust 2 skills also bring their full performances and the few
+  // skeletons those borrow layers from.
+  const performances = mode === 'skill' ? source.performances?.[performanceId(part)] : undefined;
+  const externals = performances ? await Promise.all(performanceSources(performances)
+    .map(path => loadExternalSkeleton(remote, path, signal).catch(error => {
+      if (error?.name === 'AbortError') throw error;
+      return null; // Only the performances that borrow from it are dropped.
+    }))) : [];
+  return { skelUrl, atlasUrl, rawDataURIs, objectUrls, premultipliedAlpha: /^pma:\s*true\s*$/m.test(atlas),
+    performances, externals: externals.filter(Boolean) };
+}
+
+// A borrowed skeleton's binary, atlas and decoded pages (straight alpha, as
+// the player's own textures are uploaded).
+async function loadExternalSkeleton(remote, path, signal) {
+  const [skeleton, atlas] = await Promise.all([
+    fetchAsset(remote + path + '.skel', signal).then(response => response.arrayBuffer()),
+    fetchAsset(remote + path + '.atlas', signal).then(response => response.text()),
+  ]);
+  const folder = remote + path.slice(0, path.lastIndexOf('/') + 1);
+  const images = Object.fromEntries(await Promise.all(atlasPages(atlas).map(async page =>
+    [page, await createImageBitmap(await (await fetchAsset(folder + page, signal)).blob(), { premultiplyAlpha: 'none' })])));
+  return { source: path, skeleton: new Uint8Array(skeleton), atlas, images, premultipliedAlpha: /^pma:\s*true\s*$/m.test(atlas) };
 }
 
 // Spine fits its whole canvas to the camera. The canvas fills the rail, and the
@@ -459,6 +499,8 @@ export function initCompanion() {
   // While random rotation is on, the next person appears after this time.
   let rotationDue = Infinity;
   const assetCache = new Map();
+  // The skill menu last built for each costume, kept for its 有缘之客 scene.
+  const skillMenus = new Map();
   const enabled = () => preferences.portraits || preferences.skills;
   const initialMode = () => preferences.portraits ? 'portrait' : 'skill';
   const stage = createCompanionStage({
@@ -538,7 +580,7 @@ export function initCompanion() {
       skillAnimations.forEach((animation, index) => {
         const option = document.createElement('option');
         option.value = animation.name;
-        option.textContent = configured.find(action => action.animation === animation.name)?.label || `动作${index + 1}`;
+        option.textContent = animation.label || configured.find(action => action.animation === animation.name)?.label || `动作${index + 1}`;
         skillPicker.append(option);
       });
     }
@@ -712,6 +754,8 @@ export function initCompanion() {
     }
     const record = {
       layer, selection, mode: nextMode, skillAction: preferences.skillAction,
+      // The skill display of a costume with a 有缘之客 scene can show that scene instead.
+      assetMode: nextMode === 'skill' && preferences.skillAction === DATING_ACTION && selection.costume.dating ? 'dating' : nextMode,
       controller: new AbortController(), elapsed: 0, advancing: false,
     };
     stage.begin(record);
@@ -742,7 +786,7 @@ export function initCompanion() {
       // NIKKE's combat loop also needs the cover skeleton.
       const coverPart = record.mode === 'skill' && gameOf(record.selection.character) === 'nikke' ? record.selection.costume.cover : null;
       const [spine, assets, coverSpine, coverAssets] = await withAbort(Promise.all([
-        loadRuntime(partFor(record.selection, record.mode)?.runtime), assetsFor(record.selection, record.mode),
+        loadRuntime(partFor(record.selection, record.assetMode)?.runtime), assetsFor(record.selection, record.assetMode),
         coverPart ? loadRuntime(coverPart.runtime) : null, coverPart ? assetsFor(record.selection, 'cover') : null,
       ]), signal);
       if (signal.aborted || stage.pending !== record || disposed) return;
@@ -761,26 +805,71 @@ export function initCompanion() {
           premultipliedAlpha: assets.premultipliedAlpha,
           alpha: true, backgroundColor: '#00000000', showControls: false, showLoading: false,
           preserveDrawingBuffer: false, defaultMix: 0,
-          ...(partFor(record.selection, record.mode)?.skin ? { skin: partFor(record.selection, record.mode).skin } : {}),
+          ...(partFor(record.selection, record.assetMode)?.skin ? { skin: partFor(record.selection, record.assetMode).skin } : {}),
           success(loadedPlayer) {
             if (stage.pending !== record || signal.aborted || disposed) return;
             try {
               record.player = loadedPlayer;
               const presentation = presentationForCostume(presentations, record.selection.costume);
               const data = loadedPlayer.skeleton.data;
+              if (record.assetMode === 'dating') {
+                record.performance = createDatingTour({ spine, player: loadedPlayer, tracks: record.selection.costume.dating.tracks });
+                if (!record.performance) throw new Error('有缘之客暂时无法播放');
+                record.animations = skillMenus.get(costumeKey(record.selection.costume)) || [skillsBack(), datingEntry()];
+                record.animation = { ...datingEntry(), duration: record.performance.duration };
+                record.loopSeconds = record.performance.duration;
+                record.view = loadedPlayer.companionView = record.performance.view();
+                record.configured = true;
+                if (document.hidden || !motionAllowed) loadedPlayer.pause();
+                else loadedPlayer.play();
+                return;
+              }
               if (gameOf(record.selection.character) === 'nikke') completeSkin(spine, loadedPlayer.skeleton);
               const firing = record.mode === 'skill' && gameOf(record.selection.character) === 'nikke' ? fireAnimations(data) : null;
               record.animations = firing ? [firing.idle] : playableAnimations(data.animations, record.mode, presentation);
               if (!record.animations.length) throw new Error('这套服装暂无可播放动画');
               record.animation = record.animations[0];
+              const externals = new Map();
+              if (record.mode === 'skill' && assets.performances) {
+                for (const external of assets.externals) {
+                  const read = readExternalSkeleton(spine, loadedPlayer.context, external);
+                  if (read) externals.set(external.source, read);
+                }
+                const durationOf = (name, source) => (source ? externals.get(source)?.data : data)?.findAnimation(name)?.duration;
+                record.animations = performanceMenu(assets.performances, record.animations, durationOf,
+                  name => presentation?.skills?.find(action => action.animation === name)?.label);
+              }
               if (record.mode === 'skill' && !firing) {
-                // Random rotation also varies the action unless one was chosen.
-                const saved = record.skillAction || (preferences.random && record.animations.length > 1 ?
-                  record.animations[Math.floor(Math.random() * record.animations.length)].name : '');
+                // Random rotation shows the full performance when there is one,
+                // and otherwise varies the action, unless one was chosen.
+                const full = record.animations.find(animation => animation.performance && !animation.replaces);
+                let saved = record.skillAction || (preferences.random ? full?.name || (record.animations.length > 1 ?
+                  record.animations[Math.floor(Math.random() * record.animations.length)].name : '') : '');
+                // A loop saved before its layered version existed picks that version.
+                saved = record.animations.find(animation => animation.replaces === saved)?.name || saved;
                 record.animation = selectSkillAnimation(record.animations, saved, presentation);
-                const action = presentation?.skills?.find(action => action.animation === record.animation.name);
-                record.animation = composeSkillAttachments(spine, data, record.animation, action?.attachmentLayers);
-                if (action?.framing === 'full') layer.classList.add('fit-artwork');
+                if (!record.animation.performance) {
+                  const action = presentation?.skills?.find(action => action.animation === record.animation.name);
+                  record.animation = composeSkillAttachments(spine, data, record.animation, action?.attachmentLayers);
+                  if (action?.framing === 'full') layer.classList.add('fit-artwork');
+                }
+                // The scene is offered after the choice above, so only a pick shows it.
+                if (record.selection.costume.dating) record.animations = [...record.animations, datingEntry()];
+                skillMenus.set(costumeKey(record.selection.costume), record.animations);
+              }
+              if (record.animation.performance) {
+                record.performance = createPerformance({ spine, player: loadedPlayer, definitions: assets.performances,
+                  name: record.animation.name, externals, premultipliedAlpha: assets.premultipliedAlpha });
+                if (!record.performance) throw new Error('技能演出暂时无法播放');
+                record.animation = { ...record.animation, duration: record.performance.duration };
+                record.loopSeconds = record.performance.duration;
+                if (!motionAllowed) record.performance.seek(record.performance.duration * .35);
+                // The camera follows the performance from shot to shot.
+                record.view = loadedPlayer.companionView = record.performance.view();
+                record.configured = true;
+                if (document.hidden || !motionAllowed) loadedPlayer.pause();
+                else loadedPlayer.play();
+                return;
               }
               const combat = firing && record.partner ? combatAnimations(record.partner.skeleton.data, data) : null;
               configureViewports(loadedPlayer, [record.animation], record.mode, presentation, firing ?
@@ -824,9 +913,13 @@ export function initCompanion() {
               }
             } catch (error) { finish(() => reject(error)); }
           },
+          // After the pose, before drawing: a scene hides its letterbox here.
+          update(loadedPlayer) { record.performance?.update?.(loadedPlayer.skeleton); },
           // success runs before rendering. Keep this layer transparent until
           // the renderer has actually drawn its first complete frame.
-          draw() {
+          draw(loadedPlayer) {
+            // Performance layers draw over the player's own (hidden) skeleton.
+            if (record.performance) record.performance.draw(loadedPlayer.sceneRenderer);
             if (!record.configured || record.firstFrame || stage.pending !== record || signal.aborted) return;
             record.firstFrame = true;
             clearTimeout(record.loadingTimer);
@@ -845,6 +938,12 @@ export function initCompanion() {
             finish(resolve);
           },
           frame(loadedPlayer, delta) {
+            // A performance moves on with the animation clock and picks the camera of its current shot.
+            const wrapped = record.performance ? record.performance.advance(delta) : false;
+            if (record.performance && record.performance.view() !== loadedPlayer.companionView) {
+              loadedPlayer.companionView = record.performance.view();
+              loadedPlayer.companionRailKey = undefined;
+            }
             // Runs before the camera is set for this frame, paused or not.
             if (record.view) layoutCamera(record, loadedPlayer);
             // The combat loop follows the animation clock, so it pauses with it.
@@ -858,6 +957,11 @@ export function initCompanion() {
               if (playingMotion) return;
               if (rotate) advance(record, 'rotate');
               else if (preferences.skills && record.elapsed >= 16) advance(record, 'skill');
+            } else if (record.performance) {
+              // A performance is only left between two complete plays.
+              if (!wrapped) return;
+              if (rotate) advance(record, 'rotate');
+              else if (preferences.portraits && record.elapsed >= 12) advance(record, 'portrait');
             } else if (rotate && record.elapsed >= (record.loopSeconds || record.animation.duration)) {
               advance(record, 'rotate');
             } else if (preferences.portraits && record.elapsed >= Math.max((record.loopSeconds || record.animation.duration) + 2, 12)) {
@@ -1032,15 +1136,18 @@ export function initCompanion() {
   // Every registered game loads its own catalog and fails on its own. Brown
   // Dust 2 falls back to the bundled portrait when its catalog is unreachable.
   const loadGame = async game => {
-    const [data, reference] = await Promise.all([
+    const [data, reference, performances] = await Promise.all([
       fetchResource(game.catalogUrl, catalogController.signal).then(response => response.json()),
       game.presentationsUrl ? fetchResource(game.presentationsUrl, catalogController.signal, 'no-cache')
         .then(response => response.json()).catch(() => ({})) : null,
+      // Without its performances a skill still plays its own animations.
+      game.performancesUrl ? fetchResource(game.performancesUrl, catalogController.signal, 'no-cache')
+        .then(response => response.json()).catch(() => undefined) : undefined,
     ]);
     if (!/^[a-f0-9]{12,40}$/.test(data.commit) || !Array.isArray(data.characters) || !data.characters.length) {
       throw new Error('角色索引不完整');
     }
-    return { data, reference };
+    return { data, reference, performances };
   };
   Promise.allSettled(GAMES.map(loadGame)).then(results => {
     if (disposed) return;
@@ -1054,14 +1161,19 @@ export function initCompanion() {
         characters.push({ ...LOCAL_FALLBACK_CHARACTER, game: 'bd2' });
         return;
       }
-      const { data, reference } = result.value;
+      const { data, reference, performances } = result.value;
       if (reference) presentations = reference;
-      games[game.id] = { assetBase: game.assetBase, commit: data.commit };
+      games[game.id] = { assetBase: game.assetBase, commit: data.commit, performances: performances?.costumes };
+      // A costume's 有缘之客 scene, keyed like the presets by its portrait skeleton.
+      const scene = costume => {
+        const found = performances?.dating?.[costumeKey(costume).match(/(?:^|\/)(char\d{6})\.skel$/i)?.[1]?.toLowerCase()];
+        return found ? { dating: { skeleton: found.skeleton + '.skel', atlas: found.skeleton + '.atlas', tracks: found.tracks } } : {};
+      };
       characters.push(...data.characters.map(character => {
         if (!reference) return { ...character, game: game.id };
         const costumes = character.costumes.map(costume => {
           const presentation = presentationForCostume(reference, costume);
-          return { ...costume, label: presentation?.label || costume.label };
+          return { ...costume, label: presentation?.label || costume.label, ...scene(costume) };
         });
         const named = character.costumes.map(costume => presentationForCostume(reference, costume)).find(preset => preset?.name);
         return { ...character, game: game.id, name: named?.name || character.name, costumes };

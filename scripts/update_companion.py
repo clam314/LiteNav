@@ -2,7 +2,9 @@
 """Refresh the companion character catalogs from their upstream sources.
 
 Brown Dust 2: the roster that clam314/bd2web keeps in sync with
-myssal/Brown-Dust-2-Asset is used as is.
+myssal/Brown-Dust-2-Asset is used as is. Jelosus2/BD2-L2D-Viewer (MIT) adds
+the full skill performances it choreographs and each costume's 有缘之客
+scene; its TypeScript files are parsed as literal data, never run.
 
 NIKKE: Nikke-db/Nikke-db.github.io is read at its latest commit. The l2d file
 tree decides which outfits exist, each skeleton header gives the Spine runtime
@@ -114,6 +116,193 @@ def validate_bd2(roster) -> dict:
 
 def update_bd2() -> tuple[Path, str]:
     return BD2_CATALOG, dump(validate_bd2(get_json(BD2_ROSTER)))
+
+
+def parse_js_literal(text: str, position: int = 0):
+    """Parse one JavaScript object/array literal (as data, never run) -> (value, end).
+
+    Covers what a hand-written mapping file uses: objects with bare or quoted
+    keys, arrays, strings, numbers, true/false/null, comments and trailing commas.
+    """
+    def skip(i: int) -> int:
+        while i < len(text):
+            if text[i].isspace():
+                i += 1
+            elif text.startswith("//", i):
+                i = text.find("\n", i) if "\n" in text[i:] else len(text)
+            elif text.startswith("/*", i):
+                end = text.find("*/", i + 2)
+                if end < 0:
+                    raise ValueError("unterminated comment")
+                i = end + 2
+            else:
+                break
+        return i
+
+    def string(i: int) -> tuple[str, int]:
+        quote, i, out = text[i], i + 1, []
+        escapes = {"n": "\n", "t": "\t", "r": "\r", "b": "\b", "f": "\f", "0": "\0"}
+        while i < len(text) and text[i] != quote:
+            if text[i] == "\\":
+                char = text[i + 1]
+                if char == "u":
+                    out.append(chr(int(text[i + 2:i + 6], 16)))
+                    i += 6
+                    continue
+                out.append(escapes.get(char, char))
+                i += 2
+                continue
+            out.append(text[i])
+            i += 1
+        if i >= len(text):
+            raise ValueError("unterminated string")
+        return "".join(out), i + 1
+
+    def value(i: int):
+        i = skip(i)
+        char = text[i]
+        if char == "{":
+            result, i = {}, skip(i + 1)
+            while text[i] != "}":
+                if text[i] in "\"'":
+                    key, i = string(i)
+                else:
+                    match = re.compile(r"[A-Za-z_$][\w$]*|\d+").match(text, i)
+                    if not match:
+                        raise ValueError(f"unexpected key at {i}")
+                    key, i = match.group(), match.end()
+                i = skip(i)
+                if text[i] != ":":
+                    raise ValueError(f"expected ':' at {i}")
+                result[key], i = value(i + 1)
+                i = skip(i)
+                if text[i] == ",":
+                    i = skip(i + 1)
+                elif text[i] != "}":
+                    raise ValueError(f"expected ',' or '}}' at {i}")
+            return result, i + 1
+        if char == "[":
+            result, i = [], skip(i + 1)
+            while text[i] != "]":
+                item, i = value(i)
+                result.append(item)
+                i = skip(i)
+                if text[i] == ",":
+                    i = skip(i + 1)
+                elif text[i] != "]":
+                    raise ValueError(f"expected ',' or ']' at {i}")
+            return result, i + 1
+        if char in "\"'":
+            return string(i)
+        match = re.compile(r"-?(?:\d+\.?\d*|\.\d+)(?:[eE][-+]?\d+)?|true\b|false\b|null\b").match(text, i)
+        if not match:
+            raise ValueError(f"unexpected value at {i}")
+        word = match.group()
+        literal = {"true": True, "false": False, "null": None}
+        return (literal[word] if word in literal else float(word) if re.search(r"[.eE]", word) else int(word)), match.end()
+
+    return value(position)
+
+
+BD2_PERFORMANCES = ROOT / "public/companion/bd2-performances.json"
+BD2_VIEWER_REPO = "Jelosus2/BD2-L2D-Viewer"
+BD2_VIEWER_MAPPINGS = "https://raw.githubusercontent.com/" + BD2_VIEWER_REPO + "/{commit}/src/utils/cutscene_mappings.ts"
+BD2_VIEWER_CHARACTERS = "https://raw.githubusercontent.com/" + BD2_VIEWER_REPO + "/{commit}/src/utils/character_list.ts"
+BD2_ASSET_RAW = "https://raw.githubusercontent.com/myssal/Brown-Dust-2-Asset/{commit}/"
+SPEC_KEYS = {"name", "offset", "source", "skin", "hold", "playDuration", "layerOrder", "loop"}
+
+
+def performance_definitions(entry) -> list[dict]:
+    """The viewer's three entry shapes as a list of {"name", "composite"}."""
+    def definition(item) -> bool:
+        return isinstance(item, dict) and ("composite" in item or "animations" in item)
+    if isinstance(entry, list) and entry and all(definition(item) for item in entry):
+        items = entry
+    elif definition(entry):
+        items = [entry]
+    else:
+        items = [{"composite": entry}]
+    return [{"name": item.get("name") or "all", "composite": item.get("composite", item.get("animations"))} for item in items]
+
+
+def build_bd2_performances(mappings: dict) -> tuple[dict, set[str]]:
+    """Normalize BD2-L2D-Viewer's skill compositions -> (costumes, external skeletons).
+
+    Keys become our costume ids (char000101). An external source such as
+    "cutscene/glow/cutscene_char067803_1" names a skeleton that the asset
+    repository keeps at spine/cutscenes/<name>/<name>.
+    """
+    costumes, sources = {}, set()
+
+    def spec(item):
+        if isinstance(item, str):
+            return item
+        if isinstance(item, list):
+            return [spec(child) for child in item]
+        if not isinstance(item, dict) or not isinstance(item.get("name"), str) or set(item) - SPEC_KEYS:
+            raise ValueError(f"unexpected composite step {item!r:.80}")
+        result = dict(item)
+        if "source" in item:
+            name = re.sub(r"\.(skel|atlas|json)$", "", item["source"].strip().replace("\\", "/")).rsplit("/", 1)[-1]
+            if not re.fullmatch(r"cutscene_char\d{6}(?:_\w+)?", name):
+                raise ValueError(f"unexpected composite source {item['source']!r}")
+            result["source"] = f"spine/cutscenes/{name}/{name}"
+            sources.add(result["source"])
+        return result
+
+    for key, entry in mappings.items():
+        if not re.fullmatch(r"\d{6}", key):
+            raise ValueError(f"unexpected costume id {key!r}")
+        definitions = performance_definitions(entry)
+        for definition in definitions:
+            if not isinstance(definition["composite"], list) or not definition["composite"]:
+                raise ValueError(f"empty composite for {key}")
+            definition["composite"] = [spec(step) for step in definition["composite"]]
+        costumes["char" + key] = definitions
+    return costumes, sources
+
+
+def build_bd2_dating(characters: dict) -> dict:
+    """Costume id -> its 有缘之客 scene, from BD2-L2D-Viewer's character list.
+
+    The asset repository keeps scene illust_datingN at
+    spine/illust/illust_dating/illust_datingN/illust_datingN.
+    """
+    scenes = {}
+    for key, character in characters.items():
+        name = character.get("dating") if isinstance(character, dict) else None
+        if not name:
+            continue
+        if not re.fullmatch(r"\d{6}", key) or not re.fullmatch(r"illust_dating\w+", name):
+            raise ValueError(f"unexpected dating scene {key!r}: {name!r}")
+        scenes["char" + key] = {"skeleton": f"spine/illust/illust_dating/{name}/{name}",
+                                "tracks": character.get("datingUsesTracks") is True}
+    return scenes
+
+
+def update_bd2_performances() -> tuple[Path, str]:
+    commit = get_json(f"https://api.github.com/repos/{BD2_VIEWER_REPO}/commits/main")["sha"]
+    text = request(BD2_VIEWER_MAPPINGS.format(commit=commit)).decode("utf-8")
+    start = re.search(r"const\s+cutsceneComposites\b[^=]*=\s*", text)
+    if not start:
+        raise ValueError("cutscene_mappings.ts has no cutsceneComposites object")
+    mappings, _ = parse_js_literal(text, start.end())
+    costumes, sources = build_bd2_performances(mappings)
+    characters_text = request(BD2_VIEWER_CHARACTERS.format(commit=commit)).decode("utf-8")
+    characters_start = re.search(r"export\s+default\s*", characters_text)
+    if not characters_start:
+        raise ValueError("character_list.ts has no default export")
+    dating = build_bd2_dating(parse_js_literal(characters_text, characters_start.end())[0])
+    sources |= {scene["skeleton"] for scene in dating.values()}
+    # Every external skeleton and scene must exist at the asset commit the roster pins.
+    asset_commit = json.loads(BD2_CATALOG.read_text(encoding="utf-8"))["commit"]
+    for source in sorted(sources):
+        request(BD2_ASSET_RAW.format(commit=asset_commit) + source + ".skel", {"Range": "bytes=0-15"})
+    previous = json.loads(BD2_PERFORMANCES.read_text(encoding="utf-8")) if BD2_PERFORMANCES.exists() else {}
+    if previous.get("costumes") == costumes and previous.get("dating") == dating:
+        return BD2_PERFORMANCES, dump(previous)
+    return BD2_PERFORMANCES, dump({"generatedAt": now(), "source": f"{BD2_VIEWER_REPO}@{commit[:12]}",
+                                   "license": "MIT", "commit": commit, "costumes": costumes, "dating": dating})
 
 
 # --- NIKKE ------------------------------------------------------------------
@@ -371,7 +560,8 @@ def main() -> int:
     parser.add_argument("--game", choices=["bd2", "nikke", "azurlane", "all"], default="all")
     parser.add_argument("--check", action="store_true", help="report changes without writing")
     args = parser.parse_args()
-    updates = [update for game, update in (("bd2", update_bd2), ("nikke", update_nikke), ("azurlane", update_azurlane))
+    updates = [update for game, update in (("bd2", update_bd2), ("bd2", update_bd2_performances),
+                                           ("nikke", update_nikke), ("azurlane", update_azurlane))
                if args.game in (game, "all")]
     changed = []
     for update in updates:
