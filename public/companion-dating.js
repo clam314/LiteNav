@@ -3,8 +3,8 @@
 // (mix{stage}_{reaction}_{part}, played part after part over the idle) and
 // transitions to the next stage (motion{stage}_{n}). The game moves on when
 // the player touches the right places; the companion has no touches, so it
-// tours the scene: a few reactions per stage, then the transition, and from
-// the last stage back to the first.
+// tours the scene: every reaction of a stage once, in a random order, then
+// the transition, and from the last stage back to the first.
 
 import { drawnBounds, drawnParts, withoutBackdrops, shotBox, EFFECT_SLOT } from './companion-performance-player.js';
 
@@ -40,18 +40,21 @@ export function datingScript(names) {
   }));
 }
 
-// The tour as a list of steps: { stage, idle } starts a stage, { stage,
-// reaction: [parts] } plays one reaction, { stage, motion } moves on. A
-// stage's transition is skipped when it is the last stage or has none. The
-// tour starts at stage from (an index) and ends with the last stage.
-export function datingTour(script, reactionsPerStage = 3, random = Math.random, from = 0) {
+// The tour as a list of steps: { stage, idle } starts a stage, { stage, key,
+// reaction: [parts] } plays the stage's reaction number key, { stage, motion }
+// moves on. A stage's transition is skipped when it is the last stage or has
+// none. The tour starts at stage from (an index), without the reactions of
+// that stage listed in played, and ends with the last stage.
+export function datingTour(script, random = Math.random, from = 0, played = []) {
   const steps = [];
   script.forEach((stage, index) => {
     if (index < from) return;
     steps.push({ stage: index, idle: stage.idle });
-    const pool = [...stage.reactions];
-    for (let i = 0; i < reactionsPerStage && pool.length; i++) {
-      steps.push({ stage: index, reaction: pool.splice(Math.floor(random() * pool.length), 1)[0] });
+    const pool = stage.reactions.map((reaction, key) => ({ key, reaction }))
+      .filter(({ key }) => index !== from || !played.includes(key));
+    while (pool.length) {
+      const { key, reaction } = pool.splice(Math.floor(random() * pool.length), 1)[0];
+      steps.push({ stage: index, key, reaction });
     }
     if (stage.motion && index < script.length - 1) steps.push({ stage: index, motion: stage.motion });
   });
@@ -95,11 +98,12 @@ const SAMPLES = 24;
 // Tours a scene on a SpinePlayer whose skeleton is the scene. tracks plays
 // reactions over the idle on a second track, as the game does for these
 // scenes. Same shape as a skill performance: advance(delta) is true at a
-// natural break, here every time a stage begins (after its transition, or
-// back at the first), and view() is the camera of the current stage.
-// startStage resumes the tour at a later stage; onStage(index) reports each
-// stage as it begins, so a later visit can resume there.
-export function createDatingTour({ spine, player, tracks = true, random = Math.random, startStage = 0, onStage = () => {} }) {
+// natural break, here between two steps, when the figure is in its bare
+// idle, and view() is the camera of the current stage. A stage holds up to
+// fifty reactions and can run for minutes, so the companion may leave at any
+// break: onProgress({ stage, played }) reports each one, and resume (the same
+// shape) continues a later visit with the reactions not yet played.
+export function createDatingTour({ spine, player, tracks = true, random = Math.random, resume = null, onProgress = () => {} }) {
   const data = player.skeleton.data;
   const script = datingScript(data.animations.map(animation => animation.name));
   if (!script.length) return null;
@@ -188,7 +192,8 @@ export function createDatingTour({ spine, player, tracks = true, random = Math.r
   };
   // Start at a stage: the transitions of the stages before it leave their
   // last pose (clothes shed, a turn), so pose the skeleton through them first.
-  const restart = (from = 0) => {
+  let played = [];
+  const restart = (from = 0, done = []) => {
     state.clearTracks();
     const skeleton = player.skeleton;
     skeleton.setToSetupPose();
@@ -200,14 +205,16 @@ export function createDatingTour({ spine, player, tracks = true, random = Math.r
       const motion = stage.motion && data.findAnimation(stage.motion);
       motion?.apply(skeleton, motion.duration, motion.duration, false, [], 1, spine.MixBlend.setup, spine.MixDirection.mixIn);
     }
-    steps = datingTour(script, 3, random, from);
+    played = [...done];
+    steps = datingTour(script, random, from, played);
     index = 0;
     wait = run(steps[0]);
   };
-  const startAt = Number.isInteger(startStage) && startStage > 0 && startStage < script.length ? startStage : 0;
-  restart(startAt);
-  onStage(startAt);
-  const tourLength = datingTour(script, 3, random).reduce((sum, step) => sum + (step.idle ? GAP : step.motion ? length(step.motion) :
+  const startAt = Number.isInteger(resume?.stage) && resume.stage > 0 && resume.stage < script.length ? resume.stage : 0;
+  restart(startAt, startAt === (resume?.stage ?? 0) && Array.isArray(resume?.played) ? resume.played : []);
+  const progress = () => onProgress({ stage, played: [...played] });
+  progress();
+  const tourLength = datingTour(script, random).reduce((sum, step) => sum + (step.idle ? GAP : step.motion ? length(step.motion) :
     step.reaction.reduce((total, part) => total + length(part), 0) + GAP), 0);
   return {
     duration: tourLength,
@@ -215,19 +222,20 @@ export function createDatingTour({ spine, player, tracks = true, random = Math.r
     advance(delta) {
       if (!(delta > 0)) return false;
       wait -= delta;
-      let begun = false;
+      let moved = false;
       while (wait <= 0) {
+        if (steps[index].reaction) played.push(steps[index].key);
         index += 1;
+        moved = true;
         if (index >= steps.length) {
           restart(0);
-          begun = true;
           break;
         }
+        if (steps[index].idle) played = [];
         wait += run(steps[index]);
-        if (steps[index].idle) begun = true;
       }
-      if (begun) onStage(stage);
-      return begun;
+      if (moved) progress();
+      return moved;
     },
     stage: () => stage,
     // Runs after the pose is applied and before drawing.

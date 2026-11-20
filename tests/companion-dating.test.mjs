@@ -16,29 +16,37 @@ test('a scene is read as stages with their reactions, parts in order, and transi
   assert.deepEqual(datingScript(['loop', 'mix1_1_1']), [], 'reactions without a stage idle are not a scene');
 });
 
-test('the tour plays a few reactions per stage and moves on, never past the last stage', () => {
-  const steps = datingTour(datingScript(names), 2, () => 0);
+test('the tour plays every reaction of each stage once and moves on, never past the last stage', () => {
+  const steps = datingTour(datingScript(names), () => 0);
   assert.deepEqual(steps, [
     { stage: 0, idle: 'idle1' },
-    { stage: 0, reaction: ['mix1_1_1', 'mix1_1_2'] },
-    { stage: 0, reaction: ['mix1_2_1'] },
+    { stage: 0, key: 0, reaction: ['mix1_1_1', 'mix1_1_2'] },
+    { stage: 0, key: 1, reaction: ['mix1_2_1'] },
+    { stage: 0, key: 2, reaction: ['mix1_8_2', 'mix1_8_10', 'mix1_8_end'] },
     { stage: 0, motion: 'motion1_18' },
     { stage: 1, idle: 'idle2' },
-    { stage: 1, reaction: ['mix2_1_1'] },
-    { stage: 1, reaction: ['mix2_22_1'] },
+    { stage: 1, key: 0, reaction: ['mix2_1_1'] },
+    { stage: 1, key: 1, reaction: ['mix2_22_1'] },
     { stage: 1, motion: 'motion2_22' },
     { stage: 2, idle: 'idle3' },
-    { stage: 2, reaction: ['mix3_1_1'] },
+    { stage: 2, key: 0, reaction: ['mix3_1_1'] },
   ]);
-  assert.deepEqual(datingTour(datingScript(names), 1, () => 0, 1), [
+  const shuffled = datingTour(datingScript(names), () => .99).filter(step => step.stage === 0 && step.reaction);
+  assert.deepEqual(shuffled.map(step => step.key), [2, 1, 0], 'the order is random');
+});
+
+test('a resumed tour starts at its stage without the reactions already played there', () => {
+  assert.deepEqual(datingTour(datingScript(names), () => 0, 1, [0]), [
     { stage: 1, idle: 'idle2' },
-    { stage: 1, reaction: ['mix2_1_1'] },
+    { stage: 1, key: 1, reaction: ['mix2_22_1'] },
     { stage: 1, motion: 'motion2_22' },
     { stage: 2, idle: 'idle3' },
-    { stage: 2, reaction: ['mix3_1_1'] },
-  ], 'a resumed tour starts at its stage and runs to the last');
-  const picked = datingTour(datingScript(names), 3, () => .99).filter(step => step.stage === 0 && step.reaction);
-  assert.equal(new Set(picked.map(step => step.reaction[0])).size, 3, 'a stage never repeats a reaction');
+    { stage: 2, key: 0, reaction: ['mix3_1_1'] },
+  ]);
+  assert.deepEqual(datingTour(datingScript(names), () => 0, 0, [0, 1, 2]).slice(0, 2), [
+    { stage: 0, idle: 'idle1' },
+    { stage: 0, motion: 'motion1_18' },
+  ], 'a stage with every reaction played goes straight on to its transition');
 });
 
 const part = (slot, minX, minY, maxX, maxY) => ({ slot, minX, minY, maxX, maxY });

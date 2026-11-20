@@ -263,6 +263,8 @@ const partFor = (selection, mode) => mode === 'skill' ? selection.costume.cutsce
   mode === 'cover' ? selection.costume.cover : mode === 'dating' ? selection.costume.dating : selection.costume.idle;
 // The skill menu entry that switches a Brown Dust 2 costume to its 有缘之客 scene.
 const DATING_ACTION = 'dating';
+// Seconds a 有缘之客 scene plays in 「轮流」 before it may give way to the portrait.
+const SCENE_VISIT = 30;
 const datingEntry = () => ({ name: DATING_ACTION, label: '有缘之客' });
 // A menu while the skill display shows a scene: the skills seen last for this
 // costume, or a single entry back to its default skill.
@@ -546,8 +548,9 @@ export function initCompanion() {
   const assetCache = new Map();
   // The skill menu last built for each costume, kept for its 有缘之客 scene.
   const skillMenus = new Map();
-  // The 有缘之客 stage each costume's scene last began, while the page is open.
-  const sceneStages = new Map();
+  // How far each costume's 有缘之客 scene got (its stage and the reactions of
+  // it already played), while the page is open.
+  const sceneProgress = new Map();
   const enabled = () => preferences.portraits || preferences.skills;
   const initialMode = () => preferences.portraits ? 'portrait' : 'skill';
   const stage = createCompanionStage({
@@ -866,10 +869,10 @@ export function initCompanion() {
               const presentation = presentationForCostume(presentations, record.selection.costume);
               const data = loadedPlayer.skeleton.data;
               if (record.assetMode === 'dating') {
-                // A scene left at a stage break resumes there on its next visit.
+                // A scene left between two steps resumes there on its next visit.
                 const scene = costumeKey(record.selection.costume);
                 record.performance = createDatingTour({ spine, player: loadedPlayer, tracks: record.selection.costume.dating.tracks,
-                  startStage: sceneStages.get(scene) || 0, onStage: stageIndex => sceneStages.set(scene, stageIndex) });
+                  resume: sceneProgress.get(scene), onProgress: progress => sceneProgress.set(scene, progress) });
                 if (!record.performance) throw new Error('有缘之客暂时无法播放');
                 record.animations = skillMenus.get(costumeKey(record.selection.costume)) || [skillsBack(), datingEntry()];
                 record.animation = { ...datingEntry(), duration: record.performance.duration };
@@ -1013,10 +1016,11 @@ export function initCompanion() {
               else if (preferences.skills && record.elapsed >= 16) advance(record, 'skill');
             } else if (record.performance) {
               // A loop or scene is only left at a natural break: a layered
-              // loop between two plays, a scene when one of its stages begins.
+              // loop between two plays, a scene between two of its steps. A
+              // scene breaks every few seconds, so it stays a little longer.
               if (!wrapped) return;
               if (rotate) advance(record, 'rotate');
-              else if (preferences.portraits && record.elapsed >= 12) advance(record, 'portrait');
+              else if (preferences.portraits && record.elapsed >= (record.assetMode === 'dating' ? SCENE_VISIT : 12)) advance(record, 'portrait');
             } else if (rotate && record.elapsed >= (record.loopSeconds || record.animation.duration)) {
               advance(record, 'rotate');
             } else if (preferences.portraits && record.elapsed >= Math.max((record.loopSeconds || record.animation.duration) + 2, 12)) {
