@@ -80,3 +80,9 @@
 - 自动回归：`node --test tests/*.test.mjs` 109 项、`python3 -m unittest discover -s tests` 68 项通过；用例覆盖完整阶段、随机顺序、带已播反应的续播与反应播完直接转场。
 - 无界面 Chromium（1600×900，固定奥利维尔、立绘与动作都开）：巡游共 61 步（阶段一 14 段、阶段二 44 段）；第一次播放约 47 秒、4 段反应后在两段之间切回立绘；第二次回来从阶段一剩下的 10 段继续，离开时刚开始的那一段重新完整播放。无页面错误。
 - 未覆盖：未在可见面板中完整看完 4 分钟以上的长阶段。
+
+## 静态文件缓存校验、gzip 与 HEAD（2026-11-20）
+
+- 改动：静态文件带 `ETag`（大小与修改时间）和 `Last-Modified`，未变化时返回 304；`Cache-Control` 策略不变。1 KB 以上的文本（HTML、JS、CSS、JSON、SVG）在浏览器接受时以 gzip 发送，按文件版本在内存中缓存压缩结果，压缩版本使用单独的 ETag 并带 `Vary: Accept-Encoding`。`HEAD` 与 `GET` 走同样的路由，只是不发送正文（此前返回 501）。
+- 自动回归：`python3 -m unittest discover -s tests` 71 项、`node --test tests/*.test.mjs` 109 项通过，浏览器回归通过；新增用例覆盖 304（`If-None-Match` 优先于 `If-Modified-Since`、弱比较、文件改动后返回新版本）、gzip（`q=0`、小文件与二进制不压缩、压缩版本独立的 ETag）以及静态与接口的 `HEAD`。
+- 无界面 Chromium（本地服务）：首次打开 47 个请求，文本均为 gzip（`app.js` 81 KB → 21 KB）；刷新后全部为 304，正文合计 491 字节。角色陪伴运行时压缩后：PixiJS 460 → 126 KB、Spine 4.1 564 → 104 KB、Spine 3.8 422 → 78 KB、Cubism Core 207 → 61 KB；`gamekee-presets.json` 169 → 17 KB。

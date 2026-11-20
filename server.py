@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import copy
+import gzip
 import ipaddress
 import json
 import logging
@@ -18,6 +19,8 @@ import time
 from contextlib import contextmanager
 from concurrent.futures import ThreadPoolExecutor
 from datetime import datetime, timezone
+from email.utils import formatdate, parsedate_to_datetime
+from functools import lru_cache
 from html.parser import HTMLParser
 from http import HTTPStatus
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
@@ -28,6 +31,8 @@ from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parent
 MAX_BODY = 1024 * 1024
+# Text files at least this large are sent gzip-compressed when the browser accepts it.
+GZIP_MIN_SIZE = 1024
 DEFAULT_SETTINGS = {"checkInterval": 60, "failureThreshold": 3, "timeout": 5}
 LOG = logging.getLogger("litenav")
 
@@ -691,6 +696,43 @@ def metadata(url: str, categories: list[dict], remote: bool = True) -> dict:
     return result
 
 
+def compressible(mime: str) -> bool:
+    return mime.startswith(("text/", "application/json", "image/svg+xml"))
+
+
+def accepts_gzip(header: str | None) -> bool:
+    for item in (header or "").split(","):
+        coding, _, params = item.strip().partition(";")
+        if coding.strip().lower() in ("gzip", "*"):
+            quality = params.strip().lower().removeprefix("q=")
+            try:
+                return not params.strip() or float(quality) > 0
+            except ValueError:
+                return False
+    return False
+
+
+@lru_cache(maxsize=128)
+def gzipped(path: str, size: int, mtime_ns: int) -> bytes:
+    """One file version compressed once; size and mtime_ns key the version."""
+    return gzip.compress(Path(path).read_bytes(), compresslevel=6, mtime=0)
+
+
+def not_modified(headers, etag: str, mtime: float) -> bool:
+    """If-None-Match decides when present (RFC 9110 §13.1.3), else If-Modified-Since."""
+    tags = headers.get("If-None-Match")
+    if tags is not None:
+        bare = etag.removeprefix("W/")
+        return any(tag.strip() == "*" or tag.strip().removeprefix("W/") == bare for tag in tags.split(","))
+    since = headers.get("If-Modified-Since")
+    if not since:
+        return False
+    try:
+        return int(mtime) <= parsedate_to_datetime(since).timestamp()
+    except (TypeError, ValueError, OverflowError):
+        return False
+
+
 class AppServer(ThreadingHTTPServer):
     daemon_threads = True
     allow_reuse_address = True
@@ -706,6 +748,12 @@ class AppServer(ThreadingHTTPServer):
 class Handler(BaseHTTPRequestHandler):
     server: AppServer
     server_version = "LiteNav/1.0"
+    # HEAD answers like GET without the body (uptime monitors probe with it).
+    head_only = False
+
+    def write_body(self, payload: bytes):
+        if not self.head_only:
+            self.wfile.write(payload)
 
     def log_message(self, fmt, *args):
         LOG.info("%s %s", self.address_string(), fmt % args)
@@ -718,7 +766,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("Cache-Control", "no-store")
         self.send_header("X-Content-Type-Options", "nosniff")
         self.end_headers()
-        self.wfile.write(payload)
+        self.write_body(payload)
 
     def json_body(self) -> dict:
         if self.headers.get_content_type() != "application/json":
@@ -762,6 +810,10 @@ class Handler(BaseHTTPRequestHandler):
         except Exception:
             LOG.exception("Request failed")
             self.json_response({"error": "请求处理失败，请稍后重试"}, 500)
+
+    def do_HEAD(self):
+        self.head_only = True
+        self.do_GET()
 
     def do_PUT(self):
         self.mutate("PUT")
@@ -815,21 +867,38 @@ class Handler(BaseHTTPRequestHandler):
         target = (self.server.public_dir / relative).resolve()
         if not target.is_relative_to(self.server.public_dir) or not target.is_file():
             raise APIError("页面不存在", 404)
-        content = target.read_bytes()
+        stat = target.stat()
         mime = mimetypes.guess_type(target.name)[0] or "application/octet-stream"
         if target.suffix == ".js":
             mime = "text/javascript"
-        if mime.startswith("text/") or mime in ("application/json", "image/svg+xml"):
-            mime += "; charset=utf-8"
-        self.send_response(200)
-        self.send_header("Content-Type", mime)
-        self.send_header("Content-Length", str(len(content)))
+        text = compressible(mime)
+        compress = text and stat.st_size >= GZIP_MIN_SIZE and accepts_gzip(self.headers.get("Accept-Encoding"))
+        # The validator names one version of the file; the compressed body is a
+        # different representation, so it gets its own tag.
+        etag = '"%x-%x%s"' % (stat.st_size, stat.st_mtime_ns, "-gzip" if compress else "")
+        fresh = not_modified(self.headers, etag, stat.st_mtime)
+        if fresh:
+            content = b""
+        elif compress:
+            content = gzipped(str(target), stat.st_size, stat.st_mtime_ns)
+        else:
+            content = target.read_bytes()
+        self.send_response(304 if fresh else 200)
+        self.send_header("ETag", etag)
+        self.send_header("Last-Modified", formatdate(stat.st_mtime, usegmt=True))
         self.send_header("Cache-Control", "no-cache" if target.suffix in (".html", ".js", ".css") else "public, max-age=86400")
-        self.send_header("X-Content-Type-Options", "nosniff")
-        self.send_header("Referrer-Policy", "strict-origin-when-cross-origin")
-        self.send_header("X-Frame-Options", "SAMEORIGIN")
+        if text and stat.st_size >= GZIP_MIN_SIZE:
+            self.send_header("Vary", "Accept-Encoding")
+        if not fresh:
+            self.send_header("Content-Type", mime + ("; charset=utf-8" if text else ""))
+            self.send_header("Content-Length", str(len(content)))
+            if compress:
+                self.send_header("Content-Encoding", "gzip")
+            self.send_header("X-Content-Type-Options", "nosniff")
+            self.send_header("Referrer-Policy", "strict-origin-when-cross-origin")
+            self.send_header("X-Frame-Options", "SAMEORIGIN")
         self.end_headers()
-        self.wfile.write(content)
+        self.write_body(content)
 
 
 def main():

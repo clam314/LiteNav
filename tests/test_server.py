@@ -1,6 +1,9 @@
 """配置、监控与 HTTP API 的行为回归。"""
 import copy
+import gzip
+import http.client
 import io
+import os
 import json
 import socket
 import ssl
@@ -459,6 +462,67 @@ class HTTPCase(DataFixture):
         self.assertEqual(self.request("/")[0], 200)
         self.assertEqual(self.request("/%2e%2e/seed.json")[0], 404)
         self.assertEqual(self.request("/api/missing")[0], 404)
+
+    def raw(self, path, method="GET", headers=None):
+        connection = http.client.HTTPConnection("127.0.0.1", self.app.server_port, timeout=2)
+        try:
+            connection.request(method, path, headers=headers or {})
+            response = connection.getresponse()
+            return response.status, dict(response.getheaders()), response.read()
+        finally:
+            connection.close()
+
+    def test_static_files_revalidate_with_etag_and_last_modified(self):
+        script = self.public / "app.js"
+        script.write_text("console.log('轻航');", "utf-8")
+        status, headers, body = self.raw("/app.js")
+        self.assertEqual((status, headers["Cache-Control"]), (200, "no-cache"))
+        self.assertEqual(body.decode(), "console.log('轻航');")
+        etag, modified = headers["ETag"], headers["Last-Modified"]
+        status, headers, body = self.raw("/app.js", headers={"If-None-Match": etag})
+        self.assertEqual((status, body, headers["ETag"]), (304, b"", etag))
+        self.assertEqual(self.raw("/app.js", headers={"If-None-Match": 'W/' + etag + ', "other"'})[0], 304)
+        self.assertEqual(self.raw("/app.js", headers={"If-Modified-Since": modified})[0], 304)
+        # If-None-Match decides when both are sent.
+        self.assertEqual(self.raw("/app.js", headers={"If-None-Match": '"other"', "If-Modified-Since": modified})[0], 200)
+        self.assertEqual(self.raw("/app.js", headers={"If-Modified-Since": "not a date"})[0], 200)
+        # A changed file is a new version.
+        script.write_text("console.log('新');", "utf-8")
+        later = script.stat().st_mtime + 5
+        os.utime(script, (later, later))
+        status, headers, body = self.raw("/app.js", headers={"If-None-Match": etag, "If-Modified-Since": modified})
+        self.assertEqual((status, body.decode()), (200, "console.log('新');"))
+        self.assertNotEqual(headers["ETag"], etag)
+
+    def test_text_files_are_gzipped_when_accepted(self):
+        source = ("const line = '轻航';\n" * 400).encode()
+        (self.public / "big.js").write_bytes(source)
+        (self.public / "small.css").write_text("a{}", "utf-8")
+        (self.public / "data.bin").write_bytes(b"\0" * 4096)
+        status, headers, body = self.raw("/big.js", headers={"Accept-Encoding": "br, gzip;q=0.8"})
+        self.assertEqual((status, headers["Content-Encoding"], headers["Vary"]), (200, "gzip", "Accept-Encoding"))
+        self.assertEqual(gzip.decompress(body), source)
+        self.assertEqual(int(headers["Content-Length"]), len(body))
+        self.assertLess(len(body), len(source) / 4)
+        zipped_tag = headers["ETag"]
+        plain = self.raw("/big.js")
+        self.assertNotIn("Content-Encoding", plain[1])
+        self.assertEqual((plain[2], plain[1]["Vary"]), (source, "Accept-Encoding"))
+        self.assertNotEqual(plain[1]["ETag"], zipped_tag, "each representation has its own tag")
+        self.assertEqual(self.raw("/big.js", headers={"Accept-Encoding": "gzip", "If-None-Match": zipped_tag})[0], 304)
+        self.assertNotIn("Content-Encoding", self.raw("/big.js", headers={"Accept-Encoding": "gzip;q=0"})[1])
+        self.assertNotIn("Content-Encoding", self.raw("/small.css", headers={"Accept-Encoding": "gzip"})[1])
+        binary = self.raw("/data.bin", headers={"Accept-Encoding": "gzip"})
+        self.assertNotIn("Content-Encoding", binary[1])
+        self.assertEqual(binary[2], b"\0" * 4096)
+
+    def test_head_answers_like_get_without_a_body(self):
+        for path in ("/", "/api/health", "/api/missing"):
+            get_status, get_headers, get_body = self.raw(path)
+            status, headers, body = self.raw(path, "HEAD")
+            self.assertEqual((status, body), (get_status, b""), path)
+            self.assertEqual(headers["Content-Length"], str(len(get_body)), path)
+            self.assertEqual(headers["Content-Type"], get_headers["Content-Type"], path)
 
     def test_cross_site_write_rejected(self):
         status, body = self.request("/api/state", self.store.state(), "PUT", {"Origin": "https://evil.example"})
