@@ -1,266 +1,26 @@
-import { PREFERENCES_KEY, LEGACY_KEY, ROTATION_CHOICES, normalizePreferences, displayOf, withDisplay, costumeKey, gameOf,
-  availableCharacters, paddedView, placeView,
-  chooseCharacter, atlasPages, playableAnimations, configureViewports, presentationForCostume,
+import { PREFERENCES_KEY, LEGACY_KEY, ROTATION_CHOICES, displayOf, withDisplay, costumeKey, gameOf,
+  availableCharacters, paddedView,
+  chooseCharacter, playableAnimations, configureViewports, presentationForCostume,
   isLoopingSkill, selectSkillAnimation, completeSkin } from './companion-model.js';
 import { createCompanionStage } from './companion-stage.js';
 import { LOCAL_FALLBACK_CHARACTER, LOCAL_FALLBACK_COMMIT } from './companion-fallback.js';
 import { isExcludedCharacter } from './companion-exclusions.js';
 import { composeSkillAttachments } from './companion-composition.js';
 import { queuePortraitMotion } from './companion-portrait.js';
-import { createAssetFetcher } from './companion-assets.js';
 import { GAMES, gameById } from './companion-games.js';
 import { fireAnimations, queueFireCycle } from './companion-fire.js';
 import { combatAnimations, createCombatCycle } from './companion-combat.js';
-import { live2dMotionPlan, live2dFiles } from './companion-live2d.js';
-import { createLive2DPlayer, separateShaderContexts } from './companion-live2d-player.js';
-import { performanceId, performanceSources, readExternalSkeleton, performanceMenu, createPerformance }
-  from './companion-performance-player.js';
+import { createLive2DPlayer } from './companion-live2d-player.js';
+import { readExternalSkeleton, performanceMenu, createPerformance } from './companion-performance-player.js';
 import { createDatingTour } from './companion-dating.js';
 import { createPaintingPlayer } from './companion-painting-player.js';
-// Spine binaries only load in the runtime version that exported them, and
-// each build declares the same global. Load builds one at a time, keep each
-// one, and leave window.spine on 4.1 for code that looks for it there.
-const RUNTIMES = { '4.1': '/vendor/spine/spine-player-4.1.56.js', '4.0': '/vendor/spine/spine-player-4.0.30.js' };
-const RUNTIME_CSS = '/vendor/spine/spine-player-4.1.56.css';
+import { loadRuntime, loadSpine38, loadLive2DRuntime } from './companion-runtimes.js';
+import { readPreferences, writePreferences, mediaQuery, disposePlayer, supportsWebGL } from './companion-browser.js';
+import { fetchResource, withAbort, partFor, loadCharacter } from './companion-loaders.js';
+import { railSpace, alignedViews, spawnPartner, layoutCamera } from './companion-camera.js';
 
-const runtimePromises = {};
-const loadedRuntimes = {};
-let runtimeQueue = Promise.resolve();
 let currentCompanion;
-const disposedPlayers = new WeakSet();
 
-// Keep the runtime shared, even if the switch is turned off while it downloads.
-// Each model load has a separate abort signal and generation check.
-function loadRuntime(version = '4.1') {
-  if (!RUNTIMES[version]) version = '4.1';
-  if (runtimePromises[version]) return runtimePromises[version];
-  const task = runtimeQueue.catch(() => {}).then(async () => {
-    await loadRuntimeFile('link', RUNTIME_CSS);
-    const previous = window.spine;
-    // A runtime that is already present (or a test double) serves 4.1 directly.
-    if (version === '4.1' && previous?.SpinePlayer && !Object.values(loadedRuntimes).includes(previous)) return previous;
-    await loadRuntimeFile('script', RUNTIMES[version], 'script-' + version);
-    const runtime = window.spine;
-    if (!runtime?.SpinePlayer) throw new Error('角色播放器未能载入');
-    loadedRuntimes[version] = runtime;
-    if (version !== '4.1' && previous?.SpinePlayer) window.spine = previous;
-    return runtime;
-  });
-  runtimeQueue = task;
-  runtimePromises[version] = task.catch(error => {
-    delete runtimePromises[version];
-    throw error;
-  });
-  return runtimePromises[version];
-}
-
-// Azur Lane's dynamic paintings are Spine 3.8 skeletons, drawn with the 3.8
-// WebGL runtime (it has no player). That build adds its classes to whatever
-// global spine object exists instead of making its own, which would mix them
-// into 4.1: clear the global while it loads, then put the previous one back.
-let spine38Runtime;
-
-function loadSpine38() {
-  spine38Runtime ||= (runtimeQueue = runtimeQueue.catch(() => {}).then(async () => {
-    const previous = window.spine;
-    let runtime;
-    window.spine = undefined;
-    try {
-      await loadRuntimeFile('script', '/vendor/spine/spine-webgl-3.8.js', 'script-3.8');
-      runtime = window.spine;
-    } finally {
-      window.spine = previous;
-    }
-    if (!runtime?.webgl?.SceneRenderer) throw new Error('角色播放器未能载入');
-    return runtime;
-  })).catch(error => {
-    spine38Runtime = undefined;
-    throw error;
-  });
-  return spine38Runtime;
-}
-
-// Azur Lane's Live2D models need Cubism Core, PixiJS and pixi-live2d-display,
-// loaded in this order since each builds on the previous global.
-const LIVE2D_RUNTIME = [
-  '/vendor/live2d/live2dcubismcore.min.js',
-  '/vendor/live2d/pixi-6.5.10.min.js',
-  '/vendor/live2d/pixi-live2d-display-0.4.0-cubism4.min.js',
-];
-let live2dRuntime;
-
-function loadLive2DRuntime() {
-  live2dRuntime ||= (async () => {
-    for (const [index, url] of LIVE2D_RUNTIME.entries()) await loadRuntimeFile('script', url, 'live2d-' + index);
-    const PIXI = window.PIXI;
-    if (!window.Live2DCubismCore || !PIXI?.live2d?.Live2DModel) throw new Error('角色播放器未能载入');
-    separateShaderContexts(PIXI.live2d);
-    return PIXI;
-  })().catch(error => {
-    live2dRuntime = undefined;
-    throw error;
-  });
-  return live2dRuntime;
-}
-
-function loadRuntimeFile(tag, url, key = tag) {
-  const existing = document.querySelector(`[data-companion-resource="${key}"]`);
-  if (existing?.dataset.loaded === 'true') return Promise.resolve();
-  return new Promise((resolve, reject) => {
-    const element = existing || document.createElement(tag);
-    let timer;
-    const finish = error => {
-      clearTimeout(timer);
-      element.removeEventListener('load', loaded);
-      element.removeEventListener('error', failed);
-      if (error) {
-        element.remove();
-        reject(error);
-      } else {
-        element.dataset.loaded = 'true';
-        resolve();
-      }
-    };
-    const loaded = () => finish();
-    const failed = () => finish(new Error('角色播放器未能载入，请重试'));
-    element.addEventListener('load', loaded, { once: true });
-    element.addEventListener('error', failed, { once: true });
-    timer = setTimeout(failed, 15000);
-    if (!existing) {
-      element.dataset.companionResource = key;
-      if (tag === 'link') {
-        element.rel = 'stylesheet';
-        element.href = url;
-      } else {
-        element.src = url;
-        element.async = true;
-      }
-      document.head.append(element);
-    }
-  });
-}
-
-function readPreferences() {
-  try {
-    let value;
-    try { value = JSON.parse(localStorage.getItem(PREFERENCES_KEY)); } catch { /* Recover invalid preferences. */ }
-    return normalizePreferences(value, localStorage.getItem(LEGACY_KEY) === 'true');
-  } catch { return normalizePreferences(); }
-}
-
-function writePreferences(preferences) {
-  try {
-    const value = JSON.stringify(preferences);
-    if (localStorage.getItem(PREFERENCES_KEY) !== value) localStorage.setItem(PREFERENCES_KEY, value);
-  }
-  catch { /* The controls still work when browser storage is blocked. */ }
-}
-
-function mediaQuery(query, fallback) {
-  try {
-    const media = window.matchMedia(query);
-    return {
-      get matches() { return media.matches; },
-      addEventListener(_type, listener) {
-        if (media.addEventListener) media.addEventListener('change', listener);
-        else media.addListener?.(listener);
-      },
-      removeEventListener(_type, listener) {
-        if (media.removeEventListener) media.removeEventListener('change', listener);
-        else media.removeListener?.(listener);
-      },
-    };
-  } catch {
-    // Media-query support must not prevent the independent settings controls
-    // from initializing. Keep desktop sizing responsive in this fallback too.
-    const listeners = new Set();
-    let previous = fallback();
-    const resize = () => {
-      const matches = fallback();
-      if (matches === previous) return;
-      previous = matches;
-      listeners.forEach(listener => listener({ matches }));
-    };
-    return {
-      get matches() { return fallback(); },
-      addEventListener(_type, listener) {
-        listeners.add(listener);
-        if (listeners.size === 1) window.addEventListener('resize', resize);
-      },
-      removeEventListener(_type, listener) {
-        listeners.delete(listener);
-        if (!listeners.size) window.removeEventListener('resize', resize);
-      },
-    };
-  }
-}
-
-function disposePlayer(player) {
-  if (!player || disposedPlayers.has(player)) return;
-  disposedPlayers.add(player);
-  const gl = player.context?.gl;
-  try { player.stopRendering(); } catch { /* Partially initialized player. */ }
-  try { player.pause(); } catch { /* Partially initialized player. */ }
-  try { player.dispose(); } catch { /* Already detached. */ }
-  player.dom?.remove();
-  try { gl?.getExtension('WEBGL_lose_context')?.loseContext(); } catch { /* Optional extension. */ }
-}
-
-function supportsWebGL() {
-  const canvas = document.createElement('canvas');
-  try {
-    const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-    if (!gl) return false;
-    gl.getExtension('WEBGL_lose_context')?.loseContext();
-    return true;
-  } catch { return false; }
-}
-
-async function fetchResource(url, signal, cache = 'default') {
-  const response = await fetch(url, { signal, credentials: 'same-origin', cache });
-  if (!response.ok) throw new Error('角色素材未能载入，请重试');
-  return response;
-}
-
-const fetchAsset = createAssetFetcher({ base: GAMES.flatMap(game => [game.assetBase, game.lfsBase, game.paintingBase].filter(Boolean)), fetchResource });
-
-function readDataURI(blob, signal) {
-  return new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    const abort = () => {
-      reader.abort();
-      reject(new DOMException('Aborted', 'AbortError'));
-    };
-    const finish = callback => {
-      signal.removeEventListener('abort', abort);
-      callback();
-    };
-    reader.onload = () => finish(() => resolve(reader.result));
-    reader.onerror = () => finish(() => reject(new Error('角色素材无法读取')));
-    signal.addEventListener('abort', abort, { once: true });
-    if (signal.aborted) abort();
-    else reader.readAsDataURL(blob);
-  });
-}
-
-function withAbort(promise, signal) {
-  return new Promise((resolve, reject) => {
-    const abort = () => reject(new DOMException('Aborted', 'AbortError'));
-    if (signal.aborted) { promise.catch(() => {}); abort(); return; }
-    signal.addEventListener('abort', abort, { once: true });
-    promise.then(value => {
-      signal.removeEventListener('abort', abort);
-      resolve(value);
-    }, error => {
-      signal.removeEventListener('abort', abort);
-      reject(error);
-    });
-  });
-}
-
-// 'dating' is Brown Dust 2's 有缘之客 scene, shown in the skill display.
-const partFor = (selection, mode) => mode === 'skill' ? selection.costume.cutscene :
-  mode === 'cover' ? selection.costume.cover : mode === 'dating' ? selection.costume.dating : selection.costume.idle;
 // The skill menu entry that switches a Brown Dust 2 costume to its 有缘之客 scene.
 const DATING_ACTION = 'dating';
 // Seconds a 有缘之客 scene plays in 「轮流」 before it may give way to the portrait.
@@ -269,148 +29,6 @@ const datingEntry = () => ({ name: DATING_ACTION, label: '有缘之客' });
 // A menu while the skill display shows a scene: the skills seen last for this
 // costume, or a single entry back to its default skill.
 const skillsBack = () => ({ name: '', label: '技能动作' });
-
-// A Live2D model's settings, moc, textures, physics and the motions it plays,
-// fetched through the asset cache. Each player makes its own blob URLs from
-// these blobs: PixiJS caches textures by URL, and a shared URL let one player
-// destroy the textures of the next (the same ship in its other display).
-async function loadLive2D(catalog, selection, part, signal) {
-  const id = gameOf(selection.character);
-  const source = catalog.games[id];
-  const folder = part.model.slice(0, part.model.lastIndexOf('/') + 1);
-  const raw = source.assetBase + source.commit + '/';
-  const lfs = gameById(id).lfsBase + source.commit + '/';
-  const settings = await (await fetchAsset(raw + part.model, signal)).json();
-  const plan = live2dMotionPlan(settings.FileReferences?.Motions);
-  if (!plan.idle) throw new Error('这套服装暂无可播放动画');
-  const blobs = Object.fromEntries(await Promise.all(live2dFiles(settings, plan).map(async file =>
-    [file.path, await (await fetchAsset((file.lfs ? lfs : raw) + folder + file.path, signal)).blob()])));
-  return { live2d: true, settings: { ...settings, url: raw + part.model }, plan, blobs, objectUrls: [] };
-}
-
-// An Azur Lane dynamic painting: every layer's binary skeleton, atlas text
-// and decoded pages (straight alpha), top layer first.
-async function loadPainting(catalog, selection, part, signal) {
-  const id = gameOf(selection.character);
-  const folder = gameById(id).paintingBase + catalog.games[id].paintingCommit + '/' + part.painting + '/';
-  const layers = await Promise.all(part.layers.map(async layer => {
-    const [skeleton, atlas] = await Promise.all([
-      fetchAsset(folder + layer.skeleton, signal).then(response => response.arrayBuffer()),
-      fetchAsset(folder + layer.atlas, signal).then(response => response.text()),
-    ]);
-    const images = Object.fromEntries(await Promise.all(atlasPages(atlas).map(async page =>
-      [page, await createImageBitmap(await (await fetchAsset(folder + page, signal)).blob(), { premultiplyAlpha: 'none' })])));
-    return { skeleton: new Uint8Array(skeleton), atlas, images };
-  }));
-  return { painting: true, layers, objectUrls: [] };
-}
-
-async function loadCharacter(catalog, selection, mode, signal) {
-  const part = partFor(selection, mode);
-  if (!part) throw new Error('这套服装没有对应的动画');
-  if (part.runtime === 'live2d') return loadLive2D(catalog, selection, part, signal);
-  if (part.runtime === '3.8') return loadPainting(catalog, selection, part, signal);
-  const local = mode === 'portrait' && part.skeleton === LOCAL_FALLBACK_CHARACTER.costumes[0].idle.skeleton;
-  const source = catalog.games[gameOf(selection.character)];
-  const remote = source.assetBase + source.commit + '/';
-  const skelUrl = local ? '/companion/assets/' + part.skeleton.split('/').pop() : remote + part.skeleton;
-  const atlasUrl = local ? '/companion/assets/' + part.atlas.split('/').pop() : remote + part.atlas;
-  const [skeleton, atlas] = await Promise.all([
-    fetchAsset(skelUrl, signal).then(response => response.blob()),
-    fetchAsset(atlasUrl, signal).then(response => response.text()),
-  ]);
-  const baseUrl = new URL(atlasUrl, location.href);
-  const textureUrls = atlasPages(atlas).map(page => new URL(page, baseUrl).href);
-  // A few Brown Dust 2 cutscenes are stored as CutScene_Char…png while their
-  // atlas asks for cutscene_char…png; raw GitHub paths are case-sensitive.
-  const stem = part.skeleton.split('/').pop().replace(/\.skel$/i, '');
-  const stored = url => {
-    const page = decodeURIComponent(url.slice(url.lastIndexOf('/') + 1));
-    return page.toLowerCase().startsWith(stem.toLowerCase()) && !page.startsWith(stem) ?
-      url.slice(0, url.lastIndexOf('/') + 1) + encodeURIComponent(stem + page.slice(stem.length)) : url;
-  };
-  const [textures, skeletonData] = await Promise.all([
-    Promise.all(textureUrls.map(async url => [url, await (await fetchAsset(stored(url), signal)).blob()])),
-    readDataURI(skeleton, signal),
-  ]);
-  // Spine reads the skeleton and atlas only from data URIs, but textures load
-  // through <img>. Blob URLs skip base64 for the largest files; the owner of
-  // these assets revokes them once no new player can use them. Spine decodes
-  // base64 text with atob, which garbles UTF-8 region names (NIKKE atlases use
-  // Korean ones), while a plain data URI hands back the text after the comma.
-  const rawDataURIs = { [skelUrl]: skeletonData, [atlasUrl]: 'data:text/plain;charset=utf-8,' + atlas };
-  const objectUrls = textures.map(([url, blob]) => (rawDataURIs[url] = URL.createObjectURL(blob)));
-  // Runtime joins relative local atlas paths without expanding them to location.origin.
-  if (local) {
-    for (const url of textureUrls) rawDataURIs[new URL(url).pathname] = rawDataURIs[url];
-  }
-  // Brown Dust 2 skills also bring their full performances and the few
-  // skeletons those borrow layers from.
-  const performances = mode === 'skill' ? source.performances?.[performanceId(part)] : undefined;
-  const externals = performances ? await Promise.all(performanceSources(performances)
-    .map(path => loadExternalSkeleton(remote, path, signal).catch(error => {
-      if (error?.name === 'AbortError') throw error;
-      return null; // Only the performances that borrow from it are dropped.
-    }))) : [];
-  return { skelUrl, atlasUrl, rawDataURIs, objectUrls, premultipliedAlpha: /^pma:\s*true\s*$/m.test(atlas),
-    performances, externals: externals.filter(Boolean) };
-}
-
-// A borrowed skeleton's binary, atlas and decoded pages (straight alpha, as
-// the player's own textures are uploaded).
-async function loadExternalSkeleton(remote, path, signal) {
-  const [skeleton, atlas] = await Promise.all([
-    fetchAsset(remote + path + '.skel', signal).then(response => response.arrayBuffer()),
-    fetchAsset(remote + path + '.atlas', signal).then(response => response.text()),
-  ]);
-  const folder = remote + path.slice(0, path.lastIndexOf('/') + 1);
-  const images = Object.fromEntries(await Promise.all(atlasPages(atlas).map(async page =>
-    [page, await createImageBitmap(await (await fetchAsset(folder + page, signal)).blob(), { premultiplyAlpha: 'none' })])));
-  return { source: path, skeleton: new Uint8Array(skeleton), atlas, images, premultipliedAlpha: /^pma:\s*true\s*$/m.test(atlas) };
-}
-
-// Spine fits its whole canvas to the camera. The canvas fills the rail, and the
-// camera is widened around the preset view so that view stands on the bottom
-// edge while artwork beyond it keeps drawing toward the faded rail edges.
-// The cover and aim skeletons place the figure at different spots, so a
-// shared camera made her jump sideways on every switch. Give both views the
-// same size (and so the same scale), each centred on its own figure and
-// standing on its own floor, so a switch changes the pose but not the place.
-const alignedViews = (a, b) => {
-  const width = Math.max(a.width, b.width);
-  const height = Math.max(a.height, b.height);
-  const frame = view => ({ x: view.x + view.width / 2 - width / 2, y: view.y, width, height });
-  return [frame(a), frame(b)];
-};
-
-// A second player for NIKKE's cover skeleton, sharing the layer and camera.
-function spawnPartner(spine, layer, assets, part, record) {
-  return new Promise((resolve, reject) => {
-    record.partner = new spine.SpinePlayer(layer, {
-      binaryUrl: assets.skelUrl, atlasUrl: assets.atlasUrl, rawDataURIs: assets.rawDataURIs,
-      viewport: { padLeft: '5%', padRight: '5%', padTop: '5%', padBottom: '5%', transitionTime: 0 },
-      premultipliedAlpha: assets.premultipliedAlpha,
-      alpha: true, backgroundColor: '#00000000', showControls: false, showLoading: false,
-      preserveDrawingBuffer: false, defaultMix: 0,
-      ...(part.skin ? { skin: part.skin } : {}),
-      success: resolve,
-      error: () => reject(new Error('角色动画暂时无法播放')),
-      frame(player) { if (record.view) layoutCamera(record, player); },
-    });
-  });
-}
-
-function layoutCamera(record, player) {
-  const width = player.canvas.clientWidth;
-  const height = player.canvas.clientHeight;
-  const key = width + 'x' + height;
-  if (!width || !height || key === player.companionRailKey) return;
-  player.companionRailKey = key;
-  const space = parseFloat(getComputedStyle(record.layer).getPropertyValue('--companion-space')) || width / 2;
-  // Wide full shots stay out of the strongest left fade.
-  const maxWidth = record.layer.classList.contains('fit-artwork') ? Math.max(width * .75, space) : width;
-  Object.assign(player.currentViewport, placeView(player.companionView || record.view, { width, height }, space, maxWidth));
-}
 
 export function initCompanion() {
   if (currentCompanion) return currentCompanion;
@@ -979,19 +597,12 @@ export function initCompanion() {
             if (record.performance) record.performance.draw(loadedPlayer.sceneRenderer);
             if (!record.configured || record.firstFrame || stage.pending !== record || signal.aborted) return;
             record.firstFrame = true;
-            clearTimeout(record.loadingTimer);
-            clearTimeout(record.timeout);
-            if (!stage.present(record)) return;
-            layer.classList.add('is-visible');
-            if (record.mode === 'skill') {
+            if (!reveal(record, () => {
+              if (record.mode !== 'skill') return;
               skillAnimations = record.animations;
               preferences.skillAction = record.animation.name;
               writePreferences(preferences);
-            }
-            loadError = '';
-            status.hidden = true;
-            updatePlayback();
-            prefetchOtherMode(record);
+            })) return;
             finish(resolve);
           },
           frame(loadedPlayer, delta) {
@@ -1005,27 +616,18 @@ export function initCompanion() {
             if (record.view) layoutCamera(record, loadedPlayer);
             // The combat loop follows the animation clock, so it pauses with it.
             if (record.combat && delta > 0) record.combat.advance(delta);
-            if (stage.active !== record || stage.pending || record.advancing || delta <= 0) return;
-            record.elapsed += delta;
-            // Paused or hidden pages draw no frames, so rotation waits for them.
-            const rotate = performance.now() >= rotationDue;
-            if (record.mode === 'portrait') {
-              const playingMotion = record.portraitMotion && loadedPlayer.animationState.getCurrent(0)?.animation === record.portraitMotion;
-              if (playingMotion) return;
-              if (rotate) advance(record, 'rotate');
-              else if (preferences.skills && record.elapsed >= 16) advance(record, 'skill');
-            } else if (record.performance) {
-              // A loop or scene is only left at a natural break: a layered
-              // loop between two plays, a scene between two of its steps. A
-              // scene breaks every few seconds, so it stays a little longer.
-              if (!wrapped) return;
-              if (rotate) advance(record, 'rotate');
-              else if (preferences.portraits && record.elapsed >= (record.assetMode === 'dating' ? SCENE_VISIT : 12)) advance(record, 'portrait');
-            } else if (rotate && record.elapsed >= (record.loopSeconds || record.animation.duration)) {
-              advance(record, 'rotate');
-            } else if (preferences.portraits && record.elapsed >= Math.max((record.loopSeconds || record.animation.duration) + 2, 12)) {
-              advance(record, 'portrait');
-            }
+            const loop = record.loopSeconds || record.animation?.duration;
+            handOver(record, delta, record.performance ? {
+              // A layered loop breaks between two plays, a scene between two
+              // of its steps. A scene breaks every few seconds, so it stays a
+              // little longer.
+              atBreak: () => wrapped, visit: record.assetMode === 'dating' ? SCENE_VISIT : 12,
+            } : {
+              // The portrait finishes a queued motion first; a plain loop
+              // breaks once a whole play is over.
+              busy: () => record.portraitMotion && loadedPlayer.animationState.getCurrent(0)?.animation === record.portraitMotion,
+              atBreak: () => record.elapsed >= loop, visit: Math.max(loop + 2, 12),
+            });
           },
           error() {
             queueMicrotask(() => {
@@ -1055,20 +657,12 @@ export function initCompanion() {
     const { layer } = record;
     const player = await createLive2DPlayer({
       PIXI, layer, settings: assets.settings, plan: assets.plan, blobs: assets.blobs, mode: record.mode,
-      space: () => parseFloat(getComputedStyle(layer).getPropertyValue('--companion-space')) || layer.clientWidth / 2,
-      frame: delta => live2dFrame(record, delta),
+      space: () => railSpace(layer), frame: delta => ownCanvasFrame(record, delta),
     });
     record.player = player;
     // The model kept loading after this record was replaced or released.
     if (signal.aborted || stage.pending !== record || disposed) { disposePlayer(player); return; }
-    clearTimeout(record.loadingTimer);
-    clearTimeout(record.timeout);
-    if (!stage.present(record)) return;
-    layer.classList.add('is-visible');
-    loadError = '';
-    status.hidden = true;
-    updatePlayback();
-    prefetchOtherMode(record);
+    reveal(record);
   }
 
   // An Azur Lane dynamic painting on its own canvas, like Live2D: the loop as
@@ -1079,31 +673,48 @@ export function initCompanion() {
     const { layer } = record;
     const player = createPaintingPlayer({
       spine, layer, layers: assets.layers, mode: record.mode, actions: partFor(record.selection, record.mode)?.actions,
-      space: () => parseFloat(getComputedStyle(layer).getPropertyValue('--companion-space')) || layer.clientWidth / 2,
-      frame: delta => live2dFrame(record, delta),
+      space: () => railSpace(layer), frame: delta => ownCanvasFrame(record, delta),
     });
     record.player = player;
+    reveal(record);
+  }
+
+  // Live2D models and paintings break between two reactions.
+  function ownCanvasFrame(record, delta) {
+    handOver(record, delta, { atBreak: () => record.player?.betweenActions });
+  }
+
+  // A loaded display replaces the one shown so far. onShown runs once it is
+  // on stage; false when the record lost its place meanwhile.
+  function reveal(record, onShown) {
     clearTimeout(record.loadingTimer);
     clearTimeout(record.timeout);
-    if (!stage.present(record)) return;
-    layer.classList.add('is-visible');
+    if (!stage.present(record)) return false;
+    record.layer.classList.add('is-visible');
+    onShown?.();
     loadError = '';
     status.hidden = true;
     updatePlayback();
+    prefetchOtherMode(record);
+    return true;
   }
 
-  // The same breaks as the Spine displays: the portrait hands over after a
-  // while, the action display only between two reactions.
-  function live2dFrame(record, delta) {
+  // Every display hands the stage on only at a natural break. The portrait
+  // moves to the action display after 16 s unless busy() (a queued motion);
+  // the action display returns after visit seconds, and only while atBreak().
+  // Random rotation moves to the next person at the first break once due.
+  // Paused or hidden pages draw no frames, so rotation waits for them.
+  function handOver(record, delta, { busy = () => false, atBreak = () => true, visit = 12 } = {}) {
     if (stage.active !== record || stage.pending || record.advancing || delta <= 0) return;
     record.elapsed += delta;
     const rotate = performance.now() >= rotationDue;
     if (record.mode === 'portrait') {
+      if (busy()) return;
       if (rotate) advance(record, 'rotate');
       else if (preferences.skills && record.elapsed >= 16) advance(record, 'skill');
-    } else if (record.player?.betweenActions) {
+    } else if (atBreak()) {
       if (rotate) advance(record, 'rotate');
-      else if (preferences.portraits && record.elapsed >= 12) advance(record, 'portrait');
+      else if (preferences.portraits && record.elapsed >= visit) advance(record, 'portrait');
     }
   }
 

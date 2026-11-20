@@ -736,6 +736,10 @@ def not_modified(headers, etag: str, mtime: float) -> bool:
 class AppServer(ThreadingHTTPServer):
     daemon_threads = True
     allow_reuse_address = True
+    # The page loads about forty modules at once; the default backlog of 5 made
+    # the system refuse connections when two tabs opened together, leaving one
+    # blank.
+    request_queue_size = 128
 
     def __init__(self, address, store: Store, public_dir: Path | str = ROOT / "public"):
         self.store = store

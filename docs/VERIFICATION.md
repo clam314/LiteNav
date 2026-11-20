@@ -86,3 +86,10 @@
 - 改动：静态文件带 `ETag`（大小与修改时间）和 `Last-Modified`，未变化时返回 304；`Cache-Control` 策略不变。1 KB 以上的文本（HTML、JS、CSS、JSON、SVG）在浏览器接受时以 gzip 发送，按文件版本在内存中缓存压缩结果，压缩版本使用单独的 ETag 并带 `Vary: Accept-Encoding`。`HEAD` 与 `GET` 走同样的路由，只是不发送正文（此前返回 501）。
 - 自动回归：`python3 -m unittest discover -s tests` 71 项、`node --test tests/*.test.mjs` 109 项通过，浏览器回归通过；新增用例覆盖 304（`If-None-Match` 优先于 `If-Modified-Since`、弱比较、文件改动后返回新版本）、gzip（`q=0`、小文件与二进制不压缩、压缩版本独立的 ETag）以及静态与接口的 `HEAD`。
 - 无界面 Chromium（本地服务）：首次打开 47 个请求，文本均为 gzip（`app.js` 81 KB → 21 KB）；刷新后全部为 304，正文合计 491 字节。角色陪伴运行时压缩后：PixiJS 460 → 126 KB、Spine 4.1 564 → 104 KB、Spine 3.8 422 → 78 KB、Cubism Core 207 → 61 KB；`gamekee-presets.json` 169 → 17 KB。
+
+## 角色陪伴代码整理与服务端连接队列（2026-11-20）
+
+- 整理：`companion.js` 由 1319 行减到约 900 行。运行时载入移到 `companion-runtimes.js`，素材下载移到 `companion-loaders.js`，偏好存储、媒体查询、播放器释放与 WebGL 检测移到 `companion-browser.js`，取景与 NIKKE 掩体播放器移到 `companion-camera.js`，均按原文搬移。三处切换判断（Spine、Live2D、动态立绘）合并为 `handOver`，三处显示新画面的步骤合并为 `reveal`，三处读取导航留白的写法合并为 `railSpace`；Spine 普通循环原有的两个阈值（播完一轮换人、`max(循环+2, 12)` 秒回立绘）等价地表示为 `atBreak` 与 `visit`。
+- 顺带发现：两个页面同时载入时，其中一个的模块请求被系统拒绝（`ERR_CONNECTION_RESET`），页面一直空白。用改动前的服务端同样复现，原因是 `ThreadingHTTPServer` 默认的监听队列只有 5，而页面一次请求约 40 个模块。监听队列改为 128 后，连续三次双页面同时载入均正常。
+- 自动回归：`node --test tests/*.test.mjs` 109 项、`python3 -m unittest discover -s tests` 72 项通过，两个浏览器回归脚本通过。
+- 无界面 Chromium（真实素材，「轮流」，六个页面同时运行 150 秒）：棕色尘埃 2（Spine 4.1）、NIKKE（4.0 + 掩体）、碧蓝航线 Live2D、动态立绘（带反应）、有缘之客都完成立绘与动作展示之间的切换；随机轮换（1 分钟）依次换到其他游戏的人物；均无页面错误。有缘之客在两段反应之间回到立绘，再次进入时继续。

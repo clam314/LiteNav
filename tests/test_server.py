@@ -516,6 +516,10 @@ class HTTPCase(DataFixture):
         self.assertNotIn("Content-Encoding", binary[1])
         self.assertEqual(binary[2], b"\0" * 4096)
 
+    def test_listen_queue_holds_a_page_worth_of_module_requests(self):
+        # Two tabs loading the module graph together overflowed the default backlog of 5.
+        self.assertGreaterEqual(self.app.request_queue_size, 64)
+
     def test_head_answers_like_get_without_a_body(self):
         for path in ("/", "/api/health", "/api/missing"):
             get_status, get_headers, get_body = self.raw(path)
