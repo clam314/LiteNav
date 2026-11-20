@@ -77,6 +77,22 @@ export function live2dArtBounds(drawables, canvas, bounds = { minX: Infinity, ma
   return bounds;
 }
 
+// The action display's box: the idle box with its top raised to where the
+// reactions reach most of the time (share of their frames stay below it).
+// The figure keeps standing on its idle floor at its idle centre; a moment
+// past that top (a flick of hair, a splash) and close-ups that fill the
+// canvas, which the canvas clip frames, do not shrink it.
+export function reactionFraming(idle, frames, canvas, share = 0.9) {
+  const box = { ...idle };
+  if (![idle?.minY, idle?.maxY].every(Number.isFinite)) return box;
+  const fillsCanvas = frame => [frame.minX <= 1, frame.minY <= 1, frame.maxX >= canvas.width - 1,
+    frame.maxY >= canvas.height - 1].filter(Boolean).length >= 3;
+  const tops = frames.filter(frame => Number.isFinite(frame.minY) && !fillsCanvas(frame))
+    .map(frame => frame.minY).sort((a, b) => a - b);
+  if (tops.length) box.minY = Math.min(idle.minY, tops[Math.floor(tops.length * (1 - share))]);
+  return box;
+}
+
 // Fill the rail's height with the artwork, stand it on the bottom edge and
 // centre it in the space the navigation leaves free. Wide artwork (a scene
 // behind the ship) runs past both sides; the rail fades its left edge.
@@ -90,14 +106,17 @@ export function placeLive2D(bounds, rail, space, fallback) {
 }
 
 // Play every reaction once, in a fresh random order each round, never
-// repeating the last one across rounds.
-export function createActionOrder(actions, random = Math.random) {
-  let queue = [];
-  let last;
-  return function next() {
+// repeating the last one across rounds. next.progress() is the round so far
+// ({ queue, last }: positions in actions still to play and the one played
+// last); passing it back as resume continues that round on a later visit.
+export function createActionOrder(actions, random = Math.random, resume = null) {
+  const valid = index => Number.isInteger(index) && index >= 0 && index < actions.length;
+  let queue = Array.isArray(resume?.queue) ? [...new Set(resume.queue.filter(valid))] : [];
+  let last = valid(resume?.last) ? resume.last : undefined;
+  function next() {
     if (!actions.length) return null;
     if (!queue.length) {
-      queue = [...actions];
+      queue = actions.map((_, index) => index);
       for (let i = queue.length - 1; i > 0; i--) {
         const j = Math.floor(random() * (i + 1));
         [queue[i], queue[j]] = [queue[j], queue[i]];
@@ -105,8 +124,10 @@ export function createActionOrder(actions, random = Math.random) {
       if (queue.length > 1 && queue[0] === last) queue.push(queue.shift());
     }
     last = queue.shift();
-    return last;
-  };
+    return actions[last];
+  }
+  next.progress = () => ({ queue: [...queue], last: last ?? null });
+  return next;
 }
 
 // Where the eyes look, as the focus the model's head and eyes turn toward

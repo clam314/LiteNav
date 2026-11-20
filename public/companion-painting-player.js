@@ -14,8 +14,10 @@ const ACTION_GAP = 1.5;
 // layers: [{ skeleton: Uint8Array, atlas: text, images: { page: ImageBitmap } }], top first.
 // In the action display (mode 'skill') the painting plays its reactions:
 // actions is a list of reactions, each a list of animations played in order
-// on every layer that has them, followed by the loop again.
-export function createPaintingPlayer({ spine, layer, layers, space, frame, mode = 'portrait', actions = [] }) {
+// on every layer that has them, followed by the loop again. progress and
+// onProgress continue the round of reactions across visits, as for Live2D.
+export function createPaintingPlayer({ spine, layer, layers, space, frame, mode = 'portrait', actions = [],
+  progress = null, onProgress = () => {} }) {
   const dom = document.createElement('div');
   dom.className = 'painting-player';
   const canvas = document.createElement('canvas');
@@ -24,7 +26,7 @@ export function createPaintingPlayer({ spine, layer, layers, space, frame, mode 
   // The textures carry straight alpha, so the page composites it as such.
   const context = new spine.webgl.ManagedWebGLRenderingContext(canvas, { alpha: true, premultipliedAlpha: false });
   try {
-    return paint({ spine, dom, canvas, context, layers, space, frame, reactions: mode === 'skill' ? actions : [] });
+    return paint({ spine, dom, canvas, context, layers, space, frame, reactions: mode === 'skill' ? actions : [], progress, onProgress });
   } catch (error) {
     // A painting that cannot be read gives its context back at once: browsers
     // only keep a handful of WebGL contexts alive.
@@ -34,7 +36,7 @@ export function createPaintingPlayer({ spine, layer, layers, space, frame, mode 
   }
 }
 
-function paint({ spine, dom, canvas, context, layers, space, frame, reactions }) {
+function paint({ spine, dom, canvas, context, layers, space, frame, reactions, progress, onProgress }) {
   const renderer = new spine.webgl.SceneRenderer(canvas, context, true);
 
   const loaded = layers.map(file => {
@@ -117,7 +119,7 @@ function paint({ spine, dom, canvas, context, layers, space, frame, reactions })
   };
   // The action display: one reaction at a time on every layer that has its
   // animations, back to the loop, a pause, then the next reaction.
-  const nextReaction = createActionOrder(reactions);
+  const nextReaction = createActionOrder(reactions, Math.random, progress);
   let reactionLeft = 0;
   let gapLeft = 0;
   const startReaction = () => {
@@ -145,16 +147,19 @@ function paint({ spine, dom, canvas, context, layers, space, frame, reactions })
       state.apply(skeleton);
       skeleton.updateWorldTransform();
     }
+    // frame() is true while the companion moves on from this painting: it
+    // then stays in its loop rather than begin a reaction that would be cut off.
+    const hold = frame(seconds) === true;
     if (reactions.length && seconds > 0) {
       if (!player.betweenActions && (reactionLeft -= seconds) <= 0) {
         player.betweenActions = true;
         gapLeft = ACTION_GAP;
-      } else if (player.betweenActions && (gapLeft -= seconds) <= 0) {
+        onProgress(nextReaction.progress());
+      } else if (player.betweenActions && !hold && (gapLeft -= seconds) <= 0) {
         startReaction();
       }
     }
     draw();
-    frame(seconds);
     handle = requestAnimationFrame(tick);
   };
   // A paused painting still follows a resized rail.

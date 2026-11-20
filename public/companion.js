@@ -169,6 +169,13 @@ export function initCompanion() {
   // How far each costume's 有缘之客 scene got (its stage and the reactions of
   // it already played), while the page is open.
   const sceneProgress = new Map();
+  // How far each Azur Lane costume got through its round of reactions, so the
+  // next visit plays the ones not seen yet.
+  const reactionProgress = new Map();
+  const reactionResume = record => {
+    const key = costumeKey(record.selection.costume);
+    return { progress: reactionProgress.get(key), onProgress: progress => reactionProgress.set(key, progress) };
+  };
   const enabled = () => preferences.portraits || preferences.skills;
   const initialMode = () => preferences.portraits ? 'portrait' : 'skill';
   const stage = createCompanionStage({
@@ -377,7 +384,10 @@ export function initCompanion() {
   // Move to another random person at a natural break in the current motion.
   function advance(record, next) {
     record.advancing = true;
+    // Until the next display is under way, this one starts nothing new.
+    record.leaving = true;
     queueMicrotask(() => {
+      record.leaving = false;
       if (stage.active !== record) return;
       if (next !== 'rotate') { void start(next); return; }
       try {
@@ -657,7 +667,7 @@ export function initCompanion() {
     const { layer } = record;
     const player = await createLive2DPlayer({
       PIXI, layer, settings: assets.settings, plan: assets.plan, blobs: assets.blobs, mode: record.mode,
-      space: () => railSpace(layer), frame: delta => ownCanvasFrame(record, delta),
+      space: () => railSpace(layer), frame: delta => ownCanvasFrame(record, delta), ...reactionResume(record),
     });
     record.player = player;
     // The model kept loading after this record was replaced or released.
@@ -673,15 +683,19 @@ export function initCompanion() {
     const { layer } = record;
     const player = createPaintingPlayer({
       spine, layer, layers: assets.layers, mode: record.mode, actions: partFor(record.selection, record.mode)?.actions,
-      space: () => railSpace(layer), frame: delta => ownCanvasFrame(record, delta),
+      space: () => railSpace(layer), frame: delta => ownCanvasFrame(record, delta), ...reactionResume(record),
     });
     record.player = player;
     reveal(record);
   }
 
   // Live2D models and paintings break between two reactions.
+  // True while the player should start no new reaction: the stage is moving
+  // on from it (another display loads or fades in). If that load fails, the
+  // display carries on with its reactions.
   function ownCanvasFrame(record, delta) {
     handOver(record, delta, { atBreak: () => record.player?.betweenActions });
+    return Boolean(record.leaving || stage.pending || stage.active !== record);
   }
 
   // A loaded display replaces the one shown so far. onShown runs once it is

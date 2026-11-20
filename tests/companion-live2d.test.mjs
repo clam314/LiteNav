@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { costumeKey } from '../public/companion-model.js';
 import {
-  live2dMotionPlan, live2dFiles, withLive2DFiles, live2dArtBounds, placeLive2D, createActionOrder, gazeFocus,
+  live2dMotionPlan, live2dFiles, withLive2DFiles, live2dArtBounds, placeLive2D, createActionOrder, gazeFocus, reactionFraming,
 } from '../public/companion-live2d.js';
 
 const motion = name => [{ File: `motions/${name}.motion3.json` }];
@@ -108,6 +108,47 @@ test('reactions play once per round in a shuffled order that never repeats acros
   assert.equal(createActionOrder([])(), null);
   const single = createActionOrder(['home']);
   assert.deepEqual([single(), single()], ['home', 'home']);
+});
+
+test('the action display leaves room above for where reactions usually reach, on the idle floor', () => {
+  const canvas = { width: 1000, height: 2000 };
+  const idle = { minX: 200, maxX: 800, minY: 400, maxY: 1900 };
+  const frame = (minY, extra = {}) => ({ minX: 200, maxX: 800, minY, maxY: 1900, ...extra });
+  // Twenty frames: most reach 300, one flick of hair reaches the canvas top.
+  const frames = [...Array(19).fill(0).map(() => frame(300)), frame(0)];
+  assert.deepEqual(reactionFraming(idle, frames, canvas), { ...idle, minY: 300 },
+    'a moment past the usual top does not shrink the figure');
+  const low = [...Array(20).fill(0).map(() => frame(450, { maxY: 2000, minX: 0 }))];
+  assert.deepEqual(reactionFraming(idle, low, canvas), idle, 'floor, sides and a lower top stay those of idle');
+  const closeUp = Array(20).fill(0).map(() => ({ minX: 0, maxX: 1000, minY: 0, maxY: 2000 }));
+  assert.deepEqual(reactionFraming(idle, [...closeUp, frame(350)], canvas), { ...idle, minY: 350 },
+    'close-ups that fill the canvas are left to the canvas clip');
+  assert.deepEqual(reactionFraming(idle, [], canvas), idle);
+  assert.deepEqual(reactionFraming({ minX: Infinity, maxX: -Infinity, minY: Infinity, maxY: -Infinity }, frames, canvas).minY, Infinity);
+});
+
+test('a round of reactions continues where an earlier visit left it', () => {
+  const actions = ['home', 'touch_head', 'main_1', 'login'];
+  const first = createActionOrder(actions, () => 0);
+  const seen = [first(), first()];
+  const saved = first.progress();
+  assert.equal(saved.queue.length, 2);
+  assert.equal(actions[saved.last], seen[1]);
+  const later = createActionOrder(actions, () => 0, JSON.parse(JSON.stringify(saved)));
+  const rest = [later(), later()];
+  assert.deepEqual([...seen, ...rest].sort(), [...actions].sort(), 'the round finishes with the reactions not seen yet');
+  assert.notEqual(later(), rest[1], 'the next round still avoids the reaction played last');
+  // Lists of animations (paintings) resume by position as well.
+  const steps = [['drag', 'ex'], ['login']];
+  const painting = createActionOrder(steps, () => 0);
+  const played = painting();
+  assert.notEqual(createActionOrder(steps, () => 0, painting.progress())(), played);
+  // Unknown or stale progress starts a fresh round.
+  for (const stale of [null, {}, { queue: [7, -1, 'home', 1.5], last: 9 }, { queue: 'x' }]) {
+    const order = createActionOrder(actions, () => 0, stale);
+    assert.deepEqual([order(), order(), order(), order()].sort(), [...actions].sort());
+  }
+  assert.deepEqual(createActionOrder(actions, () => 0, { queue: [2, 2], last: null }).progress().queue, [2], 'positions are not repeated');
 });
 
 test('the Azur Lane catalog pins its upstreams: Live2D models for both displays, dynamic paintings as portraits or with their reactions', () => {

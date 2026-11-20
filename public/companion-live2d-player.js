@@ -2,7 +2,7 @@
 // framework on Cubism Core 5). The player mirrors the parts of SpinePlayer the
 // companion uses: dom, pause(), play(), stopRendering(), dispose() and
 // context.gl.
-import { live2dArtBounds, placeLive2D, createActionOrder, withLive2DFiles, gazeFocus } from './companion-live2d.js';
+import { live2dArtBounds, placeLive2D, createActionOrder, withLive2DFiles, gazeFocus, reactionFraming } from './companion-live2d.js';
 
 // The framework keeps one set of compiled shaders for every WebGL context, so
 // a second canvas (the next person fading in) left the first one blank. Give
@@ -27,11 +27,18 @@ export function separateShaderContexts(live2d) {
 // Sample the idle motion for this long to find the extent the figure uses.
 const SAMPLE_SECONDS = 8;
 const SAMPLE_STEP = 0.25;
+// Width of the fade where a close-up meets the left edge of the model canvas.
+const CANVAS_FADE = 64;
+// Reactions are sampled to their end, but no further than this.
+const REACTION_SECONDS = 30;
 // The idle pause between two reactions in the action display.
 const ACTION_GAP = 1.5;
 
-// blobs maps each file of the settings to its downloaded Blob.
-export async function createLive2DPlayer({ PIXI, layer, settings, plan, blobs, mode, space, frame }) {
+// blobs maps each file of the settings to its downloaded Blob. In the action
+// display, progress (from an earlier visit) continues the round of reactions,
+// and onProgress receives the round each time a reaction has played out.
+export async function createLive2DPlayer({ PIXI, layer, settings, plan, blobs, mode, space, frame,
+  progress = null, onProgress = () => {} }) {
   const live2d = PIXI.live2d;
   const dom = document.createElement('div');
   dom.className = 'live2d-player';
@@ -110,9 +117,7 @@ export async function createLive2DPlayer({ PIXI, layer, settings, plan, blobs, m
       }
     }
 
-    let group = '';
-    motions.on('motionStart', name => { group = name; });
-    const nextAction = createActionOrder(mode === 'skill' ? plan.actions : []);
+    const nextAction = createActionOrder(mode === 'skill' ? plan.actions : [], Math.random, progress);
     let gapLeft = 0;
     const startAction = () => {
       const name = nextAction();
@@ -121,13 +126,9 @@ export async function createLive2DPlayer({ PIXI, layer, settings, plan, blobs, m
       player.betweenActions = false;
       void motions.startMotion(name, 0, live2d.MotionPriority.FORCE);
     };
-    motions.on('motionFinish', () => {
-      if (group === plan.idle || mode !== 'skill') return;
-      player.betweenActions = true;
-      gapLeft = ACTION_GAP;
-    });
 
-    // Find the extent of the idle pose before the first frame, then start.
+    // Find the extent of the idle pose (and in the action display, of every
+    // reaction) before the first frame, then start.
     const step = seconds => {
       clock += seconds;
       model.elapsedTime = clock * 1000;
@@ -137,18 +138,43 @@ export async function createLive2DPlayer({ PIXI, layer, settings, plan, blobs, m
     const core = internal.coreModel;
     const bounds = { minX: Infinity, maxX: -Infinity, minY: Infinity, maxY: -Infinity };
     const canvasSize = { width: internal.originalWidth, height: internal.originalHeight };
-    const sample = () => {
+    const sample = (into = bounds) => {
       const drawables = [];
       for (let i = 0; i < core.getDrawableCount(); i++) {
         drawables.push({ id: core.getDrawableId(i), vertices: internal.getDrawableVertices(i),
           opacity: core.getDrawableOpacity(i), visible: core.getDrawableDynamicFlagIsVisible(i) });
       }
-      live2dArtBounds(drawables, canvasSize, bounds);
+      return live2dArtBounds(drawables, canvasSize, into);
     };
     for (let t = 0; t <= SAMPLE_SECONDS; t += SAMPLE_STEP) {
       step(t ? SAMPLE_STEP : 0);
       sample();
     }
+    // Reactions move the figure (a bow, a leap), so the action display leaves
+    // room above it for them; see reactionFraming.
+    if (mode === 'skill' && plan.actions.length) {
+      const frames = [];
+      for (const name of plan.actions) {
+        await motions.startMotion(name, 0, live2d.MotionPriority.FORCE);
+        const length = motions.motionGroups[name]?.[0]?.getDuration?.();
+        const seconds = Math.min(length > 0 ? length : SAMPLE_SECONDS, REACTION_SECONDS);
+        for (let t = SAMPLE_STEP; t <= seconds; t += SAMPLE_STEP) {
+          step(SAMPLE_STEP);
+          frames.push(sample({ minX: Infinity, maxX: -Infinity, minY: Infinity, maxY: -Infinity }));
+        }
+      }
+      Object.assign(bounds, reactionFraming(bounds, frames, canvasSize));
+    }
+
+    // Listen only now, so the reactions sampled above do not count as played.
+    let group = '';
+    motions.on('motionStart', name => { group = name; });
+    motions.on('motionFinish', () => {
+      if (group === plan.idle || mode !== 'skill') return;
+      player.betweenActions = true;
+      gapLeft = ACTION_GAP;
+      onProgress(nextAction.progress());
+    });
     if (mode === 'skill') startAction();
 
     let placedKey = '';
@@ -163,13 +189,27 @@ export async function createLive2DPlayer({ PIXI, layer, settings, plan, blobs, m
       const spot = placeLive2D(bounds, { width, height }, space(), canvasSize);
       model.scale.set(spot.scale);
       model.position.set(spot.x, spot.y);
+      // The game shows a model through its canvas, so art a reaction moves
+      // past it (a close-up of the face) is cut off there instead of spilling
+      // over the navigation. Cubism's renderer turns off the scissor and
+      // stencil tests a PixiJS mask relies on, so the page clips the element.
+      // Its left edge, which lies inside the rail's own fade, fades out too.
+      const right = width - (spot.x + canvasSize.width * spot.scale);
+      const bottom = height - (spot.y + canvasSize.height * spot.scale);
+      const left = Math.max(0, spot.x);
+      canvas.style.clipPath = `inset(${[spot.y, right, bottom].map(edge => Math.max(0, edge).toFixed(1) + 'px').join(' ')} ${left.toFixed(1)}px)`;
+      const fade = left > 0 ? `linear-gradient(90deg, transparent ${left.toFixed(1)}px, #000 ${(left + CANVAS_FADE).toFixed(1)}px)` : '';
+      canvas.style.webkitMaskImage = fade;
+      canvas.style.maskImage = fade;
     };
     app.ticker.add(() => {
       const seconds = Math.min(app.ticker.deltaMS / 1000, 0.1);
       place();
       step(seconds);
-      if (player.betweenActions && (gapLeft -= seconds) <= 0) startAction();
-      frame(seconds);
+      // frame() is true while the companion moves on from this display: it
+      // then stays in idle rather than begin a reaction that would be cut off.
+      const hold = frame(seconds) === true;
+      if (player.betweenActions && !hold && (gapLeft -= seconds) <= 0) startAction();
     });
     place();
     // The eyes and head follow the pointer anywhere on the page, back to the
