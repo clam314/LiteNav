@@ -109,7 +109,7 @@ Spine 4.0 运行时 `/vendor/spine/spine-player-4.0.30.js` 下载自官方 npm �
 - 素材来源：[bungaku-moe/AzurLaneLive2D](https://github.com/bungaku-moe/AzurLaneLive2D)，目录 `azurlane/catalog.json` 固定其某次提交，只在选中时按需加载 `Live2D/{名称}/` 下的模型，未打包任何素材。每个 `{名称}.model3.json` 与同名 `.moc3` 构成一套皮肤；国服的和谐版本（`_hx`）在原版存在时不收录。上游仅有无关提交时沿用原固定提交。
 - `.moc3` 与贴图存放在 Git LFS 中，`raw.githubusercontent.com` 只返回指针文件，因此改从 `media.githubusercontent.com/media/…` 按同一固定提交读取；`model3.json`、物理与动作文件仍从 raw 读取。LFS 下载计入上游仓库的流量额度，额度用尽时 GitHub 会暂停其下载。
 - 名字：舰船与皮肤的中文名取自 [Pelom777/AzurLaneData](https://github.com/Pelom777/AzurLaneData) 的 `public/data/ship.json` 与 `skin.json`（每小时从国服客户端重新生成），按立绘名（不区分大小写）对应，目录记录所用提交。立绘名与舰船同名的皮肤显示为「默认」；同名舰船（例如天城与天城·航母）合并为一位人物。数据源暂未收录的新模型会在更新时列出并跳过。
-- 展示方式：立绘循环模型的 `idle` 动作；「互动」按随机顺序依次播放主界面与触摸动作（`home`、`login`、`mail`、`mission`、`mission_complete`、`complete`、`touch_head`、`touch_body`、`touch_special`、`main_N`），每段之间回到 `idle` 约 1.5 秒。L2D+ 模型的拖拽状态（`idleN`、`touch_idleN`、`touch_dragN`）与誓约动作 `wedding` 不播放。多数模型自带的 `effect`（飘带、光效等环境动画）在单独的动作队列上与其他动作同时循环。两种展示中，模型的视线与头部都会跟随页面上的鼠标指针（距离越远转得越多，最多到模型幅度的八成），指针离开窗口后回到正前方；台词与语音不播放。
+- 展示方式：立绘循环模型的 `idle` 动作；「互动」按随机顺序依次播放主界面与触摸动作（`home`、`login`、`mail`、`mission`、`mission_complete`、`complete`、`touch_head`、`touch_body`、`touch_special`、`main_N`），每段之间回到 `idle` 约 1.5 秒。L2D+ 模型的拖拽状态（`idleN`、`touch_idleN`、`touch_dragN`）与誓约动作 `wedding` 不播放。多数模型自带的 `effect`（飘带、光效等环境动画）在单独的动作队列上与其他动作同时循环。动作用 PartOpacity 曲线切换互斥的部件（持扇与垂下的手臂、吉祥物的两种姿势等），框架默认把这些曲线写进同名参数而不生效，本页打开 `CubismConfig.setOpacityFromMotion` 让它们直接作用于部件；每帧先把部件恢复为模型自带的不透明度，再由动作切换，因此互动动作切换过的部件不会残留到待机。两种展示中，模型的视线与头部都会跟随页面上的鼠标指针（距离越远转得越多，最多到模型幅度的八成），指针离开窗口后回到正前方；台词与语音不播放。
 - 取景：在 8 秒的 `idle` 中采样可见网格的范围（限制在模型画布内，并排除 `Touch` 开头的触摸判定网格，部分模型把它们放在画布外很远处），按此范围填满侧栏高度、贴住底边，水平居中于导航留出的空白区域。带整幅场景的模型会超出两侧，左侧由侧栏渐隐遮住。
 
 ### 动态立绘

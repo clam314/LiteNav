@@ -65,6 +65,12 @@ export async function createLive2DPlayer({ PIXI, layer, settings, plan, blobs, m
   try {
     // Every file is already a full blob URL; the library's resolver would turn
     // blob:http://… into blob:http//….
+    // Azur Lane motions switch alternative parts on and off (a fan-holding arm
+    // and a resting one, two poses of a mascot) with PartOpacity curves. By
+    // default the framework writes those curves to a parameter of the same
+    // name, which these models lack, so every alternative stayed drawn on top
+    // of the others.
+    live2d.CubismConfig.setOpacityFromMotion = true;
     const modelSettings = new live2d.Cubism4ModelSettings(withLive2DFiles(settings, plan, urls));
     modelSettings.resolveURL = path => path;
     model = await live2d.Live2DModel.from(modelSettings, {
@@ -77,6 +83,16 @@ export async function createLive2DPlayer({ PIXI, layer, settings, plan, blobs, m
     const motions = internal.motionManager;
     // The framework's clock, in seconds; motions are scheduled against it.
     let clock = 0;
+
+    // Part opacities are never reset between frames, so a part that a reaction
+    // switched and idle does not drive would keep the reaction's state. Every
+    // frame starts from the model's own opacities; the motions then switch
+    // the parts they drive.
+    const partOpacities = Array.from({ length: internal.coreModel.getPartCount() },
+      (_, index) => internal.coreModel.getPartOpacityByIndex(index));
+    internal.on('beforeMotionUpdate', () => {
+      partOpacities.forEach((opacity, index) => internal.coreModel.setPartOpacityByIndex(index, opacity));
+    });
 
     // The ambient effect loop runs on its own queue next to the base motion.
     if (plan.effect) {
