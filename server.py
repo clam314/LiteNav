@@ -4,12 +4,15 @@
 from __future__ import annotations
 
 import argparse
+import base64
 import copy
 import gzip
+import hmac
 import ipaddress
 import json
 import logging
 import mimetypes
+import os
 import re
 import socket
 import sqlite3
@@ -31,6 +34,11 @@ from urllib.request import Request, urlopen
 
 ROOT = Path(__file__).resolve().parent
 MAX_BODY = 1024 * 1024
+AUTH_PAGE = (
+    '<!doctype html><html lang="zh-CN"><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">'
+    '<title>轻航 LiteNav</title><body style="font:16px system-ui;background:#0f1115;color:#e6e8eb;display:grid;place-items:center;min-height:90vh">'
+    '<p>需要访问口令。刷新页面后在浏览器弹出的窗口中输入口令（用户名可任意填写）。</p></body></html>'
+)
 # Text files at least this large are sent gzip-compressed when the browser accepts it.
 GZIP_MIN_SIZE = 1024
 DEFAULT_SETTINGS = {"checkInterval": 60, "failureThreshold": 3, "timeout": 5}
@@ -741,11 +749,18 @@ class AppServer(ThreadingHTTPServer):
     # blank.
     request_queue_size = 128
 
-    def __init__(self, address, store: Store, public_dir: Path | str = ROOT / "public"):
+    # Wrong passwords are answered one at a time after this pause, so guessing
+    # runs at about one attempt a second however many connections try.
+    auth_failure_delay = 1.0
+
+    def __init__(self, address, store: Store, public_dir: Path | str = ROOT / "public", password: str | None = None):
         self.store = store
         self.monitor = Monitor(store)
         self.link_checker = LinkChecker(store)
         self.public_dir = Path(public_dir).resolve()
+        # Without a password every request is served, as before.
+        self.password = password or None
+        self.auth_lock = threading.Lock()
         super().__init__(address, Handler)
 
 
@@ -762,9 +777,48 @@ class Handler(BaseHTTPRequestHandler):
     def log_message(self, fmt, *args):
         LOG.info("%s %s", self.address_string(), fmt % args)
 
-    def json_response(self, value: dict, status: int = 200):
+    def authorized(self) -> bool:
+        """HTTP Basic credentials; the user name is not checked, only the password."""
+        password = self.server.password
+        if not password:
+            return True
+        header = self.headers.get("Authorization", "")
+        scheme, _, value = header.partition(" ")
+        if scheme.lower() == "basic":
+            try:
+                given = base64.b64decode(value.strip(), validate=True).decode("utf-8").partition(":")[2]
+            except (ValueError, UnicodeError):
+                given = ""
+            if hmac.compare_digest(given.encode("utf-8"), password.encode("utf-8")):
+                return True
+        if header:
+            # A wrong attempt, not a first visit without credentials.
+            with self.server.auth_lock:
+                time.sleep(self.server.auth_failure_delay)
+        return False
+
+    def challenge(self, api: bool):
+        headers = {"WWW-Authenticate": 'Basic realm="LiteNav", charset="UTF-8"'}
+        if api:
+            self.json_response({"error": "需要输入访问口令"}, 401, headers)
+            return
+        # Shown when the browser's sign-in prompt is cancelled.
+        payload = AUTH_PAGE.encode("utf-8")
+        self.send_response(401)
+        for name, header in headers.items():
+            self.send_header(name, header)
+        self.send_header("Content-Type", "text/html; charset=utf-8")
+        self.send_header("Content-Length", str(len(payload)))
+        self.send_header("Cache-Control", "no-store")
+        self.send_header("X-Content-Type-Options", "nosniff")
+        self.end_headers()
+        self.write_body(payload)
+
+    def json_response(self, value: dict, status: int = 200, headers: dict | None = None):
         payload = json.dumps(value, ensure_ascii=False).encode("utf-8")
         self.send_response(status)
+        for name, header in (headers or {}).items():
+            self.send_header(name, header)
         self.send_header("Content-Type", "application/json; charset=utf-8")
         self.send_header("Content-Length", str(len(payload)))
         self.send_header("Cache-Control", "no-store")
@@ -797,7 +851,14 @@ class Handler(BaseHTTPRequestHandler):
     def do_GET(self):
         try:
             path = urlsplit(self.path).path
-            if path == "/api/state":
+            if not self.authorized():
+                # Health checks (Docker, uptime monitors) still learn that the
+                # server is up, but not which services it watches.
+                if path == "/api/health":
+                    self.json_response({"status": "ok"})
+                else:
+                    self.challenge(path.startswith("/api/"))
+            elif path == "/api/state":
                 self.json_response(self.server.store.state())
             elif path == "/api/health":
                 self.json_response(self.server.store.health())
@@ -827,6 +888,9 @@ class Handler(BaseHTTPRequestHandler):
 
     def mutate(self, method: str):
         try:
+            if not self.authorized():
+                self.challenge(True)
+                return
             path = urlsplit(self.path).path
             body = self.json_body()
             if method == "PUT" and path == "/api/state":
@@ -912,9 +976,14 @@ def main():
     parser.add_argument("--data-dir", default=str(ROOT / "data"))
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(message)s")
-    app = AppServer((args.host, args.port), Store(args.data_dir))
+    password = os.environ.get("LITENAV_PASSWORD", "")
+    app = AppServer((args.host, args.port), Store(args.data_dir), password=password)
     app.monitor.start()
     print("轻航 LiteNav 已启动：http://" + args.host + ":" + str(app.server_port), flush=True)
+    if password:
+        LOG.info("已开启访问口令（LITENAV_PASSWORD）")
+    elif args.host not in ("127.0.0.1", "localhost", "::1"):
+        LOG.warning("未设置访问口令：能访问此端口的人都可以查看和修改配置。设置环境变量 LITENAV_PASSWORD 即可开启")
     try:
         app.serve_forever()
     except KeyboardInterrupt:

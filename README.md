@@ -115,6 +115,21 @@ docker run -d --name litenav -p 8765:8765 -v litenav-data:/app/data ghcr.io/clam
 
 启动后打开 <http://localhost:8765> 即可使用。
 
+### 访问口令
+
+默认不需要登录。在局域网或公网上使用时，建议设置环境变量 `LITENAV_PASSWORD` 开启访问口令：打开页面时浏览器会弹出登录窗口，输入这个口令即可（用户名可任意填写），所有页面和接口都需要口令。
+
+```sh
+docker run -d --name litenav -p 8765:8765 -e LITENAV_PASSWORD='换成你的口令' -v litenav-data:/app/data ghcr.io/clam314/litenav:latest
+```
+
+使用 Docker Compose 时，在 `compose.yaml` 同目录的 `.env` 文件中写入 `LITENAV_PASSWORD=换成你的口令`；直接运行时用 `LITENAV_PASSWORD='换成你的口令' python3 server.py`。
+
+- 口令错误时每次约等待 1 秒，限制暴力猜测。
+- `/api/health` 无需口令，但只返回 `{"status": "ok"}`，供 Docker 健康检查和外部监控使用；登录后才返回各服务的状态。
+- 口令以 HTTP Basic 认证发送，本身没有加密。经公网访问时请放在 HTTPS 反向代理之后。
+- 监听非本机地址却没有设置口令时，启动日志会给出提醒。
+
 ## 数据与备份
 
 - 仓库只包含通用的默认导航（[`seed.json`](seed.json)），首次启动时用它初始化。

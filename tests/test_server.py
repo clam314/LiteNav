@@ -1,4 +1,5 @@
 """配置、监控与 HTTP API 的行为回归。"""
+import base64
 import copy
 import gzip
 import http.client
@@ -533,6 +534,81 @@ class HTTPCase(DataFixture):
         self.assertEqual(status, 403)
         self.assertIn("不允许跨站", json.loads(body)["error"])
 
+
+
+
+class AuthCase(HTTPCase):
+    password = "轻航-口令"
+
+    def setUp(self):
+        DataFixture.setUp(self)
+        self.public = self.directory / "public"
+        self.public.mkdir()
+        (self.public / "index.html").write_text("<p>轻航</p>", "utf-8")
+        self.app = server.AppServer(("127.0.0.1", 0), self.store, self.public, password=self.password)
+        self.app.auth_failure_delay = 0
+        self.worker = threading.Thread(target=self.app.serve_forever, daemon=True)
+        self.worker.start()
+        self.base = "http://127.0.0.1:" + str(self.app.server_port)
+
+    def basic(self, password, user="anyone"):
+        return {"Authorization": "Basic " + base64.b64encode(f"{user}:{password}".encode()).decode()}
+
+    def test_everything_but_a_minimal_health_check_needs_the_password(self):
+        for path in ("/", "/index.html", "/api/state", "/api/link-check", "/api/missing"):
+            status, headers, body = self.raw(path)
+            self.assertEqual(status, 401, path)
+            self.assertEqual(headers["WWW-Authenticate"], 'Basic realm="LiteNav", charset="UTF-8"')
+            self.assertNotIn("轻航</p>", body.decode())
+        self.assertIn("text/html", self.raw("/")[1]["Content-Type"])
+        self.assertIn("application/json", self.raw("/api/state")[1]["Content-Type"])
+        status, _, body = self.raw("/api/health")
+        self.assertEqual((status, json.loads(body)), (200, {"status": "ok"}), "monitors learn only that it is up")
+        self.assertEqual(self.raw("/api/health", "HEAD")[:1], (200,))
+        self.assertEqual(self.raw("/", "HEAD")[0], 401)
+
+    def test_wrong_or_malformed_credentials_are_refused(self):
+        for headers in (self.basic("wrong"), self.basic(""), {"Authorization": "Basic !!!"},
+                        {"Authorization": "Bearer " + base64.b64encode(self.password.encode()).decode()}, {"Authorization": "Basic " + base64.b64encode(b"\xff\xfe").decode()}):
+            self.assertEqual(self.raw("/api/state", headers=headers)[0], 401, headers)
+        self.assertEqual(self.raw("/api/health", headers=self.basic("wrong"))[2], b'{"status": "ok"}')
+
+    def test_the_password_opens_pages_and_the_api_whatever_the_user_name(self):
+        status, _, body = self.raw("/", headers=self.basic(self.password))
+        self.assertEqual((status, body.decode()), (200, "<p>轻航</p>"))
+        status, _, body = self.raw("/api/health", headers=self.basic(self.password, "me"))
+        self.assertIn("services", json.loads(body))
+        state = json.loads(self.raw("/api/state", headers=self.basic(self.password))[2])
+        self.assertEqual(self.request("/api/state", state, "PUT", self.basic(self.password))[0], 200)
+
+    def test_writes_without_the_password_change_nothing(self):
+        before = self.store.state()
+        changed = {**before, "links": []}
+        self.assertEqual(self.request("/api/state", changed, "PUT")[0], 401)
+        self.assertEqual(self.request("/api/state", changed, "PUT", self.basic("wrong"))[0], 401)
+        self.assertEqual(self.request("/api/check", {}, "POST")[0], 401)
+        self.assertEqual(self.store.state(), before)
+
+    def test_wrong_attempts_are_slowed_but_first_visits_are_not(self):
+        self.app.auth_failure_delay = 0.3
+        started = time.monotonic()
+        self.raw("/api/state")
+        self.assertLess(time.monotonic() - started, 0.25, "a visit without credentials is answered at once")
+        started = time.monotonic()
+        self.raw("/api/state", headers=self.basic("wrong"))
+        self.assertGreaterEqual(time.monotonic() - started, 0.3)
+
+    # The inherited cases run against the open server only.
+    test_state_roundtrip_and_conflict_status = None
+    test_metadata_and_disabled_manual_check = None
+    test_link_check_endpoints = None
+    test_batch_metadata_uses_known_sites_only = None
+    test_static_cannot_escape_public_directory = None
+    test_cross_site_write_rejected = None
+    test_static_files_revalidate_with_etag_and_last_modified = None
+    test_text_files_are_gzipped_when_accepted = None
+    test_head_answers_like_get_without_a_body = None
+    test_listen_queue_holds_a_page_worth_of_module_requests = None
 
 
 class FakeSite(BaseHTTPRequestHandler):

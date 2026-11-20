@@ -5,6 +5,9 @@ services:
     build: .
     ports:
       - "8765:8765"
+    environment:
+      # Set to require this password (any user name) for every page and API.
+      LITENAV_PASSWORD: ${LITENAV_PASSWORD:-}
     volumes:
       - guihang-data:/app/data
     restart: unless-stopped
