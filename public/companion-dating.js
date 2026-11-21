@@ -135,18 +135,14 @@ export function createDatingTour({ spine, player, tracks = true, random = Math.r
   // (letterbox frames made of four pieces never cover it). The backdrop slots
   // are hidden while the scene plays. Without a picture, frame the figure.
   const probe = new spine.Skeleton(data);
-  // Some scenes keep their artwork in per-stage skins and draw nothing with
-  // the default skin; each stage then wears the skin that holds its
-  // attachments (see stageSkins), and a transition wears both looks.
-  const posed = (skin, animation, time) => {
-    probe.setSkin(skin);
-    probe.setToSetupPose();
-    animation.apply(probe, time, time, false, [], 1, spine.MixBlend.setup, spine.MixDirection.mixIn);
-    probe.updateWorldTransform();
-    return probe;
-  };
-  const first = data.findAnimation(script[0].idle);
-  const defaultDraws = drawnParts([posed(player.skeleton.skin || data.defaultSkin, first, first.duration / 2)]).length > 0;
+  // Scenes keep alternative parts in skins: a whole look per stage (安洁莉卡
+  // 「霓虹救星」, whose default skin draws nothing), or one item in several
+  // versions next to the default skin (奥利维尔「传奇退役」's wand, 黎维塔
+  // 「服装 92」's inner layer, 尤里「服装 93」's phone, 悠丝缇亚「服装 96」's arm and
+  // towel). Without one, those parts are not drawn at all; with all of them,
+  // the versions overlap. Each stage wears the skin that holds most of its
+  // attachments (see stageSkins), over the default skin, which the runtime
+  // falls back to; a transition wears both stages' skins.
   const initial = player.skeleton.skin || data.defaultSkin;
   const holds = new Map(data.skins.map(skin => [skin, new Set(skin.getAttachments().map(entry => entry.slotIndex + ':' + entry.name))]));
   // Distinct attachments, so one switched on every frame counts once.
@@ -161,8 +157,8 @@ export function createDatingTour({ spine, player, tracks = true, random = Math.r
     for (const key of keys) if (holds.get(skin).has(key)) count += 1;
     return count;
   };
-  const skins = defaultDraws ? script.map(() => initial) :
-    stageSkins(script, data.skins.filter(skin => skin !== data.defaultSkin), cover).map(skin => skin || initial);
+  const skins = stageSkins(script, data.skins.filter(skin => skin !== data.defaultSkin && skin.getAttachments().length), cover)
+    .map(skin => skin || initial);
   // A transition turns one stage's look into the next, keyed in both skins
   // (安洁莉卡「霓虹救星」 from idle1_2 to idle3_1), so it wears the two together.
   const crossings = script.map((stage, index) => {
