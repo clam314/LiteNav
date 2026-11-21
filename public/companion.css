@@ -187,3 +187,6 @@ body[data-companion] .toast-root { bottom: 82px; }
 @media (prefers-reduced-motion: reduce) {
   #companion-root *, #companion-root *::after { transition: none; }
 }
+
+/* 设置 → 显示 → 显示角色按钮 off: the corner button and its menu go away. */
+body[data-hide-companion-button] .companion-controls { display: none; }

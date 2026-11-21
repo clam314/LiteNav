@@ -74,6 +74,13 @@ function toast(message, action) {
   setTimeout(() => element.remove(), action ? 10000 : 4200);
 }
 
+// Display switches from 设置 → 显示; configurations from before them keep both on.
+const opensNewTab = () => config?.settings?.openInNewTab !== false;
+const linkTarget = () => opensNewTab() ? ' target="_blank" rel="noopener noreferrer"' : ' rel="noreferrer"';
+function applyDisplaySettings() {
+  document.body.toggleAttribute('data-hide-companion-button', config?.settings?.showCompanionButton === false);
+}
+
 function mutate(change, { renderPage = true } = {}) {
   const perform = async () => {
     let draft = structuredClone(config);
@@ -87,6 +94,7 @@ function mutate(change, { renderPage = true } = {}) {
       change(draft);
       config = await api('/api/state', { method: 'PUT', body: JSON.stringify(draft) });
     }
+    applyDisplaySettings();
     if (renderPage) render();
     return config;
   };
@@ -139,13 +147,13 @@ function linkIcon(link) {
 function shortcutMarkup(link) {
   const content = brokenFlag(link) + linkIcon(link) + '<span class="shortcut-name">' + esc(link.name).replace(/([a-z])([A-Z])/g, '$1<wbr>$2') + '</span>';
   if (editMode) return '<div class="shortcut editable-item" draggable="true" data-drag-kind="link" data-resource="' + esc(link.id) + '" data-scope="favorites" tabindex="0" aria-label="' + esc(link.name) + '，可拖动排序；按回车编辑">' + content + itemActions(link, 'favorites') + '</div>';
-  return '<a class="shortcut" href="' + esc(link.url) + '" target="_blank" rel="noopener noreferrer" aria-label="打开 ' + esc(link.name) + '" title="' + esc(link.name) + '\n' + esc(link.url) + '">' + content + '</a>';
+  return '<a class="shortcut" href="' + esc(link.url) + '"' + linkTarget() + ' aria-label="打开 ' + esc(link.name) + '" title="' + esc(link.name) + '\n' + esc(link.url) + '">' + content + '</a>';
 }
 
 function siteMarkup(link, categoryId) {
   const content = brokenFlag(link) + linkIcon(link) + '<span class="site-copy"><span class="site-name">' + esc(link.name) + '</span><span class="site-domain">' + esc(domain(link.url)) + '</span></span>';
   if (editMode) return '<div class="site-link editable-item" draggable="true" data-drag-kind="link" data-resource="' + esc(link.id) + '" data-scope="category-' + esc(categoryId) + '" tabindex="0" aria-label="' + esc(link.name) + '，可拖动排序或拖到其他分类；按回车编辑">' + content + itemActions(link, 'category') + '</div>';
-  return '<a class="site-link" href="' + esc(link.url) + '" target="_blank" rel="noopener noreferrer" title="' + esc(link.name) + '\n' + esc(link.url) + '">' + content + '<span class="link-arrow">' + icon('arrow-up-right', 13) + '</span></a>';
+  return '<a class="site-link" href="' + esc(link.url) + '"' + linkTarget() + ' title="' + esc(link.name) + '\n' + esc(link.url) + '">' + content + '<span class="link-arrow">' + icon('arrow-up-right', 13) + '</span></a>';
 }
 
 function categoryMarkup(category) {
@@ -182,7 +190,7 @@ function serviceMarkup(link) {
   if (status === 'offline' || status === 'degraded') detail = '连续 ' + (state.consecutiveFailures || 1) + ' 次未响应' + (status === 'degraded' ? '，正在确认' : '');
   const lastChecked = state.lastChecked ? new Date(typeof state.lastChecked === 'number' && state.lastChecked < 1e12 ? state.lastChecked * 1000 : state.lastChecked).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '尚未检测';
   return '<article class="service-card ' + (status === 'offline' ? 'has-error' : '') + (editMode ? ' is-sortable' : '') + '" data-service="' + esc(link.id) + '"' + (editMode ? ' draggable="true" data-drag-kind="service" data-resource="' + esc(link.id) + '"' : '') + '><header class="service-card-header">' +
-    '<a class="service-identity"' + (editMode ? ' draggable="false"' : '') + ' href="' + esc(link.url) + '" target="_blank" rel="noopener noreferrer">' + linkIcon(link) + '<span class="service-copy"><h3>' + esc(link.name) + '</h3><span class="site-domain">' + esc(domain(link.url)) + '</span></span></a>' +
+    '<a class="service-identity"' + (editMode ? ' draggable="false"' : '') + ' href="' + esc(link.url) + '"' + linkTarget() + '>' + linkIcon(link) + '<span class="service-copy"><h3>' + esc(link.name) + '</h3><span class="site-domain">' + esc(domain(link.url)) + '</span></span></a>' +
     '<span class="status-badge ' + status + '">' + statusLabels[status] + '</span></header>' +
     (link.description ? '<p class="service-description">' + esc(link.description) + '</p>' : '') +
     '<div class="service-details"><p>' + esc(detail) + '</p><div class="service-meta">最近检测：' + esc(lastChecked) + '</div>' +
@@ -201,9 +209,18 @@ function servicesMarkup() {
     '<div class="service-grid">' + (services.map(serviceMarkup).join('') || '<div class="empty-state">' + icon('server', 30) + '<h2>添加你的第一个服务</h2><p>NAS、影音库或智能家居，都可以放在这里。</p><button class="btn btn-primary" data-action="add-service">添加服务</button></div>') + '</div>';
 }
 
+function displaySettingsMarkup() {
+  const row = (name, title, hint) => '<label class="setting-switch"><span class="setting-switch-copy"><span class="setting-switch-title">' + title + '</span><span class="field-hint">' + hint + '</span></span>' +
+    '<input class="switch-input" type="checkbox" role="switch" data-setting="' + name + '"' + (config.settings[name] !== false ? ' checked' : '') + '></label>';
+  return '<section class="settings-section"><div class="section-heading">' + icon('grid', 22) + '<h2>显示</h2></div><div class="settings-card setting-switches">' +
+    row('openInNewTab', '在新标签页打开网站', '关闭后，网址和服务在当前页面打开。') +
+    row('showCompanionButton', '显示角色按钮', '关闭后右下角的角色设置按钮不再显示，角色本身按原有设置继续显示；需要调整角色时重新打开这里。') +
+    '</div></section>';
+}
+
 function settingsMarkup() {
   const categories = directoryCategories();
-  return '<section class="settings-section"><div class="section-heading">' + icon('settings', 22) + '<h2>检测设置</h2></div><form class="settings-card settings-form" id="settings-form"><div class="field-row">' +
+  return displaySettingsMarkup() + '<section class="settings-section"><div class="section-heading">' + icon('settings', 22) + '<h2>检测设置</h2></div><form class="settings-card settings-form" id="settings-form"><div class="field-row">' +
     '<label class="field"><span class="field-label">检测间隔（秒）</span><input class="form-input" type="number" name="checkInterval" min="10" max="86400" value="' + esc(config.settings.checkInterval) + '" required></label>' +
     '<label class="field"><span class="field-label">连续异常次数</span><input class="form-input" type="number" name="failureThreshold" min="1" max="10" value="' + esc(config.settings.failureThreshold) + '" required></label>' +
     '<label class="field"><span class="field-label">请求超时（秒）</span><input class="form-input" type="number" name="timeout" min="1" max="30" value="' + esc(config.settings.timeout) + '" required></label></div>' +
@@ -226,7 +243,7 @@ function searchMarkup() {
 
 function searchOptionMarkup(entry, index) {
   const selected = index === searchIndex;
-  const attributes = ' id="quick-search-option-' + index + '" role="option" aria-selected="' + selected + '" class="quick-search-option' + (selected ? ' is-selected' : '') + '" data-search-index="' + index + '" href="' + esc(entry.url) + '" target="_blank" rel="noopener noreferrer" tabindex="-1"';
+  const attributes = ' id="quick-search-option-' + index + '" role="option" aria-selected="' + selected + '" class="quick-search-option' + (selected ? ' is-selected' : '') + '" data-search-index="' + index + '" href="' + esc(entry.url) + '"' + linkTarget() + ' tabindex="-1"';
   if (entry.google) return '<a' + attributes + '><span class="quick-search-google">' + icon('search', 16) + '</span><span class="quick-search-copy"><span class="quick-search-name">用 Google 搜索“' + esc(searchQuery.trim()) + '”</span><span class="quick-search-meta">google.com</span></span></a>';
   const link = entry.link;
   const place = link.kind === 'service' ? '服务' : config.categories.find((category) => category.id === link.categoryId)?.name || '';
@@ -258,10 +275,13 @@ function resetSearch() {
   updateSearchResults();
 }
 
-function openSearchResult(index, newTab = true) {
+// open is false when a result was already followed as a link and only the search resets.
+function openSearchResult(index, open = true) {
   const entry = searchResults[index];
-  if (entry && newTab) window.open(entry.url, '_blank', 'noopener,noreferrer');
-  else if (newTab) return;
+  if (entry && open) {
+    if (!opensNewTab()) { location.assign(entry.url); return; }
+    window.open(entry.url, '_blank', 'noopener,noreferrer');
+  } else if (open) return;
   resetSearch();
 }
 
@@ -379,6 +399,7 @@ async function applyRedirects(ids) {
 
 function render() {
   if (!config) return;
+  applyDisplaySettings();
   const searchInput = document.querySelector('#quick-search-input');
   const searchFocus = searchInput && document.activeElement === searchInput ? [searchInput.selectionStart, searchInput.selectionEnd] : null;
   const titles = { home: '我的导航', services: '我的服务', settings: '设置', tools: '工具箱' };
@@ -856,10 +877,29 @@ document.addEventListener('submit', async (event) => {
   const data = new FormData(form);
   try {
     await mutate((state) => {
-      state.settings = { checkInterval: Number(data.get('checkInterval')), failureThreshold: Number(data.get('failureThreshold')), timeout: Number(data.get('timeout')) };
+      state.settings = { ...state.settings, checkInterval: Number(data.get('checkInterval')), failureThreshold: Number(data.get('failureThreshold')), timeout: Number(data.get('timeout')) };
     });
     toast('检测设置已保存');
   } catch (error) { toast(error.message); }
+});
+
+// The display switches save at once and leave the page as it is, so focus stays on them.
+document.addEventListener('change', async (event) => {
+  const input = event.target.closest?.('[data-setting]');
+  if (!input) return;
+  const name = input.dataset.setting;
+  const value = input.checked;
+  const notes = {
+    openInNewTab: value ? '网站将在新标签页打开' : '网站将在当前页面打开',
+    showCompanionButton: value ? '已显示角色按钮' : '已隐藏角色按钮',
+  };
+  try {
+    await mutate((state) => { state.settings = { ...state.settings, [name]: value }; }, { renderPage: false });
+    toast(notes[name]);
+  } catch (error) {
+    input.checked = !value;
+    toast(error.message);
+  }
 });
 
 document.addEventListener('change', (event) => {
@@ -1190,7 +1230,7 @@ document.addEventListener('click', (event) => {
 window.addEventListener('hashchange', route);
 window.addEventListener('focus', () => {
   if (!config || currentDialog || editMode) return;
-  api('/api/state').then((latest) => { if (latest.revision !== config.revision) { config = latest; if (view !== 'tools') render(); } }).catch(() => {});
+  api('/api/state').then((latest) => { if (latest.revision !== config.revision) { config = latest; applyDisplaySettings(); if (view !== 'tools') render(); } }).catch(() => {});
   refreshHealth().catch(() => {});
 });
 

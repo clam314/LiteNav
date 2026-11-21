@@ -72,6 +72,21 @@ class StoreCase(DataFixture):
         reopened = server.Store(self.directory / "data", self.seed)
         self.assertEqual(reopened.state(), state_before)
 
+    def test_display_switches_default_on_and_must_be_true_or_false(self):
+        state = self.store.state()
+        legacy = {**state, "settings": {"checkInterval": 60, "failureThreshold": 3, "timeout": 5}}
+        saved = self.store.save(legacy)
+        self.assertIs(saved["settings"]["openInNewTab"], True, "older configurations and backups keep new tabs")
+        self.assertIs(saved["settings"]["showCompanionButton"], True)
+        saved["settings"] = {**saved["settings"], "openInNewTab": False, "showCompanionButton": False}
+        changed = self.store.save(saved)
+        reopened = server.Store(self.directory / "data", self.seed).state()
+        self.assertEqual((reopened["settings"]["openInNewTab"], reopened["settings"]["showCompanionButton"]), (False, False))
+        for bad in ("false", 0, None, 1):
+            with self.assertRaises(server.APIError):
+                self.store.save({**changed, "settings": {**changed["settings"], "openInNewTab": bad}})
+        self.assertEqual(self.store.state(), changed)
+
     def test_saved_config_survives_reopen(self):
         state = self.store.state()
         state["links"][0]["name"] = "我的代码"

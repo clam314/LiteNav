@@ -402,6 +402,23 @@ input, select, textarea { min-width: 0; }
 .category-settings-count { color: var(--muted); font-size: 12px; }
 .column-picker { flex: 0 0 112px; margin-left: auto; }
 .settings-description { color: var(--muted); font-size: 13px; }
+.setting-switches { padding-top: 6px; padding-bottom: 6px; }
+.setting-switch { display: flex; align-items: center; gap: 16px; padding: 12px 0; cursor: pointer; }
+.setting-switch + .setting-switch { border-top: 1px solid var(--line); }
+.setting-switch-copy { flex: 1; min-width: 0; display: grid; gap: 3px; }
+.setting-switch-title { color: var(--ink); font-size: 14px; }
+.switch-input {
+  appearance: none; position: relative; flex: 0 0 38px; width: 38px; height: 22px; margin: 0;
+  border: 1px solid var(--line-strong); border-radius: 12px; background: var(--input); cursor: pointer;
+  transition: background-color .15s, border-color .15s;
+}
+.switch-input::after {
+  content: ''; position: absolute; top: 3px; left: 3px; width: 14px; height: 14px;
+  border-radius: 50%; background: var(--muted); transition: transform .15s, background-color .15s;
+}
+.switch-input:checked { border-color: var(--blue); background: var(--blue); }
+.switch-input:checked::after { transform: translateX(16px); background: var(--blue-on); }
+@media (prefers-reduced-motion: reduce) { .switch-input, .switch-input::after { transition: none; } }
 .type-switch button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; }
 .empty-category { grid-column: 1 / -1; min-height: 72px; padding: 14px 2px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 12px; }
 .boot-error { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 24px; text-align: center; }

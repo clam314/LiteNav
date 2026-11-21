@@ -41,7 +41,7 @@ AUTH_PAGE = (
 )
 # Text files at least this large are sent gzip-compressed when the browser accepts it.
 GZIP_MIN_SIZE = 1024
-DEFAULT_SETTINGS = {"checkInterval": 60, "failureThreshold": 3, "timeout": 5}
+DEFAULT_SETTINGS = {"checkInterval": 60, "failureThreshold": 3, "timeout": 5, "openInNewTab": True, "showCompanionButton": True}
 LOG = logging.getLogger("litenav")
 
 
@@ -98,6 +98,12 @@ def text_field(value: object, label: str, maximum: int, default: str = "") -> st
     if not isinstance(value, str) or len(value) > maximum:
         raise APIError(label + "格式不正确")
     return value.strip()
+
+
+def switch(value: object, label: str) -> bool:
+    if not isinstance(value, bool):
+        raise APIError(label + "必须是开或关")
+    return value
 
 
 def integer(value: object, label: str, minimum: int, maximum: int) -> int:
@@ -185,6 +191,9 @@ def validate_state(value: object) -> dict:
         "checkInterval": integer(supplied_settings.get("checkInterval", 60), "检测间隔", 10, 86400),
         "failureThreshold": integer(supplied_settings.get("failureThreshold", 3), "连续失败次数", 1, 10),
         "timeout": integer(supplied_settings.get("timeout", 5), "检测超时", 1, 30),
+        # Display switches; configurations and backups from before them keep the old behaviour.
+        "openInNewTab": switch(supplied_settings.get("openInNewTab", True), "在新标签页打开网站"),
+        "showCompanionButton": switch(supplied_settings.get("showCompanionButton", True), "显示角色按钮"),
     }
     return {"categories": cleaned_categories, "links": cleaned_links, "settings": settings}
 
