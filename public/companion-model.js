@@ -4,6 +4,9 @@ import { DEFAULT_GAMES, selectedGames } from './companion-games.js';
 export const PREFERENCES_KEY = 'guihang.companion.preferences';
 // How far each 有缘之客 scene got, kept across visits: { costume key: { stage, played } }.
 export const SCENE_PROGRESS_KEY = 'guihang.companion.scenes';
+// How far each Azur Lane costume got through its round of reactions, kept
+// across visits: { costume key: { queue, last } } (see createActionOrder).
+export const REACTION_PROGRESS_KEY = 'guihang.companion.reactions';
 export const LEGACY_KEY = 'guihang.companion.enabled';
 
 // Minutes between random people while the page stays open; 0 changes only on reload.
@@ -52,6 +55,20 @@ export function normalizeSceneProgress(value) {
     scenes[key] = { stage: entry.stage, played: [...new Set(played)].slice(0, 200) };
   }
   return scenes;
+}
+
+// Stored reaction rounds, cleaned like scene progress: positions that cannot
+// be one are dropped, and an entry that is not a round is left out.
+export function normalizeReactionProgress(value) {
+  const costumes = {};
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return costumes;
+  const position = index => Number.isInteger(index) && index >= 0 && index < 1000;
+  for (const [key, entry] of Object.entries(value).slice(0, SCENE_LIMIT)) {
+    if (!key || !entry || typeof entry !== 'object' || Array.isArray(entry)) continue;
+    const queue = Array.isArray(entry.queue) ? [...new Set(entry.queue.filter(position))].slice(0, 200) : [];
+    costumes[key] = { queue, last: position(entry.last) ? entry.last : null };
+  }
+  return costumes;
 }
 
 export const gameOf = character => character?.game || 'bd2';

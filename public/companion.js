@@ -15,8 +15,8 @@ import { readExternalSkeleton, performanceMenu, createPerformance } from './comp
 import { createDatingTour } from './companion-dating.js';
 import { createPaintingPlayer } from './companion-painting-player.js';
 import { loadRuntime, loadSpine38, loadLive2DRuntime } from './companion-runtimes.js';
-import { readPreferences, writePreferences, readSceneProgress, writeSceneProgress, mediaQuery, disposePlayer, supportsWebGL }
-  from './companion-browser.js';
+import { readPreferences, writePreferences, readSceneProgress, writeSceneProgress, readReactionProgress, writeReactionProgress,
+  mediaQuery, disposePlayer, supportsWebGL } from './companion-browser.js';
 import { fetchResource, fetchAsset, withAbort, partFor, loadCharacter } from './companion-loaders.js';
 import { createVoice, voiceSupported, voiceUrl } from './companion-voice.js';
 import { railSpace, alignedViews, spawnPartner, layoutCamera } from './companion-camera.js';
@@ -188,7 +188,11 @@ export function initCompanion() {
   const reactionProgress = new Map();
   const reactionResume = record => {
     const key = costumeKey(record.selection.costume);
-    return { progress: reactionProgress.get(key), onProgress: progress => reactionProgress.set(key, progress) };
+    return {
+      // Browser storage keeps it across reloads (and shares another tab's); this map when storage is blocked.
+      progress: readReactionProgress()[key] || reactionProgress.get(key),
+      onProgress: progress => { reactionProgress.set(key, progress); writeReactionProgress(key, progress); },
+    };
   };
   const enabled = () => preferences.portraits || preferences.skills;
   const initialMode = () => preferences.portraits ? 'portrait' : 'skill';

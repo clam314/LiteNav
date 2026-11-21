@@ -1,6 +1,7 @@
 // Browser services the companion relies on, each tolerant of what a page
 // may block or lack: storage, media queries, WebGL.
-import { PREFERENCES_KEY, LEGACY_KEY, SCENE_PROGRESS_KEY, normalizePreferences, normalizeSceneProgress } from './companion-model.js';
+import { PREFERENCES_KEY, LEGACY_KEY, SCENE_PROGRESS_KEY, REACTION_PROGRESS_KEY, normalizePreferences, normalizeSceneProgress,
+  normalizeReactionProgress } from './companion-model.js';
 
 const disposedPlayers = new WeakSet();
 
@@ -20,19 +21,38 @@ export function writePreferences(preferences) {
   catch { /* The controls still work when browser storage is blocked. */ }
 }
 
-export function readSceneProgress() {
-  try { return normalizeSceneProgress(JSON.parse(localStorage.getItem(SCENE_PROGRESS_KEY))); }
+// Progress kept per costume under storageKey, cleaned by normalize.
+function readProgress(storageKey, normalize) {
+  try { return normalize(JSON.parse(localStorage.getItem(storageKey))); }
   catch { return {}; }
+}
+
+// Updates one costume in place and puts it first, so tabs playing different
+// costumes keep each other's progress and the oldest entries go first.
+function writeProgress(storageKey, normalize, key, progress) {
+  try {
+    const entries = readProgress(storageKey, normalize);
+    delete entries[key];
+    const value = JSON.stringify(normalize({ [key]: progress, ...entries }));
+    if (localStorage.getItem(storageKey) !== value) localStorage.setItem(storageKey, value);
+  } catch { /* Without storage, progress lasts while the page is open. */ }
+}
+
+export function readSceneProgress() {
+  return readProgress(SCENE_PROGRESS_KEY, normalizeSceneProgress);
+}
+
+export function readReactionProgress() {
+  return readProgress(REACTION_PROGRESS_KEY, normalizeReactionProgress);
+}
+
+export function writeReactionProgress(key, progress) {
+  writeProgress(REACTION_PROGRESS_KEY, normalizeReactionProgress, key, progress);
 }
 
 // Updates one scene in place, so tabs touring different scenes keep each other's progress.
 export function writeSceneProgress(key, progress) {
-  try {
-    const scenes = readSceneProgress();
-    delete scenes[key];
-    const value = JSON.stringify(normalizeSceneProgress({ [key]: progress, ...scenes }));
-    if (localStorage.getItem(SCENE_PROGRESS_KEY) !== value) localStorage.setItem(SCENE_PROGRESS_KEY, value);
-  } catch { /* Without storage, progress lasts while the page is open. */ }
+  writeProgress(SCENE_PROGRESS_KEY, normalizeSceneProgress, key, progress);
 }
 
 export function mediaQuery(query, fallback) {
