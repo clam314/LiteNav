@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
-import { datingScript, datingTour, scenePicture } from '../public/companion-dating.js';
+import { datingScript, datingTour, scenePicture, stageSkins } from '../public/companion-dating.js';
 import { figureBounds, withoutBackdrops, shotBox, performanceMenu, performanceId, performanceSources, EFFECT_SLOT }
   from '../public/companion-performance-player.js';
 
@@ -47,6 +47,23 @@ test('a resumed tour starts at its stage without the reactions already played th
     { stage: 0, idle: 'idle1' },
     { stage: 0, motion: 'motion1_18' },
   ], 'a stage with every reaction played goes straight on to its transition');
+});
+
+test('each stage wears the skin holding its attachments, whatever the skins are called', () => {
+  // 安洁莉卡「霓虹救星」: no skin is named after idle2; its attachments are in idle1_2.
+  const script = datingScript(['idle1', 'idle2', 'idle3', 'mix1_1_1', 'mix2_1_1', 'mix2_1_end', 'motion1_26', 'motion2_2']);
+  const held = {
+    idle1_1: { idle1: 124, mix1_1_1: 129, idle2: 121, mix2_1_1: 1 },
+    idle1_2: { idle1: 131, mix1_1_1: 3, idle2: 136, mix2_1_1: 133, mix2_1_end: 20 },
+    idle3_1: { idle3: 101 },
+    idle3_2: { idle3: 94 },
+  };
+  const cover = (skin, names) => names.reduce((sum, name) => sum + (held[skin][name] || 0), 0);
+  assert.deepEqual(stageSkins(script, Object.keys(held), cover), ['idle1_1', 'idle1_2', 'idle3_1'],
+    'stage one counts its reactions too, so the idle alone does not decide');
+  assert.deepEqual(stageSkins(script, ['a', 'b'], (skin, names) => skin === 'b' && names[0] === 'idle2' ? 5 : 0), ['a', 'b', 'b'],
+    'a stage no skin serves keeps the one before, the first stage the first skin');
+  assert.deepEqual(stageSkins(script, [], () => 0), [null, null, null]);
 });
 
 const part = (slot, minX, minY, maxX, maxY) => ({ slot, minX, minY, maxX, maxY });

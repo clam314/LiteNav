@@ -61,6 +61,26 @@ export function datingTour(script, random = Math.random, from = 0, played = []) 
   return steps;
 }
 
+// The skin each stage wears when a scene keeps its artwork in skins: the
+// one holding most of the attachments its idle and reactions switch to,
+// cover(skin, animation names) counting them. Names do not tell: 安洁莉卡
+// 「霓虹救星」's second stage wears idle1_2, not a skin named after idle2. A
+// stage no skin serves keeps the one before (the first, the first skin).
+export function stageSkins(script, skins, cover) {
+  let carried = null;
+  return script.map(stage => {
+    const names = [stage.idle, ...stage.reactions.flat()];
+    let best = null;
+    let most = 0;
+    for (const skin of skins) {
+      const count = cover(skin, names);
+      if (count > most) { best = skin; most = count; }
+    }
+    carried = best ?? carried ?? skins[0] ?? null;
+    return carried;
+  });
+}
+
 const FRAME_SLOT = /black|^bk\d*$|^fr\b/i;
 
 // The camera box of a scene's picture from its drawn parts, or null. Slots of
@@ -115,9 +135,9 @@ export function createDatingTour({ spine, player, tracks = true, random = Math.r
   // (letterbox frames made of four pieces never cover it). The backdrop slots
   // are hidden while the scene plays. Without a picture, frame the figure.
   const probe = new spine.Skeleton(data);
-  // Some scenes keep their artwork in per-stage skins (idle1_1, idle3_1, …)
-  // and draw nothing with the default skin; each stage then wears its first
-  // own skin, or keeps the one before.
+  // Some scenes keep their artwork in per-stage skins and draw nothing with
+  // the default skin; each stage then wears the skin that holds its
+  // attachments (see stageSkins), and a transition wears both looks.
   const posed = (skin, animation, time) => {
     probe.setSkin(skin);
     probe.setToSetupPose();
@@ -127,13 +147,32 @@ export function createDatingTour({ spine, player, tracks = true, random = Math.r
   };
   const first = data.findAnimation(script[0].idle);
   const defaultDraws = drawnParts([posed(player.skeleton.skin || data.defaultSkin, first, first.duration / 2)]).length > 0;
-  let carried = player.skeleton.skin || data.defaultSkin;
-  const skins = script.map(stage => {
-    if (defaultDraws) return carried;
-    const prefix = stage.idle + '_';
-    const own = data.skins.filter(skin => skin.name.startsWith(prefix)).sort((a, b) => a.name.localeCompare(b.name, 'en', { numeric: true }));
-    carried = own[0] || (carried === data.defaultSkin ? data.skins.find(skin => /^idle\d+_/.test(skin.name)) || carried : carried);
-    return carried;
+  const initial = player.skeleton.skin || data.defaultSkin;
+  const holds = new Map(data.skins.map(skin => [skin, new Set(skin.getAttachments().map(entry => entry.slotIndex + ':' + entry.name))]));
+  // Distinct attachments, so one switched on every frame counts once.
+  const cover = (skin, names) => {
+    const keys = new Set();
+    for (const name of names) {
+      for (const timeline of data.findAnimation(name)?.timelines || []) {
+        for (const attachment of timeline.attachmentNames || []) if (attachment) keys.add(timeline.slotIndex + ':' + attachment);
+      }
+    }
+    let count = 0;
+    for (const key of keys) if (holds.get(skin).has(key)) count += 1;
+    return count;
+  };
+  const skins = defaultDraws ? script.map(() => initial) :
+    stageSkins(script, data.skins.filter(skin => skin !== data.defaultSkin), cover).map(skin => skin || initial);
+  // A transition turns one stage's look into the next, keyed in both skins
+  // (安洁莉卡「霓虹救星」 from idle1_2 to idle3_1), so it wears the two together.
+  const crossings = script.map((stage, index) => {
+    const from = skins[index];
+    const to = skins[index + 1];
+    if (!stage.motion || !to || from === to) return null;
+    const both = new spine.Skin(from.name + '+' + to.name);
+    both.addSkin(from);
+    both.addSkin(to);
+    return both;
   });
   const backdrops = new Set();
   const views = script.map((stage, index) => {
@@ -144,7 +183,10 @@ export function createDatingTour({ spine, player, tracks = true, random = Math.r
     probe.setToSetupPose();
     animation.apply(probe, middle, middle, false, [], 1, spine.MixBlend.setup, spine.MixDirection.mixIn);
     probe.updateWorldTransform();
-    const picture = scenePicture(drawnParts([probe]), backdrops);
+    // Backdrops found in an earlier stage are hidden in every stage, so a
+    // later stage is framed without them: 安洁莉卡「霓虹救星」's second stage
+    // keeps two of them, and the smaller would pass for its picture.
+    const picture = scenePicture(drawnParts([probe]).filter(part => !backdrops.has(part.slot)), backdrops);
     if (picture) return picture;
     const frames = [];
     probe.setSkin(skins[index]);
@@ -177,6 +219,7 @@ export function createDatingTour({ spine, player, tracks = true, random = Math.r
       return GAP;
     }
     if (step.motion) {
+      if (crossings[stage]) player.skeleton.setSkin(crossings[stage]);
       state.clearTrack(1);
       state.setAnimation(0, step.motion, false);
       return length(step.motion);
