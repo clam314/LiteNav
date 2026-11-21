@@ -198,6 +198,14 @@ def validate_state(value: object) -> dict:
     return {"categories": cleaned_categories, "links": cleaned_links, "settings": settings}
 
 
+# Automatic backups: copies of the configuration in the export format, in
+# <data dir>/backups, named by local time and the reason they were made.
+BACKUP_KEEP = 30
+BACKUP_ID = re.compile(r"(?P<day>\d{8})-\d{6}-\d{6}-(?P<reason>daily|bulk|before-restore|manual)")
+# A save removing this many links, or any category, is backed up first whatever the day.
+BULK_REMOVAL = 5
+
+
 class Store:
     """Keep user data authoritative; shipped seeds initialize empty stores only."""
 
@@ -205,6 +213,7 @@ class Store:
         # Keep the existing filename so renaming the app does not reset user data.
         self.path = Path(data_dir) / "guihang.sqlite3"
         self.path.parent.mkdir(parents=True, exist_ok=True)
+        self.backup_dir = Path(data_dir) / "backups"
         self.lock = threading.RLock()
         with self.connect() as db:
             db.execute("PRAGMA journal_mode=WAL")
@@ -233,7 +242,7 @@ class Store:
             revision, document = db.execute("SELECT revision, document FROM config WHERE id=1").fetchone()
         return {"revision": revision, **json.loads(document)}
 
-    def save(self, value: dict) -> dict:
+    def save(self, value: dict, backup: bool = True) -> dict:
         cleaned = validate_state(value)
         revision = value.get("revision")
         with self.lock, self.connect() as db:
@@ -241,7 +250,13 @@ class Store:
             current_revision, document = db.execute("SELECT revision,document FROM config WHERE id=1").fetchone()
             if isinstance(revision, bool) or revision != current_revision:
                 raise APIError("配置已在其他页面更新，请刷新后重试", 409)
-            old_links = {link["id"]: link for link in json.loads(document)["links"]}
+            previous = json.loads(document)
+            # Keep the configuration as it was before the day's first change and
+            # before any large removal (an import that replaces everything too).
+            reason = self.backup_reason(previous, cleaned) if backup else None
+            if reason:
+                self.write_backup(previous, current_revision, reason)
+            old_links = {link["id"]: link for link in previous["links"]}
             db.execute("UPDATE config SET revision=?,document=? WHERE id=1",
                        (current_revision + 1, json.dumps(cleaned, ensure_ascii=False)))
             live_ids = set()
@@ -263,6 +278,80 @@ class Store:
                 if check_id in link_urls and link_urls[check_id] != json.loads(check_document).get("url"):
                     db.execute("DELETE FROM link_check WHERE id=?", (check_id,))
         return {"revision": current_revision + 1, **cleaned}
+
+    def backup_reason(self, previous: dict, cleaned: dict) -> str | None:
+        removed_links = {link["id"] for link in previous["links"]} - {link["id"] for link in cleaned["links"]}
+        removed_categories = {item["id"] for item in previous["categories"]} - {item["id"] for item in cleaned["categories"]}
+        if len(removed_links) >= BULK_REMOVAL or removed_categories:
+            return "bulk"
+        today = datetime.now().astimezone().strftime("%Y%m%d")
+        if not any(match["day"] == today for match in map(BACKUP_ID.fullmatch, self.backup_ids()) if match):
+            return "daily"
+        return None
+
+    def backup_ids(self) -> list[str]:
+        """Oldest first; the names start with the time they were made."""
+        try:
+            return sorted(path.stem for path in self.backup_dir.glob("*.json") if BACKUP_ID.fullmatch(path.stem))
+        except OSError:
+            return []
+
+    def write_backup(self, document: dict, revision: int, reason: str) -> str | None:
+        now = datetime.now().astimezone()
+        backup_id = now.strftime("%Y%m%d-%H%M%S-%f") + "-" + reason
+        content = {"version": 1, "exportedAt": now.isoformat(timespec="seconds"), "reason": reason, "revision": revision,
+                   "categories": document["categories"], "links": document["links"], "settings": document["settings"]}
+        try:
+            self.backup_dir.mkdir(parents=True, exist_ok=True)
+            partial = self.backup_dir / (backup_id + ".tmp")
+            partial.write_text(json.dumps(content, ensure_ascii=False, indent=2), "utf-8")
+            partial.replace(self.backup_dir / (backup_id + ".json"))
+            for old in self.backup_ids()[:-BACKUP_KEEP]:
+                (self.backup_dir / (old + ".json")).unlink(missing_ok=True)
+        except OSError:
+            # A full or read-only disk must not stop the change itself.
+            LOG.warning("Automatic backup could not be written", exc_info=True)
+            return None
+        return backup_id
+
+    def backups(self) -> list[dict]:
+        """Newest first, with what each one holds."""
+        listed = []
+        for backup_id in reversed(self.backup_ids()):
+            try:
+                content = json.loads((self.backup_dir / (backup_id + ".json")).read_text("utf-8"))
+            except (OSError, ValueError):
+                continue
+            listed.append({"id": backup_id, "createdAt": content.get("exportedAt"), "reason": BACKUP_ID.fullmatch(backup_id)["reason"],
+                           "links": len(content.get("links") or []), "categories": len(content.get("categories") or [])})
+        return listed
+
+    def read_backup(self, backup_id: object) -> dict:
+        if not isinstance(backup_id, str) or not BACKUP_ID.fullmatch(backup_id):
+            raise APIError("备份不存在", 404)
+        try:
+            return json.loads((self.backup_dir / (backup_id + ".json")).read_text("utf-8"))
+        except FileNotFoundError:
+            raise APIError("备份不存在", 404) from None
+        except (OSError, ValueError):
+            raise APIError("备份文件无法读取", 500) from None
+
+    def backup_now(self) -> str:
+        with self.lock:
+            current = self.state()
+            backup_id = self.write_backup(current, current["revision"], "manual")
+        if not backup_id:
+            raise APIError("备份写入失败，请检查数据目录", 500)
+        return backup_id
+
+    def restore_backup(self, backup_id: object) -> dict:
+        """Replaces the configuration with a backup, keeping the current one first."""
+        content = self.read_backup(backup_id)
+        with self.lock:
+            current = self.state()
+            if not self.write_backup(current, current["revision"], "before-restore"):
+                raise APIError("无法先备份当前配置，已取消恢复", 500)
+            return self.save({**content, "revision": current["revision"]}, backup=False)
 
     def health(self) -> dict:
         with self.lock, self.connect() as db:
@@ -873,6 +962,12 @@ class Handler(BaseHTTPRequestHandler):
                 self.json_response(self.server.store.health())
             elif path == "/api/link-check":
                 self.json_response({"job": self.server.link_checker.status(), "results": self.server.store.link_checks()})
+            elif path == "/api/backups":
+                self.json_response({"backups": self.server.store.backups()})
+            elif path.startswith("/api/backups/"):
+                backup_id = path.removeprefix("/api/backups/")
+                content = self.server.store.read_backup(backup_id)
+                self.json_response(content, headers={"Content-Disposition": f'attachment; filename="litenav-backup-{backup_id}.json"'})
             elif path.startswith("/api/"):
                 raise APIError("接口不存在", 404)
             else:
@@ -920,6 +1015,11 @@ class Handler(BaseHTTPRequestHandler):
             elif method == "POST" and path == "/api/metadata":
                 state = self.server.store.state()
                 self.json_response(metadata(body.get("url"), state["categories"]))
+            elif method == "POST" and path == "/api/backups":
+                self.server.store.backup_now()
+                self.json_response({"backups": self.server.store.backups()}, 201)
+            elif method == "POST" and path == "/api/backups/restore":
+                self.json_response(self.server.store.restore_backup(body.get("id")))
             elif method == "POST" and path == "/api/link-check":
                 job = self.server.link_checker.start(body.get("ids"))
                 self.json_response({"job": job, "results": self.server.store.link_checks()}, 202)

@@ -18,6 +18,8 @@ let activeCategory = '';
 let activeTool = '';
 let currentDialog = null;
 let mutationQueue = Promise.resolve();
+// The server's automatic backups, newest first; null until the settings page reads them.
+let backups = null;
 let dragged = null;
 let checkTimer = null;
 let searchQuery = '';
@@ -230,7 +232,9 @@ function settingsMarkup() {
       '<label class="column-picker"><span class="sr-only">' + esc(category.name) + '所在列</span><select class="form-select" data-category-column="' + esc(category.id) + '">' + [0, 1, 2].map((n) => '<option value="' + n + '" ' + (Number(category.column) === n ? 'selected' : '') + '>第 ' + (n + 1) + ' 列</option>').join('') + '</select></label>' +
       '<button class="icon-button" data-action="edit-category" data-id="' + esc(category.id) + '" aria-label="编辑分类 ' + esc(category.name) + '">' + icon('edit', 16) + '</button><button class="icon-button danger" data-action="delete-category" data-id="' + esc(category.id) + '" aria-label="删除分类 ' + esc(category.name) + '">' + icon('trash', 16) + '</button></div>').join('') + '</div></section>' +
     '<section class="settings-section" id="link-check"><div class="section-heading">' + icon('check-circle', 22) + '<h2>网址体检</h2></div><div class="settings-card" id="link-check-card">' + linkCheckMarkup() + '</div></section>' +
-    '<section class="settings-section"><div class="section-heading">' + icon('download', 22) + '<h2>数据备份</h2></div><div class="settings-card"><p class="settings-description">导出网址、分类与服务配置，方便备份或迁移。</p><div class="settings-actions"><button class="btn btn-secondary" data-action="export">' + icon('upload', 16) + '导出备份</button><button class="btn btn-secondary" data-action="import">' + icon('download', 16) + '导入备份</button></div></div></section>' +
+    '<section class="settings-section"><div class="section-heading">' + icon('download', 22) + '<h2>数据备份</h2></div><div class="settings-card"><p class="settings-description">导出网址、分类与服务配置，方便备份或迁移。</p><div class="settings-actions"><button class="btn btn-secondary" data-action="export">' + icon('upload', 16) + '导出备份</button><button class="btn btn-secondary" data-action="import">' + icon('download', 16) + '导入备份</button></div>' +
+    '<div class="backup-auto"><div class="backup-auto-head"><div><h3>自动备份</h3><p class="settings-description">每天第一次修改前，以及一次删除 5 个以上入口或删除分类前，服务器会自动保存修改前的配置，保留最近 30 份。</p></div>' +
+    '<button class="btn btn-secondary" data-action="backup-now">' + icon('download', 16) + '立即备份</button></div><div id="backup-list">' + backupsMarkup() + '</div></div></div></section>' +
     '<section class="settings-section"><div class="section-heading">' + icon('bookmark', 22) + '<h2>导入浏览器书签</h2></div><div class="settings-card"><p class="settings-description">在 Chrome、Edge、Firefox 或 Safari 中把书签导出为 HTML 文件，再在这里导入。每个顶层文件夹会成为一个分类，已添加过的网址会自动跳过，导入前可以先预览。</p><div class="settings-actions"><button class="btn btn-secondary" data-action="import-bookmarks">' + icon('bookmark', 16) + '选择书签文件</button></div></div></section>';
 }
 
@@ -410,6 +414,8 @@ function render() {
     (view === 'tools' ? '' : '<button class="btn btn-primary" data-action="' + (view === 'services' ? 'add-service' : 'add-link') + '">' + icon('plus', 18) + '添加' + (view === 'services' ? '服务' : '') + '</button>') + '</div></header>' +
     '<div class="page-content">' + (view === 'services' ? servicesMarkup() : view === 'settings' ? settingsMarkup() : view === 'tools' ? toolsMarkup(activeTool) : homeMarkup()) + '</div></main></div>';
   if (view === 'tools') mountTools(app, { toast });
+  // A save may just have made an automatic backup.
+  if (view === 'settings') refreshBackups();
   if (searchFocus) {
     const input = document.querySelector('#quick-search-input');
     input.focus({ preventScroll: true });
@@ -750,6 +756,37 @@ async function checkServices(id, notify = true) {
   checkTimer = setTimeout(() => refreshHealth().catch(() => {}), (Number(config.settings.timeout) + 1) * 1000);
 }
 
+const BACKUP_REASONS = { daily: '每日自动', bulk: '大量删除前', 'before-restore': '恢复前', manual: '手动' };
+const backupTime = (value) => value ? new Date(value).toLocaleString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }) : '';
+
+function backupsMarkup() {
+  if (!backups) return '<p class="settings-description">正在读取备份…</p>';
+  if (!backups.length) return '<p class="settings-description">还没有自动备份，第一次修改配置前会自动生成。</p>';
+  return '<div class="backup-list">' + backups.map((item) => '<div class="backup-row"><span class="backup-time">' + esc(backupTime(item.createdAt)) + '</span>' +
+    '<span class="backup-reason">' + esc(BACKUP_REASONS[item.reason] || item.reason) + '</span><span class="backup-count">' + item.links + ' 个入口 · ' + item.categories + ' 个分类</span>' +
+    '<span class="backup-actions"><a class="btn btn-ghost btn-small" href="/api/backups/' + encodeURIComponent(item.id) + '" download>下载</a>' +
+    '<button class="btn btn-ghost btn-small" data-action="restore-backup" data-id="' + esc(item.id) + '">恢复</button></span></div>').join('') + '</div>';
+}
+
+async function refreshBackups() {
+  try { backups = (await api('/api/backups')).backups; }
+  catch { backups = backups || []; }
+  const list = document.querySelector('#backup-list');
+  if (list) list.innerHTML = backupsMarkup();
+}
+
+async function restoreBackup(id) {
+  const item = backups?.find((entry) => entry.id === id);
+  if (!item) return;
+  const time = backupTime(item.createdAt);
+  if (!await confirmDialog('恢复备份', '把配置恢复为 ' + time + ' 的备份（' + item.links + ' 个入口、' + item.categories + ' 个分类）？当前配置会先自动备份，需要时可以再恢复回来。', '恢复')) return;
+  // Let a save that is still on its way finish first.
+  await mutationQueue.catch(() => {});
+  config = await api('/api/backups/restore', { method: 'POST', body: JSON.stringify({ id }) });
+  render();
+  toast('已恢复为 ' + time + ' 的备份');
+}
+
 async function exportBackup() {
   const latest = await api('/api/state');
   const content = { version: 1, exportedAt: new Date().toISOString(), ...latest };
@@ -800,6 +837,17 @@ async function handleAction(button) {
       break;
     }
     case 'export': await exportBackup(); break;
+    case 'backup-now': {
+      button.disabled = true;
+      try {
+        backups = (await api('/api/backups', { method: 'POST', body: '{}' })).backups;
+        const list = document.querySelector('#backup-list');
+        if (list) list.innerHTML = backupsMarkup();
+        toast('已备份当前配置');
+      } finally { button.disabled = false; }
+      break;
+    }
+    case 'restore-backup': await restoreBackup(id); break;
     case 'start-link-check': button.disabled = true; await startLinkCheck(); break;
     case 'apply-redirect': await applyRedirects([id]); break;
     case 'apply-all-redirects': {

@@ -233,6 +233,76 @@ class StoreCase(DataFixture):
             monitor.close()
 
 
+class BackupCase(DataFixture):
+    def change(self, edit):
+        state = self.store.state()
+        edit(state)
+        return self.store.save(state)
+
+    def test_first_change_of_the_day_keeps_the_configuration_before_it(self):
+        before = self.store.state()
+        self.change(lambda state: state["links"][0].update(name="改名一次"))
+        self.change(lambda state: state["links"][0].update(name="改名两次"))
+        listed = self.store.backups()
+        self.assertEqual([item["reason"] for item in listed], ["daily"], "one daily backup, before the first change")
+        kept = self.store.read_backup(listed[0]["id"])
+        self.assertEqual(kept["links"], before["links"])
+        self.assertEqual((kept["version"], kept["revision"]), (1, before["revision"]))
+        self.assertEqual(listed[0]["links"], len(before["links"]))
+
+    def test_large_removals_are_backed_up_whatever_the_day(self):
+        extra = [{"id": f"site{i}", "name": f"站点{i}", "url": f"https://site{i}.example", "icon": "",
+                  "kind": "website", "categoryId": "dev", "pinned": False, "order": i, "monitorEnabled": False} for i in range(6)]
+        self.change(lambda state: state["links"].extend(extra))
+        before = self.store.state()
+        self.change(lambda state: state.update(links=state["links"][:-4]))
+        self.assertEqual([item["reason"] for item in self.store.backups()], ["daily"], "removing four links is an ordinary edit")
+        self.change(lambda state: state.update(links=state["links"][:-2]))
+        self.change(lambda state: state.update(links=[link for link in state["links"] if link["categoryId"] != "dev"]))
+        self.assertEqual([item["reason"] for item in self.store.backups()], ["daily"], "neither is removing two, then one")
+        self.change(lambda state: state.update(links=before["links"]))
+        self.change(lambda state: state.update(links=state["links"][:2]))
+        self.assertEqual([item["reason"] for item in self.store.backups()], ["bulk", "daily"], "removing six at once is backed up first")
+        self.assertEqual(self.store.read_backup(self.store.backups()[0]["id"])["links"], before["links"])
+        self.change(lambda state: state.update(categories=[item for item in state["categories"] if item["id"] != "ai"]))
+        self.assertEqual([item["reason"] for item in self.store.backups()], ["bulk", "bulk", "daily"], "so is removing a category")
+
+    def test_only_the_latest_backups_are_kept(self):
+        with patch.object(server, "BACKUP_KEEP", 3):
+            for _ in range(5):
+                self.store.backup_now()
+        self.assertEqual(len(self.store.backups()), 3)
+        self.assertEqual(len(list((self.directory / "data" / "backups").glob("*"))), 3, "no partial files are left")
+
+    def test_restoring_keeps_the_current_configuration_first(self):
+        original = self.store.state()
+        self.change(lambda state: state.update(links=[]))
+        emptied = self.store.state()
+        bulk = self.store.backups()[0]
+        restored = self.store.restore_backup(bulk["id"])
+        self.assertEqual(restored["links"], original["links"])
+        self.assertEqual(restored["revision"], emptied["revision"] + 1)
+        latest = self.store.backups()[0]
+        self.assertEqual(latest["reason"], "before-restore")
+        self.assertEqual(self.store.read_backup(latest["id"])["links"], [], "the restore itself can be undone")
+        self.assertEqual(self.store.restore_backup(latest["id"])["links"], [])
+
+    def test_unknown_or_malformed_backup_names_are_refused(self):
+        for name in ("../guihang.sqlite3", "20260101-000000-000000-daily", "x", None, 7):
+            with self.assertRaises(server.APIError) as caught:
+                self.store.read_backup(name)
+            self.assertEqual(caught.exception.status, 404)
+
+    def test_an_unwritable_backup_folder_does_not_stop_saving(self):
+        (self.directory / "data" / "backups").write_text("not a folder", "utf-8")
+        saved = self.change(lambda state: state["links"][0].update(name="仍然保存"))
+        self.assertEqual(self.store.state()["links"][0]["name"], "仍然保存")
+        self.assertEqual(saved["revision"], self.store.state()["revision"])
+        self.assertEqual(self.store.backups(), [])
+        with self.assertRaises(server.APIError):
+            self.store.restore_backup("20260101-000000-000000-daily")
+
+
 class DefaultSeedCase(unittest.TestCase):
     def test_fresh_install_uses_generic_public_defaults_without_services(self):
         with tempfile.TemporaryDirectory() as directory:
@@ -544,6 +614,21 @@ class HTTPCase(DataFixture):
             self.assertEqual(headers["Content-Length"], str(len(get_body)), path)
             self.assertEqual(headers["Content-Type"], get_headers["Content-Type"], path)
 
+    def test_backups_can_be_listed_downloaded_made_and_restored(self):
+        status, body = self.request("/api/backups", {}, "POST")
+        self.assertEqual(status, 201)
+        listed = json.loads(body)["backups"]
+        self.assertEqual(listed[0]["reason"], "manual")
+        status, headers, content = self.raw("/api/backups/" + listed[0]["id"])
+        self.assertEqual(status, 200)
+        self.assertIn("attachment", headers["Content-Disposition"])
+        self.assertEqual(json.loads(content)["links"], self.store.state()["links"])
+        self.assertEqual(self.raw("/api/backups/../guihang.sqlite3")[0], 404)
+        status, body = self.request("/api/backups/restore", {"id": listed[0]["id"]}, "POST")
+        self.assertEqual(status, 200)
+        self.assertEqual(json.loads(body)["links"], self.store.state()["links"])
+        self.assertEqual(self.request("/api/backups/restore", {"id": "nope"}, "POST")[0], 404)
+
     def test_cross_site_write_rejected(self):
         status, body = self.request("/api/state", self.store.state(), "PUT", {"Origin": "https://evil.example"})
         self.assertEqual(status, 403)
@@ -596,6 +681,15 @@ class AuthCase(HTTPCase):
         state = json.loads(self.raw("/api/state", headers=self.basic(self.password))[2])
         self.assertEqual(self.request("/api/state", state, "PUT", self.basic(self.password))[0], 200)
 
+    def test_backups_need_the_password(self):
+        self.store.backup_now()
+        backup_id = self.store.backups()[0]["id"]
+        self.assertEqual(self.raw("/api/backups")[0], 401)
+        self.assertEqual(self.raw("/api/backups/" + backup_id)[0], 401)
+        self.assertEqual(self.request("/api/backups", {}, "POST")[0], 401)
+        self.assertEqual(self.request("/api/backups/restore", {"id": backup_id}, "POST")[0], 401)
+        self.assertEqual(self.raw("/api/backups", headers=self.basic(self.password))[0], 200)
+
     def test_writes_without_the_password_change_nothing(self):
         before = self.store.state()
         changed = {**before, "links": []}
@@ -624,6 +718,7 @@ class AuthCase(HTTPCase):
     test_text_files_are_gzipped_when_accepted = None
     test_head_answers_like_get_without_a_body = None
     test_listen_queue_holds_a_page_worth_of_module_requests = None
+    test_backups_can_be_listed_downloaded_made_and_restored = None
 
 
 class FakeSite(BaseHTTPRequestHandler):
