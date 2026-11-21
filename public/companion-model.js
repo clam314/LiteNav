@@ -18,6 +18,9 @@ export function normalizePreferences(value, legacyEnabled = false) {
     random: boolean('random', true),
     portraits: boolean('portraits', legacyEnabled),
     skills: boolean('skills', false),
+    // Azur Lane voice lines with reactions: off until the viewer turns them on.
+    voice: boolean('voice', false),
+    voiceVolume: typeof data.voiceVolume === 'number' && data.voiceVolume >= 0 && data.voiceVolume <= 1 ? data.voiceVolume : 0.6,
     rotation: ROTATION_CHOICES.includes(data.rotation) ? data.rotation : DEFAULT_ROTATION,
     // The display to restore when the master switch turns the companion back on.
     resume: DISPLAY_MODES.includes(data.resume) ? data.resume : 'portrait',

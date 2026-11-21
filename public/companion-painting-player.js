@@ -17,7 +17,7 @@ const ACTION_GAP = 1.5;
 // on every layer that has them, followed by the loop again. progress and
 // onProgress continue the round of reactions across visits, as for Live2D.
 export function createPaintingPlayer({ spine, layer, layers, space, frame, mode = 'portrait', actions = [],
-  progress = null, onProgress = () => {} }) {
+  progress = null, onProgress = () => {}, onReaction = () => {} }) {
   const dom = document.createElement('div');
   dom.className = 'painting-player';
   const canvas = document.createElement('canvas');
@@ -26,7 +26,7 @@ export function createPaintingPlayer({ spine, layer, layers, space, frame, mode 
   // The textures carry straight alpha, so the page composites it as such.
   const context = new spine.webgl.ManagedWebGLRenderingContext(canvas, { alpha: true, premultipliedAlpha: false });
   try {
-    return paint({ spine, dom, canvas, context, layers, space, frame, reactions: mode === 'skill' ? actions : [], progress, onProgress });
+    return paint({ spine, dom, canvas, context, layers, space, frame, reactions: mode === 'skill' ? actions : [], progress, onProgress, onReaction });
   } catch (error) {
     // A painting that cannot be read gives its context back at once: browsers
     // only keep a handful of WebGL contexts alive.
@@ -36,7 +36,7 @@ export function createPaintingPlayer({ spine, layer, layers, space, frame, mode 
   }
 }
 
-function paint({ spine, dom, canvas, context, layers, space, frame, reactions, progress, onProgress }) {
+function paint({ spine, dom, canvas, context, layers, space, frame, reactions, progress, onProgress, onReaction }) {
   const renderer = new spine.webgl.SceneRenderer(canvas, context, true);
 
   const loaded = layers.map(file => {
@@ -128,6 +128,8 @@ function paint({ spine, dom, canvas, context, layers, space, frame, reactions, p
     if (!steps) { player.betweenActions = true; return; }
     player.betweenActions = false;
     reactionLeft = 0;
+    // The first animation names the reaction, for its voice line.
+    onReaction(steps[0]);
     for (const { skeleton, state } of loaded) {
       const own = steps.map(name => skeleton.data.findAnimation(name)).filter(Boolean);
       if (!own.length) continue;

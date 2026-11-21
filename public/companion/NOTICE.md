@@ -112,6 +112,12 @@ Spine 4.0 运行时 `/vendor/spine/spine-player-4.0.30.js` 下载自官方 npm �
 - 展示方式：立绘循环模型的 `idle` 动作；「互动」按随机顺序依次播放主界面与触摸动作（`home`、`login`、`mail`、`mission`、`mission_complete`、`complete`、`touch_head`、`touch_body`、`touch_special`、`main_N`），每段之间回到 `idle` 约 1.5 秒。页面打开期间按服装记住这一轮播到哪里：「轮流」回到互动时接着播还没播过的反应，播到一半被切走的那段下次重新播放；画面准备切走时不再开始新的反应。L2D+ 模型的拖拽状态（`idleN`、`touch_idleN`、`touch_dragN`）与誓约动作 `wedding` 不播放。多数模型自带的 `effect`（飘带、光效等环境动画）在单独的动作队列上与其他动作同时循环。动作用 PartOpacity 曲线切换互斥的部件（持扇与垂下的手臂、吉祥物的两种姿势等），框架默认把这些曲线写进同名参数而不生效，本页打开 `CubismConfig.setOpacityFromMotion` 让它们直接作用于部件；每帧先把部件恢复为模型自带的不透明度，再由动作切换，因此互动动作切换过的部件不会残留到待机。两种展示中，模型的视线与头部都会跟随页面上的鼠标指针（距离越远转得越多，最多到模型幅度的八成），指针离开窗口后回到正前方；台词与语音不播放。
 - 取景：在 8 秒的 `idle` 中采样可见网格的范围（限制在模型画布内，并排除 `Touch` 开头的触摸判定网格，部分模型把它们放在画布外很远处），按此范围填满侧栏高度、贴住底边，水平居中于导航留出的空白区域。带整幅场景的模型会超出两侧，左侧由侧栏渐隐遮住。互动展示另外逐帧采样每段反应：顶边提高到九成反应画面不超过的位置，人物仍站在待机的底边、保持待机的水平位置；一闪而过的发丝、水花，以及铺满画布的特写不参与取景。游戏只显示模型画布以内的部分，本页同样把画布以外裁掉（特写不会再盖到导航上），画布左缘落在侧栏内时以 64 像素渐隐。Cubism 渲染器会关闭 WebGL 的裁剪与模板测试，PixiJS 的遮罩因此无效，裁剪改用元素的 CSS `clip-path`。
 
+### 语音
+
+- 素材来源：[Fernando2603/AzurLane](https://github.com/Fernando2603/AzurLane) 从英文服客户端提取的语音（各服都使用日语配音），目录记录其固定提交（`voiceCommit`），只在播放时按需加载 `audio/voiceline/<皮肤编号>/<语音>.ogg`（Ogg Vorbis，每句约 60 KB），未打包任何素材。该仓库未声明许可证，语音权利归原权利人所有。
+- 对应关系：皮肤编号取自游戏数据表 `ship_skin_template`（[AzurLaneTools/AzurLaneData](https://github.com/AzurLaneTools/AzurLaneData)，先英文服、再国服），按立绘名对应。皮肤只列出它替换的台词，其余沿用舰船默认皮肤（同组编号最小的皮肤）的语音，与游戏一致；比数据表更新的皮肤使用舰船默认语音。动作与语音的对应：`login`、`home`、`mail`、`mission`、`mission_complete` 同名，`complete` → `expedition`，`touch_head` → `headtouch`，`touch_body`/`touch` → `touch`，`touch_special` → `touch2`，`main_N` → `mainN`；没有音频的台词不收录。245 个 Live2D 模型中 238 个、16 套带反应的动态立绘全部有语音。
+- 播放：默认关闭，在角色菜单中开启并调整音量（设置保存在此浏览器）。只在互动展示中随每段反应播放，同一时间只播一句；立绘展示不出声；切走、暂停、页面转入后台或关闭角色时立即停止。浏览器在用户与页面互动前可能拒绝出声：被拒绝后不再下载语音，直到在页面上点击或按键。浏览器无法播放 Ogg Vorbis 时开关不可用（Safari 是否支持未经核实）。
+
 ### 动态立绘
 
 - 素材来源：[ww-rm/azurlane_spinepainting](https://github.com/ww-rm/azurlane_spinepainting)，目录记录其固定提交（`paintingCommit`），只在选中时按需加载 `docs/<舰船>/<皮肤>/` 下的文件。仓库索引 `docs/index.json` 共 141 套皮肤，每套由一至七层 Spine 3.8.99 骨架组成（人物、背景、道具等）。名字同样取自 Pelom777/AzurLaneData，索引中缺失的（如领洋者「入浴的小恶魔」）沿用索引自带的中文名；舰船自身的立绘显示为「默认」，改造显示为「改造」。同一皮肤另有 Live2D 或多种形态时，动态立绘一项标注「（动态立绘）」。

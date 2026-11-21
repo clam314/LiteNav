@@ -13,7 +13,7 @@ export async function fetchResource(url, signal, cache = 'default') {
   return response;
 }
 
-const fetchAsset = createAssetFetcher({ base: GAMES.flatMap(game => [game.assetBase, game.lfsBase, game.paintingBase].filter(Boolean)), fetchResource });
+export const fetchAsset = createAssetFetcher({ base: GAMES.flatMap(game => [game.assetBase, game.lfsBase, game.paintingBase, game.voiceBase].filter(Boolean)), fetchResource });
 
 function readDataURI(blob, signal) {
   return new Promise((resolve, reject) => {

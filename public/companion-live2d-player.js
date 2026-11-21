@@ -38,7 +38,7 @@ const ACTION_GAP = 1.5;
 // display, progress (from an earlier visit) continues the round of reactions,
 // and onProgress receives the round each time a reaction has played out.
 export async function createLive2DPlayer({ PIXI, layer, settings, plan, blobs, mode, space, frame,
-  progress = null, onProgress = () => {} }) {
+  progress = null, onProgress = () => {}, onReaction = () => {} }) {
   const live2d = PIXI.live2d;
   const dom = document.createElement('div');
   dom.className = 'live2d-player';
@@ -125,6 +125,8 @@ export async function createLive2DPlayer({ PIXI, layer, settings, plan, blobs, m
       if (!name) { player.betweenActions = true; return; }
       player.betweenActions = false;
       void motions.startMotion(name, 0, live2d.MotionPriority.FORCE);
+      // The motion's name, for the voice line the game says with it.
+      onReaction(name);
     };
 
     // Find the extent of the idle pose (and in the action display, of every
@@ -164,6 +166,10 @@ export async function createLive2DPlayer({ PIXI, layer, settings, plan, blobs, m
         }
       }
       Object.assign(bounds, reactionFraming(bounds, frames, canvasSize));
+      // The last reaction sampled is still the current motion, and the
+      // library refuses to start a motion that is already playing: had the
+      // first reaction been that one, it would have been skipped.
+      motions.stopAllMotions();
     }
 
     // Listen only now, so the reactions sampled above do not count as played.

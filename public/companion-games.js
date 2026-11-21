@@ -32,6 +32,8 @@ export const GAMES = [
     lfsBase: 'https://media.githubusercontent.com/media/bungaku-moe/AzurLaneLive2D/',
     // Dynamic paintings (Spine 3.8 layers) come from another repository.
     paintingBase: 'https://raw.githubusercontent.com/ww-rm/azurlane_spinepainting/',
+    // Japanese voice lines, extracted from the English client.
+    voiceBase: 'https://raw.githubusercontent.com/Fernando2603/AzurLane/',
   },
 ];
 

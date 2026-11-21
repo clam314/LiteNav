@@ -58,6 +58,20 @@ AZURLANE_NAMES = "https://raw.githubusercontent.com/" + AZURLANE_NAMES_REPO + "/
 AZURLANE_PAINTINGS_REPO = "ww-rm/azurlane_spinepainting"
 AZURLANE_PAINTINGS_INDEX = "https://raw.githubusercontent.com/" + AZURLANE_PAINTINGS_REPO + "/{commit}/docs/index.json"
 AZURLANE_PAINTING_ACTIONS = ROOT / "scripts/azurlane-painting-actions.json"
+# Japanese voice lines (every server ships the Japanese cast) extracted from the
+# English client, keyed by skin id; the game's own skin table gives each skin's
+# painting name, English server first, then Chinese.
+AZURLANE_VOICE_REPO = "Fernando2603/AzurLane"
+AZURLANE_VOICELINES = "https://raw.githubusercontent.com/" + AZURLANE_VOICE_REPO + "/{commit}/voiceline.json"
+AZURLANE_GAME_DATA_REPO = "AzurLaneTools/AzurLaneData"
+AZURLANE_SKIN_TABLE = ("https://raw.githubusercontent.com/" + AZURLANE_GAME_DATA_REPO +
+                       "/{commit}/{server}/ShareCfg/ship_skin_template.json")
+VOICE_LINK = re.compile(r"/audio/voiceline/(\d+)/([A-Za-z0-9_]+)\.ogg$")
+# The motion a reaction plays and the voice line the game says with it.
+MOTION_VOICES = {"login": "login", "home": "home", "mail": "mail", "mission": "mission",
+                 "mission_complete": "mission_complete", "complete": "expedition", "touch": "touch",
+                 "touch_head": "headtouch", "touch_body": "touch", "touch_special": "touch2"}
+MAIN_VOICE = re.compile(r"main(\d+)")
 
 PLAYABLE_ID = re.compile(r"c(\d{3})(?:_(\d{2}))?")
 # NPCs (c9xx), mass-produced enemies (c25x), soldiers, products and iDolls
@@ -511,8 +525,46 @@ def painting_label(person: str, skin: str, default: bool) -> str:
     return skin
 
 
+def azurlane_voices(tables: list[dict], voicelines: dict) -> dict:
+    """Each painting's voice lines by the motion they go with: {painting: {motion: "skin/key"}}.
+
+    tables are the game's ship_skin_template ({id: {"id", "painting", "ship_group"}}),
+    earlier ones first. A skin only lists the lines it replaces; the rest are its
+    ship's default skin's (the lowest id of the group), as in the game. Lines
+    without audio are left out.
+    """
+    skins: dict[str, dict] = {}
+    for table in tables:
+        for row in table.values():
+            if isinstance(row, dict) and isinstance(row.get("painting"), str) and isinstance(row.get("id"), int):
+                skins.setdefault(row["painting"].lower(), row)
+    defaults: dict[int, int] = {}
+    for row in skins.values():
+        group = row.get("ship_group")
+        if isinstance(group, int) and (group not in defaults or row["id"] < defaults[group]):
+            defaults[group] = row["id"]
+
+    def lines(skin_id) -> dict:
+        found = {}
+        for key, entry in (voicelines.get(str(skin_id)) or {}).items():
+            link = entry.get("link") if isinstance(entry, dict) else None
+            match = VOICE_LINK.search(link) if isinstance(link, str) else None
+            if match:
+                found[key] = f"{match[1]}/{match[2]}"
+        return found
+
+    voices = {}
+    for painting, row in skins.items():
+        merged = {**lines(defaults.get(row.get("ship_group"))), **lines(row["id"])}
+        spoken = {motion: merged[key] for motion, key in MOTION_VOICES.items() if key in merged}
+        spoken.update({f"main_{match[1]}": path for key, path in merged.items() if (match := MAIN_VOICE.fullmatch(key))})
+        if spoken:
+            voices[painting] = spoken
+    return voices
+
+
 def build_azurlane(models: list[str], skins: dict, ships: dict, skipped: list | None = None,
-                   paintings: dict | None = None, actions: dict | None = None) -> list:
+                   paintings: dict | None = None, actions: dict | None = None, voices: dict | None = None) -> list:
     """Group skins into people by their ship's Chinese name.
 
     skins maps a ship's painting name to {skin painting: {"name": ...}} and
@@ -525,7 +577,10 @@ def build_azurlane(models: list[str], skins: dict, ships: dict, skipped: list | 
     first; censored *_hx layers are left out. A painting the names miss uses
     the index's own names. actions maps a painting to its reactions (lists of
     animations played in order); those paintings also get an action display.
+    voices (see azurlane_voices) gives a costume its voice lines, or its ship's
+    default ones when the skin is newer than the skin tables.
     """
+    voices = voices or {}
     owners = {painting.lower(): (ship, str(skin.get("name") or ""))
               for ship, entries in skins.items() for painting, skin in entries.items()}
     folders = {model.lower() for model in models}
@@ -547,8 +602,12 @@ def build_azurlane(models: list[str], skins: dict, ships: dict, skipped: list | 
         entry = people.setdefault(person, {"id": f"azurlane:{ship.lower()}", "name": person, "costumes": []})
         part = {"model": f"Live2D/{model}/{model}.model3.json", "runtime": "live2d"}
         # One model serves both displays: idle for the portrait, its reactions for the action.
-        entry["costumes"].append({"label": "默认" if painting == ship.lower() else skin or model,
-                                  "outfit": model, "idle": part, "cutscene": part})
+        costume = {"label": "默认" if painting == ship.lower() else skin or model,
+                   "outfit": model, "idle": part, "cutscene": part}
+        spoken = voices.get(painting) or voices.get(ship.lower())
+        if spoken:
+            costume["voices"] = spoken
+        entry["costumes"].append(costume)
     for folder, ship_entry in (paintings or {}).items():
         for key, skin_entry in ship_entry.get("skins", {}).items():
             if not SAFE_FILE.fullmatch(folder) or not SAFE_FILE.fullmatch(key):
@@ -571,9 +630,12 @@ def build_azurlane(models: list[str], skins: dict, ships: dict, skipped: list | 
             part = {"painting": f"docs/{folder}/{key}", "layers": layers, "runtime": "3.8"}
             # Most dynamic paintings only loop; the few with reactions play them as their action.
             reactions = (actions or {}).get(key)
-            entry["costumes"].append({"label": painting_label(person, skin, key.lower() == ship.lower()),
-                                      "outfit": key, "idle": part,
-                                      "cutscene": {**part, "actions": reactions} if reactions else None})
+            costume = {"label": painting_label(person, skin, key.lower() == ship.lower()),
+                       "outfit": key, "idle": part, "cutscene": {**part, "actions": reactions} if reactions else None}
+            spoken = voices.get(key.lower()) or voices.get(ship.lower())
+            if spoken and reactions:
+                costume["voices"] = spoken
+            entry["costumes"].append(costume)
     characters = sorted(people.values(), key=lambda person: person["id"])
     for person in characters:
         person["costumes"].sort(key=lambda costume: (costume["label"] != "默认", costume["outfit"].lower()))
@@ -611,8 +673,12 @@ def update_azurlane() -> tuple[Path, str]:
     missing = sorted(set(actions) - known)
     if missing:
         print(f"azurlane: reactions listed for paintings the index no longer has: {', '.join(missing)}")
+    voice_commit = get_json(api + AZURLANE_VOICE_REPO + "/commits/main")["sha"]
+    data_commit = get_json(api + AZURLANE_GAME_DATA_REPO + "/commits/main")["sha"]
+    tables = [get_json(AZURLANE_SKIN_TABLE.format(commit=data_commit, server=server)) for server in ("EN", "CN")]
+    voices = azurlane_voices(tables, get_json(AZURLANE_VOICELINES.format(commit=voice_commit)))
     skipped: list[str] = []
-    characters = build_azurlane(models, skins, ships, skipped, paintings, actions)
+    characters = build_azurlane(models, skins, ships, skipped, paintings, actions, voices)
     if not characters:
         raise ValueError("no Azur Lane Live2D model could be named")
     if skipped:
@@ -624,7 +690,10 @@ def update_azurlane() -> tuple[Path, str]:
     return AZURLANE_CATALOG, dump({"generatedAt": now(), "source": f"{AZURLANE_REPO}@{commit[:12]}",
                                    "names": f"{AZURLANE_NAMES_REPO}@{names_commit[:12]}",
                                    "paintings": f"{AZURLANE_PAINTINGS_REPO}@{painting_commit[:12]}",
-                                   "commit": commit, "paintingCommit": painting_commit, "characters": characters})
+                                   "voices": f"{AZURLANE_VOICE_REPO}@{voice_commit[:12]}",
+                                   "skinTable": f"{AZURLANE_GAME_DATA_REPO}@{data_commit[:12]}",
+                                   "commit": commit, "paintingCommit": painting_commit, "voiceCommit": voice_commit,
+                                   "characters": characters})
 
 
 def main() -> int:

@@ -155,6 +155,18 @@ test('the Azur Lane catalog pins its upstreams: Live2D models for both displays,
   const catalog = JSON.parse(readFileSync(new URL('../public/companion/azurlane/catalog.json', import.meta.url), 'utf8'));
   assert.match(catalog.commit, /^[a-f0-9]{40}$/);
   assert.match(catalog.paintingCommit, /^[a-f0-9]{40}$/);
+  assert.match(catalog.voiceCommit, /^[a-f0-9]{40}$/);
+  let spoken = 0;
+  for (const costume of catalog.characters.flatMap(person => person.costumes)) {
+    if (!costume.voices) continue;
+    spoken += 1;
+    assert.ok(costume.cutscene, 'only costumes with reactions speak');
+    for (const [motion, path] of Object.entries(costume.voices)) {
+      assert.match(motion, /^(login|home|mail|mission|mission_complete|complete|touch|touch_head|touch_body|touch_special|main_\d+)$/);
+      assert.match(path, /^\d+\/\w+$/);
+    }
+  }
+  assert.ok(spoken > 200, 'most models have their Japanese voice lines');
   assert.ok(catalog.characters.length > 100);
   const keys = new Set();
   let paintings = 0;

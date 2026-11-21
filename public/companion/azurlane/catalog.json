@@ -1,10 +1,13 @@
 {
- "generatedAt": "2026-11-19T15:34:17+00:00",
+ "generatedAt": "2026-11-21T13:29:36+00:00",
  "source": "bungaku-moe/AzurLaneLive2D@5435d971c655",
  "names": "Pelom777/AzurLaneData@323e02209bb6",
  "paintings": "ww-rm/azurlane_spinepainting@d37b5bd58b11",
+ "voices": "Fernando2603/AzurLane@219db8feba07",
+ "skinTable": "AzurLaneTools/AzurLaneData@4cca5c243700",
  "commit": "5435d971c655ff6f2efb40d13de33e815fe6c199",
  "paintingCommit": "d37b5bd58b1140c2395bb2d22cf9bc80fda504d5",
+ "voiceCommit": "219db8feba07058dde232c461218bdacaaefdc17",
  "characters": [
   {
    "id": "azurlane:abeikelongbi",
@@ -20,6 +23,20 @@
      "cutscene": {
       "model": "Live2D/abeikelongbi_3/abeikelongbi_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "213042/login",
+      "home": "213042/home",
+      "mail": "213040/mail",
+      "mission": "213040/mission",
+      "mission_complete": "213040/mission_complete",
+      "complete": "213040/expedition",
+      "touch": "213042/touch",
+      "touch_body": "213042/touch",
+      "touch_special": "213040/touch2",
+      "main_1": "213042/main1",
+      "main_2": "213042/main2",
+      "main_3": "213042/main3"
      }
     }
    ]
@@ -38,6 +55,22 @@
      "cutscene": {
       "model": "Live2D/adaerbote_2/adaerbote_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "403101/login",
+      "home": "403101/home",
+      "mail": "403101/mail",
+      "mission": "403101/mission",
+      "mission_complete": "403101/mission_complete",
+      "complete": "403101/expedition",
+      "touch": "403101/touch",
+      "touch_head": "403100/headtouch",
+      "touch_body": "403101/touch",
+      "touch_special": "403101/touch2",
+      "main_1": "403101/main1",
+      "main_2": "403101/main2",
+      "main_3": "403101/main3",
+      "main_4": "403100/main4"
      }
     },
     {
@@ -50,6 +83,22 @@
      "cutscene": {
       "model": "Live2D/adaerbote_3/adaerbote_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "403102/login",
+      "home": "403102/home",
+      "mail": "403102/mail",
+      "mission": "403102/mission",
+      "mission_complete": "403102/mission_complete",
+      "complete": "403102/expedition",
+      "touch": "403102/touch",
+      "touch_head": "403102/headtouch",
+      "touch_body": "403102/touch",
+      "touch_special": "403102/touch2",
+      "main_1": "403102/main1",
+      "main_2": "403102/main2",
+      "main_3": "403102/main3",
+      "main_4": "403100/main4"
      }
     }
    ]
@@ -68,6 +117,20 @@
      "cutscene": {
       "model": "Live2D/aerbien_3/aerbien_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "206072/login",
+      "home": "206072/home",
+      "mail": "206070/mail",
+      "mission": "206070/mission",
+      "mission_complete": "206070/mission_complete",
+      "complete": "206070/expedition",
+      "touch": "206072/touch",
+      "touch_body": "206072/touch",
+      "touch_special": "206072/touch2",
+      "main_1": "206072/main1",
+      "main_2": "206072/main2",
+      "main_3": "206072/main3"
      }
     },
     {
@@ -137,6 +200,22 @@
      "cutscene": {
       "model": "Live2D/aersasi_2/aersasi_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "805031/login",
+      "home": "805031/home",
+      "mail": "805031/mail",
+      "mission": "805031/mission",
+      "mission_complete": "805031/mission_complete",
+      "complete": "805031/expedition",
+      "touch": "805031/touch",
+      "touch_head": "805031/headtouch",
+      "touch_body": "805031/touch",
+      "touch_special": "805031/touch2",
+      "main_1": "805031/main1",
+      "main_2": "805031/main2",
+      "main_3": "805031/main3",
+      "main_4": "805031/main4"
      }
     },
     {
@@ -149,6 +228,22 @@
      "cutscene": {
       "model": "Live2D/aersasi_3/aersasi_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "805032/login",
+      "home": "805032/home",
+      "mail": "805030/mail",
+      "mission": "805032/mission",
+      "mission_complete": "805032/mission_complete",
+      "complete": "805032/expedition",
+      "touch": "805032/touch",
+      "touch_head": "805032/headtouch",
+      "touch_body": "805032/touch",
+      "touch_special": "805032/touch2",
+      "main_1": "805032/main1",
+      "main_2": "805032/main2",
+      "main_3": "805032/main3",
+      "main_4": "805032/main4"
      }
     }
    ]
@@ -167,6 +262,20 @@
      "cutscene": {
       "model": "Live2D/aidang_2/aidang_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "303121/login",
+      "home": "303120/home",
+      "mail": "303120/mail",
+      "mission": "303120/mission",
+      "mission_complete": "303120/mission_complete",
+      "complete": "303121/expedition",
+      "touch": "303121/touch",
+      "touch_body": "303121/touch",
+      "touch_special": "303121/touch2",
+      "main_1": "303121/main1",
+      "main_2": "303121/main2",
+      "main_3": "303121/main3"
      }
     },
     {
@@ -200,6 +309,21 @@
      "cutscene": {
       "model": "Live2D/aierdeliqi_4/aierdeliqi_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "101263/login",
+      "home": "101263/home",
+      "mail": "101260/mail",
+      "mission": "101260/mission",
+      "mission_complete": "101260/mission_complete",
+      "complete": "101260/expedition",
+      "touch": "101263/touch",
+      "touch_head": "101260/headtouch",
+      "touch_body": "101263/touch",
+      "touch_special": "101260/touch2",
+      "main_1": "101263/main1",
+      "main_2": "101263/main2",
+      "main_3": "101263/main3"
      }
     },
     {
@@ -212,6 +336,21 @@
      "cutscene": {
       "model": "Live2D/aierdeliqi_5/aierdeliqi_5.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "101264/login",
+      "home": "101264/home",
+      "mail": "101260/mail",
+      "mission": "101260/mission",
+      "mission_complete": "101260/mission_complete",
+      "complete": "101260/expedition",
+      "touch": "101264/touch",
+      "touch_head": "101260/headtouch",
+      "touch_body": "101264/touch",
+      "touch_special": "101264/touch2",
+      "main_1": "101264/main1",
+      "main_2": "101264/main2",
+      "main_3": "101264/main3"
      }
     },
     {
@@ -289,6 +428,21 @@
      "cutscene": {
       "model": "Live2D/aijier_2/aijier_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "499051/login",
+      "home": "499051/home",
+      "mail": "499050/mail",
+      "mission": "499050/mission",
+      "mission_complete": "499051/mission_complete",
+      "complete": "499051/expedition",
+      "touch": "499051/touch",
+      "touch_head": "499050/headtouch",
+      "touch_body": "499051/touch",
+      "touch_special": "499051/touch2",
+      "main_1": "499051/main1",
+      "main_2": "499051/main2",
+      "main_3": "499051/main3"
      }
     },
     {
@@ -301,6 +455,21 @@
      "cutscene": {
       "model": "Live2D/aijier_3/aijier_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "499052/login",
+      "home": "499052/home",
+      "mail": "499050/mail",
+      "mission": "499052/mission",
+      "mission_complete": "499052/mission_complete",
+      "complete": "499052/expedition",
+      "touch": "499052/touch",
+      "touch_head": "499052/headtouch",
+      "touch_body": "499052/touch",
+      "touch_special": "499052/touch2",
+      "main_1": "499052/main1",
+      "main_2": "499052/main2",
+      "main_3": "499052/main3"
      }
     },
     {
@@ -313,6 +482,21 @@
      "cutscene": {
       "model": "Live2D/aijier_4/aijier_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "499053/login",
+      "home": "499053/home",
+      "mail": "499050/mail",
+      "mission": "499053/mission",
+      "mission_complete": "499053/mission_complete",
+      "complete": "499053/expedition",
+      "touch": "499053/touch",
+      "touch_head": "499053/headtouch",
+      "touch_body": "499053/touch",
+      "touch_special": "499053/touch2",
+      "main_1": "499053/main1",
+      "main_2": "499053/main2",
+      "main_3": "499053/main3"
      }
     }
    ]
@@ -352,6 +536,22 @@
      "cutscene": {
       "model": "Live2D/ailunsamuna_2/ailunsamuna_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "101451/login",
+      "home": "101451/home",
+      "mail": "101450/mail",
+      "mission": "101450/mission",
+      "mission_complete": "101450/mission_complete",
+      "complete": "101450/expedition",
+      "touch": "101451/touch",
+      "touch_head": "101450/headtouch",
+      "touch_body": "101451/touch",
+      "touch_special": "101451/touch2",
+      "main_1": "101451/main1",
+      "main_2": "101451/main2",
+      "main_3": "101451/main3",
+      "main_4": "101450/main4"
      }
     },
     {
@@ -364,6 +564,23 @@
      "cutscene": {
       "model": "Live2D/ailunsamuna_3/ailunsamuna_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "101452/login",
+      "home": "101452/home",
+      "mail": "101452/mail",
+      "mission": "101450/mission",
+      "mission_complete": "101450/mission_complete",
+      "complete": "101450/expedition",
+      "touch": "101452/touch",
+      "touch_head": "101450/headtouch",
+      "touch_body": "101452/touch",
+      "touch_special": "101452/touch2",
+      "main_1": "101452/main1",
+      "main_2": "101452/main2",
+      "main_3": "101452/main3",
+      "main_4": "101452/main4",
+      "main_5": "101452/main5"
      }
     }
    ]
@@ -382,6 +599,21 @@
      "cutscene": {
       "model": "Live2D/aimierbeierding_2/aimierbeierding_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "802011/login",
+      "home": "802011/home",
+      "mail": "802010/mail",
+      "mission": "802010/mission",
+      "mission_complete": "802010/mission_complete",
+      "complete": "802010/expedition",
+      "touch": "802011/touch",
+      "touch_head": "802010/headtouch",
+      "touch_body": "802011/touch",
+      "touch_special": "802011/touch2",
+      "main_1": "802011/main1",
+      "main_2": "802011/main2",
+      "main_3": "802011/main3"
      }
     },
     {
@@ -394,6 +626,21 @@
      "cutscene": {
       "model": "Live2D/aimierbeierding_3/aimierbeierding_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "802012/login",
+      "home": "802012/home",
+      "mail": "802010/mail",
+      "mission": "802010/mission",
+      "mission_complete": "802010/mission_complete",
+      "complete": "802010/expedition",
+      "touch": "802012/touch",
+      "touch_head": "802010/headtouch",
+      "touch_body": "802012/touch",
+      "touch_special": "802012/touch2",
+      "main_1": "802012/main1",
+      "main_2": "802012/main2",
+      "main_3": "802012/main3"
      }
     }
    ]
@@ -412,6 +659,21 @@
      "cutscene": {
       "model": "Live2D/aimudeng_2/aimudeng_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "402071/login",
+      "home": "402071/home",
+      "mail": "402071/mail",
+      "mission": "402071/mission",
+      "mission_complete": "402071/mission_complete",
+      "complete": "402071/expedition",
+      "touch": "402071/touch",
+      "touch_head": "402071/headtouch",
+      "touch_body": "402071/touch",
+      "touch_special": "402071/touch2",
+      "main_1": "402071/main1",
+      "main_2": "402071/main2",
+      "main_3": "402071/main3"
      }
     },
     {
@@ -459,6 +721,21 @@
         "drag_ex"
        ]
       ]
+     },
+     "voices": {
+      "login": "402073/login",
+      "home": "402073/home",
+      "mail": "402070/mail",
+      "mission": "402070/mission",
+      "mission_complete": "402070/mission_complete",
+      "complete": "402073/expedition",
+      "touch": "402073/touch",
+      "touch_head": "402073/headtouch",
+      "touch_body": "402073/touch",
+      "touch_special": "402073/touch2",
+      "main_1": "402073/main1",
+      "main_2": "402073/main2",
+      "main_3": "402073/main3"
      }
     }
    ]
@@ -477,6 +754,21 @@
      "cutscene": {
       "model": "Live2D/aisaikesi_4/aisaikesi_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "107092/login",
+      "home": "107092/home",
+      "mail": "107090/mail",
+      "mission": "107092/mission",
+      "mission_complete": "107092/mission_complete",
+      "complete": "107092/expedition",
+      "touch": "107092/touch",
+      "touch_head": "107090/headtouch",
+      "touch_body": "107092/touch",
+      "touch_special": "107092/touch2",
+      "main_1": "107092/main1",
+      "main_2": "107092/main2",
+      "main_3": "107092/main3"
      }
     },
     {
@@ -529,6 +821,21 @@
      "cutscene": {
       "model": "Live2D/ankeleiqi_2/ankeleiqi_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "199031/login",
+      "home": "199031/home",
+      "mail": "199031/mail",
+      "mission": "199030/mission",
+      "mission_complete": "199030/mission_complete",
+      "complete": "199031/expedition",
+      "touch": "199031/touch",
+      "touch_head": "199030/headtouch",
+      "touch_body": "199031/touch",
+      "touch_special": "199031/touch2",
+      "main_1": "199031/main1",
+      "main_2": "199031/main2",
+      "main_3": "199031/main3"
      }
     },
     {
@@ -541,6 +848,22 @@
      "cutscene": {
       "model": "Live2D/ankeleiqi_3/ankeleiqi_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "199032/login",
+      "home": "199032/home",
+      "mail": "199032/mail",
+      "mission": "199030/mission",
+      "mission_complete": "199032/mission_complete",
+      "complete": "199032/expedition",
+      "touch": "199032/touch",
+      "touch_head": "199032/headtouch",
+      "touch_body": "199032/touch",
+      "touch_special": "199032/touch2",
+      "main_1": "199032/main1",
+      "main_2": "199032/main2",
+      "main_3": "199032/main3",
+      "main_4": "199032/main4"
      }
     },
     {
@@ -553,6 +876,22 @@
      "cutscene": {
       "model": "Live2D/ankeleiqi_4/ankeleiqi_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "199033/login",
+      "home": "199033/home",
+      "mail": "199033/mail",
+      "mission": "199030/mission",
+      "mission_complete": "199030/mission_complete",
+      "complete": "199030/expedition",
+      "touch": "199033/touch",
+      "touch_head": "199033/headtouch",
+      "touch_body": "199033/touch",
+      "touch_special": "199033/touch2",
+      "main_1": "199033/main1",
+      "main_2": "199033/main2",
+      "main_3": "199033/main3",
+      "main_4": "199033/main4"
      }
     }
    ]
@@ -571,6 +910,21 @@
      "cutscene": {
       "model": "Live2D/anninvwang_2/anninvwang_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "9600121/login",
+      "home": "9600121/home",
+      "mail": "9600120/mail",
+      "mission": "9600120/mission",
+      "mission_complete": "9600121/mission_complete",
+      "complete": "9600120/expedition",
+      "touch": "9600121/touch",
+      "touch_head": "9600120/headtouch",
+      "touch_body": "9600121/touch",
+      "touch_special": "9600121/touch2",
+      "main_1": "9600121/main1",
+      "main_2": "9600121/main2",
+      "main_3": "9600121/main3"
      }
     }
    ]
@@ -622,6 +976,21 @@
      "cutscene": {
       "model": "Live2D/aogusite_4/aogusite_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "499060/login",
+      "home": "499060/home",
+      "mail": "499060/mail",
+      "mission": "499060/mission",
+      "mission_complete": "499060/mission_complete",
+      "complete": "499060/expedition",
+      "touch": "499060/touch",
+      "touch_head": "499060/headtouch",
+      "touch_body": "499060/touch",
+      "touch_special": "499060/touch2",
+      "main_1": "499060/main1",
+      "main_2": "499060/main2",
+      "main_3": "499060/main3"
      }
     }
    ]
@@ -640,6 +1009,20 @@
      "cutscene": {
       "model": "Live2D/baerdimo_5/baerdimo_5.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "103163/login",
+      "home": "103163/home",
+      "mail": "103160/mail",
+      "mission": "103160/mission",
+      "mission_complete": "103160/mission_complete",
+      "complete": "103160/expedition",
+      "touch": "103163/touch",
+      "touch_body": "103163/touch",
+      "touch_special": "103160/touch2",
+      "main_1": "103163/main1",
+      "main_2": "103163/main2",
+      "main_3": "103163/main3"
      }
     },
     {
@@ -652,6 +1035,21 @@
      "cutscene": {
       "model": "Live2D/baerdimo_6/baerdimo_6.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "103165/login",
+      "home": "103165/home",
+      "mail": "103160/mail",
+      "mission": "103165/mission",
+      "mission_complete": "103165/mission_complete",
+      "complete": "103165/expedition",
+      "touch": "103165/touch",
+      "touch_head": "103165/headtouch",
+      "touch_body": "103165/touch",
+      "touch_special": "103165/touch2",
+      "main_1": "103165/main1",
+      "main_2": "103165/main2",
+      "main_3": "103165/main3"
      }
     }
    ]
@@ -685,6 +1083,22 @@
      "cutscene": {
       "model": "Live2D/baifeng_2/baifeng_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "307161/login",
+      "home": "307161/home",
+      "mail": "307160/mail",
+      "mission": "307161/mission",
+      "mission_complete": "307160/mission_complete",
+      "complete": "307160/expedition",
+      "touch": "307161/touch",
+      "touch_head": "307161/headtouch",
+      "touch_body": "307161/touch",
+      "touch_special": "307161/touch2",
+      "main_1": "307161/main1",
+      "main_2": "307161/main2",
+      "main_3": "307161/main3",
+      "main_4": "307161/main4"
      }
     },
     {
@@ -697,6 +1111,22 @@
      "cutscene": {
       "model": "Live2D/baifeng_3/baifeng_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "307160/login",
+      "home": "307160/home",
+      "mail": "307160/mail",
+      "mission": "307160/mission",
+      "mission_complete": "307160/mission_complete",
+      "complete": "307160/expedition",
+      "touch": "307160/touch",
+      "touch_head": "307160/headtouch",
+      "touch_body": "307160/touch",
+      "touch_special": "307160/touch2",
+      "main_1": "307160/main1",
+      "main_2": "307160/main2",
+      "main_3": "307160/main3",
+      "main_4": "307160/main4"
      }
     }
    ]
@@ -738,6 +1168,21 @@
      "cutscene": {
       "model": "Live2D/bailong_3/bailong_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "399052/login",
+      "home": "399052/home",
+      "mail": "399050/mail",
+      "mission": "399050/mission",
+      "mission_complete": "399050/mission_complete",
+      "complete": "399052/expedition",
+      "touch": "399052/touch",
+      "touch_head": "399050/headtouch",
+      "touch_body": "399052/touch",
+      "touch_special": "399052/touch2",
+      "main_1": "399052/main1",
+      "main_2": "399052/main2",
+      "main_3": "399052/main3"
      }
     }
    ]
@@ -756,6 +1201,21 @@
      "cutscene": {
       "model": "Live2D/baiyanjuren_4/baiyanjuren_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "206023/login",
+      "home": "206023/home",
+      "mail": "206020/mail",
+      "mission": "206020/mission",
+      "mission_complete": "206020/mission_complete",
+      "complete": "206020/expedition",
+      "touch": "206023/touch",
+      "touch_head": "206023/headtouch",
+      "touch_body": "206023/touch",
+      "touch_special": "206023/touch2",
+      "main_1": "206023/main1",
+      "main_2": "206023/main2",
+      "main_3": "206023/main3"
      }
     }
    ]
@@ -810,6 +1270,21 @@
      "cutscene": {
       "model": "Live2D/banerwei_3/banerwei_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "807022/login",
+      "home": "807022/home",
+      "mail": "807020/mail",
+      "mission": "807022/mission",
+      "mission_complete": "807022/mission_complete",
+      "complete": "807022/expedition",
+      "touch": "807022/touch",
+      "touch_head": "807020/headtouch",
+      "touch_body": "807022/touch",
+      "touch_special": "807022/touch2",
+      "main_1": "807022/main1",
+      "main_2": "807022/main2",
+      "main_3": "807022/main3"
      }
     }
    ]
@@ -828,6 +1303,20 @@
      "cutscene": {
       "model": "Live2D/banrenma_2/banrenma_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "206041/login",
+      "home": "206040/home",
+      "mail": "206040/mail",
+      "mission": "206040/mission",
+      "mission_complete": "206040/mission_complete",
+      "complete": "206040/expedition",
+      "touch": "206041/touch",
+      "touch_body": "206041/touch",
+      "touch_special": "206040/touch2",
+      "main_1": "206041/main1",
+      "main_2": "206041/main2",
+      "main_3": "206041/main3"
      }
     }
    ]
@@ -846,6 +1335,20 @@
      "cutscene": {
       "model": "Live2D/beianpudunII_2/beianpudunII_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "103261/login",
+      "home": "103261/home",
+      "mail": "103260/mail",
+      "mission": "103260/mission",
+      "mission_complete": "103260/mission_complete",
+      "complete": "103260/expedition",
+      "touch": "103261/touch",
+      "touch_body": "103261/touch",
+      "touch_special": "103261/touch2",
+      "main_1": "103261/main1",
+      "main_2": "103261/main2",
+      "main_3": "103261/main3"
      }
     }
    ]
@@ -864,6 +1367,21 @@
      "cutscene": {
       "model": "Live2D/beierfasite_2/beierfasite_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "202121/login",
+      "home": "202121/home",
+      "mail": "202120/mail",
+      "mission": "202120/mission",
+      "mission_complete": "202120/mission_complete",
+      "complete": "202121/expedition",
+      "touch": "202121/touch",
+      "touch_head": "202120/headtouch",
+      "touch_body": "202121/touch",
+      "touch_special": "202121/touch2",
+      "main_1": "202121/main1",
+      "main_2": "202121/main2",
+      "main_3": "202121/main3"
      }
     },
     {
@@ -897,6 +1415,21 @@
      "cutscene": {
       "model": "Live2D/beikaluolaina_2/beikaluolaina_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "105121/login",
+      "home": "105121/home",
+      "mail": "105120/mail",
+      "mission": "105120/mission",
+      "mission_complete": "105120/mission_complete",
+      "complete": "105121/expedition",
+      "touch": "105120/touch",
+      "touch_head": "105121/headtouch",
+      "touch_body": "105120/touch",
+      "touch_special": "105121/touch2",
+      "main_1": "105121/main1",
+      "main_2": "105121/main2",
+      "main_3": "105121/main3"
      }
     }
    ]
@@ -915,6 +1448,21 @@
      "cutscene": {
       "model": "Live2D/beilaosenlin_2/beilaosenlin_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "806011/login",
+      "home": "806011/home",
+      "mail": "806010/mail",
+      "mission": "806010/mission",
+      "mission_complete": "806010/mission_complete",
+      "complete": "806010/expedition",
+      "touch": "806011/touch",
+      "touch_head": "806011/headtouch",
+      "touch_body": "806011/touch",
+      "touch_special": "806011/touch2",
+      "main_1": "806011/main1",
+      "main_2": "806011/main2",
+      "main_3": "806011/main3"
      }
     }
    ]
@@ -951,6 +1499,24 @@
      "cutscene": {
       "model": "Live2D/biaoqiang/biaoqiang.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "201210/login",
+      "home": "201210/home",
+      "mail": "201210/mail",
+      "mission": "201210/mission",
+      "mission_complete": "201210/mission_complete",
+      "complete": "201210/expedition",
+      "touch": "201210/touch",
+      "touch_head": "201210/headtouch",
+      "touch_body": "201210/touch",
+      "touch_special": "201210/touch2",
+      "main_1": "201210/main1",
+      "main_2": "201210/main2",
+      "main_3": "201210/main3",
+      "main_4": "201210/main4",
+      "main_5": "201210/main5",
+      "main_6": "201210/main6"
      }
     },
     {
@@ -963,6 +1529,24 @@
      "cutscene": {
       "model": "Live2D/biaoqiang_3/biaoqiang_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "201212/login",
+      "home": "201210/home",
+      "mail": "201210/mail",
+      "mission": "201210/mission",
+      "mission_complete": "201210/mission_complete",
+      "complete": "201210/expedition",
+      "touch": "201212/touch",
+      "touch_head": "201210/headtouch",
+      "touch_body": "201212/touch",
+      "touch_special": "201212/touch2",
+      "main_1": "201212/main1",
+      "main_2": "201212/main2",
+      "main_3": "201212/main3",
+      "main_4": "201210/main4",
+      "main_5": "201210/main5",
+      "main_6": "201210/main6"
      }
     }
    ]
@@ -981,6 +1565,21 @@
      "cutscene": {
       "model": "Live2D/bisimai_2/bisimai_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "405011/login",
+      "home": "405011/home",
+      "mail": "405011/mail",
+      "mission": "405011/mission",
+      "mission_complete": "405011/mission_complete",
+      "complete": "405011/expedition",
+      "touch": "405011/touch",
+      "touch_head": "405010/headtouch",
+      "touch_body": "405011/touch",
+      "touch_special": "405011/touch2",
+      "main_1": "405011/main1",
+      "main_2": "405011/main2",
+      "main_3": "405011/main3"
      }
     },
     {
@@ -993,6 +1592,21 @@
      "cutscene": {
       "model": "Live2D/bisimai_4/bisimai_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "405013/login",
+      "home": "405013/home",
+      "mail": "405013/mail",
+      "mission": "405013/mission",
+      "mission_complete": "405013/mission_complete",
+      "complete": "405013/expedition",
+      "touch": "405013/touch",
+      "touch_head": "405013/headtouch",
+      "touch_body": "405013/touch",
+      "touch_special": "405013/touch2",
+      "main_1": "405013/main1",
+      "main_2": "405013/main2",
+      "main_3": "405013/main3"
      }
     }
    ]
@@ -1055,6 +1669,20 @@
      "cutscene": {
       "model": "Live2D/bola_2/bola_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "603031/login",
+      "home": "603031/home",
+      "mail": "603030/mail",
+      "mission": "603030/mission",
+      "mission_complete": "603030/mission_complete",
+      "complete": "603030/expedition",
+      "touch": "603031/touch",
+      "touch_body": "603031/touch",
+      "touch_special": "603031/touch2",
+      "main_1": "603031/main1",
+      "main_2": "603031/main2",
+      "main_3": "603031/main3"
      }
     }
    ]
@@ -1073,6 +1701,21 @@
      "cutscene": {
       "model": "Live2D/boyixi_2/boyixi_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "102291/login",
+      "home": "102291/home",
+      "mail": "102291/mail",
+      "mission": "102291/mission",
+      "mission_complete": "102291/mission_complete",
+      "complete": "102291/expedition",
+      "touch": "102291/touch",
+      "touch_head": "102291/headtouch",
+      "touch_body": "102291/touch",
+      "touch_special": "102291/touch2",
+      "main_1": "102291/main1",
+      "main_2": "102291/main2",
+      "main_3": "102291/main3"
      }
     }
    ]
@@ -1091,6 +1734,20 @@
      "cutscene": {
       "model": "Live2D/bulaimodun_2/bulaimodun_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "103243/login",
+      "home": "103243/home",
+      "mail": "103240/mail",
+      "mission": "103240/mission",
+      "mission_complete": "103240/mission_complete",
+      "complete": "103240/expedition",
+      "touch": "103243/touch",
+      "touch_body": "103243/touch",
+      "touch_special": "103243/touch2",
+      "main_1": "103243/main1",
+      "main_2": "103243/main2",
+      "main_3": "103243/main3"
      }
     },
     {
@@ -1103,6 +1760,21 @@
      "cutscene": {
       "model": "Live2D/bulaimodun_4/bulaimodun_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "103242/login",
+      "home": "103240/home",
+      "mail": "103240/mail",
+      "mission": "103240/mission",
+      "mission_complete": "103242/mission_complete",
+      "complete": "103242/expedition",
+      "touch": "103242/touch",
+      "touch_head": "103242/headtouch",
+      "touch_body": "103242/touch",
+      "touch_special": "103242/touch2",
+      "main_1": "103242/main1",
+      "main_2": "103242/main2",
+      "main_3": "103242/main3"
      }
     },
     {
@@ -1115,6 +1787,20 @@
      "cutscene": {
       "model": "Live2D/bulaimodun_5/bulaimodun_5.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "103244/login",
+      "home": "103244/home",
+      "mail": "103240/mail",
+      "mission": "103240/mission",
+      "mission_complete": "103240/mission_complete",
+      "complete": "103244/expedition",
+      "touch": "103244/touch",
+      "touch_body": "103244/touch",
+      "touch_special": "103244/touch2",
+      "main_1": "103244/main1",
+      "main_2": "103244/main2",
+      "main_3": "103244/main3"
      }
     },
     {
@@ -1167,6 +1853,21 @@
      "cutscene": {
       "model": "Live2D/buleisite_2/buleisite_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "899031/login",
+      "home": "899031/home",
+      "mail": "899031/mail",
+      "mission": "899031/mission",
+      "mission_complete": "899030/mission_complete",
+      "complete": "899031/expedition",
+      "touch": "899031/touch",
+      "touch_head": "899030/headtouch",
+      "touch_body": "899031/touch",
+      "touch_special": "899031/touch2",
+      "main_1": "899031/main1",
+      "main_2": "899031/main2",
+      "main_3": "899031/main3"
      }
     },
     {
@@ -1179,6 +1880,21 @@
      "cutscene": {
       "model": "Live2D/buleisite_3/buleisite_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "899032/login",
+      "home": "899032/home",
+      "mail": "899030/mail",
+      "mission": "899030/mission",
+      "mission_complete": "899030/mission_complete",
+      "complete": "899030/expedition",
+      "touch": "899032/touch",
+      "touch_head": "899032/headtouch",
+      "touch_body": "899032/touch",
+      "touch_special": "899032/touch2",
+      "main_1": "899032/main1",
+      "main_2": "899032/main2",
+      "main_3": "899032/main3"
      }
     }
    ]
@@ -1218,6 +1934,21 @@
      "cutscene": {
       "model": "Live2D/bunao_3/bunao_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "207120/login",
+      "home": "207120/home",
+      "mail": "207120/mail",
+      "mission": "207120/mission",
+      "mission_complete": "207120/mission_complete",
+      "complete": "207120/expedition",
+      "touch": "207120/touch",
+      "touch_head": "207120/headtouch",
+      "touch_body": "207120/touch",
+      "touch_special": "207120/touch2",
+      "main_1": "207120/main1",
+      "main_2": "207120/main2",
+      "main_3": "207120/main3"
      }
     }
    ]
@@ -1236,6 +1967,21 @@
      "cutscene": {
       "model": "Live2D/chaijun_3/chaijun_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "299032/login",
+      "home": "299032/home",
+      "mail": "299030/mail",
+      "mission": "299030/mission",
+      "mission_complete": "299032/mission_complete",
+      "complete": "299032/expedition",
+      "touch": "299032/touch",
+      "touch_head": "299030/headtouch",
+      "touch_body": "299032/touch",
+      "touch_special": "299032/touch2",
+      "main_1": "299032/main1",
+      "main_2": "299032/main2",
+      "main_3": "299032/main3"
      }
     },
     {
@@ -1248,6 +1994,21 @@
      "cutscene": {
       "model": "Live2D/chaijun_4/chaijun_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "299033/login",
+      "home": "299033/home",
+      "mail": "299030/mail",
+      "mission": "299030/mission",
+      "mission_complete": "299030/mission_complete",
+      "complete": "299030/expedition",
+      "touch": "299033/touch",
+      "touch_head": "299030/headtouch",
+      "touch_body": "299033/touch",
+      "touch_special": "299033/touch2",
+      "main_1": "299033/main1",
+      "main_2": "299033/main2",
+      "main_3": "299033/main3"
      }
     },
     {
@@ -1260,6 +2021,22 @@
      "cutscene": {
       "model": "Live2D/chaijun_5/chaijun_5.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "299034/login",
+      "home": "299034/home",
+      "mail": "299034/mail",
+      "mission": "299034/mission",
+      "mission_complete": "299034/mission_complete",
+      "complete": "299034/expedition",
+      "touch": "299034/touch",
+      "touch_head": "299034/headtouch",
+      "touch_body": "299034/touch",
+      "touch_special": "299034/touch2",
+      "main_1": "299034/main1",
+      "main_2": "299034/main2",
+      "main_3": "299034/main3",
+      "main_4": "299034/main4"
      }
     },
     {
@@ -1272,6 +2049,21 @@
      "cutscene": {
       "model": "Live2D/chaijun_6/chaijun_6.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "299030/login",
+      "home": "299030/home",
+      "mail": "299030/mail",
+      "mission": "299030/mission",
+      "mission_complete": "299030/mission_complete",
+      "complete": "299030/expedition",
+      "touch": "299030/touch",
+      "touch_head": "299030/headtouch",
+      "touch_body": "299030/touch",
+      "touch_special": "299030/touch2",
+      "main_1": "299030/main1",
+      "main_2": "299030/main2",
+      "main_3": "299030/main3"
      }
     }
    ]
@@ -1311,6 +2103,20 @@
      "cutscene": {
       "model": "Live2D/chicheng_5/chicheng_5.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "307014/login",
+      "home": "307014/home",
+      "mail": "307010/mail",
+      "mission": "307010/mission",
+      "mission_complete": "307014/mission_complete",
+      "complete": "307014/expedition",
+      "touch": "307014/touch",
+      "touch_body": "307014/touch",
+      "touch_special": "307014/touch2",
+      "main_1": "307014/main1",
+      "main_2": "307014/main2",
+      "main_3": "307014/main3"
      }
     }
    ]
@@ -1329,6 +2135,20 @@
      "cutscene": {
       "model": "Live2D/chuixue_3/chuixue_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "301013/login",
+      "home": "301013/home",
+      "mail": "301010/mail",
+      "mission": "301010/mission",
+      "mission_complete": "301010/mission_complete",
+      "complete": "301013/expedition",
+      "touch": "301013/touch",
+      "touch_body": "301013/touch",
+      "touch_special": "301013/touch2",
+      "main_1": "301013/main1",
+      "main_2": "301013/main2",
+      "main_3": "301013/main3"
      }
     }
    ]
@@ -1347,6 +2167,21 @@
      "cutscene": {
       "model": "Live2D/chuyue_2/chuyue_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "301891/login",
+      "home": "301891/home",
+      "mail": "301890/mail",
+      "mission": "301890/mission",
+      "mission_complete": "301890/mission_complete",
+      "complete": "301891/expedition",
+      "touch": "301891/touch",
+      "touch_head": "301891/headtouch",
+      "touch_body": "301891/touch",
+      "touch_special": "301891/touch2",
+      "main_1": "301891/main1",
+      "main_2": "301891/main2",
+      "main_3": "301891/main3"
      }
     }
    ]
@@ -1386,6 +2221,20 @@
      "cutscene": {
       "model": "Live2D/dafeng_2/dafeng_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "307071/login",
+      "home": "307071/home",
+      "mail": "307070/mail",
+      "mission": "307070/mission",
+      "mission_complete": "307070/mission_complete",
+      "complete": "307070/expedition",
+      "touch": "307071/touch",
+      "touch_body": "307071/touch",
+      "touch_special": "307071/touch2",
+      "main_1": "307071/main1",
+      "main_2": "307071/main2",
+      "main_3": "307071/main3"
      }
     },
     {
@@ -1398,6 +2247,20 @@
      "cutscene": {
       "model": "Live2D/dafeng_3/dafeng_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "307074/login",
+      "home": "307074/home",
+      "mail": "307070/mail",
+      "mission": "307070/mission",
+      "mission_complete": "307070/mission_complete",
+      "complete": "307070/expedition",
+      "touch": "307074/touch",
+      "touch_body": "307074/touch",
+      "touch_special": "307074/touch2",
+      "main_1": "307074/main1",
+      "main_2": "307074/main2",
+      "main_3": "307074/main3"
      }
     },
     {
@@ -1410,6 +2273,20 @@
      "cutscene": {
       "model": "Live2D/dafeng_4/dafeng_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "307072/login",
+      "home": "307072/home",
+      "mail": "307070/mail",
+      "mission": "307070/mission",
+      "mission_complete": "307070/mission_complete",
+      "complete": "307070/expedition",
+      "touch": "307072/touch",
+      "touch_body": "307072/touch",
+      "touch_special": "307070/touch2",
+      "main_1": "307072/main1",
+      "main_2": "307072/main2",
+      "main_3": "307072/main3"
      }
     },
     {
@@ -1422,6 +2299,20 @@
      "cutscene": {
       "model": "Live2D/dafeng_6/dafeng_6.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "307075/login",
+      "home": "307075/home",
+      "mail": "307075/mail",
+      "mission": "307070/mission",
+      "mission_complete": "307070/mission_complete",
+      "complete": "307075/expedition",
+      "touch": "307075/touch",
+      "touch_body": "307075/touch",
+      "touch_special": "307075/touch2",
+      "main_1": "307075/main1",
+      "main_2": "307075/main2",
+      "main_3": "307075/main3"
      }
     },
     {
@@ -1434,6 +2325,21 @@
      "cutscene": {
       "model": "Live2D/dafeng_7/dafeng_7.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "307076/login",
+      "home": "307076/home",
+      "mail": "307070/mail",
+      "mission": "307076/mission",
+      "mission_complete": "307076/mission_complete",
+      "complete": "307076/expedition",
+      "touch": "307076/touch",
+      "touch_head": "307076/headtouch",
+      "touch_body": "307076/touch",
+      "touch_special": "307076/touch2",
+      "main_1": "307076/main1",
+      "main_2": "307076/main2",
+      "main_3": "307076/main3"
      }
     }
    ]
@@ -1496,6 +2402,22 @@
      "cutscene": {
       "model": "Live2D/daofeng_4/daofeng_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "301291/login",
+      "home": "301291/home",
+      "mail": "301290/mail",
+      "mission": "301290/mission",
+      "mission_complete": "301290/mission_complete",
+      "complete": "301290/expedition",
+      "touch": "301291/touch",
+      "touch_head": "301290/headtouch",
+      "touch_body": "301291/touch",
+      "touch_special": "301291/touch2",
+      "main_1": "301291/main1",
+      "main_2": "301291/main2",
+      "main_3": "301291/main3",
+      "main_4": "301290/main4"
      }
     },
     {
@@ -1508,6 +2430,22 @@
      "cutscene": {
       "model": "Live2D/daofeng_5/daofeng_5.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "301292/login",
+      "home": "301292/home",
+      "mail": "301290/mail",
+      "mission": "301292/mission",
+      "mission_complete": "301290/mission_complete",
+      "complete": "301292/expedition",
+      "touch": "301292/touch",
+      "touch_head": "301290/headtouch",
+      "touch_body": "301292/touch",
+      "touch_special": "301292/touch2",
+      "main_1": "301292/main1",
+      "main_2": "301292/main2",
+      "main_3": "301292/main3",
+      "main_4": "301290/main4"
      }
     }
    ]
@@ -1572,6 +2510,22 @@
      "cutscene": {
       "model": "Live2D/dewenjun_2/dewenjun_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "203131/login",
+      "home": "203131/home",
+      "mail": "203130/mail",
+      "mission": "203131/mission",
+      "mission_complete": "203131/mission_complete",
+      "complete": "203130/expedition",
+      "touch": "203131/touch",
+      "touch_head": "203131/headtouch",
+      "touch_body": "203131/touch",
+      "touch_special": "203131/touch2",
+      "main_1": "203131/main1",
+      "main_2": "203131/main2",
+      "main_3": "203131/main3",
+      "main_4": "203131/main4"
      }
     }
    ]
@@ -1590,6 +2544,21 @@
      "cutscene": {
       "model": "Live2D/deyizhi_3/deyizhi_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "403042/login",
+      "home": "403042/home",
+      "mail": "403040/mail",
+      "mission": "403040/mission",
+      "mission_complete": "403040/mission_complete",
+      "complete": "403040/expedition",
+      "touch": "403042/touch",
+      "touch_head": "403040/headtouch",
+      "touch_body": "403042/touch",
+      "touch_special": "403042/touch2",
+      "main_1": "403042/main1",
+      "main_2": "403042/main2",
+      "main_3": "403042/main3"
      }
     }
    ]
@@ -1658,6 +2627,22 @@
      "cutscene": {
       "model": "Live2D/dujiaoshou_4/dujiaoshou_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "206033/login",
+      "home": "206033/home",
+      "mail": "206030/mail",
+      "mission": "206033/mission",
+      "mission_complete": "206030/mission_complete",
+      "complete": "206030/expedition",
+      "touch": "206033/touch",
+      "touch_head": "206030/headtouch",
+      "touch_body": "206033/touch",
+      "touch_special": "206033/touch2",
+      "main_1": "206033/main1",
+      "main_2": "206033/main2",
+      "main_3": "206033/main3",
+      "main_4": "206030/main4"
      }
     },
     {
@@ -1670,6 +2655,22 @@
      "cutscene": {
       "model": "Live2D/dujiaoshou_6/dujiaoshou_6.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "206035/login",
+      "home": "206035/home",
+      "mail": "206030/mail",
+      "mission": "206030/mission",
+      "mission_complete": "206030/mission_complete",
+      "complete": "206030/expedition",
+      "touch": "206035/touch",
+      "touch_head": "206030/headtouch",
+      "touch_body": "206035/touch",
+      "touch_special": "206030/touch2",
+      "main_1": "206035/main1",
+      "main_2": "206035/main2",
+      "main_3": "206035/main3",
+      "main_4": "206030/main4"
      }
     }
    ]
@@ -1688,6 +2689,22 @@
      "cutscene": {
       "model": "Live2D/dulianglai_2/dulianglai_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "302251/login",
+      "home": "302251/home",
+      "mail": "302251/mail",
+      "mission": "302251/mission",
+      "mission_complete": "302251/mission_complete",
+      "complete": "302251/expedition",
+      "touch": "302251/touch",
+      "touch_head": "302251/headtouch",
+      "touch_body": "302251/touch",
+      "touch_special": "302251/touch2",
+      "main_1": "302251/main1",
+      "main_2": "302251/main2",
+      "main_3": "302251/main3",
+      "main_4": "302251/main4"
      }
     }
    ]
@@ -1706,6 +2723,20 @@
      "cutscene": {
       "model": "Live2D/dunkeerke_2/dunkeerke_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "904011/login",
+      "home": "904011/home",
+      "mail": "904010/mail",
+      "mission": "904010/mission",
+      "mission_complete": "904010/mission_complete",
+      "complete": "904010/expedition",
+      "touch": "904011/touch",
+      "touch_body": "904011/touch",
+      "touch_special": "904010/touch2",
+      "main_1": "904011/main1",
+      "main_2": "904011/main2",
+      "main_3": "904011/main3"
      }
     }
    ]
@@ -1749,6 +2780,20 @@
      "cutscene": {
       "model": "Live2D/edu_3/edu_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "901112/login",
+      "home": "901112/home",
+      "mail": "901110/mail",
+      "mission": "901112/mission",
+      "mission_complete": "901110/mission_complete",
+      "complete": "901110/expedition",
+      "touch": "901112/touch",
+      "touch_body": "901112/touch",
+      "touch_special": "901112/touch2",
+      "main_1": "901112/main1",
+      "main_2": "901112/main2",
+      "main_3": "901112/main3"
      }
     },
     {
@@ -1761,6 +2806,20 @@
      "cutscene": {
       "model": "Live2D/edu_4/edu_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "901113/login",
+      "home": "901113/home",
+      "mail": "901110/mail",
+      "mission": "901110/mission",
+      "mission_complete": "901110/mission_complete",
+      "complete": "901113/expedition",
+      "touch": "901113/touch",
+      "touch_body": "901113/touch",
+      "touch_special": "901113/touch2",
+      "main_1": "901113/main1",
+      "main_2": "901113/main2",
+      "main_3": "901113/main3"
      }
     }
    ]
@@ -1815,6 +2874,21 @@
      "cutscene": {
       "model": "Live2D/feiteliedadi_3/feiteliedadi_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "499022/login",
+      "home": "499022/home",
+      "mail": "499020/mail",
+      "mission": "499020/mission",
+      "mission_complete": "499020/mission_complete",
+      "complete": "499020/expedition",
+      "touch": "499022/touch",
+      "touch_head": "499022/headtouch",
+      "touch_body": "499022/touch",
+      "touch_special": "499022/touch2",
+      "main_1": "499022/main1",
+      "main_2": "499022/main2",
+      "main_3": "499022/main3"
      }
     },
     {
@@ -1827,6 +2901,21 @@
      "cutscene": {
       "model": "Live2D/feiteliedadi_4/feiteliedadi_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "499023/login",
+      "home": "499023/home",
+      "mail": "499020/mail",
+      "mission": "499020/mission",
+      "mission_complete": "499020/mission_complete",
+      "complete": "499020/expedition",
+      "touch": "499023/touch",
+      "touch_head": "499023/headtouch",
+      "touch_body": "499023/touch",
+      "touch_special": "499023/touch2",
+      "main_1": "499023/main1",
+      "main_2": "499023/main2",
+      "main_3": "499023/main3"
      }
     }
    ]
@@ -1845,6 +2934,21 @@
      "cutscene": {
       "model": "Live2D/feiteliekaer_3/feiteliekaer_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "403142/login",
+      "home": "403142/home",
+      "mail": "403140/mail",
+      "mission": "403142/mission",
+      "mission_complete": "403142/mission_complete",
+      "complete": "403140/expedition",
+      "touch": "403142/touch",
+      "touch_head": "403140/headtouch",
+      "touch_body": "403142/touch",
+      "touch_special": "403142/touch2",
+      "main_1": "403142/main1",
+      "main_2": "403142/main2",
+      "main_3": "403142/main3"
      }
     },
     {
@@ -1857,6 +2961,21 @@
      "cutscene": {
       "model": "Live2D/feiteliekaer_4/feiteliekaer_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "403140/login",
+      "home": "403140/home",
+      "mail": "403140/mail",
+      "mission": "403140/mission",
+      "mission_complete": "403140/mission_complete",
+      "complete": "403140/expedition",
+      "touch": "403140/touch",
+      "touch_head": "403140/headtouch",
+      "touch_body": "403140/touch",
+      "touch_special": "403140/touch2",
+      "main_1": "403140/main1",
+      "main_2": "403140/main2",
+      "main_3": "403140/main3"
      }
     }
    ]
@@ -1894,6 +3013,21 @@
      "cutscene": {
       "model": "Live2D/fengyun_4/fengyun_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "301863/login",
+      "home": "301863/home",
+      "mail": "301863/mail",
+      "mission": "301863/mission",
+      "mission_complete": "301860/mission_complete",
+      "complete": "301863/expedition",
+      "touch": "301863/touch",
+      "touch_head": "301860/headtouch",
+      "touch_body": "301863/touch",
+      "touch_special": "301863/touch2",
+      "main_1": "301863/main1",
+      "main_2": "301863/main2",
+      "main_3": "301863/main3"
      }
     }
    ]
@@ -1948,6 +3082,22 @@
      "cutscene": {
       "model": "Live2D/fulici_2/fulici_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "407041/login",
+      "home": "407041/home",
+      "mail": "407040/mail",
+      "mission": "407041/mission",
+      "mission_complete": "407040/mission_complete",
+      "complete": "407040/expedition",
+      "touch": "407040/touch",
+      "touch_head": "407041/headtouch",
+      "touch_body": "407040/touch",
+      "touch_special": "407041/touch2",
+      "main_1": "407041/main1",
+      "main_2": "407041/main2",
+      "main_3": "407041/main3",
+      "main_4": "407041/main4"
      }
     }
    ]
@@ -2017,6 +3167,22 @@
      "cutscene": {
       "model": "Live2D/gangyishawa_3/gangyishawa_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "9600070/login",
+      "home": "9600070/home",
+      "mail": "9600070/mail",
+      "mission": "9600070/mission",
+      "mission_complete": "9600070/mission_complete",
+      "complete": "9600070/expedition",
+      "touch": "9600070/touch",
+      "touch_head": "9600070/headtouch",
+      "touch_body": "9600070/touch",
+      "touch_special": "9600070/touch2",
+      "main_1": "9600070/main1",
+      "main_2": "9600070/main2",
+      "main_3": "9600070/main3",
+      "main_4": "9600070/main4"
      }
     }
    ]
@@ -2062,6 +3228,21 @@
         "drag_ex"
        ]
       ]
+     },
+     "voices": {
+      "login": "303116/login",
+      "home": "303116/home",
+      "mail": "303116/mail",
+      "mission": "303116/mission",
+      "mission_complete": "303116/mission_complete",
+      "complete": "303116/expedition",
+      "touch": "303116/touch",
+      "touch_head": "303110/headtouch",
+      "touch_body": "303116/touch",
+      "touch_special": "303116/touch2",
+      "main_1": "303116/main1",
+      "main_2": "303116/main2",
+      "main_3": "303116/main3"
      }
     },
     {
@@ -2074,6 +3255,21 @@
      "cutscene": {
       "model": "Live2D/gaoxiong_7/gaoxiong_7.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "303117/login",
+      "home": "303117/home",
+      "mail": "303110/mail",
+      "mission": "303110/mission",
+      "mission_complete": "303110/mission_complete",
+      "complete": "303110/expedition",
+      "touch": "303117/touch",
+      "touch_head": "303117/headtouch",
+      "touch_body": "303117/touch",
+      "touch_special": "303117/touch2",
+      "main_1": "303117/main1",
+      "main_2": "303117/main2",
+      "main_3": "303117/main3"
      }
     }
    ]
@@ -2092,6 +3288,21 @@
      "cutscene": {
       "model": "Live2D/geliqiya_2/geliqiya_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "603061/login",
+      "home": "603061/home",
+      "mail": "603061/mail",
+      "mission": "603060/mission",
+      "mission_complete": "603060/mission_complete",
+      "complete": "603060/expedition",
+      "touch": "603061/touch",
+      "touch_head": "603060/headtouch",
+      "touch_body": "603061/touch",
+      "touch_special": "603061/touch2",
+      "main_1": "603061/main1",
+      "main_2": "603061/main2",
+      "main_3": "603061/main3"
      }
     }
    ]
@@ -2131,6 +3342,20 @@
      "cutscene": {
       "model": "Live2D/genaisennao_2/genaisennao_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "404021/login",
+      "home": "404021/home",
+      "mail": "404020/mail",
+      "mission": "404020/mission",
+      "mission_complete": "404020/mission_complete",
+      "complete": "404020/expedition",
+      "touch": "404021/touch",
+      "touch_body": "404021/touch",
+      "touch_special": "404021/touch2",
+      "main_1": "404021/main1",
+      "main_2": "404021/main2",
+      "main_3": "404021/main3"
      }
     }
    ]
@@ -2186,6 +3411,23 @@
      "cutscene": {
       "model": "Live2D/guandao_2/guandao_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "118021/login",
+      "home": "118021/home",
+      "mail": "118020/mail",
+      "mission": "118020/mission",
+      "mission_complete": "118020/mission_complete",
+      "complete": "118020/expedition",
+      "touch": "118021/touch",
+      "touch_head": "118020/headtouch",
+      "touch_body": "118021/touch",
+      "touch_special": "118021/touch2",
+      "main_1": "118021/main1",
+      "main_2": "118021/main2",
+      "main_3": "118021/main3",
+      "main_4": "118021/main4",
+      "main_5": "118021/main5"
      }
     },
     {
@@ -2198,6 +3440,23 @@
      "cutscene": {
       "model": "Live2D/guandao_3/guandao_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "118022/login",
+      "home": "118022/home",
+      "mail": "118020/mail",
+      "mission": "118020/mission",
+      "mission_complete": "118020/mission_complete",
+      "complete": "118022/expedition",
+      "touch": "118022/touch",
+      "touch_head": "118020/headtouch",
+      "touch_body": "118022/touch",
+      "touch_special": "118022/touch2",
+      "main_1": "118022/main1",
+      "main_2": "118022/main2",
+      "main_3": "118022/main3",
+      "main_4": "118020/main4",
+      "main_5": "118020/main5"
      }
     }
    ]
@@ -2216,6 +3475,21 @@
      "cutscene": {
       "model": "Live2D/guanghui_7/guanghui_7.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "207037/login",
+      "home": "207037/home",
+      "mail": "207030/mail",
+      "mission": "207037/mission",
+      "mission_complete": "207030/mission_complete",
+      "complete": "207030/expedition",
+      "touch": "207030/touch",
+      "touch_head": "207037/headtouch",
+      "touch_body": "207030/touch",
+      "touch_special": "207037/touch2",
+      "main_1": "207037/main1",
+      "main_2": "207037/main2",
+      "main_3": "207037/main3"
      }
     },
     {
@@ -2243,6 +3517,21 @@
      "cutscene": {
       "model": "Live2D/guanghui_9/guanghui_9.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "207030/login",
+      "home": "207030/home",
+      "mail": "207030/mail",
+      "mission": "207030/mission",
+      "mission_complete": "207030/mission_complete",
+      "complete": "207030/expedition",
+      "touch": "207030/touch",
+      "touch_head": "207030/headtouch",
+      "touch_body": "207030/touch",
+      "touch_special": "207030/touch2",
+      "main_1": "207030/main1",
+      "main_2": "207030/main2",
+      "main_3": "207030/main3"
      }
     }
    ]
@@ -2261,6 +3550,20 @@
      "cutscene": {
       "model": "Live2D/guangrong_3/guangrong_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "207062/login",
+      "home": "207062/home",
+      "mail": "207062/mail",
+      "mission": "207060/mission",
+      "mission_complete": "207060/mission_complete",
+      "complete": "207060/expedition",
+      "touch": "207062/touch",
+      "touch_body": "207062/touch",
+      "touch_special": "207062/touch2",
+      "main_1": "207062/main1",
+      "main_2": "207062/main2",
+      "main_3": "207062/main3"
      }
     }
    ]
@@ -2321,6 +3624,21 @@
      "cutscene": {
       "model": "Live2D/hailunna_4/hailunna_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "102053/login",
+      "home": "102053/home",
+      "mail": "102053/mail",
+      "mission": "102053/mission",
+      "mission_complete": "102053/mission_complete",
+      "complete": "102053/expedition",
+      "touch": "102053/touch",
+      "touch_head": "102053/headtouch",
+      "touch_body": "102053/touch",
+      "touch_special": "102053/touch2",
+      "main_1": "102053/main1",
+      "main_2": "102053/main2",
+      "main_3": "102053/main3"
      }
     },
     {
@@ -2354,6 +3672,21 @@
      "cutscene": {
       "model": "Live2D/haiyinlixi_2/haiyinlixi_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "403092/login",
+      "home": "403090/home",
+      "mail": "403090/mail",
+      "mission": "403090/mission",
+      "mission_complete": "403090/mission_complete",
+      "complete": "403090/expedition",
+      "touch": "403092/touch",
+      "touch_head": "403090/headtouch",
+      "touch_body": "403092/touch",
+      "touch_special": "403090/touch2",
+      "main_1": "403092/main1",
+      "main_2": "403092/main2",
+      "main_3": "403092/main3"
      }
     }
    ]
@@ -2372,6 +3705,21 @@
      "cutscene": {
       "model": "Live2D/heitaizi_2/heitaizi_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "202241/login",
+      "home": "202241/home",
+      "mail": "202241/mail",
+      "mission": "202240/mission",
+      "mission_complete": "202240/mission_complete",
+      "complete": "202240/expedition",
+      "touch": "202241/touch",
+      "touch_head": "202240/headtouch",
+      "touch_body": "202241/touch",
+      "touch_special": "202241/touch2",
+      "main_1": "202241/main1",
+      "main_2": "202241/main2",
+      "main_3": "202241/main3"
      }
     }
    ]
@@ -2411,6 +3759,20 @@
      "cutscene": {
       "model": "Live2D/hemin_2/hemin_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "202272/login",
+      "home": "202272/home",
+      "mail": "202270/mail",
+      "mission": "202270/mission",
+      "mission_complete": "202270/mission_complete",
+      "complete": "202270/expedition",
+      "touch": "202272/touch",
+      "touch_body": "202272/touch",
+      "touch_special": "202270/touch2",
+      "main_1": "202272/main1",
+      "main_2": "202272/main2",
+      "main_3": "202272/main3"
      }
     },
     {
@@ -2423,6 +3785,20 @@
      "cutscene": {
       "model": "Live2D/hemin_3/hemin_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "202271/login",
+      "home": "202271/home",
+      "mail": "202270/mail",
+      "mission": "202270/mission",
+      "mission_complete": "202270/mission_complete",
+      "complete": "202270/expedition",
+      "touch": "202271/touch",
+      "touch_body": "202271/touch",
+      "touch_special": "202271/touch2",
+      "main_1": "202271/main1",
+      "main_2": "202271/main2",
+      "main_3": "202271/main3"
      }
     }
    ]
@@ -2562,6 +3938,20 @@
      "cutscene": {
       "model": "Live2D/huangjiafangzhou_3/huangjiafangzhou_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "207022/login",
+      "home": "207022/home",
+      "mail": "207020/mail",
+      "mission": "207020/mission",
+      "mission_complete": "207020/mission_complete",
+      "complete": "207020/expedition",
+      "touch": "207022/touch",
+      "touch_body": "207022/touch",
+      "touch_special": "207022/touch2",
+      "main_1": "207022/main1",
+      "main_2": "207022/main2",
+      "main_3": "207022/main3"
      }
     }
    ]
@@ -2622,6 +4012,20 @@
      "cutscene": {
       "model": "Live2D/huonululu_3/huonululu_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "102120/login",
+      "home": "102122/home",
+      "mail": "102120/mail",
+      "mission": "102120/mission",
+      "mission_complete": "102120/mission_complete",
+      "complete": "102120/expedition",
+      "touch": "102122/touch",
+      "touch_body": "102122/touch",
+      "touch_special": "102122/touch2",
+      "main_1": "102122/main1",
+      "main_2": "102122/main2",
+      "main_3": "102122/main3"
      }
     },
     {
@@ -2634,6 +4038,20 @@
      "cutscene": {
       "model": "Live2D/huonululu_5/huonululu_5.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "102124/login",
+      "home": "102124/home",
+      "mail": "102120/mail",
+      "mission": "102120/mission",
+      "mission_complete": "102120/mission_complete",
+      "complete": "102120/expedition",
+      "touch": "102124/touch",
+      "touch_body": "102124/touch",
+      "touch_special": "102124/touch2",
+      "main_1": "102124/main1",
+      "main_2": "102124/main2",
+      "main_3": "102124/main3"
      }
     }
    ]
@@ -2684,6 +4102,22 @@
         "login"
        ]
       ]
+     },
+     "voices": {
+      "login": "317021/login",
+      "home": "317021/home",
+      "mail": "317020/mail",
+      "mission": "317020/mission",
+      "mission_complete": "317020/mission_complete",
+      "complete": "317020/expedition",
+      "touch": "317021/touch",
+      "touch_head": "317021/headtouch",
+      "touch_body": "317021/touch",
+      "touch_special": "317021/touch2",
+      "main_1": "317021/main1",
+      "main_2": "317021/main2",
+      "main_3": "317021/main3",
+      "main_4": "317021/main4"
      }
     },
     {
@@ -2713,6 +4147,22 @@
         "login"
        ]
       ]
+     },
+     "voices": {
+      "login": "317022/login",
+      "home": "317022/home",
+      "mail": "317022/mail",
+      "mission": "317022/mission",
+      "mission_complete": "317022/mission_complete",
+      "complete": "317022/expedition",
+      "touch": "317022/touch",
+      "touch_head": "317022/headtouch",
+      "touch_body": "317022/touch",
+      "touch_special": "317022/touch2",
+      "main_1": "317022/main1",
+      "main_2": "317022/main2",
+      "main_3": "317022/main3",
+      "main_4": "317022/main4"
      }
     }
    ]
@@ -2731,6 +4181,20 @@
      "cutscene": {
       "model": "Live2D/jialisuoniye_3/jialisuoniye_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "902013/login",
+      "home": "902013/home",
+      "mail": "902010/mail",
+      "mission": "902010/mission",
+      "mission_complete": "902010/mission_complete",
+      "complete": "902010/expedition",
+      "touch": "902013/touch",
+      "touch_body": "902013/touch",
+      "touch_special": "902013/touch2",
+      "main_1": "902013/main1",
+      "main_2": "902013/main2",
+      "main_3": "902013/main3"
      }
     },
     {
@@ -2743,6 +4207,20 @@
      "cutscene": {
       "model": "Live2D/jialisuoniye_4/jialisuoniye_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "902012/login",
+      "home": "902012/home",
+      "mail": "902010/mail",
+      "mission": "902010/mission",
+      "mission_complete": "902010/mission_complete",
+      "complete": "902010/expedition",
+      "touch": "902012/touch",
+      "touch_body": "902012/touch",
+      "touch_special": "902012/touch2",
+      "main_1": "902012/main1",
+      "main_2": "902012/main2",
+      "main_3": "902012/main3"
      }
     }
    ]
@@ -2761,6 +4239,21 @@
      "cutscene": {
       "model": "Live2D/jian_3/jian_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "502092/login",
+      "home": "502092/home",
+      "mail": "502092/mail",
+      "mission": "502092/mission",
+      "mission_complete": "502090/mission_complete",
+      "complete": "502092/expedition",
+      "touch": "502092/touch",
+      "touch_head": "502092/headtouch",
+      "touch_body": "502092/touch",
+      "touch_special": "502092/touch2",
+      "main_1": "502092/main1",
+      "main_2": "502092/main2",
+      "main_3": "502092/main3"
      }
     }
    ]
@@ -2779,6 +4272,21 @@
      "cutscene": {
       "model": "Live2D/jianwu_2/jianwu_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "503011/login",
+      "home": "503011/home",
+      "mail": "503010/mail",
+      "mission": "503011/mission",
+      "mission_complete": "503011/mission_complete",
+      "complete": "503010/expedition",
+      "touch": "503011/touch",
+      "touch_head": "503011/headtouch",
+      "touch_body": "503011/touch",
+      "touch_special": "503011/touch2",
+      "main_1": "503011/main1",
+      "main_2": "503011/main2",
+      "main_3": "503011/main3"
      }
     },
     {
@@ -2817,6 +4325,21 @@
         "touch_special"
        ]
       ]
+     },
+     "voices": {
+      "login": "503012/login",
+      "home": "503012/home",
+      "mail": "503010/mail",
+      "mission": "503012/mission",
+      "mission_complete": "503012/mission_complete",
+      "complete": "503010/expedition",
+      "touch": "503012/touch",
+      "touch_head": "503012/headtouch",
+      "touch_body": "503012/touch",
+      "touch_special": "503012/touch2",
+      "main_1": "503012/main1",
+      "main_2": "503012/main2",
+      "main_3": "503012/main3"
      }
     }
    ]
@@ -2835,6 +4358,21 @@
      "cutscene": {
       "model": "Live2D/jianye_2/jianye_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "319011/login",
+      "home": "319011/home",
+      "mail": "319011/mail",
+      "mission": "319010/mission",
+      "mission_complete": "319010/mission_complete",
+      "complete": "319010/expedition",
+      "touch": "319011/touch",
+      "touch_head": "319010/headtouch",
+      "touch_body": "319011/touch",
+      "touch_special": "319011/touch2",
+      "main_1": "319011/main1",
+      "main_2": "319011/main2",
+      "main_3": "319011/main3"
      }
     },
     {
@@ -2847,6 +4385,21 @@
      "cutscene": {
       "model": "Live2D/jianye_3/jianye_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "319012/login",
+      "home": "319012/home",
+      "mail": "319012/mail",
+      "mission": "319012/mission",
+      "mission_complete": "319010/mission_complete",
+      "complete": "319012/expedition",
+      "touch": "319012/touch",
+      "touch_head": "319012/headtouch",
+      "touch_body": "319012/touch",
+      "touch_special": "319012/touch2",
+      "main_1": "319012/main1",
+      "main_2": "319012/main2",
+      "main_3": "319012/main3"
      }
     },
     {
@@ -2859,6 +4412,21 @@
      "cutscene": {
       "model": "Live2D/jianye_4/jianye_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "319013/login",
+      "home": "319013/home",
+      "mail": "319013/mail",
+      "mission": "319010/mission",
+      "mission_complete": "319010/mission_complete",
+      "complete": "319013/expedition",
+      "touch": "319013/touch",
+      "touch_head": "319013/headtouch",
+      "touch_body": "319013/touch",
+      "touch_special": "319013/touch2",
+      "main_1": "319013/main1",
+      "main_2": "319013/main2",
+      "main_3": "319013/main3"
      }
     },
     {
@@ -2890,6 +4458,21 @@
         "drag_ex"
        ]
       ]
+     },
+     "voices": {
+      "login": "319014/login",
+      "home": "319014/home",
+      "mail": "319014/mail",
+      "mission": "319014/mission",
+      "mission_complete": "319014/mission_complete",
+      "complete": "319014/expedition",
+      "touch": "319014/touch",
+      "touch_head": "319014/headtouch",
+      "touch_body": "319014/touch",
+      "touch_special": "319014/touch2",
+      "main_1": "319014/main1",
+      "main_2": "319014/main2",
+      "main_3": "319014/main3"
      }
     }
    ]
@@ -2908,6 +4491,20 @@
      "cutscene": {
       "model": "Live2D/jiluofu_3/jiluofu_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "702042/login",
+      "home": "702042/home",
+      "mail": "702040/mail",
+      "mission": "702042/mission",
+      "mission_complete": "702040/mission_complete",
+      "complete": "702040/expedition",
+      "touch": "702042/touch",
+      "touch_body": "702042/touch",
+      "touch_special": "702040/touch2",
+      "main_1": "702042/main1",
+      "main_2": "702042/main2",
+      "main_3": "702042/main3"
      }
     }
    ]
@@ -2947,6 +4544,21 @@
      "cutscene": {
       "model": "Live2D/jinjiang_2/jinjiang_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "305161/login",
+      "home": "305161/home",
+      "mail": "305160/mail",
+      "mission": "305161/mission",
+      "mission_complete": "305161/mission_complete",
+      "complete": "305160/expedition",
+      "touch": "305161/touch",
+      "touch_head": "305161/headtouch",
+      "touch_body": "305161/touch",
+      "touch_special": "305161/touch2",
+      "main_1": "305161/main1",
+      "main_2": "305161/main2",
+      "main_3": "305161/main3"
      }
     }
    ]
@@ -2965,6 +4577,21 @@
      "cutscene": {
       "model": "Live2D/jinluhao_2/jinluhao_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "9600031/login",
+      "home": "9600031/home",
+      "mail": "9600030/mail",
+      "mission": "9600030/mission",
+      "mission_complete": "9600030/mission_complete",
+      "complete": "9600030/expedition",
+      "touch": "9600031/touch",
+      "touch_head": "9600031/headtouch",
+      "touch_body": "9600031/touch",
+      "touch_special": "9600031/touch2",
+      "main_1": "9600031/main1",
+      "main_2": "9600031/main2",
+      "main_3": "9600031/main3"
      }
     },
     {
@@ -2977,6 +4604,21 @@
      "cutscene": {
       "model": "Live2D/jinluhao_3/jinluhao_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "9600030/login",
+      "home": "9600030/home",
+      "mail": "9600030/mail",
+      "mission": "9600030/mission",
+      "mission_complete": "9600030/mission_complete",
+      "complete": "9600030/expedition",
+      "touch": "9600030/touch",
+      "touch_head": "9600030/headtouch",
+      "touch_body": "9600030/touch",
+      "touch_special": "9600030/touch2",
+      "main_1": "9600030/main1",
+      "main_2": "9600030/main2",
+      "main_3": "9600030/main3"
      }
     }
    ]
@@ -3010,6 +4652,22 @@
      "cutscene": {
       "model": "Live2D/jinshi_2/jinshi_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "1199011/login",
+      "home": "1199011/home",
+      "mail": "1199010/mail",
+      "mission": "1199010/mission",
+      "mission_complete": "1199010/mission_complete",
+      "complete": "1199010/expedition",
+      "touch": "1199011/touch",
+      "touch_head": "1199011/headtouch",
+      "touch_body": "1199011/touch",
+      "touch_special": "1199011/touch2",
+      "main_1": "1199011/main1",
+      "main_2": "1199011/main2",
+      "main_3": "1199011/main3",
+      "main_4": "1199011/main4"
      }
     }
    ]
@@ -3028,6 +4686,21 @@
      "cutscene": {
       "model": "Live2D/jiuyun_2/jiuyun_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "302231/login",
+      "home": "302231/home",
+      "mail": "302230/mail",
+      "mission": "302230/mission",
+      "mission_complete": "302230/mission_complete",
+      "complete": "302231/expedition",
+      "touch": "302231/touch",
+      "touch_head": "302231/headtouch",
+      "touch_body": "302231/touch",
+      "touch_special": "302231/touch2",
+      "main_1": "302231/main1",
+      "main_2": "302231/main2",
+      "main_3": "302231/main3"
      }
     }
    ]
@@ -3046,6 +4719,23 @@
      "cutscene": {
       "model": "Live2D/junhe_4/junhe_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "305143/login",
+      "home": "305143/home",
+      "mail": "305140/mail",
+      "mission": "305140/mission",
+      "mission_complete": "305143/mission_complete",
+      "complete": "305140/expedition",
+      "touch": "305143/touch",
+      "touch_head": "305140/headtouch",
+      "touch_body": "305143/touch",
+      "touch_special": "305140/touch2",
+      "main_1": "305143/main1",
+      "main_2": "305143/main2",
+      "main_3": "305143/main3",
+      "main_4": "305140/main4",
+      "main_5": "305140/main5"
      }
     },
     {
@@ -3058,6 +4748,23 @@
      "cutscene": {
       "model": "Live2D/junhe_5/junhe_5.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "305141/login",
+      "home": "305141/home",
+      "mail": "305140/mail",
+      "mission": "305140/mission",
+      "mission_complete": "305140/mission_complete",
+      "complete": "305140/expedition",
+      "touch": "305141/touch",
+      "touch_head": "305141/headtouch",
+      "touch_body": "305141/touch",
+      "touch_special": "305140/touch2",
+      "main_1": "305141/main1",
+      "main_2": "305141/main2",
+      "main_3": "305141/main3",
+      "main_4": "305140/main4",
+      "main_5": "305140/main5"
      }
     }
    ]
@@ -3076,6 +4783,20 @@
      "cutscene": {
       "model": "Live2D/junzhu_5/junzhu_5.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "299024/login",
+      "home": "299024/home",
+      "mail": "299020/mail",
+      "mission": "299024/mission",
+      "mission_complete": "299024/mission_complete",
+      "complete": "299024/expedition",
+      "touch": "299024/touch",
+      "touch_body": "299024/touch",
+      "touch_special": "299024/touch2",
+      "main_1": "299024/main1",
+      "main_2": "299024/main2",
+      "main_3": "299024/main3"
      }
     }
    ]
@@ -3128,6 +4849,20 @@
         "drag_ex"
        ]
       ]
+     },
+     "voices": {
+      "login": "901042/login",
+      "home": "901042/home",
+      "mail": "901040/mail",
+      "mission": "901042/mission",
+      "mission_complete": "901042/mission_complete",
+      "complete": "901042/expedition",
+      "touch": "901042/touch",
+      "touch_body": "901042/touch",
+      "touch_special": "901042/touch2",
+      "main_1": "901042/main1",
+      "main_2": "901042/main2",
+      "main_3": "901042/main3"
      }
     }
    ]
@@ -3182,6 +4917,23 @@
      "cutscene": {
       "model": "Live2D/kalangshitade_2/kalangshitade_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "718011/login",
+      "home": "718010/home",
+      "mail": "718010/mail",
+      "mission": "718010/mission",
+      "mission_complete": "718010/mission_complete",
+      "complete": "718010/expedition",
+      "touch": "718011/touch",
+      "touch_head": "718010/headtouch",
+      "touch_body": "718011/touch",
+      "touch_special": "718011/touch2",
+      "main_1": "718011/main1",
+      "main_2": "718011/main2",
+      "main_3": "718011/main3",
+      "main_4": "718010/main4",
+      "main_5": "718010/main5"
      }
     },
     {
@@ -3215,6 +4967,20 @@
      "cutscene": {
       "model": "Live2D/kalvbudisi_2/kalvbudisi_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "202301/login",
+      "home": "202301/home",
+      "mail": "202301/mail",
+      "mission": "202300/mission",
+      "mission_complete": "202301/mission_complete",
+      "complete": "202300/expedition",
+      "touch": "202301/touch",
+      "touch_body": "202301/touch",
+      "touch_special": "202301/touch2",
+      "main_1": "202301/main1",
+      "main_2": "202301/main2",
+      "main_3": "202301/main3"
      }
     }
    ]
@@ -3254,6 +5020,21 @@
      "cutscene": {
       "model": "Live2D/kebensi_2/kebensi_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "107251/login",
+      "home": "107251/home",
+      "mail": "107250/mail",
+      "mission": "107250/mission",
+      "mission_complete": "107250/mission_complete",
+      "complete": "107250/expedition",
+      "touch": "107251/touch",
+      "touch_head": "107251/headtouch",
+      "touch_body": "107251/touch",
+      "touch_special": "107251/touch2",
+      "main_1": "107251/main1",
+      "main_2": "107251/main2",
+      "main_3": "107251/main3"
      }
     }
    ]
@@ -3272,6 +5053,20 @@
      "cutscene": {
       "model": "Live2D/kelaimengsuo_2/kelaimengsuo_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "905021/login",
+      "home": "905020/home",
+      "mail": "905020/mail",
+      "mission": "905020/mission",
+      "mission_complete": "905020/mission_complete",
+      "complete": "905021/expedition",
+      "touch": "905020/touch",
+      "touch_body": "905020/touch",
+      "touch_special": "905021/touch2",
+      "main_1": "905021/main1",
+      "main_2": "905021/main2",
+      "main_3": "905021/main3"
      }
     }
    ]
@@ -3290,6 +5085,20 @@
      "cutscene": {
       "model": "Live2D/kelifulan_3/kelifulan_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "102092/login",
+      "home": "102092/home",
+      "mail": "102092/mail",
+      "mission": "102092/mission",
+      "mission_complete": "102090/mission_complete",
+      "complete": "102090/expedition",
+      "touch": "102092/touch",
+      "touch_body": "102092/touch",
+      "touch_special": "102090/touch2",
+      "main_1": "102092/main1",
+      "main_2": "102092/main2",
+      "main_3": "102092/main3"
      }
     },
     {
@@ -3302,6 +5111,21 @@
      "cutscene": {
       "model": "Live2D/kelifulan_8/kelifulan_8.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "102097/login",
+      "home": "102090/home",
+      "mail": "102097/mail",
+      "mission": "102090/mission",
+      "mission_complete": "102090/mission_complete",
+      "complete": "102097/expedition",
+      "touch": "102097/touch",
+      "touch_head": "102097/headtouch",
+      "touch_body": "102097/touch",
+      "touch_special": "102097/touch2",
+      "main_1": "102097/main1",
+      "main_2": "102097/main2",
+      "main_3": "102097/main3"
      }
     }
    ]
@@ -3320,6 +5144,20 @@
      "cutscene": {
       "model": "Live2D/kewei_4/kewei_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "207053/login",
+      "home": "207053/home",
+      "mail": "207050/mail",
+      "mission": "207050/mission",
+      "mission_complete": "207050/mission_complete",
+      "complete": "207050/expedition",
+      "touch": "207053/touch",
+      "touch_body": "207053/touch",
+      "touch_special": "207053/touch2",
+      "main_1": "207053/main1",
+      "main_2": "207053/main2",
+      "main_3": "207053/main3"
      }
     },
     {
@@ -3351,6 +5189,21 @@
      "cutscene": {
       "model": "Live2D/kewei_6/kewei_6.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "207055/login",
+      "home": "207055/home",
+      "mail": "207055/mail",
+      "mission": "207055/mission",
+      "mission_complete": "207055/mission_complete",
+      "complete": "207055/expedition",
+      "touch": "207055/touch",
+      "touch_head": "207055/headtouch",
+      "touch_body": "207055/touch",
+      "touch_special": "207055/touch2",
+      "main_1": "207055/main1",
+      "main_2": "207055/main2",
+      "main_3": "207055/main3"
      }
     }
    ]
@@ -3369,6 +5222,20 @@
      "cutscene": {
       "model": "Live2D/kubo_2/kubo_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "101441/login",
+      "home": "101441/home",
+      "mail": "101440/mail",
+      "mission": "101440/mission",
+      "mission_complete": "101440/mission_complete",
+      "complete": "101440/expedition",
+      "touch": "101441/touch",
+      "touch_body": "101441/touch",
+      "touch_special": "101440/touch2",
+      "main_1": "101441/main1",
+      "main_2": "101441/main2",
+      "main_3": "101441/main3"
      }
     }
    ]
@@ -3387,6 +5254,21 @@
      "cutscene": {
       "model": "Live2D/kuersike_2/kuersike_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "703021/login",
+      "home": "703021/home",
+      "mail": "703021/mail",
+      "mission": "703021/mission",
+      "mission_complete": "703020/mission_complete",
+      "complete": "703020/expedition",
+      "touch": "703021/touch",
+      "touch_head": "703020/headtouch",
+      "touch_body": "703021/touch",
+      "touch_special": "703021/touch2",
+      "main_1": "703021/main1",
+      "main_2": "703021/main2",
+      "main_3": "703021/main3"
      }
     }
    ]
@@ -3405,6 +5287,24 @@
      "cutscene": {
       "model": "Live2D/lafei/lafei.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "101170/login",
+      "home": "101170/home",
+      "mail": "101170/mail",
+      "mission": "101170/mission",
+      "mission_complete": "101170/mission_complete",
+      "complete": "101170/expedition",
+      "touch": "101170/touch",
+      "touch_head": "101170/headtouch",
+      "touch_body": "101170/touch",
+      "touch_special": "101170/touch2",
+      "main_1": "101170/main1",
+      "main_2": "101170/main2",
+      "main_3": "101170/main3",
+      "main_4": "101170/main4",
+      "main_5": "101170/main5",
+      "main_6": "101170/main6"
      }
     },
     {
@@ -3436,6 +5336,24 @@
      "cutscene": {
       "model": "Live2D/lafei_4/lafei_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "101173/login",
+      "home": "101173/home",
+      "mail": "101170/mail",
+      "mission": "101170/mission",
+      "mission_complete": "101170/mission_complete",
+      "complete": "101170/expedition",
+      "touch": "101173/touch",
+      "touch_head": "101170/headtouch",
+      "touch_body": "101173/touch",
+      "touch_special": "101173/touch2",
+      "main_1": "101173/main1",
+      "main_2": "101173/main2",
+      "main_3": "101173/main3",
+      "main_4": "101170/main4",
+      "main_5": "101170/main5",
+      "main_6": "101170/main6"
      }
     }
    ]
@@ -3477,6 +5395,22 @@
      "cutscene": {
       "model": "Live2D/lafeier_2/lafeier_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "605081/login",
+      "home": "605081/home",
+      "mail": "605080/mail",
+      "mission": "605081/mission",
+      "mission_complete": "605081/mission_complete",
+      "complete": "605081/expedition",
+      "touch": "605081/touch",
+      "touch_head": "605081/headtouch",
+      "touch_body": "605081/touch",
+      "touch_special": "605081/touch2",
+      "main_1": "605081/main1",
+      "main_2": "605081/main2",
+      "main_3": "605081/main3",
+      "main_4": "605081/main4"
      }
     }
    ]
@@ -3510,6 +5444,23 @@
      "cutscene": {
       "model": "Live2D/lafeiII_3/lafeiII_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "101511/login",
+      "home": "101511/home",
+      "mail": "101510/mail",
+      "mission": "101510/mission",
+      "mission_complete": "101511/mission_complete",
+      "complete": "101511/expedition",
+      "touch": "101511/touch",
+      "touch_head": "101511/headtouch",
+      "touch_body": "101511/touch",
+      "touch_special": "101511/touch2",
+      "main_1": "101511/main1",
+      "main_2": "101511/main2",
+      "main_3": "101511/main3",
+      "main_4": "101510/main4",
+      "main_5": "101510/main5"
      }
     },
     {
@@ -3562,6 +5513,21 @@
         "drag_ex"
        ]
       ]
+     },
+     "voices": {
+      "login": "9600131/login",
+      "home": "9600131/home",
+      "mail": "9600130/mail",
+      "mission": "9600130/mission",
+      "mission_complete": "9600130/mission_complete",
+      "complete": "9600130/expedition",
+      "touch": "9600131/touch",
+      "touch_head": "9600131/headtouch",
+      "touch_body": "9600131/touch",
+      "touch_special": "9600131/touch2",
+      "main_1": "9600131/main1",
+      "main_2": "9600131/main2",
+      "main_3": "9600131/main3"
      }
     }
    ]
@@ -3601,6 +5567,21 @@
      "cutscene": {
       "model": "Live2D/Leigensibao_2/Leigensibao_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "402101/login",
+      "home": "402101/home",
+      "mail": "402100/mail",
+      "mission": "402101/mission",
+      "mission_complete": "402101/mission_complete",
+      "complete": "402101/expedition",
+      "touch": "402101/touch",
+      "touch_head": "402100/headtouch",
+      "touch_body": "402101/touch",
+      "touch_special": "402101/touch2",
+      "main_1": "402101/main1",
+      "main_2": "402101/main2",
+      "main_3": "402101/main3"
      }
     }
    ]
@@ -3640,6 +5621,22 @@
      "cutscene": {
       "model": "Live2D/liekexingdunII_2/liekexingdunII_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "107161/login",
+      "home": "107161/home",
+      "mail": "107160/mail",
+      "mission": "107160/mission",
+      "mission_complete": "107160/mission_complete",
+      "complete": "107160/expedition",
+      "touch": "107161/touch",
+      "touch_head": "107161/headtouch",
+      "touch_body": "107161/touch",
+      "touch_special": "107161/touch2",
+      "main_1": "107161/main1",
+      "main_2": "107161/main2",
+      "main_3": "107161/main3",
+      "main_4": "107161/main4"
      }
     }
    ]
@@ -3658,6 +5655,21 @@
      "cutscene": {
       "model": "Live2D/lingbo/lingbo.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "301050/login",
+      "home": "301050/home",
+      "mail": "301050/mail",
+      "mission": "301050/mission",
+      "mission_complete": "301050/mission_complete",
+      "complete": "301050/expedition",
+      "touch": "301050/touch",
+      "touch_head": "301050/headtouch",
+      "touch_body": "301050/touch",
+      "touch_special": "301050/touch2",
+      "main_1": "301050/main1",
+      "main_2": "301050/main2",
+      "main_3": "301050/main3"
      }
     },
     {
@@ -3670,6 +5682,21 @@
      "cutscene": {
       "model": "Live2D/lingbo_10/lingbo_10.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "331051/login",
+      "home": "301050/home",
+      "mail": "301050/mail",
+      "mission": "301050/mission",
+      "mission_complete": "301050/mission_complete",
+      "complete": "301050/expedition",
+      "touch": "331051/touch",
+      "touch_head": "301050/headtouch",
+      "touch_body": "331051/touch",
+      "touch_special": "331051/touch2",
+      "main_1": "331051/main1",
+      "main_2": "331051/main2",
+      "main_3": "331051/main3"
      }
     }
    ]
@@ -3730,6 +5757,20 @@
      "cutscene": {
       "model": "Live2D/linuo_3/linuo_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "102263/login",
+      "home": "102263/home",
+      "mail": "102260/mail",
+      "mission": "102260/mission",
+      "mission_complete": "102260/mission_complete",
+      "complete": "102260/expedition",
+      "touch": "102263/touch",
+      "touch_body": "102263/touch",
+      "touch_special": "102263/touch2",
+      "main_1": "102263/main1",
+      "main_2": "102263/main2",
+      "main_3": "102263/main3"
      }
     }
    ]
@@ -3748,6 +5789,23 @@
      "cutscene": {
       "model": "Live2D/lisailiu_2/lisailiu_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "805011/login",
+      "home": "805011/home",
+      "mail": "805010/mail",
+      "mission": "805010/mission",
+      "mission_complete": "805010/mission_complete",
+      "complete": "805011/expedition",
+      "touch": "805011/touch",
+      "touch_head": "805010/headtouch",
+      "touch_body": "805011/touch",
+      "touch_special": "805011/touch2",
+      "main_1": "805011/main1",
+      "main_2": "805011/main2",
+      "main_3": "805011/main3",
+      "main_4": "805010/main4",
+      "main_5": "805010/main5"
      }
     },
     {
@@ -3760,6 +5818,23 @@
      "cutscene": {
       "model": "Live2D/lisailiu_3/lisailiu_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "805012/login",
+      "home": "805012/home",
+      "mail": "805012/mail",
+      "mission": "805010/mission",
+      "mission_complete": "805010/mission_complete",
+      "complete": "805012/expedition",
+      "touch": "805012/touch",
+      "touch_head": "805010/headtouch",
+      "touch_body": "805012/touch",
+      "touch_special": "805012/touch2",
+      "main_1": "805010/main1",
+      "main_2": "805010/main2",
+      "main_3": "805012/main3",
+      "main_4": "805012/main4",
+      "main_5": "805012/main5"
      }
     }
    ]
@@ -3799,6 +5874,20 @@
      "cutscene": {
       "model": "Live2D/longfeng_2/longfeng_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "306071/login",
+      "home": "306071/home",
+      "mail": "306070/mail",
+      "mission": "306070/mission",
+      "mission_complete": "306070/mission_complete",
+      "complete": "306070/expedition",
+      "touch": "306071/touch",
+      "touch_body": "306071/touch",
+      "touch_special": "306071/touch2",
+      "main_1": "306071/main1",
+      "main_2": "306071/main2",
+      "main_3": "306071/main3"
      }
     }
    ]
@@ -3817,6 +5906,21 @@
      "cutscene": {
       "model": "Live2D/longwu_2/longwu_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "501051/login",
+      "home": "501051/home",
+      "mail": "501051/mail",
+      "mission": "501051/mission",
+      "mission_complete": "501051/mission_complete",
+      "complete": "501050/expedition",
+      "touch": "501051/touch",
+      "touch_head": "501051/headtouch",
+      "touch_body": "501051/touch",
+      "touch_special": "501051/touch2",
+      "main_1": "501051/main1",
+      "main_2": "501051/main2",
+      "main_3": "501051/main3"
      }
     }
    ]
@@ -3877,6 +5981,20 @@
      "cutscene": {
       "model": "Live2D/luoen_4/luoen_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "499012/login",
+      "home": "499012/home",
+      "mail": "499010/mail",
+      "mission": "499010/mission",
+      "mission_complete": "499010/mission_complete",
+      "complete": "499012/expedition",
+      "touch": "499012/touch",
+      "touch_body": "499012/touch",
+      "touch_special": "499012/touch2",
+      "main_1": "499012/main1",
+      "main_2": "499012/main2",
+      "main_3": "499012/main3"
      }
     }
    ]
@@ -3895,6 +6013,21 @@
      "cutscene": {
       "model": "Live2D/luoma_2/luoma_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "605031/login",
+      "home": "605031/home",
+      "mail": "605031/mail",
+      "mission": "605031/mission",
+      "mission_complete": "605031/mission_complete",
+      "complete": "605031/expedition",
+      "touch": "605031/touch",
+      "touch_head": "605030/headtouch",
+      "touch_body": "605031/touch",
+      "touch_special": "605030/touch2",
+      "main_1": "605031/main1",
+      "main_2": "605031/main2",
+      "main_3": "605031/main3"
      }
     }
    ]
@@ -3913,6 +6046,21 @@
      "cutscene": {
       "model": "Live2D/lupuleixite_2/lupuleixite_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "499071/login",
+      "home": "499071/home",
+      "mail": "499070/mail",
+      "mission": "499070/mission",
+      "mission_complete": "499070/mission_complete",
+      "complete": "499070/expedition",
+      "touch": "499071/touch",
+      "touch_head": "499070/headtouch",
+      "touch_body": "499071/touch",
+      "touch_special": "499071/touch2",
+      "main_1": "499071/main1",
+      "main_2": "499071/main2",
+      "main_3": "499071/main3"
      }
     }
    ]
@@ -3931,6 +6079,21 @@
      "cutscene": {
       "model": "Live2D/luyijiushi_2/luyijiushi_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "899011/login",
+      "home": "899011/home",
+      "mail": "899010/mail",
+      "mission": "899010/mission",
+      "mission_complete": "899010/mission_complete",
+      "complete": "899010/expedition",
+      "touch": "899011/touch",
+      "touch_head": "899010/headtouch",
+      "touch_body": "899011/touch",
+      "touch_special": "899010/touch2",
+      "main_1": "899011/main1",
+      "main_2": "899011/main2",
+      "main_3": "899011/main3"
      }
     },
     {
@@ -3943,6 +6106,21 @@
      "cutscene": {
       "model": "Live2D/luyijiushi_4/luyijiushi_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "899010/login",
+      "home": "899010/home",
+      "mail": "899010/mail",
+      "mission": "899010/mission",
+      "mission_complete": "899010/mission_complete",
+      "complete": "899010/expedition",
+      "touch": "899010/touch",
+      "touch_head": "899010/headtouch",
+      "touch_body": "899010/touch",
+      "touch_special": "899010/touch2",
+      "main_1": "899010/main1",
+      "main_2": "899010/main2",
+      "main_3": "899010/main3"
      }
     }
    ]
@@ -3982,6 +6160,21 @@
      "cutscene": {
       "model": "Live2D/lvzuofu_2/lvzuofu_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "404041/login",
+      "home": "404041/home",
+      "mail": "404040/mail",
+      "mission": "404040/mission",
+      "mission_complete": "404040/mission_complete",
+      "complete": "404040/expedition",
+      "touch": "404041/touch",
+      "touch_head": "404040/headtouch",
+      "touch_body": "404041/touch",
+      "touch_special": "404041/touch2",
+      "main_1": "404041/main1",
+      "main_2": "404041/main2",
+      "main_3": "404041/main3"
      }
     }
    ]
@@ -4025,6 +6218,23 @@
      "cutscene": {
       "model": "Live2D/maliluosi_3_doa/maliluosi_3_doa.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "10600012/login",
+      "home": "10600012/home",
+      "mail": "10600010/mail",
+      "mission": "10600010/mission",
+      "mission_complete": "10600010/mission_complete",
+      "complete": "10600010/expedition",
+      "touch": "10600012/touch",
+      "touch_head": "10600010/headtouch",
+      "touch_body": "10600012/touch",
+      "touch_special": "10600012/touch2",
+      "main_1": "10600012/main1",
+      "main_2": "10600012/main2",
+      "main_3": "10600012/main3",
+      "main_4": "10600012/main4",
+      "main_5": "10600012/main5"
      }
     }
    ]
@@ -4060,6 +6270,21 @@
         "touch_special"
        ]
       ]
+     },
+     "voices": {
+      "login": "9600161/login",
+      "home": "9600161/home",
+      "mail": "9600160/mail",
+      "mission": "9600160/mission",
+      "mission_complete": "9600160/mission_complete",
+      "complete": "9600160/expedition",
+      "touch": "9600161/touch",
+      "touch_head": "9600160/headtouch",
+      "touch_body": "9600161/touch",
+      "touch_special": "9600161/touch2",
+      "main_1": "9600161/main1",
+      "main_2": "9600161/main2",
+      "main_3": "9600161/main3"
      }
     }
    ]
@@ -4078,6 +6303,21 @@
      "cutscene": {
       "model": "Live2D/masaina_2/masaina_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "804011/login",
+      "home": "804011/home",
+      "mail": "804010/mail",
+      "mission": "804011/mission",
+      "mission_complete": "804010/mission_complete",
+      "complete": "804010/expedition",
+      "touch": "804011/touch",
+      "touch_head": "804011/headtouch",
+      "touch_body": "804011/touch",
+      "touch_special": "804011/touch2",
+      "main_1": "804011/main1",
+      "main_2": "804011/main2",
+      "main_3": "804011/main3"
      }
     }
    ]
@@ -4132,6 +6372,22 @@
      "cutscene": {
       "model": "Live2D/meikelunbao_2/meikelunbao_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "499101/login",
+      "home": "499101/home",
+      "mail": "499100/mail",
+      "mission": "499101/mission",
+      "mission_complete": "499101/mission_complete",
+      "complete": "499100/expedition",
+      "touch": "499101/touch",
+      "touch_head": "499101/headtouch",
+      "touch_body": "499101/touch",
+      "touch_special": "499101/touch2",
+      "main_1": "499101/main1",
+      "main_2": "499101/main2",
+      "main_3": "499101/main3",
+      "main_4": "499100/main4"
      }
     }
    ]
@@ -4150,6 +6406,21 @@
      "cutscene": {
       "model": "Live2D/meiyinci_3/meiyinci_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "499033/login",
+      "home": "499033/home",
+      "mail": "499030/mail",
+      "mission": "499030/mission",
+      "mission_complete": "499033/mission_complete",
+      "complete": "499030/expedition",
+      "touch": "499033/touch",
+      "touch_head": "499033/headtouch",
+      "touch_body": "499033/touch",
+      "touch_special": "499033/touch2",
+      "main_1": "499033/main1",
+      "main_2": "499033/main2",
+      "main_3": "499033/main3"
      }
     }
    ]
@@ -4168,6 +6439,21 @@
      "cutscene": {
       "model": "Live2D/mingji_2/mingji_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "302291/login",
+      "home": "302291/home",
+      "mail": "302290/mail",
+      "mission": "302291/mission",
+      "mission_complete": "302291/mission_complete",
+      "complete": "302290/expedition",
+      "touch": "302291/touch",
+      "touch_head": "302291/headtouch",
+      "touch_body": "302291/touch",
+      "touch_special": "302291/touch2",
+      "main_1": "302291/main1",
+      "main_2": "302291/main2",
+      "main_3": "302291/main3"
      }
     }
    ]
@@ -4186,6 +6472,21 @@
      "cutscene": {
       "model": "Live2D/mingshi/mingshi.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "312010/login",
+      "home": "312010/home",
+      "mail": "312010/mail",
+      "mission": "312010/mission",
+      "mission_complete": "312010/mission_complete",
+      "complete": "312010/expedition",
+      "touch": "312010/touch",
+      "touch_head": "312010/headtouch",
+      "touch_body": "312010/touch",
+      "touch_special": "312010/touch2",
+      "main_1": "312010/main1",
+      "main_2": "312010/main2",
+      "main_3": "312010/main3"
      }
     }
    ]
@@ -4244,6 +6545,22 @@
      "cutscene": {
       "model": "Live2D/mojiaduoer_2/mojiaduoer_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "901071/login",
+      "home": "901071/home",
+      "mail": "901071/mail",
+      "mission": "901071/mission",
+      "mission_complete": "901071/mission_complete",
+      "complete": "901071/expedition",
+      "touch": "901071/touch",
+      "touch_head": "901071/headtouch",
+      "touch_body": "901071/touch",
+      "touch_special": "901071/touch2",
+      "main_1": "901071/main1",
+      "main_2": "901071/main2",
+      "main_3": "901071/main3",
+      "main_4": "901071/main4"
      }
     },
     {
@@ -4256,6 +6573,22 @@
      "cutscene": {
       "model": "Live2D/mojiaduoer_3/mojiaduoer_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "901072/login",
+      "home": "901072/home",
+      "mail": "901072/mail",
+      "mission": "901072/mission",
+      "mission_complete": "901072/mission_complete",
+      "complete": "901072/expedition",
+      "touch": "901072/touch",
+      "touch_head": "901072/headtouch",
+      "touch_body": "901072/touch",
+      "touch_special": "901072/touch2",
+      "main_1": "901072/main1",
+      "main_2": "901072/main2",
+      "main_3": "901072/main3",
+      "main_4": "901072/main4"
      }
     },
     {
@@ -4268,6 +6601,22 @@
      "cutscene": {
       "model": "Live2D/mojiaduoer_4/mojiaduoer_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "901070/login",
+      "home": "901070/home",
+      "mail": "901070/mail",
+      "mission": "901070/mission",
+      "mission_complete": "901070/mission_complete",
+      "complete": "901070/expedition",
+      "touch": "901070/touch",
+      "touch_head": "901070/headtouch",
+      "touch_body": "901070/touch",
+      "touch_special": "901070/touch2",
+      "main_1": "901070/main1",
+      "main_2": "901070/main2",
+      "main_3": "901070/main3",
+      "main_4": "901070/main4"
      }
     }
    ]
@@ -4311,6 +6660,21 @@
         "touch_random2"
        ]
       ]
+     },
+     "voices": {
+      "login": "101472/login",
+      "home": "101472/home",
+      "mail": "101470/mail",
+      "mission": "101470/mission",
+      "mission_complete": "101470/mission_complete",
+      "complete": "101470/expedition",
+      "touch": "101472/touch",
+      "touch_head": "101472/headtouch",
+      "touch_body": "101472/touch",
+      "touch_special": "101472/touch2",
+      "main_1": "101472/main1",
+      "main_2": "101472/main2",
+      "main_3": "101472/main3"
      }
     }
    ]
@@ -4344,6 +6708,22 @@
      "cutscene": {
       "model": "Live2D/nabulesi_2/nabulesi_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "699021/login",
+      "home": "699021/home",
+      "mail": "699020/mail",
+      "mission": "699021/mission",
+      "mission_complete": "699021/mission_complete",
+      "complete": "699021/expedition",
+      "touch": "699021/touch",
+      "touch_head": "699021/headtouch",
+      "touch_body": "699021/touch",
+      "touch_special": "699021/touch2",
+      "main_1": "699021/main1",
+      "main_2": "699021/main2",
+      "main_3": "699021/main3",
+      "main_4": "699021/main4"
      }
     }
    ]
@@ -4377,6 +6757,22 @@
      "cutscene": {
       "model": "Live2D/naximofu_2/naximofu_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "799021/login",
+      "home": "799021/home",
+      "mail": "799020/mail",
+      "mission": "799020/mission",
+      "mission_complete": "799020/mission_complete",
+      "complete": "799021/expedition",
+      "touch": "799021/touch",
+      "touch_head": "799021/headtouch",
+      "touch_body": "799021/touch",
+      "touch_special": "799021/touch2",
+      "main_1": "799021/main1",
+      "main_2": "799021/main2",
+      "main_3": "799021/main3",
+      "main_4": "799021/main4"
      }
     }
    ]
@@ -4395,6 +6791,20 @@
      "cutscene": {
       "model": "Live2D/nengdai_2/nengdai_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "302211/login",
+      "home": "302211/home",
+      "mail": "302210/mail",
+      "mission": "302210/mission",
+      "mission_complete": "302210/mission_complete",
+      "complete": "302210/expedition",
+      "touch": "302211/touch",
+      "touch_body": "302211/touch",
+      "touch_special": "302211/touch2",
+      "main_1": "302211/main1",
+      "main_2": "302211/main2",
+      "main_3": "302211/main3"
      }
     },
     {
@@ -4407,6 +6817,20 @@
      "cutscene": {
       "model": "Live2D/nengdai_3/nengdai_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "302216/login",
+      "home": "302216/home",
+      "mail": "302210/mail",
+      "mission": "302210/mission",
+      "mission_complete": "302210/mission_complete",
+      "complete": "302216/expedition",
+      "touch": "302216/touch",
+      "touch_body": "302216/touch",
+      "touch_special": "302216/touch2",
+      "main_1": "302216/main1",
+      "main_2": "302216/main2",
+      "main_3": "302216/main3"
      }
     },
     {
@@ -4436,6 +6860,20 @@
         "login"
        ]
       ]
+     },
+     "voices": {
+      "login": "332210/login",
+      "home": "332210/home",
+      "mail": "332210/mail",
+      "mission": "332210/mission",
+      "mission_complete": "332210/mission_complete",
+      "complete": "332210/expedition",
+      "touch": "332210/touch",
+      "touch_body": "332210/touch",
+      "touch_special": "332210/touch2",
+      "main_1": "332210/main1",
+      "main_2": "332210/main2",
+      "main_3": "332210/main3"
      }
     }
    ]
@@ -4475,6 +6913,20 @@
      "cutscene": {
       "model": "Live2D/ninghai_4/ninghai_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "502023/login",
+      "home": "502023/home",
+      "mail": "502023/mail",
+      "mission": "502023/mission",
+      "mission_complete": "502023/mission_complete",
+      "complete": "502023/expedition",
+      "touch": "502023/touch",
+      "touch_body": "502023/touch",
+      "touch_special": "502023/touch2",
+      "main_1": "502023/main1",
+      "main_2": "502023/main2",
+      "main_3": "502023/main3"
      }
     }
    ]
@@ -4493,6 +6945,20 @@
      "cutscene": {
       "model": "Live2D/ougen_5/ougen_5.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "403034/login",
+      "home": "403034/home",
+      "mail": "403030/mail",
+      "mission": "403030/mission",
+      "mission_complete": "403030/mission_complete",
+      "complete": "403034/expedition",
+      "touch": "403030/touch",
+      "touch_body": "403030/touch",
+      "touch_special": "403034/touch2",
+      "main_1": "403034/main1",
+      "main_2": "403034/main2",
+      "main_3": "403034/main3"
      }
     },
     {
@@ -4505,6 +6971,20 @@
      "cutscene": {
       "model": "Live2D/ougen_6/ougen_6.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "403035/login",
+      "home": "403035/home",
+      "mail": "403030/mail",
+      "mission": "403030/mission",
+      "mission_complete": "403035/mission_complete",
+      "complete": "403030/expedition",
+      "touch": "403030/touch",
+      "touch_body": "403030/touch",
+      "touch_special": "403035/touch2",
+      "main_1": "403035/main1",
+      "main_2": "403035/main2",
+      "main_3": "403035/main3"
      }
     },
     {
@@ -4532,6 +7012,21 @@
      "cutscene": {
       "model": "Live2D/ougen_8/ougen_8.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "403037/login",
+      "home": "403037/home",
+      "mail": "403030/mail",
+      "mission": "403030/mission",
+      "mission_complete": "403030/mission_complete",
+      "complete": "403030/expedition",
+      "touch": "403037/touch",
+      "touch_head": "403037/headtouch",
+      "touch_body": "403037/touch",
+      "touch_special": "403037/touch2",
+      "main_1": "403037/main1",
+      "main_2": "403037/main2",
+      "main_3": "403037/main3"
      }
     }
    ]
@@ -4550,6 +7045,20 @@
      "cutscene": {
       "model": "Live2D/ouruola_4/ouruola_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "202153/login",
+      "home": "202153/home",
+      "mail": "202150/mail",
+      "mission": "202150/mission",
+      "mission_complete": "202150/mission_complete",
+      "complete": "202150/expedition",
+      "touch": "202153/touch",
+      "touch_body": "202153/touch",
+      "touch_special": "202153/touch2",
+      "main_1": "202153/main1",
+      "main_2": "202153/main2",
+      "main_3": "202153/main3"
      }
     }
    ]
@@ -4568,6 +7077,20 @@
      "cutscene": {
       "model": "Live2D/pinghai_4/pinghai_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "502033/login",
+      "home": "502030/home",
+      "mail": "502033/mail",
+      "mission": "502033/mission",
+      "mission_complete": "502033/mission_complete",
+      "complete": "502033/expedition",
+      "touch": "502033/touch",
+      "touch_body": "502033/touch",
+      "touch_special": "502033/touch2",
+      "main_1": "502033/main1",
+      "main_2": "502033/main2",
+      "main_3": "502033/main3"
      }
     },
     {
@@ -4580,6 +7103,20 @@
      "cutscene": {
       "model": "Live2D/pinghai_6/pinghai_6.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "502035/login",
+      "home": "502035/home",
+      "mail": "502030/mail",
+      "mission": "502030/mission",
+      "mission_complete": "502030/mission_complete",
+      "complete": "502030/expedition",
+      "touch": "502035/touch",
+      "touch_body": "502035/touch",
+      "touch_special": "502035/touch2",
+      "main_1": "502035/main1",
+      "main_2": "502035/main2",
+      "main_3": "502035/main3"
      }
     }
    ]
@@ -4598,6 +7135,22 @@
      "cutscene": {
       "model": "Live2D/pizibao_2/pizibao_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "103281/login",
+      "home": "103281/home",
+      "mail": "103280/mail",
+      "mission": "103280/mission",
+      "mission_complete": "103280/mission_complete",
+      "complete": "103280/expedition",
+      "touch": "103281/touch",
+      "touch_head": "103281/headtouch",
+      "touch_body": "103281/touch",
+      "touch_special": "103281/touch2",
+      "main_1": "103281/main1",
+      "main_2": "103281/main2",
+      "main_3": "103281/main3",
+      "main_4": "103281/main4"
      }
     }
    ]
@@ -4639,6 +7192,21 @@
      "cutscene": {
       "model": "Live2D/pulimaosi_3/pulimaosi_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "299050/login",
+      "home": "299050/home",
+      "mail": "299050/mail",
+      "mission": "299050/mission",
+      "mission_complete": "299050/mission_complete",
+      "complete": "299050/expedition",
+      "touch": "299050/touch",
+      "touch_head": "299050/headtouch",
+      "touch_body": "299050/touch",
+      "touch_special": "299050/touch2",
+      "main_1": "299050/main1",
+      "main_2": "299050/main2",
+      "main_3": "299050/main3"
      }
     }
    ]
@@ -4657,6 +7225,21 @@
      "cutscene": {
       "model": "Live2D/qianjian_2/qianjian_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "303201/login",
+      "home": "303201/home",
+      "mail": "303200/mail",
+      "mission": "303201/mission",
+      "mission_complete": "303201/mission_complete",
+      "complete": "303200/expedition",
+      "touch": "303201/touch",
+      "touch_head": "303201/headtouch",
+      "touch_body": "303201/touch",
+      "touch_special": "303201/touch2",
+      "main_1": "303201/main1",
+      "main_2": "303201/main2",
+      "main_3": "303201/main3"
      }
     }
    ]
@@ -4694,6 +7277,23 @@
      "cutscene": {
       "model": "Live2D/qianwei_2/qianwei_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "205131/login",
+      "home": "205131/home",
+      "mail": "205130/mail",
+      "mission": "205131/mission",
+      "mission_complete": "205130/mission_complete",
+      "complete": "205131/expedition",
+      "touch": "205131/touch",
+      "touch_head": "205130/headtouch",
+      "touch_body": "205131/touch",
+      "touch_special": "205131/touch2",
+      "main_1": "205131/main1",
+      "main_2": "205131/main2",
+      "main_3": "205131/main3",
+      "main_4": "205130/main4",
+      "main_5": "205131/main5"
      }
     }
    ]
@@ -4712,6 +7312,20 @@
      "cutscene": {
       "model": "Live2D/qibolin_2/qibolin_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "407011/login",
+      "home": "407010/home",
+      "mail": "407010/mail",
+      "mission": "407010/mission",
+      "mission_complete": "407010/mission_complete",
+      "complete": "407010/expedition",
+      "touch": "407011/touch",
+      "touch_body": "407011/touch",
+      "touch_special": "407011/touch2",
+      "main_1": "407011/main1",
+      "main_2": "407011/main2",
+      "main_3": "407011/main3"
      }
     }
    ]
@@ -4745,6 +7359,23 @@
      "cutscene": {
       "model": "Live2D/qiershazhi_2/qiershazhi_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "199041/login",
+      "home": "199041/home",
+      "mail": "199040/mail",
+      "mission": "199041/mission",
+      "mission_complete": "199041/mission_complete",
+      "complete": "199041/expedition",
+      "touch": "199041/touch",
+      "touch_head": "199040/headtouch",
+      "touch_body": "199041/touch",
+      "touch_special": "199041/touch2",
+      "main_1": "199041/main1",
+      "main_2": "199041/main2",
+      "main_3": "199041/main3",
+      "main_4": "199041/main4",
+      "main_5": "199041/main5"
      }
     },
     {
@@ -4782,6 +7413,21 @@
      "cutscene": {
       "model": "Live2D/qisheng_2/qisheng_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "1102011/login",
+      "home": "1102011/home",
+      "mail": "1102010/mail",
+      "mission": "1102011/mission",
+      "mission_complete": "1102010/mission_complete",
+      "complete": "1102010/expedition",
+      "touch": "1102011/touch",
+      "touch_head": "1102011/headtouch",
+      "touch_body": "1102011/touch",
+      "touch_special": "1102011/touch2",
+      "main_1": "1102011/main1",
+      "main_2": "1102011/main2",
+      "main_3": "1102011/main3"
      }
     }
    ]
@@ -4800,6 +7446,20 @@
      "cutscene": {
       "model": "Live2D/qiye_10/qiye_10.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "137061/login",
+      "home": "137061/home",
+      "mail": "107060/mail",
+      "mission": "107060/mission",
+      "mission_complete": "107060/mission_complete",
+      "complete": "107060/expedition",
+      "touch": "137061/touch",
+      "touch_body": "137061/touch",
+      "touch_special": "137061/touch2",
+      "main_1": "137061/main1",
+      "main_2": "137061/main2",
+      "main_3": "137061/main3"
      }
     },
     {
@@ -4812,6 +7472,20 @@
      "cutscene": {
       "model": "Live2D/qiye_7/qiye_7.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "107066/login",
+      "home": "107066/home",
+      "mail": "107060/mail",
+      "mission": "107060/mission",
+      "mission_complete": "107060/mission_complete",
+      "complete": "107066/expedition",
+      "touch": "107066/touch",
+      "touch_body": "107066/touch",
+      "touch_special": "107066/touch2",
+      "main_1": "107066/main1",
+      "main_2": "107066/main2",
+      "main_3": "107066/main3"
      }
     },
     {
@@ -4824,6 +7498,20 @@
      "cutscene": {
       "model": "Live2D/qiye_9/qiye_9.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "137060/login",
+      "home": "137060/home",
+      "mail": "137060/mail",
+      "mission": "107060/mission",
+      "mission_complete": "137060/mission_complete",
+      "complete": "137060/expedition",
+      "touch": "137060/touch",
+      "touch_body": "137060/touch",
+      "touch_special": "137060/touch2",
+      "main_1": "137060/main1",
+      "main_2": "137060/main2",
+      "main_3": "137060/main3"
      }
     }
    ]
@@ -4842,6 +7530,20 @@
      "cutscene": {
       "model": "Live2D/rangbaer_3/rangbaer_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "905012/login",
+      "home": "905012/home",
+      "mail": "905010/mail",
+      "mission": "905010/mission",
+      "mission_complete": "905010/mission_complete",
+      "complete": "905010/expedition",
+      "touch": "905012/touch",
+      "touch_body": "905012/touch",
+      "touch_special": "905012/touch2",
+      "main_1": "905012/main1",
+      "main_2": "905012/main2",
+      "main_3": "905012/main3"
      }
     },
     {
@@ -4854,6 +7556,21 @@
      "cutscene": {
       "model": "Live2D/rangbaer_4/rangbaer_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "905013/login",
+      "home": "905013/home",
+      "mail": "905010/mail",
+      "mission": "905010/mission",
+      "mission_complete": "905010/mission_complete",
+      "complete": "905010/expedition",
+      "touch": "905013/touch",
+      "touch_head": "905013/headtouch",
+      "touch_body": "905013/touch",
+      "touch_special": "905013/touch2",
+      "main_1": "905013/main1",
+      "main_2": "905013/main2",
+      "main_3": "905013/main3"
      }
     },
     {
@@ -4866,6 +7583,21 @@
      "cutscene": {
       "model": "Live2D/rangbaer_5/rangbaer_5.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "905014/login",
+      "home": "905014/home",
+      "mail": "905014/mail",
+      "mission": "905014/mission",
+      "mission_complete": "905014/mission_complete",
+      "complete": "905014/expedition",
+      "touch": "905014/touch",
+      "touch_head": "905014/headtouch",
+      "touch_body": "905014/touch",
+      "touch_special": "905014/touch2",
+      "main_1": "905014/main1",
+      "main_2": "905014/main2",
+      "main_3": "905014/main3"
      }
     }
    ]
@@ -4941,6 +7673,20 @@
      "cutscene": {
       "model": "Live2D/shengluyisi_2/shengluyisi_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "102130/login",
+      "home": "102130/home",
+      "mail": "102130/mail",
+      "mission": "102130/mission",
+      "mission_complete": "102130/mission_complete",
+      "complete": "102130/expedition",
+      "touch": "102130/touch",
+      "touch_body": "102130/touch",
+      "touch_special": "102131/touch2",
+      "main_1": "102131/main1",
+      "main_2": "102131/main2",
+      "main_3": "102131/main3"
      }
     },
     {
@@ -4953,6 +7699,20 @@
      "cutscene": {
       "model": "Live2D/shengluyisi_3/shengluyisi_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "102132/login",
+      "home": "102132/home",
+      "mail": "102130/mail",
+      "mission": "102130/mission",
+      "mission_complete": "102130/mission_complete",
+      "complete": "102130/expedition",
+      "touch": "102132/touch",
+      "touch_body": "102132/touch",
+      "touch_special": "102130/touch2",
+      "main_1": "102132/main1",
+      "main_2": "102132/main2",
+      "main_3": "102132/main3"
      }
     },
     {
@@ -4965,6 +7725,20 @@
      "cutscene": {
       "model": "Live2D/shengluyisi_4/shengluyisi_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "102133/login",
+      "home": "102133/home",
+      "mail": "102133/mail",
+      "mission": "102133/mission",
+      "mission_complete": "102133/mission_complete",
+      "complete": "102130/expedition",
+      "touch": "102133/touch",
+      "touch_body": "102133/touch",
+      "touch_special": "102130/touch2",
+      "main_1": "102133/main1",
+      "main_2": "102133/main2",
+      "main_3": "102133/main3"
      }
     },
     {
@@ -4977,6 +7751,23 @@
      "cutscene": {
       "model": "Live2D/shengluyisi_5/shengluyisi_5.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "102134/login",
+      "home": "102134/home",
+      "mail": "102134/mail",
+      "mission": "102134/mission",
+      "mission_complete": "102134/mission_complete",
+      "complete": "102134/expedition",
+      "touch": "102134/touch",
+      "touch_head": "102134/headtouch",
+      "touch_body": "102134/touch",
+      "touch_special": "102134/touch2",
+      "main_1": "102134/main1",
+      "main_2": "102134/main2",
+      "main_3": "102134/main3",
+      "main_4": "102134/main4",
+      "main_5": "102134/main5"
      }
     }
    ]
@@ -5010,6 +7801,22 @@
      "cutscene": {
       "model": "Live2D/shi_2/shi_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "205161/login",
+      "home": "205161/home",
+      "mail": "205160/mail",
+      "mission": "205161/mission",
+      "mission_complete": "205161/mission_complete",
+      "complete": "205161/expedition",
+      "touch": "205161/touch",
+      "touch_head": "205161/headtouch",
+      "touch_body": "205161/touch",
+      "touch_special": "205161/touch2",
+      "main_1": "205161/main1",
+      "main_2": "205161/main2",
+      "main_3": "205161/main3",
+      "main_4": "205161/main4"
      }
     },
     {
@@ -5022,6 +7829,22 @@
      "cutscene": {
       "model": "Live2D/shi_3/shi_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "205160/login",
+      "home": "205160/home",
+      "mail": "205160/mail",
+      "mission": "205160/mission",
+      "mission_complete": "205160/mission_complete",
+      "complete": "205160/expedition",
+      "touch": "205160/touch",
+      "touch_head": "205160/headtouch",
+      "touch_body": "205160/touch",
+      "touch_special": "205160/touch2",
+      "main_1": "205160/main1",
+      "main_2": "205160/main2",
+      "main_3": "205160/main3",
+      "main_4": "205160/main4"
      }
     }
    ]
@@ -5040,6 +7863,20 @@
      "cutscene": {
       "model": "Live2D/shitelasai_2/shitelasai_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "407031/login",
+      "home": "407031/home",
+      "mail": "407030/mail",
+      "mission": "407030/mission",
+      "mission_complete": "407030/mission_complete",
+      "complete": "407031/expedition",
+      "touch": "407031/touch",
+      "touch_body": "407031/touch",
+      "touch_special": "407031/touch2",
+      "main_1": "407031/main1",
+      "main_2": "407031/main2",
+      "main_3": "407031/main3"
      }
     }
    ]
@@ -5097,6 +7934,20 @@
      "cutscene": {
       "model": "Live2D/sipeibojue_5/sipeibojue_5.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "403054/login",
+      "home": "403054/home",
+      "mail": "403054/mail",
+      "mission": "403050/mission",
+      "mission_complete": "403050/mission_complete",
+      "complete": "403050/expedition",
+      "touch": "403054/touch",
+      "touch_body": "403054/touch",
+      "touch_special": "403054/touch2",
+      "main_1": "403054/main1",
+      "main_2": "403054/main2",
+      "main_3": "403054/main3"
      }
     }
    ]
@@ -5115,6 +7966,21 @@
      "cutscene": {
       "model": "Live2D/sitelasibao_2/sitelasibao_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "904021/login",
+      "home": "904021/home",
+      "mail": "904020/mail",
+      "mission": "904020/mission",
+      "mission_complete": "904020/mission_complete",
+      "complete": "904020/expedition",
+      "touch": "904021/touch",
+      "touch_head": "904021/headtouch",
+      "touch_body": "904021/touch",
+      "touch_special": "904021/touch2",
+      "main_1": "904021/main1",
+      "main_2": "904021/main2",
+      "main_3": "904021/main3"
      }
     }
    ]
@@ -5154,6 +8020,22 @@
      "cutscene": {
       "model": "Live2D/siwanshi_3/siwanshi_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "399062/login",
+      "home": "399062/home",
+      "mail": "399060/mail",
+      "mission": "399062/mission",
+      "mission_complete": "399062/mission_complete",
+      "complete": "399062/expedition",
+      "touch": "399062/touch",
+      "touch_head": "399060/headtouch",
+      "touch_body": "399062/touch",
+      "touch_special": "399062/touch2",
+      "main_1": "399062/main1",
+      "main_2": "399062/main2",
+      "main_3": "399062/main3",
+      "main_4": "399060/main4"
      }
     },
     {
@@ -5195,6 +8077,22 @@
         "touch_special_2"
        ]
       ]
+     },
+     "voices": {
+      "login": "399063/login",
+      "home": "399063/home",
+      "mail": "399060/mail",
+      "mission": "399060/mission",
+      "mission_complete": "399063/mission_complete",
+      "complete": "399063/expedition",
+      "touch": "399063/touch",
+      "touch_head": "399060/headtouch",
+      "touch_body": "399063/touch",
+      "touch_special": "399063/touch2",
+      "main_1": "399063/main1",
+      "main_2": "399063/main2",
+      "main_3": "399063/main3",
+      "main_4": "399060/main4"
      }
     }
    ]
@@ -5228,6 +8126,22 @@
      "cutscene": {
       "model": "Live2D/suweiaitongmeng_2/suweiaitongmeng_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "705021/login",
+      "home": "705021/home",
+      "mail": "705020/mail",
+      "mission": "705020/mission",
+      "mission_complete": "705020/mission_complete",
+      "complete": "705020/expedition",
+      "touch": "705021/touch",
+      "touch_head": "705020/headtouch",
+      "touch_body": "705021/touch",
+      "touch_special": "705021/touch2",
+      "main_1": "705021/main1",
+      "main_2": "705021/main2",
+      "main_3": "705021/main3",
+      "main_4": "705020/main4"
      }
     },
     {
@@ -5240,6 +8154,22 @@
      "cutscene": {
       "model": "Live2D/suweiaitongmeng_3/suweiaitongmeng_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "705022/login",
+      "home": "705022/home",
+      "mail": "705022/mail",
+      "mission": "705022/mission",
+      "mission_complete": "705022/mission_complete",
+      "complete": "705022/expedition",
+      "touch": "705022/touch",
+      "touch_head": "705020/headtouch",
+      "touch_body": "705022/touch",
+      "touch_special": "705022/touch2",
+      "main_1": "705022/main1",
+      "main_2": "705022/main2",
+      "main_3": "705022/main3",
+      "main_4": "705022/main4"
      }
     },
     {
@@ -5281,6 +8211,22 @@
         "touch_special_2"
        ]
       ]
+     },
+     "voices": {
+      "login": "705023/login",
+      "home": "705023/home",
+      "mail": "705023/mail",
+      "mission": "705023/mission",
+      "mission_complete": "705023/mission_complete",
+      "complete": "705023/expedition",
+      "touch": "705023/touch",
+      "touch_head": "705020/headtouch",
+      "touch_body": "705023/touch",
+      "touch_special": "705023/touch2",
+      "main_1": "705023/main1",
+      "main_2": "705023/main2",
+      "main_3": "705023/main3",
+      "main_4": "705023/main4"
      }
     }
    ]
@@ -5299,6 +8245,21 @@
      "cutscene": {
       "model": "Live2D/taiyuan_2/taiyuan_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "501041/login",
+      "home": "501041/home",
+      "mail": "501040/mail",
+      "mission": "501040/mission",
+      "mission_complete": "501040/mission_complete",
+      "complete": "501040/expedition",
+      "touch": "501041/touch",
+      "touch_head": "501040/headtouch",
+      "touch_body": "501041/touch",
+      "touch_special": "501041/touch2",
+      "main_1": "501041/main1",
+      "main_2": "501041/main2",
+      "main_3": "501041/main3"
      }
     }
    ]
@@ -5374,6 +8335,22 @@
      "cutscene": {
       "model": "Live2D/telafaerjia_2/telafaerjia_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "201381/login",
+      "home": "201381/home",
+      "mail": "201380/mail",
+      "mission": "201381/mission",
+      "mission_complete": "201380/mission_complete",
+      "complete": "201380/expedition",
+      "touch": "201381/touch",
+      "touch_head": "201381/headtouch",
+      "touch_body": "201381/touch",
+      "touch_special": "201381/touch2",
+      "main_1": "201381/main1",
+      "main_2": "201381/main2",
+      "main_3": "201381/main3",
+      "main_4": "201381/main4"
      }
     }
    ]
@@ -5411,6 +8388,21 @@
         "drag_ex"
        ]
       ]
+     },
+     "voices": {
+      "login": "202361/login",
+      "home": "202361/home",
+      "mail": "202361/mail",
+      "mission": "202361/mission",
+      "mission_complete": "202361/mission_complete",
+      "complete": "202361/expedition",
+      "touch": "202361/touch",
+      "touch_head": "202361/headtouch",
+      "touch_body": "202361/touch",
+      "touch_special": "202361/touch2",
+      "main_1": "202361/main1",
+      "main_2": "202361/main2",
+      "main_3": "202361/main3"
      }
     }
    ]
@@ -5444,6 +8436,20 @@
      "cutscene": {
       "model": "Live2D/tiancheng_3/tiancheng_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "304052/login",
+      "home": "304052/home",
+      "mail": "304050/mail",
+      "mission": "304052/mission",
+      "mission_complete": "304052/mission_complete",
+      "complete": "304052/expedition",
+      "touch": "304050/touch",
+      "touch_body": "304050/touch",
+      "touch_special": "304052/touch2",
+      "main_1": "304052/main1",
+      "main_2": "304052/main2",
+      "main_3": "304052/main3"
      }
     },
     {
@@ -5456,6 +8462,22 @@
      "cutscene": {
       "model": "Live2D/tiancheng_cv_2/tiancheng_cv_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "307151/login",
+      "home": "307151/home",
+      "mail": "307151/mail",
+      "mission": "307151/mission",
+      "mission_complete": "307151/mission_complete",
+      "complete": "307151/expedition",
+      "touch": "307151/touch",
+      "touch_head": "307151/headtouch",
+      "touch_body": "307151/touch",
+      "touch_special": "307151/touch2",
+      "main_1": "307151/main1",
+      "main_2": "307151/main2",
+      "main_3": "307151/main3",
+      "main_4": "307151/main4"
      }
     },
     {
@@ -5468,6 +8490,22 @@
      "cutscene": {
       "model": "Live2D/tiancheng_cv_3/tiancheng_cv_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "307150/login",
+      "home": "307150/home",
+      "mail": "307150/mail",
+      "mission": "307150/mission",
+      "mission_complete": "307150/mission_complete",
+      "complete": "307150/expedition",
+      "touch": "307150/touch",
+      "touch_head": "307150/headtouch",
+      "touch_body": "307150/touch",
+      "touch_special": "307150/touch2",
+      "main_1": "307150/main1",
+      "main_2": "307150/main2",
+      "main_3": "307150/main3",
+      "main_4": "307150/main4"
      }
     }
    ]
@@ -5486,6 +8524,21 @@
      "cutscene": {
       "model": "Live2D/tianlangxing_3/tianlangxing_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "202202/login",
+      "home": "202200/home",
+      "mail": "202200/mail",
+      "mission": "202200/mission",
+      "mission_complete": "202200/mission_complete",
+      "complete": "202200/expedition",
+      "touch": "202202/touch",
+      "touch_head": "202200/headtouch",
+      "touch_body": "202202/touch",
+      "touch_special": "202202/touch2",
+      "main_1": "202202/main1",
+      "main_2": "202202/main2",
+      "main_3": "202202/main3"
      }
     },
     {
@@ -5498,6 +8551,21 @@
      "cutscene": {
       "model": "Live2D/tianlangxing_5/tianlangxing_5.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "202204/login",
+      "home": "202204/home",
+      "mail": "202204/mail",
+      "mission": "202200/mission",
+      "mission_complete": "202200/mission_complete",
+      "complete": "202204/expedition",
+      "touch": "202204/touch",
+      "touch_head": "202204/headtouch",
+      "touch_body": "202204/touch",
+      "touch_special": "202204/touch2",
+      "main_1": "202204/main1",
+      "main_2": "202204/main2",
+      "main_3": "202204/main3"
      }
     }
    ]
@@ -5516,6 +8584,20 @@
      "cutscene": {
       "model": "Live2D/tierbici_2/tierbici_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "405021/login",
+      "home": "405020/home",
+      "mail": "405020/mail",
+      "mission": "405021/mission",
+      "mission_complete": "405020/mission_complete",
+      "complete": "405020/expedition",
+      "touch": "405021/touch",
+      "touch_body": "405021/touch",
+      "touch_special": "405021/touch2",
+      "main_1": "405021/main1",
+      "main_2": "405021/main2",
+      "main_3": "405021/main3"
      }
     }
    ]
@@ -5611,6 +8693,22 @@
         "click"
        ]
       ]
+     },
+     "voices": {
+      "login": "9600051/login",
+      "home": "9600051/home",
+      "mail": "9600051/mail",
+      "mission": "9600050/mission",
+      "mission_complete": "9600050/mission_complete",
+      "complete": "9600050/expedition",
+      "touch": "9600051/touch",
+      "touch_head": "9600050/headtouch",
+      "touch_body": "9600051/touch",
+      "touch_special": "9600051/touch2",
+      "main_1": "9600051/main1",
+      "main_2": "9600051/main2",
+      "main_3": "9600051/main3",
+      "main_4": "9600050/main4"
      }
     }
    ]
@@ -5629,6 +8727,20 @@
      "cutscene": {
       "model": "Live2D/weineituo_2/weineituo_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "605011/login",
+      "home": "605011/home",
+      "mail": "605010/mail",
+      "mission": "605010/mission",
+      "mission_complete": "605010/mission_complete",
+      "complete": "605010/expedition",
+      "touch": "605011/touch",
+      "touch_body": "605011/touch",
+      "touch_special": "605011/touch2",
+      "main_1": "605011/main1",
+      "main_2": "605011/main2",
+      "main_3": "605011/main3"
      }
     }
    ]
@@ -5647,6 +8759,20 @@
      "cutscene": {
       "model": "Live2D/weixi_2/weixi_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "406012/login",
+      "home": "406012/home",
+      "mail": "406010/mail",
+      "mission": "406010/mission",
+      "mission_complete": "406010/mission_complete",
+      "complete": "406010/expedition",
+      "touch": "406012/touch",
+      "touch_body": "406012/touch",
+      "touch_special": "406012/touch2",
+      "main_1": "406012/main1",
+      "main_2": "406012/main2",
+      "main_3": "406012/main3"
      }
     }
    ]
@@ -5665,6 +8791,20 @@
      "cutscene": {
       "model": "Live2D/weiyan_2/weiyan_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "701021/login",
+      "home": "701020/home",
+      "mail": "701020/mail",
+      "mission": "701020/mission",
+      "mission_complete": "701020/mission_complete",
+      "complete": "701021/expedition",
+      "touch": "701020/touch",
+      "touch_body": "701020/touch",
+      "touch_special": "701021/touch2",
+      "main_1": "701021/main1",
+      "main_2": "701021/main2",
+      "main_3": "701021/main3"
      }
     },
     {
@@ -5677,6 +8817,20 @@
      "cutscene": {
       "model": "Live2D/weiyan_4/weiyan_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "701023/login",
+      "home": "701023/home",
+      "mail": "701023/mail",
+      "mission": "701020/mission",
+      "mission_complete": "701020/mission_complete",
+      "complete": "701023/expedition",
+      "touch": "701023/touch",
+      "touch_body": "701023/touch",
+      "touch_special": "701023/touch2",
+      "main_1": "701023/main1",
+      "main_2": "701023/main2",
+      "main_3": "701023/main3"
      }
     },
     {
@@ -5689,6 +8843,20 @@
      "cutscene": {
       "model": "Live2D/weiyan_6/weiyan_6.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "701025/login",
+      "home": "701025/home",
+      "mail": "701020/mail",
+      "mission": "701025/mission",
+      "mission_complete": "701020/mission_complete",
+      "complete": "701025/expedition",
+      "touch": "701025/touch",
+      "touch_body": "701025/touch",
+      "touch_special": "701025/touch2",
+      "main_1": "701025/main1",
+      "main_2": "701025/main2",
+      "main_3": "701025/main3"
      }
     }
    ]
@@ -5726,6 +8894,22 @@
      "cutscene": {
       "model": "Live2D/weizhang_3/weizhang_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "305132/login",
+      "home": "305132/home",
+      "mail": "305132/mail",
+      "mission": "305132/mission",
+      "mission_complete": "305132/mission_complete",
+      "complete": "305132/expedition",
+      "touch": "305132/touch",
+      "touch_head": "305132/headtouch",
+      "touch_body": "305132/touch",
+      "touch_special": "305132/touch2",
+      "main_1": "305132/main1",
+      "main_2": "305132/main2",
+      "main_3": "305132/main3",
+      "main_4": "305130/main4"
      }
     }
    ]
@@ -5759,6 +8943,22 @@
      "cutscene": {
       "model": "Live2D/wuerlixi_2/wuerlixi_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "405031/login",
+      "home": "405031/home",
+      "mail": "405030/mail",
+      "mission": "405031/mission",
+      "mission_complete": "405030/mission_complete",
+      "complete": "405030/expedition",
+      "touch": "405031/touch",
+      "touch_head": "405031/headtouch",
+      "touch_body": "405031/touch",
+      "touch_special": "405031/touch2",
+      "main_1": "405031/main1",
+      "main_2": "405031/main2",
+      "main_3": "405031/main3",
+      "main_4": "405031/main4"
      }
     },
     {
@@ -5771,6 +8971,22 @@
      "cutscene": {
       "model": "Live2D/wuerlixi_3/wuerlixi_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "405032/login",
+      "home": "405032/home",
+      "mail": "405032/mail",
+      "mission": "405030/mission",
+      "mission_complete": "405030/mission_complete",
+      "complete": "405032/expedition",
+      "touch": "405032/touch",
+      "touch_head": "405030/headtouch",
+      "touch_body": "405032/touch",
+      "touch_special": "405032/touch2",
+      "main_1": "405032/main1",
+      "main_2": "405032/main2",
+      "main_3": "405032/main3",
+      "main_4": "405030/main4"
      }
     },
     {
@@ -5819,6 +9035,20 @@
      "cutscene": {
       "model": "Live2D/wuqi_2/wuqi_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "399041/login",
+      "home": "399041/home",
+      "mail": "399040/mail",
+      "mission": "399040/mission",
+      "mission_complete": "399040/mission_complete",
+      "complete": "399040/expedition",
+      "touch": "399041/touch",
+      "touch_body": "399041/touch",
+      "touch_special": "399041/touch2",
+      "main_1": "399041/main1",
+      "main_2": "399041/main2",
+      "main_3": "399041/main3"
      }
     },
     {
@@ -5831,6 +9061,20 @@
      "cutscene": {
       "model": "Live2D/wuqi_3/wuqi_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "399042/login",
+      "home": "399042/home",
+      "mail": "399040/mail",
+      "mission": "399042/mission",
+      "mission_complete": "399040/mission_complete",
+      "complete": "399040/expedition",
+      "touch": "399042/touch",
+      "touch_body": "399042/touch",
+      "touch_special": "399042/touch2",
+      "main_1": "399042/main1",
+      "main_2": "399042/main2",
+      "main_3": "399042/main3"
      }
     }
    ]
@@ -5888,6 +9132,23 @@
      "cutscene": {
       "model": "Live2D/wuzang_3/wuzang_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "305102/login",
+      "home": "305102/home",
+      "mail": "305100/mail",
+      "mission": "305102/mission",
+      "mission_complete": "305102/mission_complete",
+      "complete": "305102/expedition",
+      "touch": "305102/touch",
+      "touch_head": "305100/headtouch",
+      "touch_body": "305102/touch",
+      "touch_special": "305102/touch2",
+      "main_1": "305102/main1",
+      "main_2": "305102/main2",
+      "main_3": "305102/main3",
+      "main_4": "305102/main4",
+      "main_5": "305102/main5"
      }
     },
     {
@@ -5900,6 +9161,23 @@
      "cutscene": {
       "model": "Live2D/wuzang_4/wuzang_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "305100/login",
+      "home": "305100/home",
+      "mail": "305100/mail",
+      "mission": "305100/mission",
+      "mission_complete": "305100/mission_complete",
+      "complete": "305100/expedition",
+      "touch": "305100/touch",
+      "touch_head": "305100/headtouch",
+      "touch_body": "305100/touch",
+      "touch_special": "305100/touch2",
+      "main_1": "305100/main1",
+      "main_2": "305100/main2",
+      "main_3": "305100/main3",
+      "main_4": "305100/main4",
+      "main_5": "305100/main5"
      }
     }
    ]
@@ -5937,6 +9215,18 @@
      "cutscene": {
       "model": "Live2D/xiafei_4/xiafei_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "907013/login",
+      "home": "907013/home",
+      "mission": "907013/mission",
+      "complete": "907013/expedition",
+      "touch": "907013/touch",
+      "touch_body": "907013/touch",
+      "touch_special": "907013/touch2",
+      "main_1": "907013/main1",
+      "main_2": "907013/main2",
+      "main_3": "907013/main3"
      }
     }
    ]
@@ -5955,6 +9245,21 @@
      "cutscene": {
       "model": "Live2D/xianghe_2/xianghe_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "307051/login",
+      "home": "307051/home",
+      "mail": "307051/mail",
+      "mission": "307050/mission",
+      "mission_complete": "307050/mission_complete",
+      "complete": "307050/expedition",
+      "touch": "307051/touch",
+      "touch_head": "307050/headtouch",
+      "touch_body": "307051/touch",
+      "touch_special": "307051/touch2",
+      "main_1": "307051/main1",
+      "main_2": "307051/main2",
+      "main_3": "307051/main3"
      }
     }
    ]
@@ -6009,6 +9314,21 @@
      "cutscene": {
       "model": "Live2D/xingdengbao_2/xingdengbao_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "499091/login",
+      "home": "499091/home",
+      "mail": "499090/mail",
+      "mission": "499091/mission",
+      "mission_complete": "499091/mission_complete",
+      "complete": "499090/expedition",
+      "touch": "499091/touch",
+      "touch_head": "499091/headtouch",
+      "touch_body": "499091/touch",
+      "touch_special": "499091/touch2",
+      "main_1": "499091/main1",
+      "main_2": "499091/main2",
+      "main_3": "499091/main3"
      }
     },
     {
@@ -6021,6 +9341,21 @@
      "cutscene": {
       "model": "Live2D/xingdengbao_3/xingdengbao_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "499092/login",
+      "home": "499092/home",
+      "mail": "499090/mail",
+      "mission": "499090/mission",
+      "mission_complete": "499090/mission_complete",
+      "complete": "499090/expedition",
+      "touch": "499092/touch",
+      "touch_head": "499092/headtouch",
+      "touch_body": "499092/touch",
+      "touch_special": "499092/touch2",
+      "main_1": "499092/main1",
+      "main_2": "499092/main2",
+      "main_3": "499092/main3"
      }
     }
    ]
@@ -6079,6 +9414,23 @@
      "cutscene": {
       "model": "Live2D/xinnong_3/xinnong_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "307082/login",
+      "home": "307082/home",
+      "mail": "307080/mail",
+      "mission": "307082/mission",
+      "mission_complete": "307082/mission_complete",
+      "complete": "307080/expedition",
+      "touch": "307082/touch",
+      "touch_head": "307082/headtouch",
+      "touch_body": "307082/touch",
+      "touch_special": "307082/touch2",
+      "main_1": "307082/main1",
+      "main_2": "307082/main2",
+      "main_3": "307082/main3",
+      "main_4": "307080/main4",
+      "main_5": "307080/main5"
      }
     },
     {
@@ -6091,6 +9443,23 @@
      "cutscene": {
       "model": "Live2D/xinnong_4/xinnong_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "307083/login",
+      "home": "307083/home",
+      "mail": "307080/mail",
+      "mission": "307083/mission",
+      "mission_complete": "307083/mission_complete",
+      "complete": "307083/expedition",
+      "touch": "307083/touch",
+      "touch_head": "307083/headtouch",
+      "touch_body": "307083/touch",
+      "touch_special": "307083/touch2",
+      "main_1": "307083/main1",
+      "main_2": "307083/main2",
+      "main_3": "307083/main3",
+      "main_4": "307080/main4",
+      "main_5": "307080/main5"
      }
     },
     {
@@ -6103,6 +9472,23 @@
      "cutscene": {
       "model": "Live2D/xinnong_5/xinnong_5.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "307084/login",
+      "home": "307084/home",
+      "mail": "307080/mail",
+      "mission": "307080/mission",
+      "mission_complete": "307080/mission_complete",
+      "complete": "307080/expedition",
+      "touch": "307084/touch",
+      "touch_head": "307084/headtouch",
+      "touch_body": "307084/touch",
+      "touch_special": "307084/touch2",
+      "main_1": "307084/main1",
+      "main_2": "307084/main2",
+      "main_3": "307084/main3",
+      "main_4": "307084/main4",
+      "main_5": "307080/main5"
      }
     },
     {
@@ -6115,6 +9501,23 @@
      "cutscene": {
       "model": "Live2D/xinnong_6/xinnong_6.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "307085/login",
+      "home": "307085/home",
+      "mail": "307080/mail",
+      "mission": "307080/mission",
+      "mission_complete": "307080/mission_complete",
+      "complete": "307080/expedition",
+      "touch": "307085/touch",
+      "touch_head": "307085/headtouch",
+      "touch_body": "307085/touch",
+      "touch_special": "307085/touch2",
+      "main_1": "307085/main1",
+      "main_2": "307085/main2",
+      "main_3": "307085/main3",
+      "main_4": "307080/main4",
+      "main_5": "307080/main5"
      }
     }
    ]
@@ -6148,6 +9551,24 @@
      "cutscene": {
       "model": "Live2D/xinzexi_3/xinzexi_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "105172/login",
+      "home": "105172/home",
+      "mail": "105170/mail",
+      "mission": "105170/mission",
+      "mission_complete": "105170/mission_complete",
+      "complete": "105172/expedition",
+      "touch": "105172/touch",
+      "touch_head": "105170/headtouch",
+      "touch_body": "105172/touch",
+      "touch_special": "105172/touch2",
+      "main_1": "105172/main1",
+      "main_2": "105172/main2",
+      "main_3": "105172/main3",
+      "main_4": "105170/main4",
+      "main_5": "105170/main5",
+      "main_6": "105170/main6"
      }
     },
     {
@@ -6179,6 +9600,24 @@
      "cutscene": {
       "model": "Live2D/xinzexi_5/xinzexi_5.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "105174/login",
+      "home": "105174/home",
+      "mail": "105170/mail",
+      "mission": "105170/mission",
+      "mission_complete": "105170/mission_complete",
+      "complete": "105170/expedition",
+      "touch": "105174/touch",
+      "touch_head": "105174/headtouch",
+      "touch_body": "105174/touch",
+      "touch_special": "105174/touch2",
+      "main_1": "105174/main1",
+      "main_2": "105174/main2",
+      "main_3": "105174/main3",
+      "main_4": "105170/main4",
+      "main_5": "105170/main5",
+      "main_6": "105170/main6"
      }
     }
    ]
@@ -6197,6 +9636,21 @@
      "cutscene": {
       "model": "Live2D/xixuegui_4/xixuegui_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "201233/login",
+      "home": "201230/home",
+      "mail": "201230/mail",
+      "mission": "201230/mission",
+      "mission_complete": "201230/mission_complete",
+      "complete": "201233/expedition",
+      "touch": "201233/touch",
+      "touch_head": "201230/headtouch",
+      "touch_body": "201233/touch",
+      "touch_special": "201230/touch2",
+      "main_1": "201233/main1",
+      "main_2": "201233/main2",
+      "main_3": "201233/main3"
      }
     }
    ]
@@ -6215,6 +9669,23 @@
      "cutscene": {
       "model": "Live2D/xuefeng/xuefeng.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "301160/login",
+      "home": "301160/home",
+      "mail": "301160/mail",
+      "mission": "301160/mission",
+      "mission_complete": "301160/mission_complete",
+      "complete": "301160/expedition",
+      "touch": "301160/touch",
+      "touch_head": "301160/headtouch",
+      "touch_body": "301160/touch",
+      "touch_special": "301160/touch2",
+      "main_1": "301160/main1",
+      "main_2": "301160/main2",
+      "main_3": "301160/main3",
+      "main_4": "301160/main4",
+      "main_5": "301160/main5"
      }
     },
     {
@@ -6227,6 +9698,23 @@
      "cutscene": {
       "model": "Live2D/xuefeng_3/xuefeng_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "301162/login",
+      "home": "301160/home",
+      "mail": "301160/mail",
+      "mission": "301162/mission",
+      "mission_complete": "301160/mission_complete",
+      "complete": "301160/expedition",
+      "touch": "301162/touch",
+      "touch_head": "301160/headtouch",
+      "touch_body": "301162/touch",
+      "touch_special": "301160/touch2",
+      "main_1": "301162/main1",
+      "main_2": "301162/main2",
+      "main_3": "301162/main3",
+      "main_4": "301160/main4",
+      "main_5": "301160/main5"
      }
     }
    ]
@@ -6245,6 +9733,20 @@
      "cutscene": {
       "model": "Live2D/xukufu_2/xukufu_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "808011/login",
+      "home": "808010/home",
+      "mail": "808010/mail",
+      "mission": "808010/mission",
+      "mission_complete": "808010/mission_complete",
+      "complete": "808010/expedition",
+      "touch": "808011/touch",
+      "touch_body": "808011/touch",
+      "touch_special": "808011/touch2",
+      "main_1": "808011/main1",
+      "main_2": "808011/main2",
+      "main_3": "808011/main3"
      }
     },
     {
@@ -6257,6 +9759,20 @@
      "cutscene": {
       "model": "Live2D/xukufu_3/xukufu_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "808012/login",
+      "home": "808012/home",
+      "mail": "808010/mail",
+      "mission": "808010/mission",
+      "mission_complete": "808010/mission_complete",
+      "complete": "808010/expedition",
+      "touch": "808012/touch",
+      "touch_body": "808012/touch",
+      "touch_special": "808010/touch2",
+      "main_1": "808012/main1",
+      "main_2": "808012/main2",
+      "main_3": "808012/main3"
      }
     }
    ]
@@ -6292,6 +9808,21 @@
         "touch"
        ]
       ]
+     },
+     "voices": {
+      "login": "404061/login",
+      "home": "404061/home",
+      "mail": "404060/mail",
+      "mission": "404060/mission",
+      "mission_complete": "404060/mission_complete",
+      "complete": "404060/expedition",
+      "touch": "404061/touch",
+      "touch_head": "404061/headtouch",
+      "touch_body": "404061/touch",
+      "touch_special": "404061/touch2",
+      "main_1": "404061/main1",
+      "main_2": "404061/main2",
+      "main_3": "404061/main3"
      }
     }
    ]
@@ -6310,6 +9841,21 @@
      "cutscene": {
       "model": "Live2D/yanusi_3/yanusi_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "201351/login",
+      "home": "201351/home",
+      "mail": "201350/mail",
+      "mission": "201351/mission",
+      "mission_complete": "201350/mission_complete",
+      "complete": "201351/expedition",
+      "touch": "201351/touch",
+      "touch_head": "201350/headtouch",
+      "touch_body": "201351/touch",
+      "touch_special": "201350/touch2",
+      "main_1": "201351/main1",
+      "main_2": "201351/main2",
+      "main_3": "201351/main3"
      }
     },
     {
@@ -6337,6 +9883,21 @@
      "cutscene": {
       "model": "Live2D/yanusi_7/yanusi_7.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "201350/login",
+      "home": "201350/home",
+      "mail": "201350/mail",
+      "mission": "201350/mission",
+      "mission_complete": "201350/mission_complete",
+      "complete": "201350/expedition",
+      "touch": "201350/touch",
+      "touch_head": "201350/headtouch",
+      "touch_body": "201350/touch",
+      "touch_special": "201350/touch2",
+      "main_1": "201350/main1",
+      "main_2": "201350/main2",
+      "main_3": "201350/main3"
      }
     }
    ]
@@ -6376,6 +9937,21 @@
      "cutscene": {
       "model": "Live2D/yibei_3/yibei_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "406022/login",
+      "home": "406022/home",
+      "mail": "406020/mail",
+      "mission": "406022/mission",
+      "mission_complete": "406022/mission_complete",
+      "complete": "406020/expedition",
+      "touch": "406022/touch",
+      "touch_head": "406020/headtouch",
+      "touch_body": "406022/touch",
+      "touch_special": "406022/touch2",
+      "main_1": "406022/main1",
+      "main_2": "406022/main2",
+      "main_3": "406022/main3"
      }
     }
    ]
@@ -6394,6 +9970,20 @@
      "cutscene": {
       "model": "Live2D/yichui_2/yichui_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "399011/login",
+      "home": "399011/home",
+      "mail": "399010/mail",
+      "mission": "399010/mission",
+      "mission_complete": "399010/mission_complete",
+      "complete": "399010/expedition",
+      "touch": "399011/touch",
+      "touch_body": "399011/touch",
+      "touch_special": "399011/touch2",
+      "main_1": "399011/main1",
+      "main_2": "399011/main2",
+      "main_3": "399011/main3"
      }
     }
    ]
@@ -6412,6 +10002,20 @@
      "cutscene": {
       "model": "Live2D/yilishabai_6/yilishabai_6.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "205010/login",
+      "home": "205015/home",
+      "mail": "205015/mail",
+      "mission": "205015/mission",
+      "mission_complete": "205015/mission_complete",
+      "complete": "205010/expedition",
+      "touch": "205010/touch",
+      "touch_body": "205010/touch",
+      "touch_special": "205015/touch2",
+      "main_1": "205015/main1",
+      "main_2": "205015/main2",
+      "main_3": "205015/main3"
      }
     }
    ]
@@ -6451,6 +10055,21 @@
      "cutscene": {
       "model": "Live2D/yingrui_3/yingrui_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "502042/login",
+      "home": "502042/home",
+      "mail": "502042/mail",
+      "mission": "502040/mission",
+      "mission_complete": "502040/mission_complete",
+      "complete": "502040/expedition",
+      "touch": "502042/touch",
+      "touch_head": "502040/headtouch",
+      "touch_body": "502042/touch",
+      "touch_special": "502042/touch2",
+      "main_1": "502042/main1",
+      "main_2": "502042/main2",
+      "main_3": "502042/main3"
      }
     }
    ]
@@ -6469,6 +10088,21 @@
      "cutscene": {
       "model": "Live2D/yingxianzuo_3/yingxianzuo_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "206062/login",
+      "home": "206062/home",
+      "mail": "206062/mail",
+      "mission": "206060/mission",
+      "mission_complete": "206060/mission_complete",
+      "complete": "206062/expedition",
+      "touch": "206062/touch",
+      "touch_head": "206062/headtouch",
+      "touch_body": "206062/touch",
+      "touch_special": "206062/touch2",
+      "main_1": "206062/main1",
+      "main_2": "206062/main2",
+      "main_3": "206062/main3"
      }
     }
    ]
@@ -6592,6 +10226,23 @@
      "cutscene": {
       "model": "Live2D/yuanchou_3/yuanchou_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "207072/login",
+      "home": "207072/home",
+      "mail": "207070/mail",
+      "mission": "207070/mission",
+      "mission_complete": "207070/mission_complete",
+      "complete": "207070/expedition",
+      "touch": "207072/touch",
+      "touch_head": "207072/headtouch",
+      "touch_body": "207072/touch",
+      "touch_special": "207072/touch2",
+      "main_1": "207072/main1",
+      "main_2": "207072/main2",
+      "main_3": "207072/main3",
+      "main_4": "207070/main4",
+      "main_5": "207070/main5"
      }
     }
    ]
@@ -6673,6 +10324,23 @@
      "cutscene": {
       "model": "Live2D/yuekechengII_3/yuekechengII_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "107102/login",
+      "home": "107102/home",
+      "mail": "107102/mail",
+      "mission": "107102/mission",
+      "mission_complete": "107102/mission_complete",
+      "complete": "107102/expedition",
+      "touch": "107102/touch",
+      "touch_head": "107100/headtouch",
+      "touch_body": "107102/touch",
+      "touch_special": "107102/touch2",
+      "main_1": "107102/main1",
+      "main_2": "107102/main2",
+      "main_3": "107102/main3",
+      "main_4": "107102/main4",
+      "main_5": "107100/main5"
      }
     }
    ]
@@ -6727,6 +10395,23 @@
      "cutscene": {
       "model": "Live2D/yunxian_2/yunxian_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "303191/login",
+      "home": "303191/home",
+      "mail": "303191/mail",
+      "mission": "303190/mission",
+      "mission_complete": "303190/mission_complete",
+      "complete": "303190/expedition",
+      "touch": "303191/touch",
+      "touch_head": "303190/headtouch",
+      "touch_body": "303191/touch",
+      "touch_special": "303191/touch2",
+      "main_1": "303191/main1",
+      "main_2": "303191/main2",
+      "main_3": "303191/main3",
+      "main_4": "303190/main4",
+      "main_5": "303190/main5"
      }
     },
     {
@@ -6739,6 +10424,23 @@
      "cutscene": {
       "model": "Live2D/yunxian_3/yunxian_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "303192/login",
+      "home": "303192/home",
+      "mail": "303190/mail",
+      "mission": "303190/mission",
+      "mission_complete": "303190/mission_complete",
+      "complete": "303190/expedition",
+      "touch": "303192/touch",
+      "touch_head": "303192/headtouch",
+      "touch_body": "303192/touch",
+      "touch_special": "303192/touch2",
+      "main_1": "303192/main1",
+      "main_2": "303192/main2",
+      "main_3": "303192/main3",
+      "main_4": "303190/main4",
+      "main_5": "303190/main5"
      }
     }
    ]
@@ -6757,6 +10459,21 @@
      "cutscene": {
       "model": "Live2D/z13_2/z13_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "401131/login",
+      "home": "401131/home",
+      "mail": "401130/mail",
+      "mission": "401130/mission",
+      "mission_complete": "401130/mission_complete",
+      "complete": "401130/expedition",
+      "touch": "401131/touch",
+      "touch_head": "401131/headtouch",
+      "touch_body": "401131/touch",
+      "touch_special": "401131/touch2",
+      "main_1": "401131/main1",
+      "main_2": "401131/main2",
+      "main_3": "401131/main3"
      }
     }
    ]
@@ -6775,6 +10492,23 @@
      "cutscene": {
       "model": "Live2D/Z23/Z23.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "401230/login",
+      "home": "401230/home",
+      "mail": "401230/mail",
+      "mission": "401230/mission",
+      "mission_complete": "401230/mission_complete",
+      "complete": "401230/expedition",
+      "touch": "401230/touch",
+      "touch_head": "401230/headtouch",
+      "touch_body": "401230/touch",
+      "touch_special": "401230/touch2",
+      "main_1": "401230/main1",
+      "main_2": "401230/main2",
+      "main_3": "401230/main3",
+      "main_4": "401230/main4",
+      "main_5": "401230/main5"
      }
     }
    ]
@@ -6793,6 +10527,20 @@
      "cutscene": {
       "model": "Live2D/Z46_2/Z46_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "401461/login",
+      "home": "401461/home",
+      "mail": "401460/mail",
+      "mission": "401460/mission",
+      "mission_complete": "401460/mission_complete",
+      "complete": "401460/expedition",
+      "touch": "401461/touch",
+      "touch_body": "401461/touch",
+      "touch_special": "401461/touch2",
+      "main_1": "401461/main1",
+      "main_2": "401461/main2",
+      "main_3": "401461/main3"
      }
     },
     {
@@ -6805,6 +10553,20 @@
      "cutscene": {
       "model": "Live2D/Z46_3/Z46_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "401460/login",
+      "home": "401462/home",
+      "mail": "401460/mail",
+      "mission": "401460/mission",
+      "mission_complete": "401460/mission_complete",
+      "complete": "401460/expedition",
+      "touch": "401462/touch",
+      "touch_body": "401462/touch",
+      "touch_special": "401462/touch2",
+      "main_1": "401462/main1",
+      "main_2": "401462/main2",
+      "main_3": "401462/main3"
      }
     },
     {
@@ -6817,6 +10579,20 @@
      "cutscene": {
       "model": "Live2D/z46_4/z46_4.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "401463/login",
+      "home": "401463/home",
+      "mail": "401460/mail",
+      "mission": "401460/mission",
+      "mission_complete": "401460/mission_complete",
+      "complete": "401463/expedition",
+      "touch": "401463/touch",
+      "touch_body": "401463/touch",
+      "touch_special": "401460/touch2",
+      "main_1": "401463/main1",
+      "main_2": "401463/main2",
+      "main_3": "401463/main3"
      }
     }
    ]
@@ -6871,6 +10647,21 @@
      "cutscene": {
       "model": "Live2D/zengkehaijunshangjiang_2/zengkehaijunshangjiang_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "404071/login",
+      "home": "404071/home",
+      "mail": "404070/mail",
+      "mission": "404070/mission",
+      "mission_complete": "404070/mission_complete",
+      "complete": "404070/expedition",
+      "touch": "404071/touch",
+      "touch_head": "404071/headtouch",
+      "touch_body": "404071/touch",
+      "touch_special": "404071/touch2",
+      "main_1": "404071/main1",
+      "main_2": "404071/main2",
+      "main_3": "404071/main3"
      }
     }
    ]
@@ -6889,6 +10680,20 @@
      "cutscene": {
       "model": "Live2D/zhala_2/zhala_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "603021/login",
+      "home": "603021/home",
+      "mail": "603020/mail",
+      "mission": "603020/mission",
+      "mission_complete": "603020/mission_complete",
+      "complete": "603020/expedition",
+      "touch": "603021/touch",
+      "touch_body": "603021/touch",
+      "touch_special": "603021/touch2",
+      "main_1": "603021/main1",
+      "main_2": "603021/main2",
+      "main_3": "603021/main3"
      }
     }
    ]
@@ -6907,6 +10712,21 @@
      "cutscene": {
       "model": "Live2D/zhangwu_2/zhangwu_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "503021/login",
+      "home": "503021/home",
+      "mail": "503020/mail",
+      "mission": "503020/mission",
+      "mission_complete": "503020/mission_complete",
+      "complete": "503021/expedition",
+      "touch": "503021/touch",
+      "touch_head": "503021/headtouch",
+      "touch_body": "503021/touch",
+      "touch_special": "503021/touch2",
+      "main_1": "503021/main1",
+      "main_2": "503021/main2",
+      "main_3": "503021/main3"
      }
     }
    ]
@@ -6925,6 +10745,21 @@
      "cutscene": {
       "model": "Live2D/zhaohe_3/zhaohe_3.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "502052/login",
+      "home": "502052/home",
+      "mail": "502052/mail",
+      "mission": "502050/mission",
+      "mission_complete": "502050/mission_complete",
+      "complete": "502050/expedition",
+      "touch": "502052/touch",
+      "touch_head": "502050/headtouch",
+      "touch_body": "502052/touch",
+      "touch_special": "502052/touch2",
+      "main_1": "502052/main1",
+      "main_2": "502052/main2",
+      "main_3": "502052/main3"
      }
     },
     {
@@ -6958,6 +10793,21 @@
      "cutscene": {
       "model": "Live2D/zhenzhuhao_2/zhenzhuhao_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "9600141/login",
+      "home": "9600141/home",
+      "mail": "9600140/mail",
+      "mission": "9600140/mission",
+      "mission_complete": "9600140/mission_complete",
+      "complete": "9600140/expedition",
+      "touch": "9600141/touch",
+      "touch_head": "9600141/headtouch",
+      "touch_body": "9600141/touch",
+      "touch_special": "9600141/touch2",
+      "main_1": "9600141/main1",
+      "main_2": "9600141/main2",
+      "main_3": "9600141/main3"
      }
     }
    ]

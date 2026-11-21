@@ -41,7 +41,7 @@ const catalog = {
 const preferences = overrides => normalizePreferences({ portraits: true, ...overrides });
 
 const ALL_GAMES = ['bd2', 'nikke', 'azurlane'];
-const DEFAULTS = { rotation: 3, resume: 'portrait', games: ALL_GAMES, knownGames: ALL_GAMES };
+const DEFAULTS = { voice: false, voiceVolume: 0.6, rotation: 3, resume: 'portrait', games: ALL_GAMES, knownGames: ALL_GAMES };
 
 test('new preferences default to random people with display off; legacy enabled migrates only portrait visibility', () => {
   assert.deepEqual(normalizePreferences(null), {
@@ -62,9 +62,13 @@ test('preferences reject truthy strings, numbers, and non-string selection IDs',
     random: false, portraits: true, skills: true, rotation: 0, resume: 'both', games: ['bd2'], knownGames: ALL_GAMES, info: false,
     characterId: 'two', costumeKey: 'two-a/idle', skillAction: 'loop_2',
   }), {
-    random: false, portraits: true, skills: true, rotation: 0, resume: 'both', games: ['bd2'], knownGames: ALL_GAMES,
+    random: false, portraits: true, skills: true, voice: false, voiceVolume: 0.6, rotation: 0, resume: 'both', games: ['bd2'], knownGames: ALL_GAMES,
     characterId: 'two', costumeKey: 'two-a/idle', skillAction: 'loop_2',
   }, 'the retired info option is dropped');
+  assert.deepEqual([true, 0].map(volume => normalizePreferences({ voice: true, voiceVolume: volume })).map(p => [p.voice, p.voiceVolume]),
+    [[true, 0.6], [true, 0]], 'voice turns on only with true; the volume is a share from 0 to 1');
+  for (const bad of ['true', 1, null]) assert.equal(normalizePreferences({ voice: bad }).voice, false);
+  for (const bad of [-0.1, 1.5, '0.5', NaN]) assert.equal(normalizePreferences({ voiceVolume: bad }).voiceVolume, 0.6);
   assert.deepEqual(normalizePreferences({ games: ['unknown'], knownGames: ALL_GAMES }).games, ALL_GAMES,
     'unknown games fall back to all known ones');
   assert.deepEqual(normalizePreferences({ games: ['bd2'] }).games, ALL_GAMES,

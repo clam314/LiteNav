@@ -17,7 +17,8 @@ import { createPaintingPlayer } from './companion-painting-player.js';
 import { loadRuntime, loadSpine38, loadLive2DRuntime } from './companion-runtimes.js';
 import { readPreferences, writePreferences, readSceneProgress, writeSceneProgress, mediaQuery, disposePlayer, supportsWebGL }
   from './companion-browser.js';
-import { fetchResource, withAbort, partFor, loadCharacter } from './companion-loaders.js';
+import { fetchResource, fetchAsset, withAbort, partFor, loadCharacter } from './companion-loaders.js';
+import { createVoice, voiceSupported, voiceUrl } from './companion-voice.js';
 import { railSpace, alignedViews, spawnPartner, layoutCamera } from './companion-camera.js';
 
 let currentCompanion;
@@ -87,6 +88,11 @@ export function initCompanion() {
         <legend>游戏</legend>
         <div class="companion-chips">${GAMES.map(game => `<label><input type="checkbox" name="companion-game" value="${game.id}"><span>${game.name}</span></label>`).join('')}</div>
       </fieldset>
+      <div class="companion-field companion-voice" hidden>
+        <label class="companion-voice-row"><span>碧蓝航线语音（日语）</span><input class="companion-voice-switch" type="checkbox" role="switch" aria-label="碧蓝航线语音"></label>
+        <input class="companion-voice-volume" type="range" min="0" max="100" step="5" aria-label="语音音量">
+        <small class="companion-voice-note">互动时随反应播放；在页面上点击或按键后才会出声。</small>
+      </div>
       <p class="companion-menu-note" role="status" aria-live="polite" hidden></p>
       <div class="companion-menu-recovery" hidden><button class="companion-menu-retry" type="button">重试切换</button><button class="companion-menu-fallback" type="button">使用本地立绘</button></div>
       <small class="companion-menu-foot">设置仅保存在此浏览器，新角色首次加载需要联网。</small>
@@ -107,6 +113,12 @@ export function initCompanion() {
   const displayInputs = [...root.querySelectorAll('[name="companion-display"]')];
   const personInputs = [...root.querySelectorAll('[name="companion-person"]')];
   const gameInputs = [...root.querySelectorAll('[name="companion-game"]')];
+  const voiceField = root.querySelector('.companion-voice');
+  const voiceSwitch = root.querySelector('.companion-voice-switch');
+  const voiceVolume = root.querySelector('.companion-voice-volume');
+  const voiceNote = root.querySelector('.companion-voice-note');
+  const canSpeak = voiceSupported();
+  const voice = createVoice({ fetchAsset });
   const rotationField = root.querySelector('.companion-rotation');
   const rotationPicker = root.querySelector('[aria-label="更换间隔"]');
   const fixedField = root.querySelector('.companion-fixed');
@@ -182,6 +194,7 @@ export function initCompanion() {
   const initialMode = () => preferences.portraits ? 'portrait' : 'skill';
   const stage = createCompanionStage({
     dispose(record) {
+      voice.stop(record);
       clearTimeout(record.timeout);
       clearTimeout(record.loadingTimer);
       disposePlayer(record.player);
@@ -235,6 +248,12 @@ export function initCompanion() {
       // At least one game must stay selected.
       input.disabled = input.checked && preferences.games.length === 1;
     });
+    voiceField.hidden = !preferences.games.includes('azurlane');
+    voiceSwitch.checked = canSpeak && preferences.voice;
+    voiceSwitch.disabled = !canSpeak;
+    voiceVolume.value = String(Math.round(preferences.voiceVolume * 100));
+    voiceVolume.disabled = !canSpeak || !preferences.voice;
+    voiceNote.textContent = canSpeak ? '互动时随反应播放；在页面上点击或按键后才会出声。' : '此浏览器无法播放语音（Ogg Vorbis）。';
     shuffle.disabled = !catalog || !enabled();
     pause.disabled = !active;
     const pauseText = motionAllowed ? '暂停动画' : '播放动画';
@@ -313,6 +332,7 @@ export function initCompanion() {
 
   function updatePlayback() {
     const paused = document.hidden || !motionAllowed;
+    if (paused) voice.stop();
     for (const record of [stage.active, stage.pending, stage.outgoing]) {
       for (const player of [record?.player, record?.partner]) {
         if (!player) continue;
@@ -358,6 +378,7 @@ export function initCompanion() {
   }
 
   function stop() {
+    voice.stop();
     stage.clear();
     clearAssets();
     loadError = '';
@@ -672,6 +693,7 @@ export function initCompanion() {
     const player = await createLive2DPlayer({
       PIXI, layer, settings: assets.settings, plan: assets.plan, blobs: assets.blobs, mode: record.mode,
       space: () => railSpace(layer), frame: delta => ownCanvasFrame(record, delta), ...reactionResume(record),
+      onReaction: motion => speak(record, motion),
     });
     record.player = player;
     // The model kept loading after this record was replaced or released.
@@ -688,6 +710,7 @@ export function initCompanion() {
     const player = createPaintingPlayer({
       spine, layer, layers: assets.layers, mode: record.mode, actions: partFor(record.selection, record.mode)?.actions,
       space: () => railSpace(layer), frame: delta => ownCanvasFrame(record, delta), ...reactionResume(record),
+      onReaction: motion => speak(record, motion),
     });
     record.player = player;
     reveal(record);
@@ -714,7 +737,21 @@ export function initCompanion() {
     status.hidden = true;
     updatePlayback();
     prefetchOtherMode(record);
+    // A display's first reaction starts while it loads; its line waits for it to show.
+    if (record.reaction) speak(record, record.reaction);
     return true;
+  }
+
+  // The voice line of the reaction a record starts, when voices are on and
+  // the record is the one on stage and playing.
+  function speak(record, motion) {
+    record.reaction = motion;
+    if (!canSpeak || !preferences.voice || record.mode !== 'skill' || stage.active !== record || stage.pending) return;
+    if (document.hidden || !motionAllowed) return;
+    const game = gameOf(record.selection.character);
+    const url = voiceUrl(gameById(game).voiceBase, catalog?.games?.[game]?.voiceCommit, record.selection.costume.voices?.[motion]);
+    if (url) void voice.play(url, preferences.voiceVolume, record);
+    else voice.stop();
   }
 
   // Every display hands the stage on only at a natural break. The portrait
@@ -786,6 +823,14 @@ export function initCompanion() {
       }
     }
   };
+  const onVoice = () => {
+    updatePreference({ voice: voiceSwitch.checked });
+    if (!preferences.voice) voice.stop();
+  };
+  const onVolume = () => {
+    updatePreference({ voiceVolume: Number(voiceVolume.value) / 100 });
+    voice.setVolume(preferences.voiceVolume);
+  };
   const onShuffle = () => { selectCharacter(true); void start(); };
   const onPick = () => {
     const character = availableCharacters(catalog, preferences).find(item => item.costumes.some(costume => costumeKey(costume) === picker.value));
@@ -833,6 +878,8 @@ export function initCompanion() {
   personInputs.forEach(input => input.addEventListener('change', onPerson));
   rotationPicker.addEventListener('change', onRotation);
   gameInputs.forEach(input => input.addEventListener('change', onGame));
+  voiceSwitch.addEventListener('change', onVoice);
+  voiceVolume.addEventListener('input', onVolume);
   picker.addEventListener('change', onPick);
   skillPicker.addEventListener('change', onSkillPick);
   document.addEventListener('visibilitychange', updatePlayback);
@@ -873,7 +920,7 @@ export function initCompanion() {
       const { data, reference, performances } = result.value;
       if (reference) presentations = reference;
       games[game.id] = { assetBase: game.assetBase, commit: data.commit, performances: performances?.costumes,
-        paintingCommit: data.paintingCommit };
+        paintingCommit: data.paintingCommit, voiceCommit: data.voiceCommit };
       // A costume's 有缘之客 scene, keyed like the presets by its portrait skeleton.
       const scene = costume => {
         const found = performances?.dating?.[costumeKey(costume).match(/(?:^|\/)(char\d{6})\.skel$/i)?.[1]?.toLowerCase()];
@@ -926,6 +973,9 @@ export function initCompanion() {
       personInputs.forEach(input => input.removeEventListener('change', onPerson));
       rotationPicker.removeEventListener('change', onRotation);
       gameInputs.forEach(input => input.removeEventListener('change', onGame));
+      voiceSwitch.removeEventListener('change', onVoice);
+      voiceVolume.removeEventListener('input', onVolume);
+      voice.dispose();
       picker.removeEventListener('change', onPick);
       skillPicker.removeEventListener('change', onSkillPick);
       document.removeEventListener('pointerdown', onOutside);

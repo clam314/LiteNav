@@ -180,6 +180,33 @@ class AzurLaneCatalogTests(unittest.TestCase):
         costume = people[0]["costumes"][0]
         self.assertEqual(costume["cutscene"], {**costume["idle"], "actions": [["click"]]})
 
+    def test_voice_lines_follow_skins_over_their_ship_defaults(self):
+        tables = [{"306070": {"id": 306070, "painting": "longfeng", "ship_group": 30607},
+                   "306071": {"id": 306071, "painting": "longfeng_2", "ship_group": 30607},
+                   "all": [306070, 306071]},
+                  {"306071": {"id": 306071, "painting": "LongFeng_2", "ship_group": 1},
+                   "999990": {"id": 999990, "painting": "cn_only", "ship_group": 99999}}]
+        link = lambda skin, key: {"link": f"https://raw.githubusercontent.com/Fernando2603/AzurLane/main/audio/voiceline/{skin}/{key}.ogg"}
+        voicelines = {
+            "306070": {"login": link(306070, "login"), "mail": link(306070, "mail"), "headtouch": link(306070, "headtouch"),
+                       "drop_descrip": {"link": None, "line": "text only"}, "main2": link(306070, "main2")},
+            "306071": {"login": link(306071, "login"), "touch2": link(306071, "touch2"), "main1": link(306071, "main1"),
+                       "main12": link(306071, "main12"), "battle": link(306071, "battle"), "odd": {"link": "https://example.test/x.mp3"}},
+        }
+        voices = update.azurlane_voices(tables, voicelines)
+        self.assertEqual(voices["longfeng_2"], {
+            "login": "306071/login", "mail": "306070/mail", "touch_head": "306070/headtouch", "touch_special": "306071/touch2",
+            "main_1": "306071/main1", "main_2": "306070/main2", "main_12": "306071/main12"})
+        self.assertEqual(voices["longfeng"]["login"], "306070/login")
+        self.assertNotIn("cn_only", voices, "a skin without any line has no voices")
+        # A model newer than the skin tables says its ship's default lines.
+        skins = {"longfeng": {"longfeng": {"name": "龙凤"}, "longfeng_9": {"name": "新皮肤"}}}
+        people = update.build_azurlane(["longfeng_2", "longfeng_9"], {"longfeng": {**skins["longfeng"], "longfeng_2": {"name": "凤舞新年"}}},
+                                       {"longfeng": {"name": "龙凤"}}, voices=voices)
+        by_outfit = {costume["outfit"]: costume for costume in people[0]["costumes"]}
+        self.assertEqual(by_outfit["longfeng_2"]["voices"]["login"], "306071/login")
+        self.assertEqual(by_outfit["longfeng_9"]["voices"]["login"], "306070/login")
+
     def test_double_form_paintings_say_so(self):
         paintings = {"aersasi": {"chName": "阿尔萨斯", "skins": {"aersasi_3": {"chName": "圣宵之鬼的微醺", "spines": [
             {"skelName": "aersasi_3.skel", "atlasName": "aersasi_3.atlas", "pages": []}]}}}}

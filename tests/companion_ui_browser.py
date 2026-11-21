@@ -212,7 +212,9 @@ def run_cases(browser, origin, case_filter=None):
         saved = page.evaluate(f"JSON.parse(localStorage.getItem({json.dumps(PREFERENCE_KEY)}))")
         assert saved["characterId"] == "0002"
         assert saved["costumeKey"] == "spine/char/char000201/char000201.skel"
-        assert len(page.get_by_role("switch").all()) == 1, "only the master switch"
+        names = [switch.get_attribute("aria-label") for switch in page.get_by_role("switch").all()]
+        assert names.count("角色陪伴") == 1 and set(names) <= {"角色陪伴", "碧蓝航线语音"}, \
+            f"one master switch, and per-display switches stay gone: {names}"
 
     case("a saved male is removed from selection and replaced before rendering", saved_male,
          prefs=preferences(characterId="0001", costumeKey="spine/char/char000101/char000101.skel"))
