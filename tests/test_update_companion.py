@@ -180,6 +180,45 @@ class AzurLaneCatalogTests(unittest.TestCase):
         costume = people[0]["costumes"][0]
         self.assertEqual(costume["cutscene"], {**costume["idle"], "actions": [["click"]]})
 
+    def test_skin_table_is_read_from_the_lua_scripts_as_data(self):
+        lua = """_G.pg.base.ship_skin_template[306071] = {
+\tname = "Firebird's New Year Dance",
+\tship_group = 30607,
+\tpainting = "longfeng_2",
+\tl2d_voice_calibrate = {
+\t\tpainting = "not_this",
+\t\tid = 1
+\t},
+\tid = 306071,
+}
+_G.pg.base.ship_skin_template[399030] = {
+\tpainting = "beifeng",
+\tid = 399030,
+}
+_G.pg.base.ship_skin_template[5] = {
+\tpainting = "mismatch",
+\tship_group = 1,
+\tid = 6,
+}
+_G.pg.base.ship_skin_template[900195] = {
+\tship_group = 900195,
+\tpainting = "Beifeng",
+\tid = 900195,
+}
+"""
+        self.assertEqual(update.parse_skin_table(lua), {
+            "306071": {"id": 306071, "painting": "longfeng_2", "ship_group": 30607},
+            "900195": {"id": 900195, "painting": "Beifeng", "ship_group": 900195},
+        }, "nested fields, an entry missing its group and one whose id disagrees are left out")
+        self.assertEqual(update.parse_skin_table("return {}"), {})
+
+    def test_a_painting_with_special_copies_is_its_regular_skin(self):
+        link = lambda skin, key: {"link": f"https://raw.githubusercontent.com/Fernando2603/AzurLane/main/audio/voiceline/{skin}/{key}.ogg"}
+        table = {"900195": {"id": 900195, "painting": "beifeng", "ship_group": 900195},
+                 "399030": {"id": 399030, "painting": "beifeng", "ship_group": 39903}}
+        voicelines = {"900195": {"login": link(900195, "login")}, "399030": {"login": link(399030, "login")}}
+        self.assertEqual(update.azurlane_voices([table], voicelines)["beifeng"], {"login": "399030/login"})
+
     def test_voice_lines_follow_skins_over_their_ship_defaults(self):
         tables = [{"306070": {"id": 306070, "painting": "longfeng", "ship_group": 30607},
                    "306071": {"id": 306071, "painting": "longfeng_2", "ship_group": 30607},

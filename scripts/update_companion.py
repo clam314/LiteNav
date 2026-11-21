@@ -60,12 +60,18 @@ AZURLANE_PAINTINGS_INDEX = "https://raw.githubusercontent.com/" + AZURLANE_PAINT
 AZURLANE_PAINTING_ACTIONS = ROOT / "scripts/azurlane-painting-actions.json"
 # Japanese voice lines (every server ships the Japanese cast) extracted from the
 # English client, keyed by skin id; the game's own skin table gives each skin's
-# painting name, English server first, then Chinese.
+# painting name, English server first, then Chinese. AzurLaneLuaScripts
+# extracts the clients' scripts daily (AzurLaneData's JSON stopped in May 2026).
 AZURLANE_VOICE_REPO = "Fernando2603/AzurLane"
 AZURLANE_VOICELINES = "https://raw.githubusercontent.com/" + AZURLANE_VOICE_REPO + "/{commit}/voiceline.json"
-AZURLANE_GAME_DATA_REPO = "AzurLaneTools/AzurLaneData"
-AZURLANE_SKIN_TABLE = ("https://raw.githubusercontent.com/" + AZURLANE_GAME_DATA_REPO +
-                       "/{commit}/{server}/ShareCfg/ship_skin_template.json")
+AZURLANE_SKIN_REPO = "AzurLaneTools/AzurLaneLuaScripts"
+AZURLANE_SKIN_TABLE = ("https://raw.githubusercontent.com/" + AZURLANE_SKIN_REPO +
+                       "/{commit}/{server}/sharecfgdata/ship_skin_template.lua")
+# One Lua table per skin; its own fields sit one tab in, nested tables deeper.
+SKIN_ENTRY = re.compile(r"^_G\.pg\.base\.ship_skin_template\[(\d+)\] = \{\n(.*?)^\}", re.S | re.M)
+SKIN_FIELDS = {"painting": re.compile(r'^\tpainting = "([^"\n]*)",$', re.M),
+               "ship_group": re.compile(r"^\tship_group = (\d+),$", re.M),
+               "id": re.compile(r"^\tid = (\d+),$", re.M)}
 VOICE_LINK = re.compile(r"/audio/voiceline/(\d+)/([A-Za-z0-9_]+)\.ogg$")
 # The motion a reaction plays and the voice line the game says with it.
 MOTION_VOICES = {"login": "login", "home": "home", "mail": "mail", "mission": "mission",
@@ -525,19 +531,39 @@ def painting_label(person: str, skin: str, default: bool) -> str:
     return skin
 
 
+def parse_skin_table(text: str) -> dict:
+    """The game's ship_skin_template as AzurLaneLuaScripts extracts it: {id: {"id", "painting", "ship_group"}}.
+
+    The Lua is read as data, never run. Only a skin's own fields count; one
+    missing a field, or whose id disagrees with its key, is left out.
+    """
+    rows = {}
+    for entry in SKIN_ENTRY.finditer(text):
+        found = {name: pattern.search(entry[2]) for name, pattern in SKIN_FIELDS.items()}
+        if all(found.values()) and int(found["id"][1]) == int(entry[1]):
+            rows[entry[1]] = {"id": int(entry[1]), "painting": found["painting"][1], "ship_group": int(found["ship_group"][1])}
+    return rows
+
+
 def azurlane_voices(tables: list[dict], voicelines: dict) -> dict:
     """Each painting's voice lines by the motion they go with: {painting: {motion: "skin/key"}}.
 
     tables are the game's ship_skin_template ({id: {"id", "painting", "ship_group"}}),
-    earlier ones first. A skin only lists the lines it replaces; the rest are its
-    ship's default skin's (the lowest id of the group), as in the game. Lines
-    without audio are left out.
+    earlier ones first. A painting listed under several ids (special copies in
+    the 900000s besides the regular skin) is its lowest. A skin only lists the
+    lines it replaces; the rest are its ship's default skin's (the lowest id of
+    the group), as in the game. Lines without audio are left out.
     """
     skins: dict[str, dict] = {}
     for table in tables:
+        own: dict[str, dict] = {}
         for row in table.values():
             if isinstance(row, dict) and isinstance(row.get("painting"), str) and isinstance(row.get("id"), int):
-                skins.setdefault(row["painting"].lower(), row)
+                key = row["painting"].lower()
+                if key not in own or row["id"] < own[key]["id"]:
+                    own[key] = row
+        for key, row in own.items():
+            skins.setdefault(key, row)
     defaults: dict[int, int] = {}
     for row in skins.values():
         group = row.get("ship_group")
@@ -674,8 +700,11 @@ def update_azurlane() -> tuple[Path, str]:
     if missing:
         print(f"azurlane: reactions listed for paintings the index no longer has: {', '.join(missing)}")
     voice_commit = get_json(api + AZURLANE_VOICE_REPO + "/commits/main")["sha"]
-    data_commit = get_json(api + AZURLANE_GAME_DATA_REPO + "/commits/main")["sha"]
-    tables = [get_json(AZURLANE_SKIN_TABLE.format(commit=data_commit, server=server)) for server in ("EN", "CN")]
+    data_commit = get_json(api + AZURLANE_SKIN_REPO + "/commits/main")["sha"]
+    tables = [parse_skin_table(request(AZURLANE_SKIN_TABLE.format(commit=data_commit, server=server)).decode("utf-8"))
+              for server in ("EN", "CN")]
+    if not all(tables):
+        raise ValueError(f"no skins could be read from {AZURLANE_SKIN_REPO}")
     voices = azurlane_voices(tables, get_json(AZURLANE_VOICELINES.format(commit=voice_commit)))
     skipped: list[str] = []
     characters = build_azurlane(models, skins, ships, skipped, paintings, actions, voices)
@@ -691,7 +720,7 @@ def update_azurlane() -> tuple[Path, str]:
                                    "names": f"{AZURLANE_NAMES_REPO}@{names_commit[:12]}",
                                    "paintings": f"{AZURLANE_PAINTINGS_REPO}@{painting_commit[:12]}",
                                    "voices": f"{AZURLANE_VOICE_REPO}@{voice_commit[:12]}",
-                                   "skinTable": f"{AZURLANE_GAME_DATA_REPO}@{data_commit[:12]}",
+                                   "skinTable": f"{AZURLANE_SKIN_REPO}@{data_commit[:12]}",
                                    "commit": commit, "paintingCommit": painting_commit, "voiceCommit": voice_commit,
                                    "characters": characters})
 

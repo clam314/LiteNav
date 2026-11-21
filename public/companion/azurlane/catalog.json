@@ -1,10 +1,10 @@
 {
- "generatedAt": "2026-11-21T13:29:36+00:00",
+ "generatedAt": "2026-11-21T14:36:00+00:00",
  "source": "bungaku-moe/AzurLaneLive2D@5435d971c655",
  "names": "Pelom777/AzurLaneData@323e02209bb6",
  "paintings": "ww-rm/azurlane_spinepainting@d37b5bd58b11",
  "voices": "Fernando2603/AzurLane@219db8feba07",
- "skinTable": "AzurLaneTools/AzurLaneData@4cca5c243700",
+ "skinTable": "AzurLaneTools/AzurLaneLuaScripts@69edd04e6dda",
  "commit": "5435d971c655ff6f2efb40d13de33e815fe6c199",
  "paintingCommit": "d37b5bd58b1140c2395bb2d22cf9bc80fda504d5",
  "voiceCommit": "219db8feba07058dde232c461218bdacaaefdc17",
@@ -943,6 +943,22 @@
      "cutscene": {
       "model": "Live2D/antu_2/antu_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "304091/login",
+      "home": "304091/home",
+      "mail": "304090/mail",
+      "mission": "304090/mission",
+      "mission_complete": "304090/mission_complete",
+      "complete": "304090/expedition",
+      "touch": "304091/touch",
+      "touch_head": "304091/headtouch",
+      "touch_body": "304091/touch",
+      "touch_special": "304091/touch2",
+      "main_1": "304091/main1",
+      "main_2": "304091/main2",
+      "main_3": "304091/main3",
+      "main_4": "304091/main4"
      }
     }
    ]
@@ -978,19 +994,19 @@
       "runtime": "live2d"
      },
      "voices": {
-      "login": "499060/login",
-      "home": "499060/home",
+      "login": "499063/login",
+      "home": "499063/home",
       "mail": "499060/mail",
-      "mission": "499060/mission",
+      "mission": "499063/mission",
       "mission_complete": "499060/mission_complete",
       "complete": "499060/expedition",
-      "touch": "499060/touch",
+      "touch": "499063/touch",
       "touch_head": "499060/headtouch",
-      "touch_body": "499060/touch",
-      "touch_special": "499060/touch2",
-      "main_1": "499060/main1",
-      "main_2": "499060/main2",
-      "main_3": "499060/main3"
+      "touch_body": "499063/touch",
+      "touch_special": "499063/touch2",
+      "main_1": "499063/main1",
+      "main_2": "499063/main2",
+      "main_3": "499063/main3"
      }
     }
    ]
@@ -1113,20 +1129,20 @@
       "runtime": "live2d"
      },
      "voices": {
-      "login": "307160/login",
-      "home": "307160/home",
+      "login": "307162/login",
+      "home": "307162/home",
       "mail": "307160/mail",
       "mission": "307160/mission",
       "mission_complete": "307160/mission_complete",
       "complete": "307160/expedition",
-      "touch": "307160/touch",
-      "touch_head": "307160/headtouch",
-      "touch_body": "307160/touch",
-      "touch_special": "307160/touch2",
-      "main_1": "307160/main1",
-      "main_2": "307160/main2",
-      "main_3": "307160/main3",
-      "main_4": "307160/main4"
+      "touch": "307162/touch",
+      "touch_head": "307162/headtouch",
+      "touch_body": "307162/touch",
+      "touch_special": "307162/touch2",
+      "main_1": "307162/main1",
+      "main_2": "307162/main2",
+      "main_3": "307162/main3",
+      "main_4": "307162/main4"
      }
     }
    ]
@@ -1481,6 +1497,21 @@
      "cutscene": {
       "model": "Live2D/benningdun_2/benningdun_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "107201/login",
+      "home": "107201/home",
+      "mail": "107200/mail",
+      "mission": "107201/mission",
+      "mission_complete": "107200/mission_complete",
+      "complete": "107200/expedition",
+      "touch": "107201/touch",
+      "touch_head": "107201/headtouch",
+      "touch_body": "107201/touch",
+      "touch_special": "107201/touch2",
+      "main_1": "107201/main1",
+      "main_2": "107201/main2",
+      "main_3": "107201/main3"
      }
     }
    ]
@@ -1936,19 +1967,19 @@
       "runtime": "live2d"
      },
      "voices": {
-      "login": "207120/login",
-      "home": "207120/home",
+      "login": "207122/login",
+      "home": "207122/home",
       "mail": "207120/mail",
       "mission": "207120/mission",
       "mission_complete": "207120/mission_complete",
       "complete": "207120/expedition",
-      "touch": "207120/touch",
-      "touch_head": "207120/headtouch",
-      "touch_body": "207120/touch",
-      "touch_special": "207120/touch2",
-      "main_1": "207120/main1",
-      "main_2": "207120/main2",
-      "main_3": "207120/main3"
+      "touch": "207122/touch",
+      "touch_head": "207122/headtouch",
+      "touch_body": "207122/touch",
+      "touch_special": "207122/touch2",
+      "main_1": "207122/main1",
+      "main_2": "207122/main2",
+      "main_3": "207122/main3"
      }
     }
    ]
@@ -2051,19 +2082,19 @@
       "runtime": "live2d"
      },
      "voices": {
-      "login": "299030/login",
-      "home": "299030/home",
+      "login": "299035/login",
+      "home": "299035/home",
       "mail": "299030/mail",
       "mission": "299030/mission",
       "mission_complete": "299030/mission_complete",
-      "complete": "299030/expedition",
-      "touch": "299030/touch",
-      "touch_head": "299030/headtouch",
-      "touch_body": "299030/touch",
-      "touch_special": "299030/touch2",
-      "main_1": "299030/main1",
-      "main_2": "299030/main2",
-      "main_3": "299030/main3"
+      "complete": "299035/expedition",
+      "touch": "299035/touch",
+      "touch_head": "299035/headtouch",
+      "touch_body": "299035/touch",
+      "touch_special": "299035/touch2",
+      "main_1": "299035/main1",
+      "main_2": "299035/main2",
+      "main_3": "299035/main3"
      }
     }
    ]
@@ -2963,19 +2994,19 @@
       "runtime": "live2d"
      },
      "voices": {
-      "login": "403140/login",
-      "home": "403140/home",
+      "login": "403143/login",
+      "home": "403143/home",
       "mail": "403140/mail",
       "mission": "403140/mission",
       "mission_complete": "403140/mission_complete",
       "complete": "403140/expedition",
-      "touch": "403140/touch",
-      "touch_head": "403140/headtouch",
-      "touch_body": "403140/touch",
-      "touch_special": "403140/touch2",
-      "main_1": "403140/main1",
-      "main_2": "403140/main2",
-      "main_3": "403140/main3"
+      "touch": "403143/touch",
+      "touch_head": "403143/headtouch",
+      "touch_body": "403143/touch",
+      "touch_special": "403143/touch2",
+      "main_1": "403143/main1",
+      "main_2": "403143/main2",
+      "main_3": "403143/main3"
      }
     }
    ]
@@ -3169,19 +3200,19 @@
       "runtime": "live2d"
      },
      "voices": {
-      "login": "9600070/login",
-      "home": "9600070/home",
+      "login": "9600072/login",
+      "home": "9600072/home",
       "mail": "9600070/mail",
       "mission": "9600070/mission",
       "mission_complete": "9600070/mission_complete",
       "complete": "9600070/expedition",
-      "touch": "9600070/touch",
-      "touch_head": "9600070/headtouch",
-      "touch_body": "9600070/touch",
-      "touch_special": "9600070/touch2",
-      "main_1": "9600070/main1",
-      "main_2": "9600070/main2",
-      "main_3": "9600070/main3",
+      "touch": "9600072/touch",
+      "touch_head": "9600072/headtouch",
+      "touch_body": "9600072/touch",
+      "touch_special": "9600072/touch2",
+      "main_1": "9600072/main1",
+      "main_2": "9600072/main2",
+      "main_3": "9600072/main3",
       "main_4": "9600070/main4"
      }
     }
@@ -3374,6 +3405,22 @@
      "cutscene": {
       "model": "Live2D/gezi_2/gezi_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "405071/login",
+      "home": "405071/home",
+      "mail": "405070/mail",
+      "mission": "405070/mission",
+      "mission_complete": "405070/mission_complete",
+      "complete": "405070/expedition",
+      "touch": "405071/touch",
+      "touch_head": "405071/headtouch",
+      "touch_body": "405071/touch",
+      "touch_special": "405071/touch2",
+      "main_1": "405071/main1",
+      "main_2": "405071/main2",
+      "main_3": "405071/main3",
+      "main_4": "405071/main4"
      }
     }
    ]
@@ -3519,19 +3566,19 @@
       "runtime": "live2d"
      },
      "voices": {
-      "login": "207030/login",
-      "home": "207030/home",
+      "login": "237031/login",
+      "home": "237031/home",
       "mail": "207030/mail",
       "mission": "207030/mission",
       "mission_complete": "207030/mission_complete",
       "complete": "207030/expedition",
-      "touch": "207030/touch",
-      "touch_head": "207030/headtouch",
-      "touch_body": "207030/touch",
-      "touch_special": "207030/touch2",
-      "main_1": "207030/main1",
-      "main_2": "207030/main2",
-      "main_3": "207030/main3"
+      "touch": "237031/touch",
+      "touch_head": "237031/headtouch",
+      "touch_body": "237031/touch",
+      "touch_special": "237031/touch2",
+      "main_1": "237031/main1",
+      "main_2": "237031/main2",
+      "main_3": "237031/main3"
      }
     }
    ]
@@ -6108,19 +6155,19 @@
       "runtime": "live2d"
      },
      "voices": {
-      "login": "899010/login",
-      "home": "899010/home",
+      "login": "899013/login",
+      "home": "899013/home",
       "mail": "899010/mail",
       "mission": "899010/mission",
       "mission_complete": "899010/mission_complete",
       "complete": "899010/expedition",
-      "touch": "899010/touch",
-      "touch_head": "899010/headtouch",
-      "touch_body": "899010/touch",
-      "touch_special": "899010/touch2",
-      "main_1": "899010/main1",
-      "main_2": "899010/main2",
-      "main_3": "899010/main3"
+      "touch": "899013/touch",
+      "touch_head": "899013/headtouch",
+      "touch_body": "899013/touch",
+      "touch_special": "899013/touch2",
+      "main_1": "899013/main1",
+      "main_2": "899013/main2",
+      "main_3": "899013/main3"
      }
     }
    ]
@@ -6603,20 +6650,20 @@
       "runtime": "live2d"
      },
      "voices": {
-      "login": "901070/login",
-      "home": "901070/home",
+      "login": "901073/login",
+      "home": "901073/home",
       "mail": "901070/mail",
       "mission": "901070/mission",
       "mission_complete": "901070/mission_complete",
       "complete": "901070/expedition",
-      "touch": "901070/touch",
-      "touch_head": "901070/headtouch",
-      "touch_body": "901070/touch",
-      "touch_special": "901070/touch2",
-      "main_1": "901070/main1",
-      "main_2": "901070/main2",
-      "main_3": "901070/main3",
-      "main_4": "901070/main4"
+      "touch": "901073/touch",
+      "touch_head": "901073/headtouch",
+      "touch_body": "901073/touch",
+      "touch_special": "901073/touch2",
+      "main_1": "901073/main1",
+      "main_2": "901073/main2",
+      "main_3": "901073/main3",
+      "main_4": "901073/main4"
      }
     }
    ]
@@ -7194,19 +7241,19 @@
       "runtime": "live2d"
      },
      "voices": {
-      "login": "299050/login",
-      "home": "299050/home",
+      "login": "299052/login",
+      "home": "299052/home",
       "mail": "299050/mail",
       "mission": "299050/mission",
       "mission_complete": "299050/mission_complete",
       "complete": "299050/expedition",
-      "touch": "299050/touch",
-      "touch_head": "299050/headtouch",
-      "touch_body": "299050/touch",
-      "touch_special": "299050/touch2",
-      "main_1": "299050/main1",
-      "main_2": "299050/main2",
-      "main_3": "299050/main3"
+      "touch": "299052/touch",
+      "touch_head": "299052/headtouch",
+      "touch_body": "299052/touch",
+      "touch_special": "299052/touch2",
+      "main_1": "299052/main1",
+      "main_2": "299052/main2",
+      "main_3": "299052/main3"
      }
     }
    ]
@@ -7616,6 +7663,21 @@
      "cutscene": {
       "model": "Live2D/sailimiye_2/sailimiye_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "9600191/login",
+      "home": "9600191/home",
+      "mail": "9600190/mail",
+      "mission": "9600190/mission",
+      "mission_complete": "9600190/mission_complete",
+      "complete": "9600190/expedition",
+      "touch": "9600191/touch",
+      "touch_head": "9600191/headtouch",
+      "touch_body": "9600191/touch",
+      "touch_special": "9600191/touch2",
+      "main_1": "9600191/main1",
+      "main_2": "9600191/main2",
+      "main_3": "9600191/main3"
      }
     }
    ]
@@ -7634,6 +7696,21 @@
      "cutscene": {
       "model": "Live2D/sebao_2/sebao_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "818011/login",
+      "home": "818011/home",
+      "mail": "818010/mail",
+      "mission": "818010/mission",
+      "mission_complete": "818010/mission_complete",
+      "complete": "818010/expedition",
+      "touch": "818011/touch",
+      "touch_head": "818011/headtouch",
+      "touch_body": "818011/touch",
+      "touch_special": "818011/touch2",
+      "main_1": "818011/main1",
+      "main_2": "818011/main2",
+      "main_3": "818011/main3"
      }
     }
    ]
@@ -7831,20 +7908,20 @@
       "runtime": "live2d"
      },
      "voices": {
-      "login": "205160/login",
-      "home": "205160/home",
+      "login": "205162/login",
+      "home": "205162/home",
       "mail": "205160/mail",
       "mission": "205160/mission",
       "mission_complete": "205160/mission_complete",
       "complete": "205160/expedition",
-      "touch": "205160/touch",
-      "touch_head": "205160/headtouch",
-      "touch_body": "205160/touch",
-      "touch_special": "205160/touch2",
-      "main_1": "205160/main1",
-      "main_2": "205160/main2",
-      "main_3": "205160/main3",
-      "main_4": "205160/main4"
+      "touch": "205162/touch",
+      "touch_head": "205162/headtouch",
+      "touch_body": "205162/touch",
+      "touch_special": "205162/touch2",
+      "main_1": "205162/main1",
+      "main_2": "205162/main2",
+      "main_3": "205162/main3",
+      "main_4": "205162/main4"
      }
     }
    ]
@@ -7895,6 +7972,21 @@
      "cutscene": {
       "model": "Live2D/shuixinghao_2/shuixinghao_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "9600171/login",
+      "home": "9600171/home",
+      "mail": "9600170/mail",
+      "mission": "9600170/mission",
+      "mission_complete": "9600170/mission_complete",
+      "complete": "9600170/expedition",
+      "touch": "9600171/touch",
+      "touch_head": "9600171/headtouch",
+      "touch_body": "9600171/touch",
+      "touch_special": "9600171/touch2",
+      "main_1": "9600171/main1",
+      "main_2": "9600171/main2",
+      "main_3": "9600171/main3"
      }
     }
    ]
@@ -8492,20 +8584,20 @@
       "runtime": "live2d"
      },
      "voices": {
-      "login": "307150/login",
-      "home": "307150/home",
+      "login": "307152/login",
+      "home": "307152/home",
       "mail": "307150/mail",
       "mission": "307150/mission",
       "mission_complete": "307150/mission_complete",
       "complete": "307150/expedition",
       "touch": "307150/touch",
-      "touch_head": "307150/headtouch",
+      "touch_head": "307152/headtouch",
       "touch_body": "307150/touch",
-      "touch_special": "307150/touch2",
-      "main_1": "307150/main1",
-      "main_2": "307150/main2",
-      "main_3": "307150/main3",
-      "main_4": "307150/main4"
+      "touch_special": "307152/touch2",
+      "main_1": "307152/main1",
+      "main_2": "307152/main2",
+      "main_3": "307152/main3",
+      "main_4": "307152/main4"
      }
     }
    ]
@@ -8637,6 +8729,22 @@
      "cutscene": {
       "model": "Live2D/u2501_2/u2501_2.model3.json",
       "runtime": "live2d"
+     },
+     "voices": {
+      "login": "408151/login",
+      "home": "408151/home",
+      "mail": "408150/mail",
+      "mission": "408151/mission",
+      "mission_complete": "408151/mission_complete",
+      "complete": "408150/expedition",
+      "touch": "408151/touch",
+      "touch_head": "408151/headtouch",
+      "touch_body": "408151/touch",
+      "touch_special": "408151/touch2",
+      "main_1": "408151/main1",
+      "main_2": "408151/main2",
+      "main_3": "408151/main3",
+      "main_4": "408151/main4"
      }
     }
    ]
@@ -9163,20 +9271,20 @@
       "runtime": "live2d"
      },
      "voices": {
-      "login": "305100/login",
-      "home": "305100/home",
+      "login": "305103/login",
+      "home": "305103/home",
       "mail": "305100/mail",
       "mission": "305100/mission",
       "mission_complete": "305100/mission_complete",
       "complete": "305100/expedition",
-      "touch": "305100/touch",
-      "touch_head": "305100/headtouch",
-      "touch_body": "305100/touch",
-      "touch_special": "305100/touch2",
-      "main_1": "305100/main1",
-      "main_2": "305100/main2",
-      "main_3": "305100/main3",
-      "main_4": "305100/main4",
+      "touch": "305103/touch",
+      "touch_head": "305103/headtouch",
+      "touch_body": "305103/touch",
+      "touch_special": "305103/touch2",
+      "main_1": "305103/main1",
+      "main_2": "305103/main2",
+      "main_3": "305103/main3",
+      "main_4": "305103/main4",
       "main_5": "305100/main5"
      }
     }
@@ -9885,19 +9993,19 @@
       "runtime": "live2d"
      },
      "voices": {
-      "login": "201350/login",
-      "home": "201350/home",
+      "login": "201355/login",
+      "home": "201355/home",
       "mail": "201350/mail",
       "mission": "201350/mission",
       "mission_complete": "201350/mission_complete",
       "complete": "201350/expedition",
-      "touch": "201350/touch",
-      "touch_head": "201350/headtouch",
-      "touch_body": "201350/touch",
-      "touch_special": "201350/touch2",
-      "main_1": "201350/main1",
-      "main_2": "201350/main2",
-      "main_3": "201350/main3"
+      "touch": "201355/touch",
+      "touch_head": "201355/headtouch",
+      "touch_body": "201355/touch",
+      "touch_special": "201355/touch2",
+      "main_1": "201355/main1",
+      "main_2": "201355/main2",
+      "main_3": "201355/main3"
      }
     }
    ]

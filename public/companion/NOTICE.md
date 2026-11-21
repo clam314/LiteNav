@@ -115,7 +115,7 @@ Spine 4.0 运行时 `/vendor/spine/spine-player-4.0.30.js` 下载自官方 npm �
 ### 语音
 
 - 素材来源：[Fernando2603/AzurLane](https://github.com/Fernando2603/AzurLane) 从英文服客户端提取的语音（各服都使用日语配音），目录记录其固定提交（`voiceCommit`），只在播放时按需加载 `audio/voiceline/<皮肤编号>/<语音>.ogg`（Ogg Vorbis，每句约 60 KB），未打包任何素材。该仓库未声明许可证，语音权利归原权利人所有。
-- 对应关系：皮肤编号取自游戏数据表 `ship_skin_template`（[AzurLaneTools/AzurLaneData](https://github.com/AzurLaneTools/AzurLaneData)，先英文服、再国服），按立绘名对应。皮肤只列出它替换的台词，其余沿用舰船默认皮肤（同组编号最小的皮肤）的语音，与游戏一致；比数据表更新的皮肤使用舰船默认语音。动作与语音的对应：`login`、`home`、`mail`、`mission`、`mission_complete` 同名，`complete` → `expedition`，`touch_head` → `headtouch`，`touch_body`/`touch` → `touch`，`touch_special` → `touch2`，`main_N` → `mainN`；没有音频的台词不收录。245 个 Live2D 模型中 238 个、16 套带反应的动态立绘全部有语音。
+- 对应关系：皮肤编号取自游戏数据表 `ship_skin_template`，来自每天自动从各服客户端提取的 [AzurLaneTools/AzurLaneLuaScripts](https://github.com/AzurLaneTools/AzurLaneLuaScripts)（`sharecfgdata/ship_skin_template.lua`，先英文服、再国服，目录记录所用提交），按立绘名对应。Lua 文件只当作数据读取，不执行：每个皮肤只读取它自身的 `id`、`painting`、`ship_group` 三个字段。同一立绘有多个编号时（90 万以上的特殊副本与正常皮肤）取最小的编号，即正常皮肤。皮肤只列出它替换的台词，其余沿用舰船默认皮肤（同组编号最小的皮肤）的语音，与游戏一致；比数据表更新的皮肤、以及自身台词缺少音频的皮肤（如金鹿号 `jinluhao_3`），使用舰船默认语音。动作与语音的对应：`login`、`home`、`mail`、`mission`、`mission_complete` 同名，`complete` → `expedition`，`touch_head` → `headtouch`，`touch_body`/`touch` → `touch`，`touch_special` → `touch2`，`main_N` → `mainN`；没有音频的台词不收录。245 个 Live2D 模型、16 套带反应的动态立绘全部有语音。
 - 播放：默认关闭，在角色菜单中开启并调整音量（设置保存在此浏览器）。只在互动展示中随每段反应播放，同一时间只播一句；立绘展示不出声；切走、暂停、页面转入后台或关闭角色时立即停止。浏览器在用户与页面互动前可能拒绝出声：被拒绝后不再下载语音，直到在页面上点击或按键。浏览器无法播放 Ogg Vorbis 时开关不可用（Safari 是否支持未经核实）。
 
 ### 动态立绘
