@@ -2,6 +2,8 @@
 import { isExcludedCharacter } from './companion-exclusions.js';
 import { DEFAULT_GAMES, selectedGames } from './companion-games.js';
 export const PREFERENCES_KEY = 'guihang.companion.preferences';
+// How far each 有缘之客 scene got, kept across visits: { costume key: { stage, played } }.
+export const SCENE_PROGRESS_KEY = 'guihang.companion.scenes';
 export const LEGACY_KEY = 'guihang.companion.enabled';
 
 // Minutes between random people while the page stays open; 0 changes only on reload.
@@ -33,6 +35,20 @@ function normalizeGames(data) {
   const known = Array.isArray(data.knownGames) ? data.knownGames : ['bd2'];
   const games = [...data.games, ...DEFAULT_GAMES.filter(id => !known.includes(id))];
   return selectedGames(games).map(game => game.id);
+}
+
+// Stored scene progress, cleaned: entries that cannot be a tour position are
+// dropped, so damaged or stale storage only restarts those scenes.
+const SCENE_LIMIT = 64;
+export function normalizeSceneProgress(value) {
+  const scenes = {};
+  if (!value || typeof value !== 'object' || Array.isArray(value)) return scenes;
+  for (const [key, entry] of Object.entries(value).slice(0, SCENE_LIMIT)) {
+    if (!key || !entry || typeof entry !== 'object' || !Number.isInteger(entry.stage) || entry.stage < 0 || entry.stage > 63) continue;
+    const played = Array.isArray(entry.played) ? entry.played.filter(index => Number.isInteger(index) && index >= 0 && index < 1000) : [];
+    scenes[key] = { stage: entry.stage, played: [...new Set(played)].slice(0, 200) };
+  }
+  return scenes;
 }
 
 export const gameOf = character => character?.game || 'bd2';

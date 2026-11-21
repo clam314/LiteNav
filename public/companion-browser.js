@@ -1,6 +1,6 @@
 // Browser services the companion relies on, each tolerant of what a page
 // may block or lack: storage, media queries, WebGL.
-import { PREFERENCES_KEY, LEGACY_KEY, normalizePreferences } from './companion-model.js';
+import { PREFERENCES_KEY, LEGACY_KEY, SCENE_PROGRESS_KEY, normalizePreferences, normalizeSceneProgress } from './companion-model.js';
 
 const disposedPlayers = new WeakSet();
 
@@ -18,6 +18,21 @@ export function writePreferences(preferences) {
     if (localStorage.getItem(PREFERENCES_KEY) !== value) localStorage.setItem(PREFERENCES_KEY, value);
   }
   catch { /* The controls still work when browser storage is blocked. */ }
+}
+
+export function readSceneProgress() {
+  try { return normalizeSceneProgress(JSON.parse(localStorage.getItem(SCENE_PROGRESS_KEY))); }
+  catch { return {}; }
+}
+
+// Updates one scene in place, so tabs touring different scenes keep each other's progress.
+export function writeSceneProgress(key, progress) {
+  try {
+    const scenes = readSceneProgress();
+    delete scenes[key];
+    const value = JSON.stringify(normalizeSceneProgress({ [key]: progress, ...scenes }));
+    if (localStorage.getItem(SCENE_PROGRESS_KEY) !== value) localStorage.setItem(SCENE_PROGRESS_KEY, value);
+  } catch { /* Without storage, progress lasts while the page is open. */ }
 }
 
 export function mediaQuery(query, fallback) {

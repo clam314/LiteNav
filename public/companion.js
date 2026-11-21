@@ -15,7 +15,8 @@ import { readExternalSkeleton, performanceMenu, createPerformance } from './comp
 import { createDatingTour } from './companion-dating.js';
 import { createPaintingPlayer } from './companion-painting-player.js';
 import { loadRuntime, loadSpine38, loadLive2DRuntime } from './companion-runtimes.js';
-import { readPreferences, writePreferences, mediaQuery, disposePlayer, supportsWebGL } from './companion-browser.js';
+import { readPreferences, writePreferences, readSceneProgress, writeSceneProgress, mediaQuery, disposePlayer, supportsWebGL }
+  from './companion-browser.js';
 import { fetchResource, withAbort, partFor, loadCharacter } from './companion-loaders.js';
 import { railSpace, alignedViews, spawnPartner, layoutCamera } from './companion-camera.js';
 
@@ -167,7 +168,8 @@ export function initCompanion() {
   // The skill menu last built for each costume, kept for its 有缘之客 scene.
   const skillMenus = new Map();
   // How far each costume's 有缘之客 scene got (its stage and the reactions of
-  // it already played), while the page is open.
+  // it already played); browser storage keeps it across reloads, this map
+  // when storage is blocked.
   const sceneProgress = new Map();
   // How far each Azur Lane costume got through its round of reactions, so the
   // next visit plays the ones not seen yet.
@@ -497,10 +499,12 @@ export function initCompanion() {
               const presentation = presentationForCostume(presentations, record.selection.costume);
               const data = loadedPlayer.skeleton.data;
               if (record.assetMode === 'dating') {
-                // A scene left between two steps resumes there on its next visit.
+                // A scene left between two steps resumes there on its next
+                // visit, also after a reload; another tab's tour counts too.
                 const scene = costumeKey(record.selection.costume);
                 record.performance = createDatingTour({ spine, player: loadedPlayer, tracks: record.selection.costume.dating.tracks,
-                  resume: sceneProgress.get(scene), onProgress: progress => sceneProgress.set(scene, progress) });
+                  resume: readSceneProgress()[scene] || sceneProgress.get(scene),
+                  onProgress: progress => { sceneProgress.set(scene, progress); writeSceneProgress(scene, progress); } });
                 if (!record.performance) throw new Error('有缘之客暂时无法播放');
                 record.animations = skillMenus.get(costumeKey(record.selection.costume)) || [skillsBack(), datingEntry()];
                 record.animation = { ...datingEntry(), duration: record.performance.duration };
