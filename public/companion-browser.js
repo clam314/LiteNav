@@ -5,10 +5,13 @@ import { PREFERENCES_KEY, LEGACY_KEY, SCENE_PROGRESS_KEY, REACTION_PROGRESS_KEY,
 
 const disposedPlayers = new WeakSet();
 
-export function readPreferences() {
+// With current, the fields the stored copy lacks keep their values here: a
+// page of an older version, still open, saves without the newer ones.
+export function readPreferences(current = null) {
   try {
     let value;
     try { value = JSON.parse(localStorage.getItem(PREFERENCES_KEY)); } catch { /* Recover invalid preferences. */ }
+    if (current && value && typeof value === 'object' && !Array.isArray(value)) value = { ...current, ...value };
     return normalizePreferences(value, localStorage.getItem(LEGACY_KEY) === 'true');
   } catch { return normalizePreferences(); }
 }
@@ -16,7 +19,17 @@ export function readPreferences() {
 export function writePreferences(preferences) {
   try {
     const value = JSON.stringify(preferences);
-    if (localStorage.getItem(PREFERENCES_KEY) !== value) localStorage.setItem(PREFERENCES_KEY, value);
+    const stored = localStorage.getItem(PREFERENCES_KEY);
+    if (stored === value) return;
+    // The same preferences written another way (key order, an older page's
+    // copy) are not rewritten: every write wakes the other open pages.
+    let same = false;
+    try {
+      const saved = JSON.parse(stored);
+      same = Boolean(saved) && typeof saved === 'object' && !Array.isArray(saved) &&
+        JSON.stringify(normalizePreferences(saved)) === JSON.stringify(normalizePreferences(preferences));
+    } catch { /* Unreadable: write ours. */ }
+    if (!same) localStorage.setItem(PREFERENCES_KEY, value);
   }
   catch { /* The controls still work when browser storage is blocked. */ }
 }

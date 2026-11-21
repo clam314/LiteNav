@@ -1,4 +1,4 @@
-import { PREFERENCES_KEY, LEGACY_KEY, ROTATION_CHOICES, displayOf, withDisplay, costumeKey, gameOf,
+import { PREFERENCES_KEY, LEGACY_KEY, ROTATION_CHOICES, displayOf, withDisplay, costumeKey, gameOf, displayChanged,
   availableCharacters, paddedView,
   chooseCharacter, playableAnimations, configureViewports, presentationForCostume,
   isLoopingSkill, selectSkillAnimation, completeSkin } from './companion-model.js';
@@ -428,7 +428,9 @@ export function initCompanion() {
     });
   }
 
-  function selectCharacter(redraw = false, preserveSkillAction = false) {
+  // persist is false when following another page's change: writing it back
+  // would wake that page in turn.
+  function selectCharacter(redraw = false, preserveSkillAction = false, persist = true) {
     if (!catalog) return;
     const previous = selection ? costumeKey(selection.costume) : preferences.costumeKey;
     selection = chooseCharacter(catalog, preferences, redraw);
@@ -441,7 +443,7 @@ export function initCompanion() {
     }
     preferences.characterId = selection.character.id;
     preferences.costumeKey = costumeKey(selection.costume);
-    writePreferences(preferences);
+    if (persist) writePreferences(preferences);
     updateUI();
   }
 
@@ -865,10 +867,22 @@ export function initCompanion() {
   const onPause = () => { motionAllowed = !motionAllowed; updatePlayback(); };
   const onMotionChange = () => { motionAllowed = !reducedMotion.matches; updatePlayback(); };
   const onDesktopChange = () => { if (desktop.matches) void start(); else { stop(); updateUI(); } };
+  // Another page saved preferences. Pages never write back in answer, or two
+  // pages that read them differently (an older version still open) would
+  // wake each other for ever, each restart showing 正在准备 again. Only a
+  // change in what is shown restarts the companion here.
   const onStorage = event => {
     if (![PREFERENCES_KEY, LEGACY_KEY, null].includes(event.key)) return;
-    preferences = readPreferences();
-    if (catalog) selectCharacter(false, true);
+    const previous = preferences;
+    preferences = readPreferences(previous);
+    if (!preferences.voice) voice.stop();
+    else voice.setVolume(preferences.voiceVolume);
+    if (previous.rotation !== preferences.rotation || previous.random !== preferences.random) scheduleRotation();
+    if (event.key !== null && !displayChanged(previous, preferences)) {
+      updateUI();
+      return;
+    }
+    if (catalog) selectCharacter(false, true, false);
     void start();
   };
   retry.addEventListener('click', onRetry);

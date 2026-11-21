@@ -71,6 +71,15 @@ export function normalizeReactionProgress(value) {
   return costumes;
 }
 
+// Whether preferences another page saved change what this page shows. Its
+// own passing choices (the skill it showed, a voice volume) and, in random
+// rotation, the person it moved on to, do not: each page rotates on its own.
+export function displayChanged(previous, next) {
+  const same = key => JSON.stringify(previous[key]) === JSON.stringify(next[key]);
+  if (!['random', 'portraits', 'skills', 'games'].every(same)) return true;
+  return !next.random && !(same('characterId') && same('costumeKey'));
+}
+
 export const gameOf = character => character?.game || 'bd2';
 
 export function displayOf(preferences) {
