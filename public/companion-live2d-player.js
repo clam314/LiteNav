@@ -2,7 +2,7 @@
 // framework on Cubism Core 5). The player mirrors the parts of SpinePlayer the
 // companion uses: dom, pause(), play(), stopRendering(), dispose() and
 // context.gl.
-import { live2dArtBounds, placeLive2D, createActionOrder, withLive2DFiles, gazeFocus, reactionFraming } from './companion-live2d.js';
+import { live2dArtBounds, placeLive2D, backgroundBand, createActionOrder, withLive2DFiles, gazeFocus, reactionFraming } from './companion-live2d.js';
 
 // The framework keeps one set of compiled shaders for every WebGL context, so
 // a second canvas (the next person fading in) left the first one blank. Give
@@ -183,7 +183,47 @@ export async function createLive2DPlayer({ PIXI, layer, settings, plan, blobs, m
     });
     if (mode === 'skill') startAction();
 
+    // The head in model pixels: the highest point of the drawables that move
+    // when the head turns, and their middle across. null when the model has
+    // no head turn.
+    const findHead = () => {
+      const index = core.getParameterIndex('ParamAngleX');
+      if (!(index >= 0 && index < core.getParameterCount())) return null;
+      const count = core.getDrawableCount();
+      const before = Array.from({ length: count }, (_, i) => Float32Array.from(internal.getDrawableVertices(i)));
+      const value = core.getParameterValueByIndex(index);
+      core.setParameterValueByIndex(index, value + 30);
+      core.update();
+      let top = Infinity;
+      let left = Infinity;
+      let right = -Infinity;
+      const moved = canvasSize.height * 0.002;
+      for (let i = 0; i < count; i++) {
+        if (!core.getDrawableDynamicFlagIsVisible(i) || !(core.getDrawableOpacity(i) >= 0.02)) continue;
+        const after = internal.getDrawableVertices(i);
+        let shift = 0;
+        let highest = Infinity;
+        let lowX = Infinity;
+        let highX = -Infinity;
+        for (let k = 0; k < after.length; k += 2) {
+          shift = Math.max(shift, Math.abs(after[k] - before[i][k]), Math.abs(after[k + 1] - before[i][k + 1]));
+          highest = Math.min(highest, before[i][k + 1]);
+          lowX = Math.min(lowX, before[i][k]);
+          highX = Math.max(highX, before[i][k]);
+        }
+        if (shift > moved) {
+          top = Math.min(top, highest);
+          left = Math.min(left, lowX);
+          right = Math.max(right, highX);
+        }
+      }
+      core.setParameterValueByIndex(index, value);
+      core.update();
+      return Number.isFinite(top) ? { top: Math.max(0, top), x: (left + right) / 2 } : null;
+    };
     let placedKey = '';
+    // A scene's background band in model pixels, once the first frame showed it.
+    let cover = null;
     const place = () => {
       const width = dom.clientWidth;
       const height = dom.clientHeight;
@@ -192,7 +232,7 @@ export async function createLive2DPlayer({ PIXI, layer, settings, plan, blobs, m
       placedKey = key;
       app.resize();
       // The free space follows the viewport, so it is read again on every resize.
-      const spot = placeLive2D(bounds, { width, height }, space(), canvasSize);
+      const spot = placeLive2D(bounds, { width, height }, space(), canvasSize, cover);
       model.scale.set(spot.scale);
       model.position.set(spot.x, spot.y);
       // The game shows a model through its canvas, so art a reaction moves
@@ -236,6 +276,36 @@ export async function createLive2DPlayer({ PIXI, layer, settings, plan, blobs, m
       dispose();
     };
     app.render();
+    // Read the first frame (opacity, at a low resolution) to find a scene's
+    // background, then place the model by it and draw again. The head (the
+    // drawables a head turn moves) stays in view; a model without a head turn
+    // keeps its plain framing.
+    try {
+      const head = findHead();
+      const width = app.renderer.view.width;
+      const height = app.renderer.view.height;
+      const pixels = app.renderer.plugins.extract.pixels();
+      const columns = 96;
+      const rows = 96;
+      const mask = new Uint8Array(columns * rows);
+      for (let row = 0; row < rows; row++) {
+        // The pixels come bottom row first, as WebGL reads them.
+        const y = height - 1 - Math.min(height - 1, Math.floor((row + 0.5) * height / rows));
+        for (let column = 0; column < columns; column++) {
+          const x = Math.min(width - 1, Math.floor((column + 0.5) * width / columns));
+          mask[row * columns + column] = pixels[(y * width + x) * 4 + 3];
+        }
+      }
+      const railHeight = dom.clientHeight;
+      const band = head ? backgroundBand(mask, columns, rows, { keep: (head.top * model.scale.y + model.y) / railHeight }) : null;
+      if (band) {
+        cover = { minY: (band.top * railHeight - model.y) / model.scale.y, maxY: (band.bottom * railHeight - model.y) / model.scale.y,
+          anchorX: head.x };
+        placedKey = '';
+        place();
+        app.render();
+      }
+    } catch { /* Without a readable frame the plain framing stays. */ }
     return player;
   } catch (error) {
     player.dispose();

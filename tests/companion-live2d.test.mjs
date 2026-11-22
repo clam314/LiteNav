@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { costumeKey } from '../public/companion-model.js';
 import {
-  live2dMotionPlan, live2dFiles, withLive2DFiles, live2dArtBounds, placeLive2D, createActionOrder, gazeFocus, reactionFraming,
+  live2dMotionPlan, live2dFiles, withLive2DFiles, live2dArtBounds, placeLive2D, backgroundBand, MAX_COVER_ZOOM, createActionOrder, gazeFocus, reactionFraming,
 } from '../public/companion-live2d.js';
 
 const motion = name => [{ File: `motions/${name}.motion3.json` }];
@@ -235,4 +235,50 @@ test('the gaze turns toward the pointer from the face, growing with distance up 
   assert.ok(Math.abs(far.x + 0.8) < 1e-9, 'far away the turn stops at 80% of the range');
   assert.ok(gazeFocus({ x: 500, y: -5000 }, bounds).y > 0.79, 'above the face looks up');
   assert.deepEqual(gazeFocus({ x: 1, y: 1 }, { minX: Infinity }), { x: 0, y: 0 });
+});
+
+// A rail of 20 columns × 20 rows: rows lists, for each row, the columns drawn opaque.
+const railMask = rows => {
+  const mask = new Uint8Array(20 * 20);
+  rows.forEach((columns, row) => { for (const column of columns) mask[row * 20 + column] = 255; });
+  return mask;
+};
+const span = (from, to) => Array.from({ length: to - from }, (_, i) => from + i);
+
+test('a scene is framed by the rows its background fills, not by what sticks out of it', () => {
+  // A rope down the first four rows, then a background over the rest.
+  const roped = railMask([...Array(4).fill([15]), ...Array(16).fill(span(0, 20))]);
+  assert.deepEqual(backgroundBand(roped, 20, 20), { top: 0.2, bottom: 1 });
+  // A brushed edge: the last two rows only reach part of the visible half.
+  const brushed = railMask([...Array(18).fill(span(0, 20)), span(0, 15), span(0, 12)]);
+  assert.deepEqual(backgroundBand(brushed, 20, 20), { top: 0, bottom: 0.9 });
+  // Only the visible half (columns 10 and up) counts: the left may stay bare.
+  const leftBare = railMask(Array(20).fill(span(10, 20)));
+  assert.deepEqual(backgroundBand(leftBare, 20, 20), { top: 0, bottom: 1 });
+});
+
+test('the head above a background stays in view, and figures or thin bands keep their framing', () => {
+  const roped = railMask([...Array(4).fill([15]), ...Array(16).fill(span(0, 20))]);
+  assert.deepEqual(backgroundBand(roped, 20, 20, { keep: 0.1 }), { top: 0.1, bottom: 1 }, 'never cut above the top of the head');
+  assert.deepEqual(backgroundBand(roped, 20, 20, { keep: -0.2 }), { top: 0, bottom: 1 });
+  const figure = railMask(Array(20).fill(span(13, 17)));
+  assert.equal(backgroundBand(figure, 20, 20), null, 'a figure on its own');
+  const strip = railMask([...Array(12).fill(span(10, 15)), ...Array(8).fill(span(0, 20))]);
+  assert.equal(backgroundBand(strip, 20, 20), null, 'a band under 55% of the height');
+});
+
+test('a background band fills the height with the figure in its place, within the zoom limit', () => {
+  const bounds = { minX: 0, maxX: 1000, minY: 0, maxY: 1000 };
+  const rail = { width: 800, height: 500 };
+  const plain = placeLive2D(bounds, rail, 400, rail);
+  assert.deepEqual(plain, { scale: 0.5, x: 350, y: -0 });
+  const banded = placeLive2D(bounds, rail, 400, rail, { minY: 200, maxY: 1000 });
+  assert.equal(banded.scale, 0.625);
+  assert.equal(banded.y, -125, 'the band starts at the top');
+  assert.equal(banded.x + 500 * banded.scale, plain.x + 500 * plain.scale, 'the middle of the art stays where it was');
+  const headed = placeLive2D(bounds, rail, 400, rail, { minY: 200, maxY: 1000, anchorX: 300 });
+  assert.equal(headed.x + 300 * headed.scale, plain.x + 300 * plain.scale, 'with a head, the head stays where it was');
+  const tooFar = placeLive2D(bounds, rail, 400, rail, { minY: 0, maxY: 1000 / (MAX_COVER_ZOOM + 0.1) });
+  assert.deepEqual(tooFar, plain, 'more than the zoom limit keeps the plain framing');
+  assert.deepEqual(placeLive2D(bounds, rail, 400, rail, { minY: 0, maxY: 1000 }), plain);
 });

@@ -93,16 +93,67 @@ export function reactionFraming(idle, frames, canvas, share = 0.9) {
   return box;
 }
 
+// A scene is never enlarged more than this to fill the rail with its background.
+export const MAX_COVER_ZOOM = 1.6;
+
 // Fill the rail's height with the artwork, stand it on the bottom edge and
 // centre it in the space the navigation leaves free. Wide artwork (a scene
 // behind the ship) runs past both sides; the rail fades its left edge.
-export function placeLive2D(bounds, rail, space, fallback) {
+// cover ({ minY, maxY, anchorX }, model pixels) is a scene's background band
+// (see backgroundBand): that band then fills the height instead, unless it
+// would take more than MAX_COVER_ZOOM. The point anchorX (the head) keeps its
+// place across the rail, so enlarging never pushes the figure under the
+// navigation; without it, the middle of the art does.
+export function placeLive2D(bounds, rail, space, fallback, cover = null) {
   const usable = [bounds?.minX, bounds?.maxX, bounds?.minY, bounds?.maxY].every(Number.isFinite) &&
     bounds.maxX > bounds.minX && bounds.maxY > bounds.minY;
   const box = usable ? bounds : { minX: 0, maxX: fallback.width, minY: 0, maxY: fallback.height };
-  const scale = rail.height / (box.maxY - box.minY);
   const centre = rail.width - Math.min(space, rail.width) / 2;
-  return { scale, x: centre - (box.minX + box.maxX) / 2 * scale, y: -box.minY * scale };
+  const plain = rail.height / (box.maxY - box.minY);
+  const banded = cover && cover.maxY > cover.minY ? rail.height / (cover.maxY - cover.minY) : 0;
+  const zoomed = banded > plain && banded <= plain * MAX_COVER_ZOOM;
+  const middle = (box.minX + box.maxX) / 2;
+  const x = centre - middle * plain;
+  if (!zoomed) return { scale: plain, x, y: -box.minY * plain };
+  const anchor = Number.isFinite(cover.anchorX) ? cover.anchorX : middle;
+  return { scale: banded, x: x + anchor * plain - anchor * banded, y: -cover.minY * banded };
+}
+
+// Where a scene's background lies on the rail, from the first frame drawn at
+// the plain framing: mask holds its opacity (0–255), columns × rows, top row
+// first. Only the part of the rail the navigation leaves visible counts (from
+// the share `from` of its width). A figure on its own (the rail mostly bare)
+// gives null; a scene gives the longest run of rows its background covers
+// all but a sliver of ({ top, bottom }, shares of the height). Backgrounds
+// are landscape and figures and props stick out above or below them, and
+// some end in a painted edge (a brushed pool, a slanted room); the band
+// leaves those rows out, but never cuts above `keep` (the top of the head,
+// a share of the height): a head above the background stays in view. A band
+// below `least` of the height gives null too.
+export function backgroundBand(mask, columns, rows, { from = 0.5, solid = 0.93, scene = 0.6, least = 0.55, keep = 1 } = {}) {
+  const left = Math.floor(columns * from);
+  const span = columns - left;
+  const filled = row => {
+    let count = 0;
+    for (let column = left; column < columns; column++) if (mask[row * columns + column] >= 200) count += 1;
+    return count / span;
+  };
+  const shares = Array.from({ length: rows }, (_, row) => filled(row));
+  if (shares.reduce((sum, share) => sum + share, 0) < scene * rows) return null;
+  let best = null;
+  let start = -1;
+  for (let row = 0; row <= rows; row++) {
+    const inside = row < rows && shares[row] >= solid;
+    if (inside && start < 0) start = row;
+    if (!inside && start >= 0) {
+      if (!best || row - start > best.bottom - best.top) best = { top: start, bottom: row };
+      start = -1;
+    }
+  }
+  if (!best) return null;
+  const top = Math.min(best.top / rows, Math.max(0, keep));
+  const bottom = best.bottom / rows;
+  return bottom - top >= least ? { top, bottom } : null;
 }
 
 // Play every reaction once, in a fresh random order each round, never
