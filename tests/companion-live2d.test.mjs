@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { costumeKey } from '../public/companion-model.js';
 import {
-  live2dMotionPlan, live2dFiles, withLive2DFiles, live2dArtBounds, placeLive2D, backgroundBand, MAX_COVER_ZOOM, createActionOrder, gazeFocus, reactionFraming,
+  live2dMotionPlan, live2dFiles, withLive2DFiles, live2dArtBounds, placeLive2D, backgroundBand, MAX_COVER_ZOOM, orderMotionCurves, createActionOrder, gazeFocus, reactionFraming,
 } from '../public/companion-live2d.js';
 
 const motion = name => [{ File: `motions/${name}.motion3.json` }];
@@ -281,4 +281,21 @@ test('a background band fills the height with the figure in its place, within th
   const tooFar = placeLive2D(bounds, rail, 400, rail, { minY: 0, maxY: 1000 / (MAX_COVER_ZOOM + 0.1) });
   assert.deepEqual(tooFar, plain, 'more than the zoom limit keeps the plain framing');
   assert.deepEqual(placeLive2D(bounds, rail, 400, rail, { minY: 0, maxY: 1000 }), plain);
+});
+
+test('motion curves are read in the order the framework expects, all of them kept', () => {
+  const curve = (Target, Id) => ({ Target, Id, Segments: [0, 0, 0, 1, 0] });
+  // As 爱宕「盛夏进行曲」's reactions: parameters, parts, more parameters, more parts.
+  const motion = { Version: 3, Meta: { CurveCount: 6 }, Curves: [
+    curve('Model', 'Opacity'), curve('Parameter', 'A'), curve('PartOpacity', 'P1'),
+    curve('Parameter', 'B'), curve('PartOpacity', 'P2'), curve('Parameter', 'C'),
+  ] };
+  const ordered = orderMotionCurves(motion);
+  assert.deepEqual(ordered.Curves.map(c => c.Id), ['Opacity', 'A', 'B', 'C', 'P1', 'P2'], 'kinds in order, each kind in its own order');
+  assert.equal(ordered.Meta, motion.Meta);
+  assert.equal(motion.Curves[2].Id, 'P1', 'the file read is left as it was');
+  const tidy = { Curves: [curve('Parameter', 'A'), curve('PartOpacity', 'P1')] };
+  assert.equal(orderMotionCurves(tidy), tidy, 'a motion already in order is passed on as it is');
+  assert.deepEqual(orderMotionCurves({ Curves: [curve('Other', 'X'), curve('Parameter', 'A')] }).Curves.map(c => c.Id), ['A', 'X']);
+  for (const value of [null, {}, { Curves: 'x' }]) assert.equal(orderMotionCurves(value), value);
 });

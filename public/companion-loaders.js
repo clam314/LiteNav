@@ -4,7 +4,7 @@ import { gameOf, atlasPages } from './companion-model.js';
 import { LOCAL_FALLBACK_CHARACTER } from './companion-fallback.js';
 import { createAssetFetcher } from './companion-assets.js';
 import { GAMES, gameById } from './companion-games.js';
-import { live2dMotionPlan, live2dFiles } from './companion-live2d.js';
+import { live2dMotionPlan, live2dFiles, orderMotionCurves } from './companion-live2d.js';
 import { performanceId, performanceSources } from './companion-performance-player.js';
 
 export async function fetchResource(url, signal, cache = 'default') {
@@ -57,6 +57,18 @@ export const partFor = (selection, mode) => mode === 'skill' ? selection.costume
 // fetched through the asset cache. Each player makes its own blob URLs from
 // these blobs: PixiJS caches textures by URL, and a shared URL let one player
 // destroy the textures of the next (the same ship in its other display).
+// A motion file with its curves in the order the framework reads (see
+// orderMotionCurves); one that cannot be read is passed on unchanged.
+async function inOrder(blob) {
+  try {
+    const motion = JSON.parse(await blob.text());
+    const ordered = orderMotionCurves(motion);
+    return ordered === motion ? blob : new Blob([JSON.stringify(ordered)], { type: 'application/json' });
+  } catch {
+    return blob;
+  }
+}
+
 async function loadLive2D(catalog, selection, part, signal) {
   const id = gameOf(selection.character);
   const source = catalog.games[id];
@@ -66,8 +78,10 @@ async function loadLive2D(catalog, selection, part, signal) {
   const settings = await (await fetchAsset(raw + part.model, signal)).json();
   const plan = live2dMotionPlan(settings.FileReferences?.Motions);
   if (!plan.idle) throw new Error('这套服装暂无可播放动画');
-  const blobs = Object.fromEntries(await Promise.all(live2dFiles(settings, plan).map(async file =>
-    [file.path, await (await fetchAsset((file.lfs ? lfs : raw) + folder + file.path, signal)).blob()])));
+  const blobs = Object.fromEntries(await Promise.all(live2dFiles(settings, plan).map(async file => {
+    const blob = await (await fetchAsset((file.lfs ? lfs : raw) + folder + file.path, signal)).blob();
+    return [file.path, file.path.endsWith('.motion3.json') ? await inOrder(blob) : blob];
+  })));
   return { live2d: true, settings: { ...settings, url: raw + part.model }, plan, blobs, objectUrls: [] };
 }
 

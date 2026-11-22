@@ -18,6 +18,26 @@ export function live2dMotionPlan(motions) {
   };
 }
 
+// The Cubism framework reads a motion's curves as one run of model curves,
+// then parameters, then part opacities, each run ending at the first curve of
+// another kind. Half the Azur Lane models interleave them (parameters, parts,
+// more parameters, more parts), so everything after the first change was
+// skipped: part of the movement, and the part switches that hide one of two
+// poses (爱宕「盛夏进行曲」 showed four hands). The same curves, stably ordered
+// by kind; a motion already in order comes back as it is.
+const CURVE_KINDS = ['Model', 'Parameter', 'PartOpacity'];
+export function orderMotionCurves(motion) {
+  if (!Array.isArray(motion?.Curves)) return motion;
+  const rank = curve => {
+    const kind = CURVE_KINDS.indexOf(curve?.Target);
+    return kind < 0 ? CURVE_KINDS.length : kind;
+  };
+  const ranked = motion.Curves.map((curve, index) => ({ curve, index, rank: rank(curve) }));
+  if (ranked.every((entry, index) => index === 0 || ranked[index - 1].rank <= entry.rank)) return motion;
+  ranked.sort((a, b) => a.rank - b.rank || a.index - b.index);
+  return { ...motion, Curves: ranked.map(entry => entry.curve) };
+}
+
 // The files a model needs, relative to its folder. The moc and textures are
 // Git LFS objects, which raw.githubusercontent.com serves only as pointers.
 export function live2dFiles(settings, plan) {
