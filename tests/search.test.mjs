@@ -33,3 +33,12 @@ test('single letters prefer word starts over letters inside names', () => {
 test('Google is the only search engine', () => {
   assert.equal(googleSearchUrl(' a&b c '), 'https://www.google.com/search?q=a%26b%20c');
 });
+
+test('sites shelved in 杂物库 are found, after everyday ones that match as well', () => {
+  const shelf = [
+    { id: 'old', name: 'Gitee', url: 'https://gitee.com', kind: 'website', order: 0, archived: true },
+    { id: 'new', name: 'Gitea', url: 'https://gitea.com', kind: 'website', order: 1 },
+  ];
+  assert.deepEqual(searchLinks('git', shelf).map((link) => link.id), ['new', 'old']);
+  assert.deepEqual(searchLinks('gitee', shelf).map((link) => link.id), ['old'], 'a better match still comes first');
+});

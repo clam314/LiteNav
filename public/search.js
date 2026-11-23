@@ -77,7 +77,7 @@ function score(link, terms) {
   return total;
 }
 
-/** Returns the best matches for `query`, highest score first; favorites win ties, then the saved order. */
+/** Returns the best matches for `query`, highest score first; favorites win ties, sites shelved in 杂物库 (`archived`) lose them, then the saved order. */
 export function searchLinks(query, links, limit = 8) {
   const terms = String(query ?? '').toLowerCase().trim().split(/\s+/).filter(Boolean);
   if (!terms.length) return [];
@@ -86,6 +86,7 @@ export function searchLinks(query, links, limit = 8) {
     .filter((entry) => entry.score > 0)
     .sort((a, b) => b.score - a.score
       || Number(Boolean(b.link.pinned)) - Number(Boolean(a.link.pinned))
+      || Number(Boolean(a.link.archived)) - Number(Boolean(b.link.archived))
       || (a.link.kind === b.link.kind ? 0 : a.link.kind === 'website' ? -1 : 1)
       || (a.link.order ?? 0) - (b.link.order ?? 0))
     .slice(0, limit)

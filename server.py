@@ -130,12 +130,19 @@ def validate_state(value: object) -> dict:
         if not category_id or not name or category_id in category_ids:
             raise APIError("分类名称和 ID 不能为空，ID 不能重复")
         category_ids.add(category_id)
-        cleaned_categories.append({
+        cleaned_category = {
             "id": category_id, "name": name,
             "icon": text_field(item.get("icon"), "分类图标", 100, "folder"),
             "column": integer(item.get("column", index % 3), "分类所在列", 0, 2),
             "order": integer(item.get("order", index), "分类顺序", 0, 100000),
-        })
+        }
+        # Categories in 杂物库 hold rarely used sites away from the home page; the rest stay in the directory.
+        area = item.get("area", "directory")
+        if area not in ("directory", "archive"):
+            raise APIError("分类位置不正确")
+        if area == "archive":
+            cleaned_category["area"] = "archive"
+        cleaned_categories.append(cleaned_category)
     cleaned_links, link_ids, urls = [], set(), set()
     for index, item in enumerate(links):
         if not isinstance(item, dict):
@@ -766,7 +773,8 @@ def metadata(url: str, categories: list[dict], remote: bool = True) -> dict:
     kind = "service" if local_hostname(hostname) else "website"
     category_name = known[2] if known else ""
     category_names = CATEGORY_ALIASES.get(category_name, (category_name,)) if known else ()
-    category_id = next((item["id"] for name in category_names for item in categories if item["name"] == name), None)
+    directory = [item for item in categories if item.get("area", "directory") != "archive"]
+    category_id = next((item["id"] for name in category_names for item in directory if item["name"] == name), None)
     result = {
         "url": url, "name": known[0] if known else match_host,
         "icon": known[1] if known else "", "categoryId": category_id,

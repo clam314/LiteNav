@@ -31,7 +31,25 @@ let linkCheckTimer = null;
 const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const uid = () => globalThis.crypto?.randomUUID?.() || 'item-' + Date.now() + '-' + Math.random().toString(36).slice(2, 9);
 const ordered = (items) => [...items].sort((a, b) => (a.order ?? 0) - (b.order ?? 0));
-const directoryCategories = () => [0, 1, 2].flatMap((column) => ordered(config.categories).filter((category) => Number(category.column) === column));
+// A category lives either in the home directory or in 杂物库, the shelf for rarely used sites.
+const ARCHIVE = 'archive';
+const ARCHIVE_UNSORTED = '@archive';
+const areaOf = (category) => category?.area === ARCHIVE ? ARCHIVE : 'directory';
+const areaCategories = (area, categories = config.categories) => [0, 1, 2].flatMap((column) => ordered(categories).filter((category) => areaOf(category) === area && Number(category.column) === column));
+const directoryCategories = () => areaCategories('directory');
+const archiveCategories = () => areaCategories(ARCHIVE);
+const categoryOf = (link, categories = config.categories) => categories.find((category) => category.id === link.categoryId);
+const isArchived = (link) => link.kind === 'website' && areaOf(categoryOf(link)) === ARCHIVE;
+const placeName = (link) => {
+  if (link.kind === 'service') return '服务';
+  const category = categoryOf(link);
+  if (!category) return '';
+  return areaOf(category) === ARCHIVE ? '杂物库 · ' + category.name : category.name;
+};
+const quietestColumn = (categories, area) => {
+  const counts = [0, 1, 2].map((column) => categories.filter((item) => areaOf(item) === area && Number(item.column) === column).length);
+  return counts.indexOf(Math.min(...counts));
+};
 const favorites = () => config.links.filter((link) => link.pinned).sort((a, b) => (a.pinnedOrder ?? a.order) - (b.pinnedOrder ?? b.order));
 const domain = (url) => { try { const parsed = new URL(url); return parsed.host.replace(/^www\./, ''); } catch { return url; } };
 const safeUrl = (input) => {
@@ -120,14 +138,18 @@ function sidebarMarkup() {
     '<nav class="sidebar-nav" aria-label="页面目录"><a href="#home" class="nav-item ' + (view === 'home' && !activeCategory ? 'active' : '') + '">' + icon('home') + '<span>常用</span></a>',
     '<div class="nav-section-label">网址目录</div>',
     categories.map((category) => '<a href="#category-' + encodeURIComponent(category.id) + '" draggable="true" data-drag-kind="category" data-resource="' + esc(category.id) + '" title="拖动调整分类顺序" class="nav-item ' + (view === 'home' && activeCategory === category.id ? 'active' : '') + '">' + icon(category.icon || 'folder') + '<span>' + esc(category.name) + '</span></a>').join(''),
-    '<div class="nav-divider"></div><a href="#services" class="nav-item ' + (view === 'services' ? 'active' : '') + '">' + icon('server') + '<span>我的服务</span></a>',
-    '<a href="#tools" class="nav-item ' + (view === 'tools' ? 'active' : '') + '">' + icon('toolbox') + '<span>工具箱</span></a></nav>',
+    '<div class="nav-divider"></div><a href="#services" class="nav-item ' + (view === 'services' ? 'active' : '') + '">' + icon('server') + '<span>服务集</span></a>',
+    '<a href="#tools" class="nav-item ' + (view === 'tools' ? 'active' : '') + '">' + icon('toolbox') + '<span>工具箱</span></a>',
+    '<a href="#archive" class="nav-item ' + (view === 'archive' ? 'active' : '') + '">' + icon('archive') + '<span>杂物库</span></a></nav>',
     '<div class="sidebar-bottom"><a href="#settings" class="nav-item ' + (view === 'settings' ? 'active' : '') + '">' + icon('settings') + '<span>设置</span></a></div></aside>',
   ].join('');
 }
 
 function itemActions(link, scope) {
   return '<div class="item-actions"><button class="icon-button" data-action="edit-link" data-id="' + esc(link.id) + '" aria-label="编辑 ' + esc(link.name) + '" title="编辑">' + icon('edit', 14) + '</button>' +
+    (scope === 'category' ? (isArchived(link)
+      ? '<button class="icon-button" data-action="unarchive-link" data-id="' + esc(link.id) + '" aria-label="把 ' + esc(link.name) + ' 移回网址导航" title="移回网址导航">' + icon('archive-restore', 14) + '</button>'
+      : '<button class="icon-button" data-action="archive-link" data-id="' + esc(link.id) + '" aria-label="把 ' + esc(link.name) + ' 收进杂物库" title="收进杂物库">' + icon('archive', 14) + '</button>') : '') +
     (scope === 'favorites'
       ? '<button class="icon-button" data-action="unpin" data-id="' + esc(link.id) + '" aria-label="取消常用 ' + esc(link.name) + '" title="取消常用">' + icon('x', 14) + '</button>'
       : '<button class="icon-button danger" data-action="delete-link" data-id="' + esc(link.id) + '" aria-label="删除 ' + esc(link.name) + '" title="删除">' + icon('trash', 14) + '</button>') + '</div>';
@@ -164,17 +186,33 @@ function categoryMarkup(category) {
   return '<section class="category-card" id="category-' + esc(category.id) + '" aria-labelledby="title-' + esc(category.id) + '"' + sortable + '>' +
     '<header class="category-header"' + (editMode ? ' title="拖动标题栏调整分类顺序，可拖到其他列"' : '') + '><div class="category-title">' + (editMode ? '<span class="drag-handle" aria-hidden="true">' + icon('grip', 16) + '</span>' : '') + icon(category.icon || 'folder', 21) + '<h3 id="title-' + esc(category.id) + '">' + esc(category.name) + '</h3></div>' +
     (editMode ? '<button class="icon-button" data-action="add-link" data-category="' + esc(category.id) + '" aria-label="添加到 ' + esc(category.name) + '">' + icon('plus', 17) + '</button>' : '<span class="category-count" aria-label="' + links.length + ' 个网址">' + links.length + '</span>') + '</header>' +
-    '<div class="link-grid" data-sort-scope="category-' + esc(category.id) + '">' + (links.map((link) => siteMarkup(link, category.id)).join('') || '<div class="empty-category">还没有网址<button class="btn btn-ghost" data-action="add-link" data-category="' + esc(category.id) + '">添加一个</button></div>') + '</div></section>';
+    '<div class="link-grid" data-sort-scope="category-' + esc(category.id) + '">' + (links.map((link) => siteMarkup(link, category.id)).join('') || '<div class="empty-category">还没有网址<span class="empty-category-actions">' +
+      // Shelving makes 杂物库 categories on its own and moving pages back leaves them empty, so they can be cleared right here.
+      (areaOf(category) === ARCHIVE ? '<button class="btn btn-ghost" data-action="delete-category" data-id="' + esc(category.id) + '">删除分类</button>' : '') +
+      '<button class="btn btn-ghost" data-action="add-link" data-category="' + esc(category.id) + '">添加一个</button></span></div>') + '</div></section>';
 }
+
+const columnsMarkup = (categories) => '<div class="directory-columns">' +
+  [0, 1, 2].map((column) => '<div class="directory-column" data-column="' + column + '">' + categories.filter((category) => Number(category.column) === column).map(categoryMarkup).join('') + '</div>').join('') + '</div>';
 
 function homeMarkup() {
   const pinned = favorites();
-  const categories = ordered(config.categories);
   return '<section class="favorites-section" id="favorites"><div class="section-heading">' + icon('sparkles', 24) + '<h2>常用</h2>' +
     (editMode ? '<span class="section-note">拖动调整顺序，网址可拖到其他分类，分类可拖动标题栏换位置</span>' : '') + '</div>' +
     '<div class="favorites-grid" data-sort-scope="favorites" data-link-drop="favorites">' + (pinned.map(shortcutMarkup).join('') || '<div class="empty-state">' + icon('star', 25) + '<p>把常用的网址或服务放在这里</p><button class="btn btn-secondary" data-action="add-link" data-pinned="true">添加常用</button></div>') + '</div></section>' +
-    '<section class="directory-section"><div class="section-heading">' + icon('link', 23) + '<h2>网址导航</h2></div><div class="directory-columns">' +
-    [0, 1, 2].map((column) => '<div class="directory-column" data-column="' + column + '">' + categories.filter((category) => Number(category.column) === column).map(categoryMarkup).join('') + '</div>').join('') + '</div></section>';
+    '<section class="directory-section"><div class="section-heading">' + icon('link', 23) + '<h2>网址导航</h2></div>' + columnsMarkup(directoryCategories()) + '</section>';
+}
+
+function archiveMarkup() {
+  const categories = archiveCategories();
+  const count = config.links.filter(isArchived).length;
+  const intro = '<div class="page-intro"><p>不常用的网址收在这里，不占首页位置；顶部搜索框照样能找到它们。在首页点“整理”，网址右侧的收纳按钮可以把它收进来，原来的分类会跟着一起建好。</p></div>';
+  if (!categories.length) {
+    return intro + '<div class="empty-state">' + icon('archive', 30) + '<h2>杂物库还是空的</h2><p>偶尔才用一次的网站、存着备查的文档和工具，都可以放在这里。</p>' +
+      '<div class="empty-actions"><button class="btn btn-primary" data-action="add-link" data-area="archive">添加网址</button><button class="btn btn-secondary" data-action="add-category" data-area="archive">新建分类</button></div></div>';
+  }
+  return intro + '<div class="service-toolbar"><span class="section-hint">' + (editMode ? '拖动调整顺序，网址可拖到其他分类，分类可拖动标题栏换位置' : categories.length + ' 个分类 · ' + count + ' 个网址') + '</span>' +
+    '<button class="btn btn-secondary" data-action="add-category" data-area="archive">' + icon('plus', 16) + '新建分类</button></div>' + columnsMarkup(categories);
 }
 
 const statusLabels = { disabled: '未启用', unknown: '待检测', checking: '检测中', online: '在线', degraded: '待确认', offline: '离线' };
@@ -220,17 +258,25 @@ function displaySettingsMarkup() {
     '</div></section>';
 }
 
+function categorySettingsRow(category) {
+  return '<div class="category-settings-row" draggable="true" data-drag-kind="category" data-resource="' + esc(category.id) + '"><span class="drag-handle" title="拖动调整顺序" aria-hidden="true">' + icon('grip', 16) + '</span><span class="category-settings-name">' + icon(category.icon, 19) + '<span>' + esc(category.name) + '</span></span><span class="category-settings-count">' + config.links.filter((link) => link.kind === 'website' && link.categoryId === category.id).length + ' 个网址</span>' +
+    '<label class="column-picker"><span class="sr-only">' + esc(category.name) + '所在列</span><select class="form-select" data-category-column="' + esc(category.id) + '">' + [0, 1, 2].map((n) => '<option value="' + n + '" ' + (Number(category.column) === n ? 'selected' : '') + '>第 ' + (n + 1) + ' 列</option>').join('') + '</select></label>' +
+    '<button class="icon-button" data-action="edit-category" data-id="' + esc(category.id) + '" aria-label="编辑分类 ' + esc(category.name) + '">' + icon('edit', 16) + '</button><button class="icon-button danger" data-action="delete-category" data-id="' + esc(category.id) + '" aria-label="删除分类 ' + esc(category.name) + '">' + icon('trash', 16) + '</button></div>';
+}
+
 function settingsMarkup() {
   const categories = directoryCategories();
+  const shelved = archiveCategories();
   return displaySettingsMarkup() + '<section class="settings-section"><div class="section-heading">' + icon('settings', 22) + '<h2>检测设置</h2></div><form class="settings-card settings-form" id="settings-form"><div class="field-row">' +
     '<label class="field"><span class="field-label">检测间隔（秒）</span><input class="form-input" type="number" name="checkInterval" min="10" max="86400" value="' + esc(config.settings.checkInterval) + '" required></label>' +
     '<label class="field"><span class="field-label">连续异常次数</span><input class="form-input" type="number" name="failureThreshold" min="1" max="10" value="' + esc(config.settings.failureThreshold) + '" required></label>' +
     '<label class="field"><span class="field-label">请求超时（秒）</span><input class="form-input" type="number" name="timeout" min="1" max="30" value="' + esc(config.settings.timeout) + '" required></label></div>' +
     '<p class="field-hint">后台会持续检测已开启监控的服务，关闭页面后也会继续。</p><div class="settings-actions"><button class="btn btn-primary" type="submit">保存设置</button></div></form></section>' +
     '<section class="settings-section"><div class="section-heading">' + icon('folder', 22) + '<h2>网址分类</h2><button class="btn btn-secondary" data-action="add-category">' + icon('plus', 16) + '新建分类</button></div><div class="settings-card category-settings-list"><p class="settings-description">拖动左侧把手调整分类顺序，首页和侧边栏会同步更新。</p>' +
-    categories.map((category) => '<div class="category-settings-row" draggable="true" data-drag-kind="category" data-resource="' + esc(category.id) + '"><span class="drag-handle" title="拖动调整顺序" aria-hidden="true">' + icon('grip', 16) + '</span><span class="category-settings-name">' + icon(category.icon, 19) + '<span>' + esc(category.name) + '</span></span><span class="category-settings-count">' + config.links.filter((link) => link.kind === 'website' && link.categoryId === category.id).length + ' 个网址</span>' +
-      '<label class="column-picker"><span class="sr-only">' + esc(category.name) + '所在列</span><select class="form-select" data-category-column="' + esc(category.id) + '">' + [0, 1, 2].map((n) => '<option value="' + n + '" ' + (Number(category.column) === n ? 'selected' : '') + '>第 ' + (n + 1) + ' 列</option>').join('') + '</select></label>' +
-      '<button class="icon-button" data-action="edit-category" data-id="' + esc(category.id) + '" aria-label="编辑分类 ' + esc(category.name) + '">' + icon('edit', 16) + '</button><button class="icon-button danger" data-action="delete-category" data-id="' + esc(category.id) + '" aria-label="删除分类 ' + esc(category.name) + '">' + icon('trash', 16) + '</button></div>').join('') + '</div></section>' +
+    categories.map(categorySettingsRow).join('') + '</div></section>' +
+    '<section class="settings-section"><div class="section-heading">' + icon('archive', 22) + '<h2>杂物库分类</h2><button class="btn btn-secondary" data-action="add-category" data-area="archive">' + icon('plus', 16) + '新建分类</button></div><div class="settings-card category-settings-list"><p class="settings-description">' +
+    (shelved.length ? '杂物库里的分类，在杂物库页按列排布。编辑分类时可以把整个分类连同网址移回网址导航。' : '还没有杂物库分类。编辑网址分类时把位置改为“杂物库”，就能把整个分类收进去。') + '</p>' +
+    shelved.map(categorySettingsRow).join('') + '</div></section>' +
     '<section class="settings-section" id="link-check"><div class="section-heading">' + icon('check-circle', 22) + '<h2>网址体检</h2></div><div class="settings-card" id="link-check-card">' + linkCheckMarkup() + '</div></section>' +
     '<section class="settings-section"><div class="section-heading">' + icon('download', 22) + '<h2>数据备份</h2></div><div class="settings-card"><p class="settings-description">导出网址、分类与服务配置，方便备份或迁移。</p><div class="settings-actions"><button class="btn btn-secondary" data-action="export">' + icon('upload', 16) + '导出备份</button><button class="btn btn-secondary" data-action="import">' + icon('download', 16) + '导入备份</button></div>' +
     '<div class="backup-auto"><div class="backup-auto-head"><div><h3>自动备份</h3><p class="settings-description">每天第一次修改前，以及一次删除 5 个以上入口或删除分类前，服务器会自动保存修改前的配置，保留最近 30 份。</p></div>' +
@@ -250,7 +296,7 @@ function searchOptionMarkup(entry, index) {
   const attributes = ' id="quick-search-option-' + index + '" role="option" aria-selected="' + selected + '" class="quick-search-option' + (selected ? ' is-selected' : '') + '" data-search-index="' + index + '" href="' + esc(entry.url) + '"' + linkTarget() + ' tabindex="-1"';
   if (entry.google) return '<a' + attributes + '><span class="quick-search-google">' + icon('search', 16) + '</span><span class="quick-search-copy"><span class="quick-search-name">用 Google 搜索“' + esc(searchQuery.trim()) + '”</span><span class="quick-search-meta">google.com</span></span></a>';
   const link = entry.link;
-  const place = link.kind === 'service' ? '服务' : config.categories.find((category) => category.id === link.categoryId)?.name || '';
+  const place = placeName(link);
   return '<a' + attributes + '>' + linkIcon(link) + '<span class="quick-search-copy"><span class="quick-search-name">' + esc(link.name) + '</span><span class="quick-search-meta">' + esc(domain(link.url)) + '</span></span>' +
     (link.pinned ? '<span class="quick-search-tag">常用</span>' : '') + (place ? '<span class="quick-search-tag">' + esc(place) + '</span>' : '') + '</a>';
 }
@@ -260,7 +306,9 @@ function updateSearchResults() {
   const panel = document.querySelector('#quick-search-results');
   if (!input || !panel) return;
   const query = searchQuery.trim();
-  searchResults = query ? [...searchLinks(query, config.links).map((link) => ({ link, url: link.url })), { google: true, url: googleSearchUrl(query) }] : [];
+  // Shelved sites are found too, after everyday ones that match as well.
+  const links = config.links.map((link) => isArchived(link) ? { ...link, archived: true } : link);
+  searchResults = query ? [...searchLinks(query, links).map((link) => ({ link, url: link.url })), { google: true, url: googleSearchUrl(query) }] : [];
   searchIndex = Math.min(Math.max(0, searchIndex), Math.max(0, searchResults.length - 1));
   const open = Boolean(query) && document.activeElement === input;
   panel.hidden = !open;
@@ -307,7 +355,7 @@ function currentLinkChecks() {
 }
 
 function linkCheckRowMarkup({ link, result }) {
-  const category = config.categories.find((item) => item.id === link.categoryId)?.name || '';
+  const category = placeName(link);
   return '<div class="link-check-row">' + linkIcon(link) +
     '<span class="link-check-copy"><span class="link-check-name">' + esc(link.name) + (category ? '<span class="link-check-category">' + esc(category) + '</span>' : '') + '</span>' +
     '<span class="link-check-reason" title="' + esc(link.url) + '">' + esc(domain(link.url)) + ' · ' + esc(result.message || '') + (result.status === 'redirected' && result.finalUrl ? ' → <span class="link-check-target">' + esc(result.finalUrl) + '</span>' : '') + '</span></span>' +
@@ -406,13 +454,13 @@ function render() {
   applyDisplaySettings();
   const searchInput = document.querySelector('#quick-search-input');
   const searchFocus = searchInput && document.activeElement === searchInput ? [searchInput.selectionStart, searchInput.selectionEnd] : null;
-  const titles = { home: '我的导航', services: '我的服务', settings: '设置', tools: '工具箱' };
+  const titles = { home: '我的导航', services: '服务集', settings: '设置', tools: '工具箱', archive: '杂物库' };
   const previousScroll = window.scrollY;
   app.innerHTML = '<div class="app-shell ' + (editMode ? 'edit-mode' : '') + '">' + sidebarMarkup() +
     '<main class="workspace"><header class="topbar"><h1 class="page-title">' + titles[view] + '</h1>' + searchMarkup() + '<div class="topbar-actions"><span id="service-alert">' + alertMarkup() + '</span>' +
-    (view === 'home' || view === 'services' ? '<button class="btn ' + (editMode ? 'btn-secondary is-editing' : 'btn-secondary') + '" data-action="toggle-edit">' + (editMode ? icon('check', 16) + '完成整理' : '整理') + '</button>' : '') +
-    (view === 'tools' ? '' : '<button class="btn btn-primary" data-action="' + (view === 'services' ? 'add-service' : 'add-link') + '">' + icon('plus', 18) + '添加' + (view === 'services' ? '服务' : '') + '</button>') + '</div></header>' +
-    '<div class="page-content">' + (view === 'services' ? servicesMarkup() : view === 'settings' ? settingsMarkup() : view === 'tools' ? toolsMarkup(activeTool) : homeMarkup()) + '</div></main></div>';
+    (view === 'home' || view === 'services' || (view === 'archive' && archiveCategories().length) ? '<button class="btn ' + (editMode ? 'btn-secondary is-editing' : 'btn-secondary') + '" data-action="toggle-edit">' + (editMode ? icon('check', 16) + '完成整理' : '整理') + '</button>' : '') +
+    (view === 'tools' ? '' : '<button class="btn btn-primary" data-action="' + (view === 'services' ? 'add-service' : 'add-link') + '"' + (view === 'archive' ? ' data-area="archive"' : '') + '>' + icon('plus', 18) + '添加' + (view === 'services' ? '服务' : '') + '</button>') + '</div></header>' +
+    '<div class="page-content">' + (view === 'services' ? servicesMarkup() : view === 'settings' ? settingsMarkup() : view === 'tools' ? toolsMarkup(activeTool) : view === 'archive' ? archiveMarkup() : homeMarkup()) + '</div></main></div>';
   if (view === 'tools') mountTools(app, { toast });
   // A save may just have made an automatic backup.
   if (view === 'settings') refreshBackups();
@@ -429,7 +477,7 @@ function render() {
 function route() {
   const hash = location.hash.slice(1);
   const oldView = view;
-  view = hash === 'services' ? 'services' : hash === 'settings' ? 'settings' : hash === 'tools' || hash.startsWith('tools/') ? 'tools' : 'home';
+  view = hash === 'services' ? 'services' : hash === 'settings' ? 'settings' : hash === 'archive' ? 'archive' : hash === 'tools' || hash.startsWith('tools/') ? 'tools' : 'home';
   if (view === 'tools') activeTool = resolveTool(hash.slice(6));
   try { activeCategory = hash.startsWith('category-') ? decodeURIComponent(hash.slice(9)) : ''; }
   catch { activeCategory = ''; }
@@ -462,9 +510,14 @@ function makeDialog(markup) {
   return dialog;
 }
 
-function categoryOptions(selected) {
-  return '<option value="" ' + (!selected ? 'selected' : '') + '>未分类</option>' + directoryCategories().map((category) => '<option value="' + esc(category.id) + '" ' + (category.id === selected ? 'selected' : '') + '>' + esc(category.name) + '</option>').join('');
+// Each place has its own 未分类 choice, so a site can go straight into 杂物库 before it has any categories.
+function categoryOptions(selected, area) {
+  // A closed select hides the group labels, so 杂物库 choices name their place.
+  const group = (label, categories, unsorted, prefix) => '<optgroup label="' + label + '"><option value="' + unsorted + '" ' + (!selected && (unsorted === ARCHIVE_UNSORTED) === (area === ARCHIVE) ? 'selected' : '') + '>' + prefix + '未分类</option>' +
+    categories.map((category) => '<option value="' + esc(category.id) + '" ' + (category.id === selected ? 'selected' : '') + '>' + prefix + esc(category.name) + '</option>').join('') + '</optgroup>';
+  return group('网址导航', directoryCategories(), '', '') + group('杂物库', archiveCategories(), ARCHIVE_UNSORTED, '杂物库 · ');
 }
+const isUnsorted = (value) => !value || value === ARCHIVE_UNSORTED;
 
 function inferService(url) {
   try {
@@ -480,8 +533,9 @@ function customIconUrl(input) {
   throw new Error('请填写 HTTP 或 HTTPS 图片地址，或 /icons/ 下的图标路径');
 }
 
-function openLinkDialog({ id, kind = 'website', categoryId = '', pinned = false } = {}) {
+function openLinkDialog({ id, kind = 'website', categoryId = '', pinned = false, area = 'directory' } = {}) {
   const existing = config.links.find((link) => link.id === id);
+  const place = existing ? areaOf(categoryOf(existing)) : categoryId ? areaOf(config.categories.find((category) => category.id === categoryId)) : area;
   const draft = existing ? structuredClone(existing) : {
     id: uid(), name: '', url: '', icon: 'link', kind,
     categoryId: categoryId || '', pinned,
@@ -489,7 +543,7 @@ function openLinkDialog({ id, kind = 'website', categoryId = '', pinned = false 
     order: Math.max(-1, ...config.links.map((link) => link.order || 0)) + 1,
   };
   const locked = { name: Boolean(existing), category: Boolean(existing || categoryId), kind: Boolean(existing || kind === 'service'), monitor: Boolean(existing) };
-  const categoryNames = config.categories.length ? categoryOptions(draft.categoryId) : '<option value="">未分类</option>';
+  const categoryNames = categoryOptions(draft.categoryId, place);
   const dialog = makeDialog([
     '<form class="dialog-form" id="link-form"><header class="dialog-header"><h2>' + (existing ? '编辑入口' : '添加入口') + '</h2><button type="button" class="icon-button" data-action="close-dialog" aria-label="关闭">' + icon('x', 21) + '</button></header>',
     '<div class="dialog-body"><div class="type-switch" aria-label="入口类型"><button type="button" data-kind="website" class="' + (draft.kind === 'website' ? 'is-active' : '') + '">' + icon('link', 15) + '网址</button><button type="button" data-kind="service" class="' + (draft.kind === 'service' ? 'is-active' : '') + '">' + icon('server', 15) + '服务</button></div>',
@@ -544,6 +598,12 @@ function openLinkDialog({ id, kind = 'website', categoryId = '', pinned = false 
     if (!locked.monitor) monitor.checked = draft.kind === 'service';
     updateKind();
   }));
+  // Recognition names a directory category; adding to 杂物库 files the site under the shelf's category of the same name.
+  const suggestedCategory = (id) => {
+    const category = config.categories.find((item) => item.id === id);
+    if (place !== ARCHIVE) return category ? category.id : '';
+    return (category && archiveCategories().find((item) => item.name === category.name)?.id) || ARCHIVE_UNSORTED;
+  };
   const recognize = (url) => {
     if (metadataUrl === url) return metadataRequest;
     metadataUrl = url;
@@ -554,7 +614,7 @@ function openLinkDialog({ id, kind = 'website', categoryId = '', pinned = false 
     metadataRequest = api('/api/metadata', { method: 'POST', body: JSON.stringify({ url }), signal: controller.signal }).then((metadata) => {
       if (!dialog.open || controller.signal.aborted) return;
       if (!locked.name && metadata.name) nameInput.value = metadata.name;
-      if (!locked.category) categorySelect.value = config.categories.some((category) => category.id === metadata.categoryId) ? metadata.categoryId : '';
+      if (!locked.category) categorySelect.value = suggestedCategory(metadata.categoryId);
       if (!locked.kind && metadata.kind) {
         draft.kind = metadata.kind;
         if (!locked.monitor) monitor.checked = draft.kind === 'service';
@@ -562,7 +622,7 @@ function openLinkDialog({ id, kind = 'website', categoryId = '', pinned = false 
       }
       automaticIcon = metadata.icon || new URL('/favicon.ico', url).href;
       updatePreview();
-      status.textContent = draft.kind === 'website' && !categorySelect.value ? '名称已识别，可存入未分类或选择分类' : '已识别，可直接' + (existing ? '保存' : '添加');
+      status.textContent = draft.kind === 'website' && isUnsorted(categorySelect.value) ? '名称已识别，可存入未分类或选择分类' : '已识别，可直接' + (existing ? '保存' : '添加');
     }).catch(() => {
       if (!dialog.open || dialog._abort !== controller) return;
       automaticIcon = new URL('/favicon.ico', url).href;
@@ -629,7 +689,9 @@ function openLinkDialog({ id, kind = 'website', categoryId = '', pinned = false 
       draft.name = nameInput.value.trim() || domain(url);
       draft.icon = manualIcon || automaticIcon || new URL('/favicon.ico', url).href;
       draft.iconManual = Boolean(manualIcon);
-      draft.categoryId = draft.kind === 'website' ? categorySelect.value : '';
+      const chosen = categorySelect.value;
+      const defaultArea = chosen === ARCHIVE_UNSORTED ? ARCHIVE : 'directory';
+      draft.categoryId = draft.kind === 'website' && !isUnsorted(chosen) ? chosen : '';
       const needsDefaultCategory = draft.kind === 'website' && !draft.categoryId;
       draft.pinned = form.querySelector('#link-pinned').checked;
       draft.monitorEnabled = draft.kind === 'service' && monitor.checked;
@@ -643,9 +705,9 @@ function openLinkDialog({ id, kind = 'website', categoryId = '', pinned = false 
       const requestedPosition = positionInput ? Math.max(0, Number(positionInput.value) - 1) : null;
       await mutate((state) => {
         if (needsDefaultCategory) {
-          let category = state.categories.find((item) => item.name === '未分类');
+          let category = state.categories.find((item) => item.name === '未分类' && areaOf(item) === defaultArea);
           if (!category) {
-            category = { id: uid(), name: '未分类', icon: 'folder', column: 2, order: Math.max(-1, ...state.categories.map((item) => item.order)) + 1 };
+            category = { id: uid(), name: '未分类', icon: 'folder', column: 2, order: Math.max(-1, ...state.categories.map((item) => item.order)) + 1, ...(defaultArea === ARCHIVE ? { area: ARCHIVE } : {}) };
             state.categories.push(category);
           }
           draft.categoryId = category.id;
@@ -678,15 +740,17 @@ function openLinkDialog({ id, kind = 'website', categoryId = '', pinned = false 
   });
 }
 
-function openCategoryDialog(id) {
+function openCategoryDialog(id, area = 'directory') {
   const existing = config.categories.find((category) => category.id === id);
+  const place = existing ? areaOf(existing) : area;
   let submitted = false;
-  const dialog = makeDialog('<form id="category-form" class="dialog-form"><header class="dialog-header"><h2>' + (existing ? '编辑分类' : '新建分类') + '</h2><button type="button" class="icon-button" data-action="close-dialog" aria-label="关闭">' + icon('x') + '</button></header><div class="dialog-body"><label class="field"><span class="field-label">分类名称</span><input class="form-input" name="name" value="' + esc(existing?.name || '') + '" maxlength="30" required autofocus></label><div class="field-row"><label class="field"><span class="field-label">所在列</span><select class="form-select" name="column">' + [0, 1, 2].map((n) => '<option value="' + n + '" ' + (Number(existing?.column || 0) === n ? 'selected' : '') + '>第 ' + (n + 1) + ' 列</option>').join('') + '</select></label><label class="field"><span class="field-label">图标</span><select class="form-select" name="icon">' + ['folder', 'sparkles', 'code', 'layers', 'book', 'play', 'grid', 'link', 'network', 'cart', 'mail', 'forum'].map((name) => '<option value="' + name + '" ' + (existing?.icon === name ? 'selected' : '') + '>' + ({ folder: '文件夹', sparkles: '星芒', code: '代码', layers: '办公', book: '阅读', play: '影音', grid: '网格', link: '链接', network: '网络', cart: '购物', mail: '邮箱', forum: '社区' })[name] + '</option>').join('') + '</select></label></div><p class="form-error" hidden role="alert"></p></div><footer class="dialog-footer"><span></span><div><button class="btn btn-ghost" type="button" data-action="close-dialog">取消</button><button class="btn btn-primary" type="submit">保存</button></div></footer></form>');
+  const dialog = makeDialog('<form id="category-form" class="dialog-form"><header class="dialog-header"><h2>' + (existing ? '编辑分类' : '新建分类') + '</h2><button type="button" class="icon-button" data-action="close-dialog" aria-label="关闭">' + icon('x') + '</button></header><div class="dialog-body"><label class="field"><span class="field-label">分类名称</span><input class="form-input" name="name" value="' + esc(existing?.name || '') + '" maxlength="30" required autofocus></label><label class="field"><span class="field-label">位置</span><select class="form-select" name="area"><option value="directory" ' + (place !== ARCHIVE ? 'selected' : '') + '>网址导航（首页）</option><option value="archive" ' + (place === ARCHIVE ? 'selected' : '') + '>杂物库</option></select>' + (existing ? '<span class="field-hint">改变位置时，分类里的网址会一起移过去。</span>' : '') + '</label><div class="field-row"><label class="field"><span class="field-label">所在列</span><select class="form-select" name="column">' + [0, 1, 2].map((n) => '<option value="' + n + '" ' + (Number(existing?.column || 0) === n ? 'selected' : '') + '>第 ' + (n + 1) + ' 列</option>').join('') + '</select></label><label class="field"><span class="field-label">图标</span><select class="form-select" name="icon">' + ['folder', 'sparkles', 'code', 'layers', 'book', 'play', 'grid', 'link', 'network', 'cart', 'mail', 'forum'].map((name) => '<option value="' + name + '" ' + (existing?.icon === name ? 'selected' : '') + '>' + ({ folder: '文件夹', sparkles: '星芒', code: '代码', layers: '办公', book: '阅读', play: '影音', grid: '网格', link: '链接', network: '网络', cart: '购物', mail: '邮箱', forum: '社区' })[name] + '</option>').join('') + '</select></label></div><p class="form-error" hidden role="alert"></p></div><footer class="dialog-footer"><span></span><div><button class="btn btn-ghost" type="button" data-action="close-dialog">取消</button><button class="btn btn-primary" type="submit">保存</button></div></footer></form>');
   dialog.querySelector('form').addEventListener('submit', async (event) => {
     event.preventDefault();
     if (submitted) return;
     const data = new FormData(event.target);
     const name = String(data.get('name')).trim();
+    const nextArea = data.get('area') === ARCHIVE ? ARCHIVE : 'directory';
     if (!name) return;
     try {
       submitted = true;
@@ -694,14 +758,16 @@ function openCategoryDialog(id) {
       submit.disabled = true;
       submit.textContent = '保存中…';
       await mutate((state) => {
-        if (state.categories.some((category) => category.id !== id && category.name === name)) throw new Error('已存在同名分类');
-        const category = { id: existing?.id || uid(), name, column: Number(data.get('column')), icon: String(data.get('icon')), order: existing?.order ?? Math.max(-1, ...state.categories.map((category) => category.order || 0)) + 1 };
+        if (state.categories.some((category) => category.id !== id && category.name === name && areaOf(category) === nextArea)) throw new Error((nextArea === ARCHIVE ? '杂物库里' : '网址导航里') + '已有同名分类');
+        const category = { id: existing?.id || uid(), name, column: Number(data.get('column')), icon: String(data.get('icon')), order: existing?.order ?? Math.max(-1, ...state.categories.map((category) => category.order || 0)) + 1, ...(nextArea === ARCHIVE ? { area: ARCHIVE } : {}) };
         const index = state.categories.findIndex((item) => item.id === category.id);
         if (index < 0) state.categories.push(category);
         else state.categories[index] = category;
       });
       dialog.close();
-      toast('分类已保存');
+      const count = config.links.filter((link) => link.kind === 'website' && link.categoryId === id).length;
+      if (existing && place !== nextArea) toast('已把「' + name + '」' + (count ? '连同 ' + count + ' 个网址' : '') + (nextArea === ARCHIVE ? '收进杂物库' : '移回网址导航'));
+      else toast('分类已保存');
     } catch (error) {
       submitted = false;
       const submit = dialog.querySelector('[type="submit"]');
@@ -800,11 +866,48 @@ async function exportBackup() {
   toast('备份已导出');
 }
 
+// Moves a site between the home directory and 杂物库, into the category of the same name there (made if missing).
+async function shelveLink(id, area) {
+  const before = structuredClone(config.links.find((link) => link.id === id));
+  if (!before) return;
+  let created = null;
+  let target = null;
+  await mutate((state) => {
+    created = null;
+    const link = state.links.find((item) => item.id === id);
+    if (!link) return;
+    const from = categoryOf(link, state.categories);
+    const name = from?.name || '未分类';
+    target = state.categories.find((item) => areaOf(item) === area && item.name === name);
+    if (!target) {
+      target = { id: uid(), name, icon: from?.icon || 'folder', column: quietestColumn(state.categories, area), order: Math.max(-1, ...state.categories.map((item) => item.order || 0)) + 1, ...(area === ARCHIVE ? { area: ARCHIVE } : {}) };
+      state.categories.push(target);
+      created = target.id;
+    }
+    link.categoryId = target.id;
+    link.order = Math.max(-1, ...state.links.filter((item) => item.kind === 'website' && item.categoryId === target.id && item.id !== id).map((item) => item.order || 0)) + 1;
+    // A shelved site is by definition not an everyday one.
+    if (area === ARCHIVE) link.pinned = false;
+  });
+  if (!target) return;
+  const unpinned = area === ARCHIVE && before.pinned;
+  toast((area === ARCHIVE ? '已把「' + before.name + '」收进杂物库「' : '已把「' + before.name + '」移回「') + target.name + '」' + (unpinned ? '，并移出常用' : ''), {
+    label: '撤销',
+    run: () => mutate((state) => {
+      const link = state.links.find((item) => item.id === id);
+      if (link && state.categories.some((item) => item.id === before.categoryId)) Object.assign(link, { categoryId: before.categoryId, order: before.order, pinned: before.pinned });
+      if (created && !state.links.some((item) => item.categoryId === created)) state.categories = state.categories.filter((item) => item.id !== created);
+    }),
+  });
+}
+
 async function handleAction(button) {
   const action = button.dataset.action;
   const id = button.dataset.id;
   switch (action) {
-    case 'add-link': openLinkDialog({ categoryId: button.dataset.category, pinned: button.dataset.pinned === 'true' }); break;
+    case 'add-link': openLinkDialog({ categoryId: button.dataset.category, pinned: button.dataset.pinned === 'true', area: button.dataset.area }); break;
+    case 'archive-link': await shelveLink(id, ARCHIVE); break;
+    case 'unarchive-link': await shelveLink(id, 'directory'); break;
     case 'add-service': openLinkDialog({ kind: 'service' }); break;
     case 'edit-link': openLinkDialog({ id }); break;
     case 'close-dialog': currentDialog?.close(); break;
@@ -828,7 +931,7 @@ async function handleAction(button) {
       await mutate((state) => { const link = state.links.find((link) => link.id === id); if (link) link.monitorEnabled = true; });
       await checkServices(id);
       break;
-    case 'add-category': openCategoryDialog(); break;
+    case 'add-category': openCategoryDialog(undefined, button.dataset.area); break;
     case 'edit-category': openCategoryDialog(id); break;
     case 'delete-category': {
       const category = config.categories.find((item) => item.id === id);
@@ -975,7 +1078,7 @@ function planBookmarkImport(groups) {
       seen.add(key);
       links.push({ name: bookmark.name, url, kind: inferService(url) ? 'service' : 'website' });
     }
-    if (links.length) plan.push({ name: group.name, links, existing: config.categories.some((category) => category.name === group.name) });
+    if (links.length) plan.push({ name: group.name, links, existing: directoryCategories().some((category) => category.name === group.name) });
   }
   return { plan, duplicates, invalid };
 }
@@ -1005,10 +1108,9 @@ async function importBookmarks(plan) {
       const meta = items?.[index] || {};
       let categoryId = '';
       if (bookmark.kind === 'website') {
-        let category = state.categories.find((item) => item.name === bookmark.group);
+        let category = state.categories.find((item) => item.name === bookmark.group && areaOf(item) === 'directory');
         if (!category) {
-          const counts = [0, 1, 2].map((column) => state.categories.filter((item) => Number(item.column) === column).length);
-          category = { id: uid(), name: bookmark.group, icon: 'folder', column: counts.indexOf(Math.min(...counts)), order: nextCategoryOrder++ };
+          category = { id: uid(), name: bookmark.group, icon: 'folder', column: quietestColumn(state.categories, 'directory'), order: nextCategoryOrder++ };
           state.categories.push(category);
           createdCategories.push(category.id);
         }
@@ -1030,7 +1132,7 @@ async function importBookmarks(plan) {
   const linkIds = new Set(createdLinks);
   const categoryIds = new Set(createdCategories);
   const services = config.links.filter((link) => linkIds.has(link.id) && link.kind === 'service').length;
-  toast('已导入 ' + linkIds.size + ' 个网址' + (categoryIds.size ? '，新建 ' + categoryIds.size + ' 个分类' : '') + (services ? '，其中 ' + services + ' 个放进了「我的服务」' : ''), {
+  toast('已导入 ' + linkIds.size + ' 个网址' + (categoryIds.size ? '，新建 ' + categoryIds.size + ' 个分类' : '') + (services ? '，其中 ' + services + ' 个放进了「服务集」' : ''), {
     label: '撤销',
     run: () => mutate((state) => {
       state.links = state.links.filter((link) => !linkIds.has(link.id));
@@ -1046,8 +1148,8 @@ function openBookmarkDialog({ plan, duplicates, invalid }) {
   const dialog = makeDialog('<form class="dialog-form" id="bookmark-form"><header class="dialog-header"><h2>导入浏览器书签</h2><button type="button" class="icon-button" data-action="close-dialog" aria-label="关闭">' + icon('x', 21) + '</button></header>' +
     '<div class="dialog-body"><p class="confirm-message">找到 ' + total + ' 个新网址，来自 ' + plan.length + ' 个文件夹' + (skippedText ? '；另有 ' + skippedText + '，将会跳过' : '') + '。</p>' +
     '<fieldset class="bookmark-groups"><legend class="field-label">选择要导入的文件夹</legend>' +
-    plan.map((group, index) => '<label class="bookmark-group"><input type="checkbox" name="group" value="' + index + '" checked><span class="bookmark-group-name">' + icon('folder', 16) + '<span>' + esc(group.name) + '</span></span><span class="bookmark-group-target">' + (group.links.every((link) => link.kind === 'service') ? '我的服务' : group.existing ? '并入现有分类' : '新建分类') + '</span><span class="bookmark-group-count">' + group.links.length + ' 个</span></label>').join('') +
-    '</fieldset><p class="field-hint">子文件夹里的网址会并入所在的顶层文件夹' + (services ? '；' + services + ' 个局域网地址会放进「我的服务」，不会自动开启检测' : '') + '。导入后可以撤销。</p><p class="form-error" role="alert" hidden></p></div>' +
+    plan.map((group, index) => '<label class="bookmark-group"><input type="checkbox" name="group" value="' + index + '" checked><span class="bookmark-group-name">' + icon('folder', 16) + '<span>' + esc(group.name) + '</span></span><span class="bookmark-group-target">' + (group.links.every((link) => link.kind === 'service') ? '服务集' : group.existing ? '并入现有分类' : '新建分类') + '</span><span class="bookmark-group-count">' + group.links.length + ' 个</span></label>').join('') +
+    '</fieldset><p class="field-hint">子文件夹里的网址会并入所在的顶层文件夹' + (services ? '；' + services + ' 个局域网地址会放进「服务集」，不会自动开启检测' : '') + '。导入后可以撤销。</p><p class="form-error" role="alert" hidden></p></div>' +
     '<footer class="dialog-footer"><span></span><div><button class="btn btn-ghost" type="button" data-action="close-dialog">取消</button><button class="btn btn-primary" type="submit">导入 ' + total + ' 个</button></div></footer></form>');
   const form = dialog.querySelector('form');
   const submit = form.querySelector('[type="submit"]');
@@ -1126,7 +1228,7 @@ function findDropTarget(event) {
     if (item) {
       if (item.dataset.resource === dragged.id) return null;
       const category = config.categories.find((entry) => entry.id === item.dataset.resource);
-      if (!category) return null;
+      if (!category || areaOf(category) !== areaOf(config.categories.find((entry) => entry.id === dragged.id))) return null;
       const position = halfPosition(item, event);
       return { mark: item, markClass: 'drop-' + position, targetId: category.id, column: Number(category.column), position };
     }
@@ -1162,9 +1264,9 @@ function placeItem(list, item, targetId, position) {
 
 function applyDrop(state, source, target) {
   if (source.kind === 'category') {
-    const all = [0, 1, 2].flatMap((column) => ordered(state.categories).filter((category) => Number(category.column) === column));
-    const item = all.find((category) => category.id === source.id);
+    const item = state.categories.find((category) => category.id === source.id);
     if (!item) return null;
+    const all = areaCategories(areaOf(item), state.categories);
     let list;
     if (target.targetId) list = placeItem(all, item, target.targetId, target.position);
     else {

@@ -95,6 +95,21 @@ class StoreCase(DataFixture):
         self.assertEqual(reopened.state(), updated)
         self.assertEqual(updated["revision"], 2)
 
+    def test_archive_categories_keep_their_place_and_older_ones_stay_in_the_directory(self):
+        state = self.store.state()
+        state["categories"].append({"id": "old-dev", "name": "开发工具", "icon": "code", "column": 0, "order": 2, "area": "archive"})
+        state["links"][0]["categoryId"] = "old-dev"
+        saved = self.store.save(state)
+        reopened = server.Store(self.directory / "data", self.seed).state()
+        self.assertEqual(reopened, saved)
+        self.assertEqual(reopened["categories"][2]["area"], "archive")
+        self.assertNotIn("area", reopened["categories"][0], "directory categories are saved as before")
+        self.assertEqual(reopened["links"][0]["kind"], "website", "archived pages are still websites, so 网址体检 covers them")
+        for bad in ("home", "", None, 1):
+            with self.assertRaises(server.APIError):
+                self.store.save({**saved, "categories": [*saved["categories"][:2], {**saved["categories"][2], "area": bad}]})
+        self.assertEqual(self.store.state(), saved)
+
     def test_manual_icon_survives_save_and_can_return_to_automatic(self):
         state = self.store.state()
         state["links"][0].update(icon="https://example.org/logo.png", iconManual=True)
@@ -335,6 +350,12 @@ class MetadataCase(unittest.TestCase):
         self.assertEqual(result["name"], "GitHub")
         self.assertEqual(result["categoryId"], "dev")
         self.assertEqual(result["url"], "https://github.com")
+
+    def test_recognized_sites_are_never_filed_into_archive_categories(self):
+        categories = [{"id": "old-dev", "name": "开发工具", "area": "archive"}, *sample()["categories"]]
+        with patch("server.urlopen"):
+            self.assertEqual(server.metadata("github.com", categories)["categoryId"], "dev")
+            self.assertIsNone(server.metadata("github.com", categories[:1])["categoryId"])
 
     def test_outlook_recognized_before_redirect_to_sign_in(self):
         categories = [{"id": "mail", "name": "邮箱"}]

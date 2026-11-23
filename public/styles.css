@@ -200,6 +200,7 @@ input, select, textarea { min-width: 0; }
 .item-actions .icon-button svg { width: 14px; height: 14px; }
 .editable-item { cursor: grab; }
 .edit-mode .editable-item { padding-right: 53px; }
+.edit-mode .site-link.editable-item { padding-right: 78px; }
 .edit-mode .editable-item:active { cursor: grabbing; }
 .edit-mode .editable-item:hover { background: var(--blue-soft); }
 .edit-mode .link-arrow { display: none; }
@@ -304,6 +305,7 @@ input, select, textarea { min-width: 0; }
 .empty-state > svg { width: 32px; height: 32px; margin: 0 auto 13px; color: var(--subtle); }
 .empty-state h2, .empty-state h3, .empty-state .focus { margin-bottom: 7px; color: var(--ink); font-size: 16px; font-weight: 600; }
 .empty-state p { margin: 0 auto; max-width: 440px; font-size: 13px; line-height: 1.7; }
+.empty-actions { margin-top: 16px; display: flex; justify-content: center; flex-wrap: wrap; gap: 10px; }
 .empty-state .btn { margin-top: 17px; }
 .category-card .empty-state { padding: 24px 10px; border: 0; background: transparent; }
 
@@ -431,6 +433,7 @@ input, select, textarea { min-width: 0; }
 @media (prefers-reduced-motion: reduce) { .switch-input, .switch-input::after { transition: none; } }
 .type-switch button { display: inline-flex; align-items: center; justify-content: center; gap: 7px; }
 .empty-category { grid-column: 1 / -1; min-height: 72px; padding: 14px 2px; display: flex; align-items: center; justify-content: space-between; gap: 12px; color: var(--muted); font-size: 12px; }
+.empty-category-actions { display: flex; align-items: center; gap: 4px; }
 .boot-error { min-height: 100vh; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 16px; padding: 24px; text-align: center; }
 .boot-error > svg { color: var(--muted); }
 .boot-error h1 { color: var(--ink); font-size: 23px; }
@@ -560,6 +563,7 @@ input, select, textarea { min-width: 0; }
   .site-domain { font-size: 9px; }
   .favorites-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .edit-mode .editable-item { padding-right: 47px; }
+  .edit-mode .site-link.editable-item { padding-right: 68px; }
   .item-actions .icon-button { width: 21px; }
 }
 @media (prefers-reduced-motion: reduce) {
