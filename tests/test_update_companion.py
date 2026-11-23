@@ -265,6 +265,95 @@ _G.pg.base.ship_skin_template[900195] = {
         self.assertEqual(skipped, ["newship_2"])
 
 
+def dc_folder(model, *motions, texture=True):
+    folder = f"assets/live2d/{model}/"
+    files = {"model.json", "model.moc", "icon.png", "angry.exp.json"} | {f"{model}_{motion}.mtn" for motion in motions}
+    if texture:
+        files.add("texture_00.png")
+    return {folder + name for name in files}
+
+
+class DestinyChildTests(unittest.TestCase):
+    SKINS = "﻿// key\tCHARACTER_NAME_\tCHARACTER_SKIN_DESCRIPTION_\n" \
+            "c000_01\t_Master\tThe demon.\nc001_01\t_Mona\tA uniform.\nc001_02\tBattlesuit_Mona\tReady.\n" \
+            "c004_00\t_Jennifer\tHuman form.\nc004_01\tNeighborly_Cheoyong\tA.\nc004_02\tWarmhearted_Cheoyong\tB.\n" \
+            "c040_00\tShizuka Takagi\tA guest.\nm077_01\tCube_Moa\tA monster.\n"
+
+    def test_models_need_a_moc_texture_and_idle_and_note_their_moves(self):
+        paths = (dc_folder("c001_01", "idle", "attack", "hit") | dc_folder("c001_02", "idle", "banner") |
+                 dc_folder("c002_01", "idle") | dc_folder("c003_01", "attack") | dc_folder("c005_01", "idle", texture=False) |
+                 dc_folder("sc001_01", "idle", "touch") | {"assets/names.json"})
+        self.assertEqual(update.dc_models(paths), {"c001_01": True, "c001_02": True, "c002_01": False})
+
+    def test_skin_table_gives_skin_and_character(self):
+        names = update.parse_dc_skin_names(self.SKINS)
+        self.assertEqual(names["c001_02"], ("Battlesuit", "Mona"))
+        self.assertEqual(names["c001_01"], ("", "Mona"))
+        self.assertEqual(names["c040_00"], ("", "Shizuka Takagi"))
+        self.assertNotIn("m077_01", names)
+
+    def test_child_list_is_read_as_data(self):
+        text = 'const CHILDS_CODE_MAP = {\n "c001": {"name": "莫娜", "variants": {"01": {"title": "", "id": "01"}}},\n}\n' \
+               "module.exports = CHILDS_CODE_MAP"
+        self.assertEqual(update.parse_dc_children(text)["c001"]["name"], "莫娜")
+        with self.assertRaises(ValueError):
+            update.parse_dc_children("module.exports = {}")
+
+    CHINESE = "c001_01\t_莫娜\tA.\nc001_02\t战斗服_莫娜\tB.\nc255_01\t序幕_莫娜\tC.\nc014_01\t星夜_阿斯特莉亚\tD.\n" \
+              "c419_01\t劈腿的_凯瑟琳\tE.\nc420_01\t女朋友_凯瑟琳\tF.\n"
+    ENGLISH = SKINS + "c255_01\tPrologue_Mona\tC.\nc014_00\tKatsumi_Tohdoh\tD.\nc014_01\tStarry_Astraea\tE.\n" \
+                      "c419_01\tCheating_Catherine\tF.\nc420_01\tGirlfriend_Katherine\tG.\nc254_01\t_Davi\tH.\n"
+
+    def build(self, models, children=None, skipped=None):
+        return update.build_destinychild(models, update.parse_dc_skin_names(self.ENGLISH),
+                                         update.parse_dc_skin_names(self.CHINESE), children or {}, skipped)
+
+    def test_children_are_named_in_chinese_and_grouped_by_their_english_name(self):
+        people = self.build({"c001_01": True, "c001_02": True, "c255_01": False, "c014_00": True, "c014_01": True})
+        self.assertEqual([(person["id"], person["name"], person.get("aka")) for person in people],
+                         [("destinychild:c001", "莫娜", "Mona"), ("destinychild:c014", "阿斯特莉亚", "Astraea")])
+        mona, astraea = people
+        self.assertEqual([(costume["label"], costume["outfit"]) for costume in mona["costumes"]],
+                         [("默认", "c001_01"), ("战斗服", "c001_02"), ("序幕", "c255_01")],
+                         "Mona's models under other codes join her")
+        self.assertEqual(mona["costumes"][0]["idle"], {"model": "assets/live2d/c001_01/model.json", "runtime": "live2d"})
+        self.assertEqual(mona["costumes"][0]["cutscene"], mona["costumes"][0]["idle"])
+        self.assertIsNone(mona["costumes"][2]["cutscene"], "no move, no action display")
+        self.assertEqual([costume["outfit"] for costume in astraea["costumes"]], ["c014_01"],
+                         "a pactmaker's human form is not the child")
+
+    def test_men_bystanders_and_scenes_are_left_out(self):
+        children = {"c254": {"name": "Davi", "variants": {"01": {"title": "Child 5★ Animation"}}},
+                    "c265": {"name": "Mona", "variants": {"01": {"title": "SD"}}}}
+        people = self.build({"c000_01": True, "c037_01": True, "c327_01": True, "c254_01": True, "c265_01": True,
+                             "c001_01": True}, children)
+        self.assertEqual([person["id"] for person in people], ["destinychild:c001"])
+        self.assertEqual([costume["outfit"] for costume in people[0]["costumes"]], ["c001_01"])
+
+    def test_models_the_tables_lack_use_the_child_list(self):
+        children = {"c007": {"name": "Phoenix"}, "c055": {"name": "Minerva", "variants": {"01": {"title": ""}}},
+                    "c124": {"name": "伊芙", "variants": {}},
+                    "c001": {"name": "莫娜", "variants": {"11": {"title": "Christmas"}}}}
+        skipped = []
+        people = self.build({"c001_01": True, "c001_11": True, "c055_01": True, "c124_01": True}, children, skipped)
+        self.assertEqual([(person["name"], [costume["label"] for costume in person["costumes"]]) for person in people],
+                         [("莫娜", ["默认", "Christmas"]), ("Minerva", ["默认"])])
+        self.assertEqual(skipped, ["c124"], "a nickname in Chinese is not a name")
+
+    def test_one_chinese_name_for_two_characters_adds_the_english_one(self):
+        people = self.build({"c419_01": True, "c420_01": True})
+        self.assertEqual([person["name"] for person in people], ["凯瑟琳（Catherine）", "凯瑟琳（Katherine）"])
+
+    def test_looks_of_one_name_say_which_is_which(self):
+        skins = "c002_01\t_Lisa\tA.\nc002_02\tBattlesuit_Lisa\tB.\nc365_01\t_Lisa\tC.\nc003_14\tLucifer_Davi\tD.\n" \
+                "c003_89\tLucifer_Davi\tE.\n"
+        names = update.parse_dc_skin_names(skins)
+        people = update.build_destinychild({"c002_01": True, "c002_02": True, "c365_01": True, "c003_14": True,
+                                            "c003_89": True}, names, names, {})
+        self.assertEqual([[costume["label"] for costume in person["costumes"]] for person in people],
+                         [["默认（c002_01）", "默认（c365_01）", "Battlesuit"], ["Lucifer（14）", "Lucifer（89）"]])
+
+
 class JsLiteralTests(unittest.TestCase):
     def test_reads_objects_arrays_comments_and_trailing_commas_as_data(self):
         text = """const x: Record<string, Entry> = {

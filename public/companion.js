@@ -11,6 +11,7 @@ import { GAMES, gameById } from './companion-games.js';
 import { fireAnimations, queueFireCycle } from './companion-fire.js';
 import { combatAnimations, createCombatCycle } from './companion-combat.js';
 import { createLive2DPlayer } from './companion-live2d-player.js';
+import { live2dGeneration } from './companion-live2d.js';
 import { readExternalSkeleton, performanceMenu, createPerformance } from './companion-performance-player.js';
 import { createDatingTour } from './companion-dating.js';
 import { createPaintingPlayer } from './companion-painting-player.js';
@@ -693,11 +694,13 @@ export function initCompanion() {
   // Azur Lane: the portrait loops the model's idle; the action display plays
   // its reactions with a short idle in between. Each model is its own canvas.
   async function startLive2D(record, signal) {
-    const [PIXI, assets] = await withAbort(Promise.all([loadLive2DRuntime(), assetsFor(record.selection, record.mode)]), signal);
+    const generation = live2dGeneration(partFor(record.selection, record.mode)?.model);
+    const [{ PIXI, live2d }, assets] = await withAbort(Promise.all([loadLive2DRuntime(generation),
+      assetsFor(record.selection, record.mode)]), signal);
     if (signal.aborted || stage.pending !== record || disposed) return;
     const { layer } = record;
     const player = await createLive2DPlayer({
-      PIXI, layer, settings: assets.settings, plan: assets.plan, blobs: assets.blobs, mode: record.mode,
+      PIXI, live2d, layer, settings: assets.settings, plan: assets.plan, blobs: assets.blobs, mode: record.mode,
       space: () => railSpace(layer), frame: delta => ownCanvasFrame(record, delta), ...reactionResume(record),
       onReaction: motion => speak(record, motion),
     });

@@ -20,11 +20,18 @@ paintings (Spine 3.8, in layers) as portraits. Pelom777/AzurLaneData, rebuilt
 hourly from the Chinese server, maps each painting name to its ship and
 Chinese skin name.
 
+Destiny Child: Pelom777/DestinyChildLive2D holds the game's Live2D (Cubism 2)
+models; the game ended service in 2023, so the set is complete. Each child's
+model (c###_##) with an idle motion is one costume. Mobbbb/DCLive2D keeps the
+client's own text tables, whose skin tables name every model (skin_character)
+in English and Simplified Chinese; its hand-kept child list fills the few the
+tables lack. Male characters and the story's bystanders are left out.
+
 Every catalog pins an upstream commit, so the browser never loads moving
 assets. Standard library only; set GITHUB_TOKEN to raise the API rate limit.
 
     python3 scripts/update_companion.py            # update every catalog
-    python3 scripts/update_companion.py --game nikke
+    python3 scripts/update_companion.py --game nikke   # or bd2, azurlane, destinychild
     python3 scripts/update_companion.py --check    # exit 1 if anything would change
 """
 from __future__ import annotations
@@ -78,6 +85,32 @@ MOTION_VOICES = {"login": "login", "home": "home", "mail": "mail", "mission": "m
                  "mission_complete": "mission_complete", "complete": "expedition", "touch": "touch",
                  "touch_head": "headtouch", "touch_body": "touch", "touch_special": "touch2"}
 MAIN_VOICE = re.compile(r"main(\d+)")
+
+DC_CATALOG = ROOT / "public/companion/destinychild/catalog.json"
+DC_REPO = "Pelom777/DestinyChildLive2D"
+DC_NAMES_REPO = "Mobbbb/DCLive2D"
+# The English client's text tables, in every language it shipped: 00000008 is
+# the English skin table, 00000245 the Simplified Chinese one.
+DC_SKIN_NAMES = "https://raw.githubusercontent.com/" + DC_NAMES_REPO + "/{commit}/src/static/locale/{table}.tab"
+DC_ENGLISH, DC_CHINESE = "00000008", "00000245"
+DC_CHILDREN = "https://raw.githubusercontent.com/" + DC_NAMES_REPO + "/{commit}/src/data/childs.js"
+DC_MODEL = re.compile(r"assets/live2d/(c\d{3}_\d{2})/model\.json")
+# Only women and girls are shown, as in the other games. Checked against the
+# client's character profiles (pronouns) and the models themselves: the
+# Master (c000), male Children, and the story's men and bystanders.
+DC_EXCLUDED = {
+    "c000",
+    "c007", "c009", "c012", "c022", "c023", "c024", "c037", "c044", "c050", "c051", "c052", "c066", "c067",
+    "c069", "c072", "c082", "c085", "c090", "c107", "c110", "c112", "c121", "c125", "c131", "c132", "c147",
+    "c154", "c175", "c180", "c185", "c205", "c208", "c214", "c219", "c224", "c225", "c226", "c234", "c237",
+    "c266", "c286", "c289", "c299", "c302", "c315", "c317", "c319", "c346", "c362", "c412", "c413", "c425",
+    "c428", "c444", "c454", "c457", "c484", "c489", "c519", "c532",
+    "c257", "c322", "c325", "c326", "c327", "c328", "c330", "c331", "c352", "c369", "c515",
+}
+# Summon and evolution animations and the chibi model are scenes, not portraits.
+DC_SCENES = re.compile(r"Animation|^SD$")
+# The motions the action display plays (see companion-live2d.js).
+DC_ACTION = re.compile(r"_(?:attack2?|hit|banner)\.mtn")
 
 PLAYABLE_ID = re.compile(r"c(\d{3})(?:_(\d{2}))?")
 # NPCs (c9xx), mass-produced enemies (c25x), soldiers, products and iDolls
@@ -725,13 +758,151 @@ def update_azurlane() -> tuple[Path, str]:
                                    "characters": characters})
 
 
+# --- Destiny Child ------------------------------------------------------------
+
+def dc_models(tree_paths: set[str]) -> dict[str, bool]:
+    """Children's models with a moc, a texture and an idle motion -> whether
+    they have a move for the action display."""
+    folders: dict[str, set[str]] = {}
+    for path in tree_paths:
+        parts = path.split("/")
+        if len(parts) == 4 and path.startswith("assets/live2d/"):
+            folders.setdefault(parts[2], set()).add(parts[3])
+    models = {}
+    for model, files in folders.items():
+        if DC_MODEL.fullmatch(f"assets/live2d/{model}/model.json") and \
+                {"model.json", "model.moc", "texture_00.png", f"{model}_idle.mtn"} <= files:
+            models[model] = any(DC_ACTION.fullmatch(name[len(model):]) for name in files if name.startswith(model))
+    return dict(sorted(models.items()))
+
+
+def parse_dc_skin_names(text: str) -> dict[str, tuple[str, str]]:
+    """The client's skin table: model id -> (skin, character). A child's own
+    look has no skin name ("_Mona"); a few entries carry a full name alone."""
+    names = {}
+    for line in text.lstrip("\ufeff").splitlines():
+        fields = line.split("\t")
+        if line.startswith("//") or len(fields) < 2 or not re.fullmatch(r"c\d{3}_\d{2}", fields[0]):
+            continue
+        skin, _, person = fields[1].rpartition("_")
+        names[fields[0]] = (skin.strip(), person.strip())
+    return names
+
+
+def parse_dc_children(text: str) -> dict:
+    """The hand-kept child list, a JavaScript object literal read as data."""
+    start = re.search(r"CHILDS_CODE_MAP\s*=\s*", text)
+    if not start:
+        raise ValueError(f"no child list in {DC_NAMES_REPO}")
+    children, _ = parse_js_literal(text, start.end())
+    if not isinstance(children, dict):
+        raise ValueError(f"unexpected child list in {DC_NAMES_REPO}")
+    return children
+
+
+def latin(value) -> str:
+    """A name in the client's own (English) text; the child list's Chinese
+    entries are mostly players' nicknames, so they are not used."""
+    value = value.strip() if isinstance(value, str) else ""
+    return "" if not value or value == "未知" or re.search(r"[\u3000-\u9fff\uac00-\ud7af]", value) else value
+
+
+def build_destinychild(models: dict[str, bool], english: dict, chinese: dict, children: dict,
+                       skipped: list | None = None) -> list:
+    """One character per English name (Mona has five model codes, while
+    Catherine and Katherine share a Chinese name), named in Chinese. A pact-
+    maker's human form (_00) is not the child, so it is left out."""
+    codes: dict[str, list[str]] = {}
+    for model in models:
+        if model[:4] not in DC_EXCLUDED and not model.endswith("_00"):
+            codes.setdefault(model[:4], []).append(model)
+    groups: dict[str, list[tuple[str, str]]] = {}
+    for code, outfits in sorted(codes.items()):
+        child = children.get(code) if isinstance(children.get(code), dict) else {}
+        variants = child.get("variants") if isinstance(child.get("variants"), dict) else {}
+        counts: dict[str, int] = {}
+        for outfit in outfits:
+            person = english.get(outfit, ("", ""))[1]
+            if person:
+                counts[person] = counts.get(person, 0) + 1
+        name = max(counts, key=lambda person: counts[person]) if counts else latin(child.get("name"))
+        if not name:
+            if skipped is not None:
+                skipped.append(code)
+            continue
+        for outfit in outfits:
+            variant = variants.get(outfit[5:])
+            title = latin(variant.get("title")) if isinstance(variant, dict) else ""
+            if DC_SCENES.search(english.get(outfit, ("", ""))[0]) or DC_SCENES.search(title):
+                continue
+            # The client's own skin name; the child list's for a model it lacks.
+            label = (chinese[outfit][0] or "默认") if outfit in chinese else title or "默认"
+            groups.setdefault(name, []).append((outfit, label))
+    characters = []
+    for name, outfits in groups.items():
+        counts = {}
+        for outfit, _ in outfits:
+            person = chinese.get(outfit, ("", ""))[1]
+            if person:
+                counts[person] = counts.get(person, 0) + 1
+        costumes = [{"label": label, "outfit": outfit, "idle": part, "cutscene": part if models[outfit] else None}
+                    for outfit, label in outfits
+                    for part in [{"model": f"assets/live2d/{outfit}/model.json", "runtime": "live2d"}]]
+        # Two looks of one name (a child's two forms) say which is which.
+        for key in (lambda costume: costume["outfit"][5:], lambda costume: costume["outfit"]):
+            labels = [costume["label"] for costume in costumes]
+            for costume in costumes:
+                if labels.count(costume["label"]) > 1:
+                    costume["label"] = re.sub(r"（[^）]*）$", "", costume["label"]) + f"（{key(costume)}）"
+        costumes.sort(key=lambda costume: (not costume["label"].startswith("默认"), costume["outfit"]))
+        characters.append({"id": f"destinychild:{min(outfit for outfit, _ in outfits)[:4]}",
+                           "name": max(counts, key=lambda person: counts[person]) if counts else name,
+                           "aka": name, "costumes": costumes})
+    # Two characters of one Chinese name (Catherine and Katherine) add their English one.
+    shown = [person["name"] for person in characters]
+    for person in characters:
+        if shown.count(person["name"]) > 1:
+            person["name"] += f"（{person['aka']}）"
+        if person["aka"] == person["name"]:
+            del person["aka"]
+    return sorted(characters, key=lambda person: person["id"])
+
+
+def update_destinychild() -> tuple[Path, str]:
+    api = "https://api.github.com/repos/"
+    commit = get_json(api + DC_REPO + "/commits/master")["sha"]
+    tree = get_json(f"{api}{DC_REPO}/git/trees/{commit}?recursive=1")
+    if tree.get("truncated"):
+        raise ValueError("DestinyChildLive2D tree was truncated")
+    models = dc_models({item["path"] for item in tree["tree"]})
+    names_commit = get_json(api + DC_NAMES_REPO + "/commits/main")["sha"]
+    english, chinese = (parse_dc_skin_names(request(DC_SKIN_NAMES.format(commit=names_commit, table=table))
+                                            .decode("utf-8")) for table in (DC_ENGLISH, DC_CHINESE))
+    if not english or not chinese:
+        raise ValueError(f"no skin names could be read from {DC_NAMES_REPO}")
+    children = parse_dc_children(request(DC_CHILDREN.format(commit=names_commit)).decode("utf-8"))
+    skipped: list[str] = []
+    characters = build_destinychild(models, english, chinese, children, skipped)
+    if not characters:
+        raise ValueError("no Destiny Child model could be named")
+    if skipped:
+        print(f"destinychild: {len(skipped)} children without a name left out: " + ", ".join(skipped))
+    previous = json.loads(DC_CATALOG.read_text(encoding="utf-8")) if DC_CATALOG.exists() else {}
+    if previous.get("characters") == characters:
+        return DC_CATALOG, dump(previous)
+    return DC_CATALOG, dump({"generatedAt": now(), "source": f"{DC_REPO}@{commit[:12]}",
+                             "names": f"{DC_NAMES_REPO}@{names_commit[:12]}", "commit": commit,
+                             "characters": characters})
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument("--game", choices=["bd2", "nikke", "azurlane", "all"], default="all")
+    parser.add_argument("--game", choices=["bd2", "nikke", "azurlane", "destinychild", "all"], default="all")
     parser.add_argument("--check", action="store_true", help="report changes without writing")
     args = parser.parse_args()
     updates = [update for game, update in (("bd2", update_bd2), ("bd2", update_bd2_performances),
-                                           ("nikke", update_nikke), ("azurlane", update_azurlane))
+                                           ("nikke", update_nikke), ("azurlane", update_azurlane),
+                                           ("destinychild", update_destinychild))
                if args.game in (game, "all")]
     changed = []
     for update in updates:

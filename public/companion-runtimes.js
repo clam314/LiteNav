@@ -61,27 +61,56 @@ export function loadSpine38() {
   return spine38Runtime;
 }
 
-// Azur Lane's Live2D models need Cubism Core, PixiJS and pixi-live2d-display,
-// loaded in this order since each builds on the previous global.
-const LIVE2D_RUNTIME = [
-  '/vendor/live2d/live2dcubismcore.min.js',
-  '/vendor/live2d/pixi-6.5.10.min.js',
-  '/vendor/live2d/pixi-live2d-display-0.4.0-cubism4.min.js',
-];
-let live2dRuntime;
+// Live2D models run on PixiJS with pixi-live2d-display, which ships one build
+// per Cubism generation: Azur Lane's Cubism 3+ models need Cubism Core and the
+// cubism4 build, Destiny Child's Cubism 2 models the Cubism 2.1 runtime and
+// the cubism2 build. Each loads only when a model needs it, after the
+// runtime it builds on. Both builds add their classes to PIXI.live2d, so each
+// loads into a namespace of its own (see loadLive2DBuild).
+const PIXI_RUNTIME = '/vendor/live2d/pixi-6.5.10.min.js';
+const LIVE2D_GENERATIONS = {
+  4: { runtime: '/vendor/live2d/live2dcubismcore.min.js', ready: () => window.Live2DCubismCore,
+    build: '/vendor/live2d/pixi-live2d-display-0.4.0-cubism4.min.js', settings: 'Cubism4ModelSettings' },
+  2: { runtime: '/vendor/live2d/live2d-2.1.min.js', ready: () => window.Live2D,
+    build: '/vendor/live2d/pixi-live2d-display-0.4.0-cubism2.min.js', settings: 'Cubism2ModelSettings' },
+};
+const live2dRuntimes = {};
 
-export function loadLive2DRuntime() {
-  live2dRuntime ||= (async () => {
-    for (const [index, url] of LIVE2D_RUNTIME.entries()) await loadRuntimeFile('script', url, 'live2d-' + index);
+// The PixiJS global and the plugin namespace for one generation (4 or 2).
+export function loadLive2DRuntime(generation = 4) {
+  const spec = LIVE2D_GENERATIONS[generation];
+  if (!spec) return Promise.reject(new Error('角色播放器未能载入'));
+  live2dRuntimes[generation] ||= (async () => {
+    await loadRuntimeFile('script', spec.runtime, 'live2d-core-' + generation);
+    await loadRuntimeFile('script', PIXI_RUNTIME, 'live2d-pixi');
     const PIXI = window.PIXI;
-    if (!window.Live2DCubismCore || !PIXI?.live2d?.Live2DModel) throw new Error('角色播放器未能载入');
-    separateShaderContexts(PIXI.live2d);
-    return PIXI;
+    const live2d = await loadLive2DBuild(PIXI, spec.build, generation);
+    if (!spec.ready() || !live2d?.Live2DModel || !live2d[spec.settings]) throw new Error('角色播放器未能载入');
+    if (generation === 4) separateShaderContexts(live2d);
+    return { PIXI, live2d };
   })().catch(error => {
-    live2dRuntime = undefined;
+    delete live2dRuntimes[generation];
     throw error;
   });
-  return live2dRuntime;
+  return live2dRuntimes[generation];
+}
+
+// A plugin build adds itself to PIXI.live2d, creating it when missing. Give it
+// an empty one while it runs, keep what it made and put the previous one back,
+// one build at a time.
+function loadLive2DBuild(PIXI, url, generation) {
+  const task = runtimeQueue.catch(() => {}).then(async () => {
+    const previous = PIXI?.live2d;
+    if (PIXI) PIXI.live2d = undefined;
+    try {
+      await loadRuntimeFile('script', url, 'live2d-build-' + generation);
+      return PIXI?.live2d;
+    } finally {
+      if (PIXI) PIXI.live2d = previous;
+    }
+  });
+  runtimeQueue = task;
+  return task;
 }
 
 function loadRuntimeFile(tag, url, key = tag) {

@@ -1,6 +1,6 @@
 # 角色资源来源
 
-角色陪伴目前收录《棕色尘埃 2》《NIKKE：胜利女神》与《碧蓝航线》三个来源，各份角色目录都固定在上游的某次提交上，并由 `scripts/update_companion.py` 每周自动刷新（`.github/workflows/companion-catalogs.yml`）。以下先说明棕色尘埃 2，NIKKE 与碧蓝航线见文末。
+角色陪伴目前收录《棕色尘埃 2》《NIKKE：胜利女神》《碧蓝航线》与《天命之子》四个来源，各份角色目录都固定在上游的某次提交上，并由 `scripts/update_companion.py` 每周自动刷新（`.github/workflows/companion-catalogs.yml`）。以下先说明棕色尘埃 2，NIKKE、碧蓝航线与天命之子见文末。
 
 此目录包含角色索引 `catalog.json`，以及一套本地待机后备资源：**悠丝缇亚（Justia）· 血骑士**，资源 ID `char000201`。随机角色及技能使用索引中的素材路径，只在选中时从固定版本的上游按需加载；没有将全部角色、技能或声音素材打包进项目。
 
@@ -88,7 +88,7 @@ SHA-256：
 
 - 棕色尘埃 2：读取 [clam314/bd2web](https://github.com/clam314/bd2web) 的 `data/roster.json`。该名册由作者随上游素材仓库同步，本项目原样使用并校验其固定提交与角色列表。
 - NIKKE：见下一节。
-- 碧蓝航线：见文末一节。
+- 碧蓝航线、天命之子：见文末各节。
 
 ## NIKKE：胜利女神
 
@@ -137,6 +137,10 @@ Spine 4.0 运行时 `/vendor/spine/spine-player-4.0.30.js` 下载自官方 npm �
 - `live2dcubismcore.min.js`：Live2D Cubism Core 5.1.0（`05.01.0000`），下载自官方地址 <https://cubism.live2d.com/sdk-web/cubismcore/live2dcubismcore.min.js>。该文件是 [Live2D Proprietary Software License Agreement](https://www.live2d.com/eula/live2d-proprietary-software-license-agreement_en.html) 中的 Redistributable Code，使用须遵守该协议；个人及小规模用途另见 Live2D 的 SDK 发布许可。
 - `pixi-6.5.10.min.js`：[PixiJS](https://github.com/pixijs/pixijs) 6.5.10（npm `pixi.js@6.5.10` 的 `dist/browser/pixi.min.js`），MIT 许可，原文见 `LICENSE.pixijs`。
 - `pixi-live2d-display-0.4.0-cubism4.min.js`：[pixi-live2d-display](https://github.com/guansss/pixi-live2d-display) 0.4.0（npm 包的 `dist/cubism4.min.js`），MIT 许可，原文见 `LICENSE.pixi-live2d-display`。其中打包的 Cubism 4 Framework 受 [Live2D Open Software License](https://www.live2d.com/eula/live2d-open-software-license-agreement_en.html) 约束。
+- `pixi-live2d-display-0.4.0-cubism2.min.js`：同一 npm 包（`pixi-live2d-display-0.4.0.tgz`）的 `dist/cubism2.min.js`，MIT 许可，供天命之子的 Cubism 2 模型使用。该包内的 `cubism4.min.js` 与上面的文件逐字节相同。
+- `live2d-2.1.min.js`：Live2D Cubism 2.1 运行时（`2.1.00_1`）。官方已停止提供下载，取自 [Pelom777/DestinyChildLive2D](https://github.com/Pelom777/DestinyChildLive2D) 的 `src/lib/live2d.min.js`；与 pixi-live2d-display 文档所指的镜像 `dylanNew/live2d` 中的同名文件逐字节相同（git blob `8d3c0a98…`）。权利归 Live2D Inc.，使用须遵守 Live2D 的许可条款。
+
+两种 Cubism 只在显示对应模型时才载入：碧蓝航线载入 Cubism Core 与 cubism4 版插件，天命之子载入 Cubism 2.1 运行时与 cubism2 版插件，PixiJS 共用。插件的完整版（`index.min.js`）虽同时支持两者，但不导出 Cubism 4 框架的着色器类，无法沿用下面的着色器修复，因此不使用。两个分版都会写入全局 `PIXI.live2d`，载入时各给一个空的命名空间、载入后恢复原值，两套类互不覆盖。Cubism 2 在更新模型时就需要绘制用的 WebGL 上下文，而插件只在首次绘制时交给它；播放器在首帧之前取景采样，因此先把上下文交给模型。
 
 该版本的框架把编译好的着色器作为单例在所有 WebGL 上下文间共用，切换人物时新旧两个画布同时存在会使旧画布变成空白。运行时（`companion-live2d-player.js`）为每个上下文单独保存一套着色器，未修改上述文件。
 
@@ -147,5 +151,17 @@ Spine 4.0 运行时 `/vendor/spine/spine-player-4.0.30.js` 下载自官方 npm �
 | `live2dcubismcore.min.js` | `25ae938cb4fe282ce189b357bcc97e603d1e1f7ec78bf04150d401c23cdc792f` |
 | `pixi-6.5.10.min.js` | `403f2f2ee8145fa17f60c5c89403056efe2680e5096ec2762036486914ed19c5` |
 | `pixi-live2d-display-0.4.0-cubism4.min.js` | `af1267e6d52759b245766c578d905bfa025b532d5c3cc727c370957c4409e21b` |
+| `pixi-live2d-display-0.4.0-cubism2.min.js` | `0e86a36540fb487d463904fc5e295316a3130dfc8ac345f37f29b34bed48bba3` |
+| `live2d-2.1.min.js` | `e4ea1f18bdd44b65394ffd5a1bab16982e88757d45134d1bd0737c8a6b3ddd08` |
 
 素材相关权利归蛮啾网络、勇仕网络、Yostar 及原权利人所有。上游仓库声明与上述公司无合作或背书关系。此收录仅用于个人学习与展示，不用于商业用途。
+
+## 天命之子
+
+- 素材来源：[Pelom777/DestinyChildLive2D](https://github.com/Pelom777/DestinyChildLive2D)（「天命之子 Live2D 图鉴」），目录 `destinychild/catalog.json` 固定其某次提交，只在选中时按需加载 `assets/live2d/<编号>/` 下的模型，未打包任何素材。游戏已于 2023 年停止运营，仓库收录的 2191 个 Live2D（Cubism 2：`model.json`、`.moc`、`.mtn`）即全部素材。只收录角色模型（`c###_##`）中有 `idle` 动作的；温泉、怪物、Q 版等其他模型不收录。
+- 名字：取自 [Mobbbb/DCLive2D](https://github.com/Mobbbb/DCLive2D) 保存的游戏客户端文本表（`src/static/locale/`），目录记录所用提交。皮肤表以「皮肤_角色」为每个模型命名，`00000245.tab` 为简体中文、`00000008.tab` 为英文；中文名直接显示，英文名用来合并同一角色分散在多个编号下的模型（如莫娜的 5 个编号；凯瑟琳与 Catherine/Katherine 两位不同角色中文同名，名字后补上英文以示区分）。皮肤表没有的少数模型使用该仓库手工维护的 `src/data/childs.js` 中的英文名；其中的中文名多为玩家昵称，不使用。同一角色两套服装同名时，标注编号。
+- 不展示：每个角色的 `_00` 模型是与其订立契约的人类（男女都有），不是角色本身；召唤与进化动画、Q 版模型；男性角色与剧情中的路人。性别依据客户端角色档案（`00000044.tab`）中的代词，并对照模型本身逐一确认，名单写在更新脚本的 `DC_EXCLUDED` 中（共 72 个编号）。
+- 展示方式：立绘循环播放 `idle`；「动作」轮流播放 `attack`、`hit` 与抽卡横幅姿势 `banner`（有的才播），之后回到 `idle` 约 1.5 秒再播下一个，顺序随机并按服装续播。其他待机变体与剧情事件动作不播放。视线跟随鼠标、取景与背景铺满与碧蓝航线的 Live2D 共用同一套逻辑。
+- 目前收录 287 位角色、943 套服装。
+
+素材相关权利归 SHIFT UP 及原权利人所有。上游仓库与原权利人无合作或背书关系。此收录仅用于个人学习与展示，不用于商业用途。

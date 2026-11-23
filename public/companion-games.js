@@ -3,7 +3,7 @@
 // and the selected ones form the pool for random rotation. Catalogs share one
 // character/costume shape and are refreshed by scripts/update_companion.py.
 // action names the second display: BD2 skill cut-ins, NIKKE's firing loop,
-// Azur Lane's Live2D reactions.
+// Azur Lane's Live2D reactions, Destiny Child's battle moves and banner pose.
 export const GAMES = [
   {
     id: 'bd2',
@@ -34,6 +34,14 @@ export const GAMES = [
     paintingBase: 'https://raw.githubusercontent.com/ww-rm/azurlane_spinepainting/',
     // Japanese voice lines, extracted from the English client.
     voiceBase: 'https://raw.githubusercontent.com/Fernando2603/AzurLane/',
+  },
+  {
+    id: 'destinychild',
+    name: '天命之子',
+    action: '动作',
+    catalogUrl: '/companion/destinychild/catalog.json',
+    // Live2D (Cubism 2) models of the children; the game ended service in 2023.
+    assetBase: 'https://raw.githubusercontent.com/Pelom777/DestinyChildLive2D/',
   },
 ];
 

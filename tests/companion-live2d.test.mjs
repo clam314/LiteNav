@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { readFileSync } from 'node:fs';
 import { costumeKey } from '../public/companion-model.js';
 import {
-  live2dMotionPlan, live2dFiles, withLive2DFiles, live2dArtBounds, placeLive2D, backgroundBand, MAX_COVER_ZOOM, orderMotionCurves, createActionOrder, gazeFocus, reactionFraming,
+  live2dMotionPlan, live2dMotions, isCubism2, live2dGeneration, live2dFiles, withLive2DFiles, live2dArtBounds, placeLive2D, backgroundBand, MAX_COVER_ZOOM, orderMotionCurves, createActionOrder, gazeFocus, reactionFraming,
 } from '../public/companion-live2d.js';
 
 const motion = name => [{ File: `motions/${name}.motion3.json` }];
@@ -53,6 +53,41 @@ test('the rewritten settings point every file at its URL and drop unplanned moti
       .map(name => [name, [{ File: `blob:motions/${name}.motion3.json` }]])),
   });
   assert.ok(model.FileReferences.Motions.wedding, 'the original settings are left untouched');
+  assert.throws(() => withLive2DFiles(model, plan, {}), /文件缺失/);
+});
+
+// A Destiny Child model (Cubism 2): lower-case keys, expressions it is not asked to play.
+const cubism2 = () => ({
+  version: 'Sample 1.0.0', model: 'model.moc', textures: ['texture_00.png', 'texture_01.png'],
+  expressions: [{ name: 'angry', file: 'angry.exp.json' }],
+  motions: Object.fromEntries(['attack', 'hit', 'idle', 'idle_ls', 'banner', 'event'].map(name =>
+    [name, [{ file: `c001_02_${name}.mtn`, fade_in: 0, fade_out: 0 }]])),
+});
+
+test('Cubism 2 models plan their battle moves and banner pose and fetch everything from git', () => {
+  const model = cubism2();
+  assert.equal(isCubism2(model), true);
+  assert.equal(live2dGeneration('assets/live2d/c001_02/model.json'), 2);
+  assert.equal(live2dGeneration('Live2D/z23/z23.model3.json'), 4, 'Cubism 3+ settings need the Cubism 4 framework');
+  assert.equal(live2dGeneration(undefined), 2);
+  assert.equal(isCubism2(settings()), false);
+  assert.equal(live2dMotions(model), model.motions);
+  assert.deepEqual(live2dMotions(settings()), settings().FileReferences.Motions);
+  const plan = live2dMotionPlan(live2dMotions(model));
+  assert.deepEqual(plan, { idle: 'idle', effect: null, actions: ['attack', 'hit', 'banner'] },
+    'the other idle loops and story event motions are not played');
+  assert.deepEqual(live2dFiles(model, plan), ['model.moc', 'texture_00.png', 'texture_01.png',
+    ...['idle', 'attack', 'hit', 'banner'].map(name => `c001_02_${name}.mtn`)].map(path => ({ path, lfs: false })));
+  assert.deepEqual(live2dFiles({ ...model, physics: 'model.physics.json' }, plan)[3], { path: 'model.physics.json', lfs: false });
+  assert.throws(() => live2dFiles({ ...model, textures: [] }, plan), /配置不完整/);
+  const urls = Object.fromEntries(live2dFiles(model, plan).map(file => [file.path, 'blob:' + file.path]));
+  const rewritten = withLive2DFiles(model, plan, urls);
+  assert.equal(rewritten.model, 'blob:model.moc');
+  assert.deepEqual(rewritten.textures, ['blob:texture_00.png', 'blob:texture_01.png']);
+  assert.deepEqual(Object.keys(rewritten.motions), ['idle', 'attack', 'hit', 'banner']);
+  assert.deepEqual(rewritten.motions.hit, [{ file: 'blob:c001_02_hit.mtn', fade_in: 0, fade_out: 0 }]);
+  assert.equal(rewritten.expressions, undefined, 'expressions are not fetched, so not listed');
+  assert.ok(model.expressions && model.motions.event, 'the original settings are left untouched');
   assert.throws(() => withLive2DFiles(model, plan, {}), /文件缺失/);
 });
 

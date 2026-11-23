@@ -40,7 +40,7 @@ const catalog = {
 };
 const preferences = overrides => normalizePreferences({ portraits: true, ...overrides });
 
-const ALL_GAMES = ['bd2', 'nikke', 'azurlane'];
+const ALL_GAMES = ['bd2', 'nikke', 'azurlane', 'destinychild'];
 const DEFAULTS = { voice: false, voiceVolume: 0.6, rotation: 3, resume: 'portrait', games: ALL_GAMES, knownGames: ALL_GAMES };
 
 test('new preferences default to random people with display off; legacy enabled migrates only portrait visibility', () => {
@@ -73,8 +73,10 @@ test('preferences reject truthy strings, numbers, and non-string selection IDs',
     'unknown games fall back to all known ones');
   assert.deepEqual(normalizePreferences({ games: ['bd2'] }).games, ALL_GAMES,
     'a game added after the choice was saved starts selected');
-  assert.deepEqual(normalizePreferences({ games: ['bd2'], knownGames: ['bd2', 'nikke'] }).games, ['bd2', 'azurlane'],
-    'Azur Lane joins a choice saved before it was offered');
+  assert.deepEqual(normalizePreferences({ games: ['bd2'], knownGames: ['bd2', 'nikke'] }).games, ['bd2', 'azurlane', 'destinychild'],
+    'Azur Lane and Destiny Child join a choice saved before they were offered');
+  assert.deepEqual(normalizePreferences({ games: ['bd2', 'azurlane'], knownGames: ['bd2', 'nikke', 'azurlane'] }).games,
+    ['bd2', 'azurlane', 'destinychild'], 'Destiny Child joins a choice saved before it was offered');
   assert.deepEqual(normalizePreferences({ games: ['nikke'], knownGames: ALL_GAMES }).games, ['nikke'],
     'a game the viewer turned off stays off');
 });

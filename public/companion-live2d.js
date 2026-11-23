@@ -1,16 +1,37 @@
-// Azur Lane ships come as Live2D (Cubism) models instead of Spine skeletons.
-// These helpers decide what to play, which files to fetch and where to place
-// the figure; companion-live2d-player.js does the drawing.
+// Live2D models: Azur Lane ships (Cubism 3+, model3.json) and Destiny Child
+// children (Cubism 2, model.json), instead of Spine skeletons. These helpers
+// decide what to play, which files to fetch and where to place the figure;
+// companion-live2d-player.js does the drawing.
 
-// Reactions the game plays on its main screen and when the ship is touched.
-// L2D+ models add drag states (idleN, touch_idleN, touch_dragN) that only make
-// sense while dragging, so they are not played here.
-const ACTION = /^(?:home|login|mail|mission|mission_complete|complete|touch_(?:head|body|special)|main_\d+)$/;
+// Reactions the games play. Azur Lane: its main screen and touches; L2D+
+// models add drag states (idleN, touch_idleN, touch_dragN) that only make
+// sense while dragging, so they are not played here. Destiny Child: the
+// battle moves and the pose of the summon banner; its event motions belong to
+// story scenes.
+const ACTION = /^(?:home|login|mail|mission|mission_complete|complete|touch_(?:head|body|special)|main_\d+|attack2?|hit|banner)$/;
+
+// Cubism 2 settings name the moc "model" and list files in lower case.
+export function isCubism2(settings) {
+  return typeof settings?.model === 'string';
+}
+
+// The runtime a model's settings file needs, from its name: Cubism 3 and
+// later name it *.model3.json, which the Cubism 4 framework reads.
+export function live2dGeneration(path) {
+  return /\.model3\.json$/i.test(String(path || '')) ? 4 : 2;
+}
+
+// The motion groups of either kind of settings.
+export function live2dMotions(settings) {
+  return isCubism2(settings) ? settings.motions : settings?.FileReferences?.Motions;
+}
+
+const motionFile = group => group?.[0]?.File || group?.[0]?.file;
 
 // idle loops on the base track; effect is a separate ambient loop (ribbons,
-// glows) that the game runs alongside every other motion.
+// glows) that Azur Lane runs alongside every other motion.
 export function live2dMotionPlan(motions) {
-  const groups = Object.keys(motions || {}).filter(name => motions[name]?.[0]?.File);
+  const groups = Object.keys(motions || {}).filter(name => typeof motionFile(motions[name]) === 'string');
   return {
     idle: groups.includes('idle') ? 'idle' : null,
     effect: groups.includes('effect') ? 'effect' : null,
@@ -38,30 +59,49 @@ export function orderMotionCurves(motion) {
   return { ...motion, Curves: ranked.map(entry => entry.curve) };
 }
 
-// The files a model needs, relative to its folder. The moc and textures are
-// Git LFS objects, which raw.githubusercontent.com serves only as pointers.
+// The files a model needs, relative to its folder. Azur Lane keeps the moc
+// and textures in Git LFS, which raw.githubusercontent.com serves only as
+// pointers; lfs marks them. Expressions are not played, so not fetched.
 export function live2dFiles(settings, plan) {
+  const groups = [plan.idle, plan.effect, ...plan.actions].filter(Boolean);
+  if (isCubism2(settings)) {
+    if (!settings.textures?.length) throw new Error('角色模型配置不完整');
+    return [settings.model, ...settings.textures, settings.physics, settings.pose,
+      ...groups.map(group => motionFile(settings.motions[group]))]
+      .filter(Boolean).map(path => ({ path, lfs: false }));
+  }
   const refs = settings.FileReferences || {};
   if (!refs.Moc || !refs.Textures?.length) throw new Error('角色模型配置不完整');
-  const motions = [plan.idle, plan.effect, ...plan.actions].filter(Boolean).map(group => refs.Motions[group][0].File);
   return [
     { path: refs.Moc, lfs: true },
     ...refs.Textures.map(path => ({ path, lfs: true })),
     ...(refs.Physics ? [{ path: refs.Physics, lfs: false }] : []),
-    ...motions.map(path => ({ path, lfs: false })),
+    ...groups.map(group => ({ path: motionFile(refs.Motions[group]), lfs: false })),
   ];
 }
 
 // A copy of the settings that only lists the planned motions, with every file
 // replaced by the URL that serves it.
 export function withLive2DFiles(settings, plan, urls) {
-  const refs = settings.FileReferences;
   const url = path => {
     if (!urls[path]) throw new Error('角色模型文件缺失');
     return urls[path];
   };
+  const groups = [plan.idle, plan.effect, ...plan.actions].filter(Boolean);
+  if (isCubism2(settings)) {
+    const { expressions: _expressions, ...rest } = settings;
+    return {
+      ...rest,
+      model: url(settings.model),
+      textures: settings.textures.map(url),
+      ...(settings.physics ? { physics: url(settings.physics) } : {}),
+      ...(settings.pose ? { pose: url(settings.pose) } : {}),
+      motions: Object.fromEntries(groups.map(group => [group, [{ ...settings.motions[group][0], file: url(settings.motions[group][0].file) }]])),
+    };
+  }
+  const refs = settings.FileReferences;
   const motions = {};
-  for (const group of [plan.idle, plan.effect, ...plan.actions].filter(Boolean)) {
+  for (const group of groups) {
     motions[group] = [{ ...refs.Motions[group][0], File: url(refs.Motions[group][0].File) }];
   }
   return {

@@ -1,8 +1,46 @@
-// Draws one Live2D model with PixiJS and pixi-live2d-display (Cubism 4
-// framework on Cubism Core 5). The player mirrors the parts of SpinePlayer the
+// Draws one Live2D model with PixiJS and pixi-live2d-display: Cubism 3+
+// models on the Cubism 4 framework and Cubism Core 5, Cubism 2 models on the
+// Cubism 2.1 runtime. The player mirrors the parts of SpinePlayer the
 // companion uses: dom, pause(), play(), stopRendering(), dispose() and
 // context.gl.
-import { live2dArtBounds, placeLive2D, backgroundBand, createActionOrder, withLive2DFiles, gazeFocus, reactionFraming } from './companion-live2d.js';
+import { live2dArtBounds, placeLive2D, backgroundBand, createActionOrder, withLive2DFiles, gazeFocus, reactionFraming,
+  isCubism2 } from './companion-live2d.js';
+
+// What the player reads from a model, the same way for both runtimes:
+// drawables (id, vertices in model pixels, opacity, visibility), the head
+// turn parameter and a refresh of the vertices after setting it. Cubism 2
+// does not expose a drawable's opacity; its drawables count as shown.
+function modelReader(internal, cubism2) {
+  const core = internal.coreModel;
+  if (cubism2) {
+    const ids = internal.getDrawableIDs();
+    const head = core.getParamIndex('PARAM_ANGLE_X');
+    return {
+      count: () => ids.length,
+      drawable: index => ({ id: ids[index], vertices: internal.getDrawableVertices(index), opacity: 1, visible: true }),
+      head: head >= 0 ? { get: () => core.getParamFloat(head), set: value => core.setParamFloat(head, value) } : null,
+      refresh: () => core.update(),
+    };
+  }
+  const head = core.getParameterIndex('ParamAngleX');
+  return {
+    count: () => core.getDrawableCount(),
+    drawable: index => ({ id: core.getDrawableId(index), vertices: internal.getDrawableVertices(index),
+      opacity: core.getDrawableOpacity(index), visible: core.getDrawableDynamicFlagIsVisible(index) }),
+    head: head >= 0 && head < core.getParameterCount() ? {
+      get: () => core.getParameterValueByIndex(head), set: value => core.setParameterValueByIndex(head, value),
+    } : null,
+    refresh: () => core.update(),
+  };
+}
+
+// A motion's length in seconds; Cubism 2 counts in milliseconds. Not positive
+// for a loop.
+function motionSeconds(motion) {
+  if (typeof motion?.getDuration === 'function') return motion.getDuration();
+  if (typeof motion?.getDurationMSec === 'function') return motion.getDurationMSec() / 1000;
+  return -1;
+}
 
 // The framework keeps one set of compiled shaders for every WebGL context, so
 // a second canvas (the next person fading in) left the first one blank. Give
@@ -37,9 +75,10 @@ const ACTION_GAP = 1.5;
 // blobs maps each file of the settings to its downloaded Blob. In the action
 // display, progress (from an earlier visit) continues the round of reactions,
 // and onProgress receives the round each time a reaction has played out.
-export async function createLive2DPlayer({ PIXI, layer, settings, plan, blobs, mode, space, frame,
+// live2d is the plugin build for the model's Cubism generation (see
+// loadLive2DRuntime).
+export async function createLive2DPlayer({ PIXI, live2d, layer, settings, plan, blobs, mode, space, frame,
   progress = null, onProgress = () => {}, onReaction = () => {} }) {
-  const live2d = PIXI.live2d;
   const dom = document.createElement('div');
   dom.className = 'live2d-player';
   const canvas = document.createElement('canvas');
@@ -77,29 +116,40 @@ export async function createLive2DPlayer({ PIXI, layer, settings, plan, blobs, m
     // default the framework writes those curves to a parameter of the same
     // name, which these models lack, so every alternative stayed drawn on top
     // of the others.
-    live2d.CubismConfig.setOpacityFromMotion = true;
-    const modelSettings = new live2d.Cubism4ModelSettings(withLive2DFiles(settings, plan, urls));
+    const cubism2 = isCubism2(settings);
+    if (!cubism2) live2d.CubismConfig.setOpacityFromMotion = true;
+    const files = withLive2DFiles(settings, plan, urls);
+    const Settings = cubism2 ? live2d.Cubism2ModelSettings : live2d.Cubism4ModelSettings;
+    if (!Settings) throw new Error('角色播放器未能载入');
+    const modelSettings = new Settings(files);
     modelSettings.resolveURL = path => path;
     model = await live2d.Live2DModel.from(modelSettings, {
       autoUpdate: false, autoInteract: false, motionPreload: live2d.MotionPreloadStrategy.ALL,
-      // The library looks for "Idle"; Azur Lane names the group "idle".
+      // The library looks for "Idle"; both games name the group "idle".
       idleMotionGroup: plan.idle,
     });
     app.stage.addChild(model);
     const internal = model.internalModel;
     const motions = internal.motionManager;
+    const reader = modelReader(internal, cubism2);
+    // Cubism 2 updates a model through the WebGL context it draws with, which
+    // the library hands over on the first draw; the framing below updates the
+    // model before that.
+    if (cubism2) internal.updateWebGLContext(app.renderer.gl, app.renderer.CONTEXT_UID);
     // The framework's clock, in seconds; motions are scheduled against it.
     let clock = 0;
 
     // Part opacities are never reset between frames, so a part that a reaction
     // switched and idle does not drive would keep the reaction's state. Every
     // frame starts from the model's own opacities; the motions then switch
-    // the parts they drive.
-    const partOpacities = Array.from({ length: internal.coreModel.getPartCount() },
-      (_, index) => internal.coreModel.getPartOpacityByIndex(index));
-    internal.on('beforeMotionUpdate', () => {
-      partOpacities.forEach((opacity, index) => internal.coreModel.setPartOpacityByIndex(index, opacity));
-    });
+    // the parts they drive. (Cubism 2 restores its parameters every frame.)
+    if (!cubism2) {
+      const partOpacities = Array.from({ length: internal.coreModel.getPartCount() },
+        (_, index) => internal.coreModel.getPartOpacityByIndex(index));
+      internal.on('beforeMotionUpdate', () => {
+        partOpacities.forEach((opacity, index) => internal.coreModel.setPartOpacityByIndex(index, opacity));
+      });
+    }
 
     // The ambient effect loop runs on its own queue next to the base motion.
     if (plan.effect) {
@@ -137,15 +187,11 @@ export async function createLive2DPlayer({ PIXI, layer, settings, plan, blobs, m
       internal.update(seconds * 1000, clock * 1000);
     };
     if (plan.idle) await motions.startMotion(plan.idle, 0, live2d.MotionPriority.IDLE);
-    const core = internal.coreModel;
     const bounds = { minX: Infinity, maxX: -Infinity, minY: Infinity, maxY: -Infinity };
     const canvasSize = { width: internal.originalWidth, height: internal.originalHeight };
     const sample = (into = bounds) => {
       const drawables = [];
-      for (let i = 0; i < core.getDrawableCount(); i++) {
-        drawables.push({ id: core.getDrawableId(i), vertices: internal.getDrawableVertices(i),
-          opacity: core.getDrawableOpacity(i), visible: core.getDrawableDynamicFlagIsVisible(i) });
-      }
+      for (let i = 0; i < reader.count(); i++) drawables.push(reader.drawable(i));
       return live2dArtBounds(drawables, canvasSize, into);
     };
     for (let t = 0; t <= SAMPLE_SECONDS; t += SAMPLE_STEP) {
@@ -158,7 +204,7 @@ export async function createLive2DPlayer({ PIXI, layer, settings, plan, blobs, m
       const frames = [];
       for (const name of plan.actions) {
         await motions.startMotion(name, 0, live2d.MotionPriority.FORCE);
-        const length = motions.motionGroups[name]?.[0]?.getDuration?.();
+        const length = motionSeconds(motions.motionGroups[name]?.[0]);
         const seconds = Math.min(length > 0 ? length : SAMPLE_SECONDS, REACTION_SECONDS);
         for (let t = SAMPLE_STEP; t <= seconds; t += SAMPLE_STEP) {
           step(SAMPLE_STEP);
@@ -187,20 +233,19 @@ export async function createLive2DPlayer({ PIXI, layer, settings, plan, blobs, m
     // when the head turns, and their middle across. null when the model has
     // no head turn.
     const findHead = () => {
-      const index = core.getParameterIndex('ParamAngleX');
-      if (!(index >= 0 && index < core.getParameterCount())) return null;
-      const count = core.getDrawableCount();
+      if (!reader.head) return null;
+      const count = reader.count();
       const before = Array.from({ length: count }, (_, i) => Float32Array.from(internal.getDrawableVertices(i)));
-      const value = core.getParameterValueByIndex(index);
-      core.setParameterValueByIndex(index, value + 30);
-      core.update();
+      const value = reader.head.get();
+      reader.head.set(value + 30);
+      reader.refresh();
       let top = Infinity;
       let left = Infinity;
       let right = -Infinity;
       const moved = canvasSize.height * 0.002;
       for (let i = 0; i < count; i++) {
-        if (!core.getDrawableDynamicFlagIsVisible(i) || !(core.getDrawableOpacity(i) >= 0.02)) continue;
-        const after = internal.getDrawableVertices(i);
+        const { visible, opacity, vertices: after } = reader.drawable(i);
+        if (!visible || !(opacity >= 0.02)) continue;
         let shift = 0;
         let highest = Infinity;
         let lowX = Infinity;
@@ -217,8 +262,8 @@ export async function createLive2DPlayer({ PIXI, layer, settings, plan, blobs, m
           right = Math.max(right, highX);
         }
       }
-      core.setParameterValueByIndex(index, value);
-      core.update();
+      reader.head.set(value);
+      reader.refresh();
       return Number.isFinite(top) ? { top: Math.max(0, top), x: (left + right) / 2 } : null;
     };
     let placedKey = '';

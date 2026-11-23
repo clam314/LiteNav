@@ -4,7 +4,7 @@ import { gameOf, atlasPages } from './companion-model.js';
 import { LOCAL_FALLBACK_CHARACTER } from './companion-fallback.js';
 import { createAssetFetcher } from './companion-assets.js';
 import { GAMES, gameById } from './companion-games.js';
-import { live2dMotionPlan, live2dFiles, orderMotionCurves } from './companion-live2d.js';
+import { live2dMotionPlan, live2dMotions, live2dFiles, orderMotionCurves } from './companion-live2d.js';
 import { performanceId, performanceSources } from './companion-performance-player.js';
 
 export async function fetchResource(url, signal, cache = 'default') {
@@ -53,7 +53,7 @@ export function withAbort(promise, signal) {
 export const partFor = (selection, mode) => mode === 'skill' ? selection.costume.cutscene :
   mode === 'cover' ? selection.costume.cover : mode === 'dating' ? selection.costume.dating : selection.costume.idle;
 
-// A Live2D model's settings, moc, textures, physics and the motions it plays,
+// A Live2D model's settings (Cubism 2 or 3+), moc, textures, physics and the motions it plays,
 // fetched through the asset cache. Each player makes its own blob URLs from
 // these blobs: PixiJS caches textures by URL, and a shared URL let one player
 // destroy the textures of the next (the same ship in its other display).
@@ -74,9 +74,10 @@ async function loadLive2D(catalog, selection, part, signal) {
   const source = catalog.games[id];
   const folder = part.model.slice(0, part.model.lastIndexOf('/') + 1);
   const raw = source.assetBase + source.commit + '/';
-  const lfs = gameById(id).lfsBase + source.commit + '/';
+  const lfsBase = gameById(id).lfsBase;
+  const lfs = lfsBase ? lfsBase + source.commit + '/' : raw;
   const settings = await (await fetchAsset(raw + part.model, signal)).json();
-  const plan = live2dMotionPlan(settings.FileReferences?.Motions);
+  const plan = live2dMotionPlan(live2dMotions(settings));
   if (!plan.idle) throw new Error('这套服装暂无可播放动画');
   const blobs = Object.fromEntries(await Promise.all(live2dFiles(settings, plan).map(async file => {
     const blob = await (await fetchAsset((file.lfs ? lfs : raw) + folder + file.path, signal)).blob();
