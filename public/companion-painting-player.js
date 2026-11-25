@@ -10,12 +10,15 @@ import { createActionOrder } from './companion-live2d.js';
 const SAMPLES = 24;
 // The loop plays this long between two reactions in the action display.
 const ACTION_GAP = 1.5;
+// How long the camera takes to move to the other display's framing.
+const GLIDE_SECONDS = 0.6;
 
 // layers: [{ skeleton: Uint8Array, atlas: text, images: { page: ImageBitmap } }], top first.
 // In the action display (mode 'skill') the painting plays its reactions:
 // actions is a list of reactions, each a list of animations played in order
 // on every layer that has them, followed by the loop again. progress and
 // onProgress continue the round of reactions across visits, as for Live2D.
+// setMode() moves the same painting to the other display.
 export function createPaintingPlayer({ spine, layer, layers, space, frame, mode = 'portrait', actions = [],
   progress = null, onProgress = () => {}, onReaction = () => {} }) {
   const dom = document.createElement('div');
@@ -26,7 +29,7 @@ export function createPaintingPlayer({ spine, layer, layers, space, frame, mode 
   // The textures carry straight alpha, so the page composites it as such.
   const context = new spine.webgl.ManagedWebGLRenderingContext(canvas, { alpha: true, premultipliedAlpha: false });
   try {
-    return paint({ spine, dom, canvas, context, layers, space, frame, reactions: mode === 'skill' ? actions : [], progress, onProgress, onReaction });
+    return paint({ spine, dom, canvas, context, layers, space, frame, mode, actions, progress, onProgress, onReaction });
   } catch (error) {
     // A painting that cannot be read gives its context back at once: browsers
     // only keep a handful of WebGL contexts alive.
@@ -36,7 +39,10 @@ export function createPaintingPlayer({ spine, layer, layers, space, frame, mode 
   }
 }
 
-function paint({ spine, dom, canvas, context, layers, space, frame, reactions, progress, onProgress, onReaction }) {
+function paint({ spine, dom, canvas, context, layers, space, frame, mode, actions, progress, onProgress, onReaction }) {
+  let current = mode === 'skill' ? 'skill' : 'portrait';
+  // The reactions the current display plays.
+  let reactions = current === 'skill' ? actions : [];
   const renderer = new spine.webgl.SceneRenderer(canvas, context, true);
 
   const loaded = layers.map(file => {
@@ -67,25 +73,30 @@ function paint({ spine, dom, canvas, context, layers, space, frame, reactions, p
     skeleton.updateWorldTransform();
   }
 
-  // The painting's extent over the loop and any reaction it plays, from
-  // every drawn layer. A layer without an animation keeps its loop.
+  // The painting's extent over the loop, and over the loop and its reactions
+  // for the action display, from every drawn layer. A layer without an
+  // animation keeps its loop.
   const probes = loaded.map(({ skeleton }) => new spine.Skeleton(skeleton.data));
-  const frames = [];
-  for (const name of [loop, ...new Set(reactions.flat())]) {
-    const duration = Math.max(0, ...probes.map(probe => probe.data.findAnimation(name)?.duration || 0));
-    for (let i = 0; i <= SAMPLES; i++) {
-      const time = duration * i / SAMPLES;
-      for (const probe of probes) {
-        probe.setToSetupPose();
-        (probe.data.findAnimation(name) || probe.data.findAnimation(loop))
-          ?.apply(probe, time, time, true, [], 1, spine.MixBlend.setup, spine.MixDirection.mixIn);
-        probe.updateWorldTransform();
+  const extent = names => {
+    const frames = [];
+    for (const name of names) {
+      const duration = Math.max(0, ...probes.map(probe => probe.data.findAnimation(name)?.duration || 0));
+      for (let i = 0; i <= SAMPLES; i++) {
+        const time = duration * i / SAMPLES;
+        for (const probe of probes) {
+          probe.setToSetupPose();
+          (probe.data.findAnimation(name) || probe.data.findAnimation(loop))
+            ?.apply(probe, time, time, true, [], 1, spine.MixBlend.setup, spine.MixDirection.mixIn);
+          probe.updateWorldTransform();
+        }
+        frames.push(drawnBounds(probes));
       }
-      frames.push(drawnBounds(probes));
     }
-  }
-  const view = shotBox(frames);
-  if (!view) throw new Error('这张立绘暂时无法显示');
+    return shotBox(frames);
+  };
+  const views = { portrait: extent([loop]) };
+  views.skill = actions.length ? extent([loop, ...new Set(actions.flat())]) : views.portrait;
+  if (!views.portrait || !views.skill) throw new Error('这张立绘暂时无法显示');
 
   const gl = context.gl;
   let running = false;
@@ -93,7 +104,23 @@ function paint({ spine, dom, canvas, context, layers, space, frame, reactions, p
   let handle = 0;
   let last = 0;
   let placedKey = '';
-  const draw = () => {
+  // The camera on screen, and a glide to the other display's framing.
+  let shown = null;
+  let glide = null;
+  const aim = camera => {
+    shown = camera;
+    renderer.camera.zoom = camera.zoom;
+    renderer.camera.position.x = camera.x;
+    renderer.camera.position.y = camera.y;
+  };
+  // smooth moves there over GLIDE_SECONDS (a display switch); a resize jumps.
+  const place = (width, height, ratio, smooth) => {
+    // The free space follows the viewport, so it is read again on every resize.
+    const camera = placePainting(views[current], { width, height }, space() * ratio);
+    glide = smooth && shown ? { from: shown, to: camera, elapsed: 0 } : null;
+    if (!glide) aim(camera);
+  };
+  const draw = (seconds = 0, smooth = false) => {
     const ratio = Math.min(window.devicePixelRatio || 1, 2);
     const width = Math.round(dom.clientWidth * ratio);
     const height = Math.round(dom.clientHeight * ratio);
@@ -102,12 +129,19 @@ function paint({ spine, dom, canvas, context, layers, space, frame, reactions, p
       placedKey = key;
       canvas.width = width;
       canvas.height = height;
-      // The free space follows the viewport, so it is read again on every resize.
-      const camera = placePainting(view, { width, height }, space() * ratio);
       renderer.camera.setViewport(width, height);
-      renderer.camera.zoom = camera.zoom;
-      renderer.camera.position.x = camera.x;
-      renderer.camera.position.y = camera.y;
+      place(width, height, ratio, false);
+    } else if (width && height && smooth) {
+      place(width, height, ratio, true);
+    }
+    if (glide) {
+      glide.elapsed += seconds;
+      const progress = Math.min(1, glide.elapsed / GLIDE_SECONDS);
+      const eased = progress * progress * (3 - 2 * progress);
+      const { from, to } = glide;
+      const mix = key => from[key] + (to[key] - from[key]) * eased;
+      aim({ zoom: mix('zoom'), x: mix('x'), y: mix('y') });
+      if (progress >= 1) glide = null;
     }
     gl.viewport(0, 0, canvas.width, canvas.height);
     gl.clearColor(0, 0, 0, 0);
@@ -119,7 +153,7 @@ function paint({ spine, dom, canvas, context, layers, space, frame, reactions, p
   };
   // The action display: one reaction at a time on every layer that has its
   // animations, back to the loop, a pause, then the next reaction.
-  const nextReaction = createActionOrder(reactions, Math.random, progress);
+  const nextReaction = createActionOrder(actions, Math.random, progress);
   let reactionLeft = 0;
   let gapLeft = 0;
   const startReaction = () => {
@@ -161,7 +195,7 @@ function paint({ spine, dom, canvas, context, layers, space, frame, reactions, p
         startReaction();
       }
     }
-    draw();
+    draw(seconds);
     handle = requestAnimationFrame(tick);
   };
   // A paused painting still follows a resized rail.
@@ -184,6 +218,17 @@ function paint({ spine, dom, canvas, context, layers, space, frame, reactions, p
       handle = requestAnimationFrame(tick);
     },
     stopRendering() { this.pause(); },
+    // Moves this painting to the other display: the action display frames
+    // room for the reactions and plays them, the portrait keeps the loop.
+    // The companion switches at a break between reactions.
+    setMode(next) {
+      if (destroyed || next === current || (next !== 'skill' && next !== 'portrait')) return;
+      current = next;
+      reactions = current === 'skill' ? actions : [];
+      player.betweenActions = false;
+      if (reactions.length) startReaction();
+      draw(0, true);
+    },
     dispose() {
       if (destroyed) return;
       destroyed = true;

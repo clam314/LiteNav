@@ -71,12 +71,15 @@ const CANVAS_FADE = 64;
 const REACTION_SECONDS = 30;
 // The idle pause between two reactions in the action display.
 const ACTION_GAP = 1.5;
+// How long the figure takes to move to the other display's framing.
+const GLIDE_SECONDS = 0.6;
 
 // blobs maps each file of the settings to its downloaded Blob. In the action
 // display, progress (from an earlier visit) continues the round of reactions,
 // and onProgress receives the round each time a reaction has played out.
 // live2d is the plugin build for the model's Cubism generation (see
-// loadLive2DRuntime).
+// loadLive2DRuntime). mode is the display it starts in; setMode() moves the
+// same model to the other one, as the companion does when both are on.
 export async function createLive2DPlayer({ PIXI, live2d, layer, settings, plan, blobs, mode, space, frame,
   progress = null, onProgress = () => {}, onReaction = () => {} }) {
   const dom = document.createElement('div');
@@ -107,6 +110,8 @@ export async function createLive2DPlayer({ PIXI, live2d, layer, settings, plan, 
     },
     // True while the action display waits in idle between two reactions.
     betweenActions: false,
+    // Replaced once the model is ready.
+    async setMode() {},
   };
   try {
     // Every file is already a full blob URL; the library's resolver would turn
@@ -167,9 +172,11 @@ export async function createLive2DPlayer({ PIXI, live2d, layer, settings, plan, 
       }
     }
 
-    const nextAction = createActionOrder(mode === 'skill' ? plan.actions : [], Math.random, progress);
+    let current = mode;
+    const nextAction = createActionOrder(plan.actions, Math.random, progress);
     let gapLeft = 0;
     const startAction = () => {
+      if (current !== 'skill') return;
       const name = nextAction();
       // Without reactions the action display simply stays in idle.
       if (!name) { player.betweenActions = true; return; }
@@ -187,9 +194,9 @@ export async function createLive2DPlayer({ PIXI, live2d, layer, settings, plan, 
       internal.update(seconds * 1000, clock * 1000);
     };
     if (plan.idle) await motions.startMotion(plan.idle, 0, live2d.MotionPriority.IDLE);
-    const bounds = { minX: Infinity, maxX: -Infinity, minY: Infinity, maxY: -Infinity };
+    const idleBounds = { minX: Infinity, maxX: -Infinity, minY: Infinity, maxY: -Infinity };
     const canvasSize = { width: internal.originalWidth, height: internal.originalHeight };
-    const sample = (into = bounds) => {
+    const sample = (into = idleBounds) => {
       const drawables = [];
       for (let i = 0; i < reader.count(); i++) drawables.push(reader.drawable(i));
       return live2dArtBounds(drawables, canvasSize, into);
@@ -199,35 +206,47 @@ export async function createLive2DPlayer({ PIXI, live2d, layer, settings, plan, 
       sample();
     }
     // Reactions move the figure (a bow, a leap), so the action display leaves
-    // room above it for them; see reactionFraming.
-    if (mode === 'skill' && plan.actions.length) {
-      const frames = [];
-      for (const name of plan.actions) {
-        await motions.startMotion(name, 0, live2d.MotionPriority.FORCE);
-        const length = motionSeconds(motions.motionGroups[name]?.[0]);
-        const seconds = Math.min(length > 0 ? length : SAMPLE_SECONDS, REACTION_SECONDS);
-        for (let t = SAMPLE_STEP; t <= seconds; t += SAMPLE_STEP) {
-          step(SAMPLE_STEP);
-          frames.push(sample({ minX: Infinity, maxX: -Infinity, minY: Infinity, maxY: -Infinity }));
+    // room above it for them; see reactionFraming. Sampled when the model
+    // first shows the action display, at its start or on its first switch.
+    let actionBounds = null;
+    let sampling = false;
+    const sampleReactions = async () => {
+      if (actionBounds || !plan.actions.length) return;
+      sampling = true;
+      try {
+        const frames = [];
+        for (const name of plan.actions) {
+          await motions.startMotion(name, 0, live2d.MotionPriority.FORCE);
+          const length = motionSeconds(motions.motionGroups[name]?.[0]);
+          const seconds = Math.min(length > 0 ? length : SAMPLE_SECONDS, REACTION_SECONDS);
+          for (let t = SAMPLE_STEP; t <= seconds; t += SAMPLE_STEP) {
+            step(SAMPLE_STEP);
+            frames.push(sample({ minX: Infinity, maxX: -Infinity, minY: Infinity, maxY: -Infinity }));
+          }
         }
+        actionBounds = reactionFraming(idleBounds, frames, canvasSize);
+        // The last reaction sampled is still the current motion, and the
+        // library refuses to start a motion that is already playing: had the
+        // first reaction been that one, it would have been skipped.
+        motions.stopAllMotions();
+      } finally {
+        sampling = false;
       }
-      Object.assign(bounds, reactionFraming(bounds, frames, canvasSize));
-      // The last reaction sampled is still the current motion, and the
-      // library refuses to start a motion that is already playing: had the
-      // first reaction been that one, it would have been skipped.
-      motions.stopAllMotions();
-    }
+    };
+    if (mode === 'skill') await sampleReactions();
+    // The box the current display frames.
+    let bounds = mode === 'skill' && actionBounds || idleBounds;
 
     // Listen only now, so the reactions sampled above do not count as played.
     let group = '';
     motions.on('motionStart', name => { group = name; });
     motions.on('motionFinish', () => {
-      if (group === plan.idle || mode !== 'skill') return;
+      if (sampling || group === plan.idle || current !== 'skill') return;
       player.betweenActions = true;
       gapLeft = ACTION_GAP;
       onProgress(nextAction.progress());
     });
-    if (mode === 'skill') startAction();
+    startAction();
 
     // The head in model pixels: the highest point of the drawables that move
     // when the head turns, and their middle across. null when the model has
@@ -269,15 +288,11 @@ export async function createLive2DPlayer({ PIXI, live2d, layer, settings, plan, 
     let placedKey = '';
     // A scene's background band in model pixels, once the first frame showed it.
     let cover = null;
-    const place = () => {
-      const width = dom.clientWidth;
-      const height = dom.clientHeight;
-      const key = `${width}x${height}`;
-      if (!width || !height || key === placedKey) return;
-      placedKey = key;
-      app.resize();
-      // The free space follows the viewport, so it is read again on every resize.
-      const spot = placeLive2D(bounds, { width, height }, space(), canvasSize, cover);
+    // The placement on screen, and a glide to the other display's framing.
+    let shown = null;
+    let glide = null;
+    const apply = spot => {
+      shown = spot;
       model.scale.set(spot.scale);
       model.position.set(spot.x, spot.y);
       // The game shows a model through its canvas, so art a reaction moves
@@ -285,6 +300,8 @@ export async function createLive2DPlayer({ PIXI, live2d, layer, settings, plan, 
       // over the navigation. Cubism's renderer turns off the scissor and
       // stencil tests a PixiJS mask relies on, so the page clips the element.
       // Its left edge, which lies inside the rail's own fade, fades out too.
+      const width = dom.clientWidth;
+      const height = dom.clientHeight;
       const right = width - (spot.x + canvasSize.width * spot.scale);
       const bottom = height - (spot.y + canvasSize.height * spot.scale);
       const left = Math.max(0, spot.x);
@@ -293,9 +310,51 @@ export async function createLive2DPlayer({ PIXI, live2d, layer, settings, plan, 
       canvas.style.webkitMaskImage = fade;
       canvas.style.maskImage = fade;
     };
+    // smooth moves there over GLIDE_SECONDS (a display switch); a resize jumps.
+    const place = (smooth = false) => {
+      const width = dom.clientWidth;
+      const height = dom.clientHeight;
+      const key = `${width}x${height}`;
+      if (!width || !height || (key === placedKey && !smooth)) return;
+      if (key !== placedKey) app.resize();
+      placedKey = key;
+      // The free space follows the viewport, so it is read again on every resize.
+      const spot = placeLive2D(bounds, { width, height }, space(), canvasSize, cover);
+      glide = smooth && shown ? { from: shown, to: spot, elapsed: 0 } : null;
+      if (!glide) apply(spot);
+    };
+    const advanceGlide = seconds => {
+      if (!glide) return;
+      glide.elapsed += seconds;
+      const progress = Math.min(1, glide.elapsed / GLIDE_SECONDS);
+      const eased = progress * progress * (3 - 2 * progress);
+      const { from, to } = glide;
+      const mix = key => from[key] + (to[key] - from[key]) * eased;
+      apply({ scale: mix('scale'), x: mix('x'), y: mix('y') });
+      if (progress >= 1) glide = null;
+    };
+    // Moves this model to the other display: the action display frames room
+    // for the reactions (sampled now if never before) and plays them, the
+    // portrait stays in idle. The companion switches at a break between
+    // reactions, so none is cut off.
+    player.setMode = async next => {
+      if (destroyed || next === current || (next !== 'skill' && next !== 'portrait')) return;
+      if (next === 'skill' && !actionBounds) {
+        const running = app.ticker.started;
+        app.ticker.stop();
+        try { await sampleReactions(); } finally { if (running && !destroyed) app.ticker.start(); }
+        if (destroyed) return;
+      }
+      current = next;
+      bounds = current === 'skill' && actionBounds || idleBounds;
+      player.betweenActions = false;
+      startAction();
+      place(true);
+    };
     app.ticker.add(() => {
       const seconds = Math.min(app.ticker.deltaMS / 1000, 0.1);
       place();
+      advanceGlide(seconds);
       step(seconds);
       // frame() is true while the companion moves on from this display: it
       // then stays in idle rather than begin a reaction that would be cut off.

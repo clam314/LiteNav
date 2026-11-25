@@ -335,6 +335,36 @@ export function initCompanion() {
     note.hidden = !note.textContent;
   }
 
+  // A page left out of sight (another tab in front, the window minimised or
+  // covered) draws nothing, yet keeps its models, textures and WebGL contexts,
+  // once for every forgotten tab. After a while hidden it lets them go, and
+  // loads the same display again when it is looked at.
+  const HIDDEN_RELEASE_MS = 3 * 60 * 1000;
+  let hiddenTimer;
+  // The display to load once visible again; null while nothing was released.
+  let resumeMode = null;
+
+  function onVisibility() {
+    updatePlayback();
+    clearTimeout(hiddenTimer);
+    if (document.hidden) {
+      hiddenTimer = setTimeout(releaseHidden, HIDDEN_RELEASE_MS);
+      return;
+    }
+    if (!resumeMode) return;
+    const next = resumeMode;
+    resumeMode = null;
+    if (enabled() && desktop.matches && selection && !disposed) void start(next);
+  }
+
+  function releaseHidden() {
+    const record = stage.active || stage.pending;
+    if (!document.hidden || disposed || !record) return;
+    resumeMode = record.mode;
+    stop();
+    updateUI();
+  }
+
   function updatePlayback() {
     const paused = document.hidden || !motionAllowed;
     if (paused) voice.stop();
@@ -417,6 +447,7 @@ export function initCompanion() {
     queueMicrotask(() => {
       record.leaving = false;
       if (stage.active !== record) return;
+      if (next !== 'rotate' && switchInPlace(record, next)) return;
       if (next !== 'rotate') { void start(next); return; }
       try {
         selectCharacter(true);
@@ -427,6 +458,31 @@ export function initCompanion() {
       }
       void start();
     });
+  }
+
+  // A Live2D model or dynamic painting serves both displays, so taking turns
+  // moves the same player to the other display instead of loading it again.
+  // Every new player costs the browser memory it keeps after the player is
+  // gone (a new WebGL context, its textures decoded or uploaded once more),
+  // and with both displays on the turns come every few seconds, for as long as
+  // the page stays open.
+  function switchInPlace(record, next) {
+    if (!record.player?.setMode || stage.pending || stage.outgoing) return false;
+    const from = partFor(record.selection, record.mode);
+    const to = partFor(record.selection, next);
+    const same = from?.runtime === 'live2d' ? to?.runtime === 'live2d' && from.model === to.model
+      : from?.runtime === '3.8' && to?.runtime === '3.8' && from.painting === to.painting;
+    if (!same) return false;
+    voice.stop(record);
+    record.mode = next;
+    record.assetMode = next;
+    record.elapsed = 0;
+    record.reaction = undefined;
+    record.advancing = false;
+    mode = next;
+    void record.player.setMode(next);
+    updateUI();
+    return true;
   }
 
   // persist is false when following another page's change: writing it back
@@ -454,6 +510,13 @@ export function initCompanion() {
       updateUI();
       return;
     }
+    // Released while hidden: a change made meanwhile (in another tab) loads
+    // when the page is looked at again.
+    if (resumeMode && document.hidden) {
+      resumeMode = nextMode;
+      return;
+    }
+    resumeMode = null;
     mode = nextMode;
     const layer = document.createElement('div');
     layer.className = 'companion-layer';
@@ -717,7 +780,8 @@ export function initCompanion() {
     if (signal.aborted || stage.pending !== record || disposed) return;
     const { layer } = record;
     const player = createPaintingPlayer({
-      spine, layer, layers: assets.layers, mode: record.mode, actions: partFor(record.selection, record.mode)?.actions,
+      // The action display's reactions, also for a portrait that may switch to it in place.
+      spine, layer, layers: assets.layers, mode: record.mode, actions: partFor(record.selection, 'skill')?.actions || [],
       space: () => railSpace(layer), frame: delta => ownCanvasFrame(record, delta), ...reactionResume(record),
       onReaction: motion => speak(record, motion),
     });
@@ -903,7 +967,8 @@ export function initCompanion() {
   voiceVolume.addEventListener('input', onVolume);
   picker.addEventListener('change', onPick);
   skillPicker.addEventListener('change', onSkillPick);
-  document.addEventListener('visibilitychange', updatePlayback);
+  document.addEventListener('visibilitychange', onVisibility);
+  if (document.hidden) hiddenTimer = setTimeout(releaseHidden, HIDDEN_RELEASE_MS);
   reducedMotion.addEventListener('change', onMotionChange);
   desktop.addEventListener('change', onDesktopChange);
   window.addEventListener('storage', onStorage);
@@ -1002,7 +1067,8 @@ export function initCompanion() {
       document.removeEventListener('pointerdown', onOutside);
       document.removeEventListener('keydown', onKeydown, true);
       document.removeEventListener('focusin', onFocus);
-      document.removeEventListener('visibilitychange', updatePlayback);
+      document.removeEventListener('visibilitychange', onVisibility);
+      clearTimeout(hiddenTimer);
       reducedMotion.removeEventListener('change', onMotionChange);
       desktop.removeEventListener('change', onDesktopChange);
       window.removeEventListener('storage', onStorage);

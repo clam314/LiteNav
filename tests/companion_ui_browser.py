@@ -78,6 +78,14 @@ RENDERER = """(() => {
 })();"""
 
 
+# Browsers report a background tab as hidden; this stands in for switching away and back.
+VISIBILITY = """(hidden) => {
+  Object.defineProperty(document, 'hidden', { configurable: true, get: () => hidden });
+  Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => hidden ? 'hidden' : 'visible' });
+  document.dispatchEvent(new Event('visibilitychange'));
+}"""
+
+
 class QuietHandler(SimpleHTTPRequestHandler):
     def log_message(self, *_args):
         pass
@@ -204,6 +212,22 @@ def run_cases(browser, origin, case_filter=None):
         expect(page.locator("#companion-root canvas")).to_have_count(0)
 
     case("the controls work with browser storage blocked", no_storage, blocked_storage=True)
+
+    def hidden_release(page):
+        page.wait_for_function("document.querySelector('#companion-root').dataset.state === 'ready'")
+        expect(page.locator("#companion-root canvas")).to_have_count(1)
+        page.clock.install()
+        page.evaluate(VISIBILITY, True)
+        page.clock.fast_forward("02:50")
+        expect(page.locator("#companion-root canvas")).to_have_count(1)
+        page.clock.fast_forward("00:20")
+        expect(page.locator("#companion-root canvas")).to_have_count(0)
+        page.clock.resume()
+        page.evaluate(VISIBILITY, False)
+        expect(page.locator("#companion-root canvas")).to_have_count(1)
+        expect(page.locator("#companion-root")).to_have_attribute("data-mode", "portrait")
+
+    case("a page hidden for three minutes lets its player go and loads it again when shown", hidden_release)
 
     def saved_male(page):
         page.wait_for_function("document.querySelector('#companion-root').dataset.state === 'ready'")

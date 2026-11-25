@@ -118,12 +118,17 @@ export function disposePlayer(player) {
   try { gl?.getExtension('WEBGL_lose_context')?.loseContext(); } catch { /* Optional extension. */ }
 }
 
+// Checked once per page: every load asked again, and each check is one more
+// WebGL context for the browser to clean up.
+let webglSupport;
+
 export function supportsWebGL() {
+  if (webglSupport !== undefined) return webglSupport;
   const canvas = document.createElement('canvas');
   try {
     const gl = canvas.getContext('webgl') || canvas.getContext('experimental-webgl');
-    if (!gl) return false;
+    if (!gl) return (webglSupport = false);
     gl.getExtension('WEBGL_lose_context')?.loseContext();
-    return true;
-  } catch { return false; }
+    return (webglSupport = true);
+  } catch { return (webglSupport = false); }
 }
