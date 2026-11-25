@@ -108,7 +108,9 @@ export async function loadCharacter(catalog, selection, mode, signal) {
   if (!part) throw new Error('这套服装没有对应的动画');
   if (part.runtime === 'live2d') return loadLive2D(catalog, selection, part, signal);
   if (part.runtime === '3.8') return loadPainting(catalog, selection, part, signal);
-  const local = mode === 'portrait' && part.skeleton === LOCAL_FALLBACK_CHARACTER.costumes[0].idle.skeleton;
+  // The bundled portrait is the Spine 4.1 export; a catalog on another runtime downloads its own.
+  const fallback = LOCAL_FALLBACK_CHARACTER.costumes[0].idle;
+  const local = mode === 'portrait' && part.skeleton === fallback.skeleton && (part.runtime || '4.1') === (fallback.runtime || '4.1');
   const source = catalog.games[gameOf(selection.character)];
   const remote = source.assetBase + source.commit + '/';
   const skelUrl = local ? '/companion/assets/' + part.skeleton.split('/').pop() : remote + part.skeleton;

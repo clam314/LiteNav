@@ -2,7 +2,11 @@
 """Refresh the companion character catalogs from their upstream sources.
 
 Brown Dust 2: the roster that clam314/bd2web keeps in sync with
-myssal/Brown-Dust-2-Asset is used as is. Jelosus2/BD2-L2D-Viewer (MIT) adds
+myssal/Brown-Dust-2-Asset is used as is, except for the names it does not
+know yet (服装 NN, Char NNNN, or English only): those come in Simplified
+Chinese from the character data bruhnn/BD2ModManager keeps for each costume
+(a new one is usually there within a day of its release). The update lists
+the costumes neither source names. Jelosus2/BD2-L2D-Viewer (MIT) adds
 the full skill performances it choreographs and each costume's 有缘之客
 scene; its TypeScript files are parsed as literal data, never run.
 
@@ -52,6 +56,15 @@ ROOT = Path(__file__).resolve().parents[1]
 BD2_CATALOG = ROOT / "public/companion/catalog.json"
 NIKKE_CATALOG = ROOT / "public/companion/nikke/catalog.json"
 NIKKE_NAMES = ROOT / "scripts/nikke-names.json"
+BD2_NAMES_REPO = "bruhnn/BD2ModManager"
+BD2_NAMES = "https://raw.githubusercontent.com/" + BD2_NAMES_REPO + "/{commit}/src-tauri/data/characters.json"
+BD2_PRESETS = ROOT / "public/companion/gamekee-presets.json"
+# The Spine runtimes the page can play Brown Dust 2 with (companion-runtimes.js).
+# A roster whose skeletons need another one is held back (see update_bd2).
+BD2_RUNTIMES = ("4.1", "4.2")
+# The roster's names for a costume or person it has no name for yet.
+BD2_PLACEHOLDER = re.compile(r"服装 \d+|Char \d+")
+CJK = re.compile(r"[\u3400-\u9fff]")
 
 BD2_ROSTER = "https://raw.githubusercontent.com/clam314/bd2web/main/data/roster.json"
 NIKKE_REPO = "Nikke-db/Nikke-db.github.io"
@@ -172,8 +185,101 @@ def validate_bd2(roster) -> dict:
     return roster
 
 
+def bd2_skeleton(costume: dict) -> str:
+    """A costume's skeleton name (char067203), as the GameKee presets key it."""
+    part = costume.get("idle") or costume.get("cutscene") or {}
+    stem = Path(str(part.get("skeleton", ""))).stem.lower()
+    return stem.removeprefix("cutscene_")
+
+
+def bd2_name_index(data) -> dict:
+    """BD2ModManager's characters.json -> costume id (067203) -> (person, costume) in Simplified Chinese."""
+    entries = data.get("characters") if isinstance(data, dict) else None
+    if not isinstance(entries, list) or not entries:
+        raise ValueError(f"no characters in {BD2_NAMES_REPO}")
+    index = {}
+    for entry in entries:
+        if not isinstance(entry, dict) or not re.fullmatch(r"\d{6}", str(entry.get("costume_id", ""))):
+            continue
+        person = (entry.get("character_name") or {}).get("cn")
+        costume = (entry.get("costume_name") or {}).get("cn")
+        index[entry["costume_id"]] = (person.strip() if isinstance(person, str) else "",
+                                      costume.strip() if isinstance(costume, str) else "")
+    return index
+
+
+def unknown_name(name) -> bool:
+    """A name the roster has not filled in yet: a placeholder or English only."""
+    return not isinstance(name, str) or not name.strip() or bool(BD2_PLACEHOLDER.fullmatch(name.strip())) \
+        or not CJK.search(name)
+
+
+def name_bd2(roster: dict, names: dict, presets=()) -> list[str]:
+    """Names the roster does not know yet come from names (see bd2_name_index).
+    Returns the costumes still unnamed that the GameKee presets the page reads
+    do not name either."""
+    unnamed = []
+    for character in roster["characters"]:
+        people = set()
+        for costume in character["costumes"]:
+            skeleton = bd2_skeleton(costume)
+            person, label = names.get(skeleton.removeprefix("char"), ("", ""))
+            if person:
+                people.add(person)
+            if not unknown_name(costume.get("label")):
+                continue
+            if label and CJK.search(label):
+                costume["label"] = label
+            elif skeleton not in presets:
+                unnamed.append(f"{skeleton} ({character.get('name', character.get('id'))})")
+        if unknown_name(character.get("name")) and len(people) == 1:
+            character["name"] = people.pop()
+    return unnamed
+
+
+def bd2_spine_version(roster: dict) -> str:
+    """The Spine version the roster's assets were exported with, from the
+    header of its first portrait skeleton (the game exports them all at once)."""
+    for character in roster["characters"]:
+        for costume in character["costumes"]:
+            skeleton = (costume.get("idle") or {}).get("skeleton")
+            if skeleton:
+                url = BD2_ASSET_RAW.format(commit=roster["commit"]) + skeleton
+                return read_spine_version(request(url, {"Range": "bytes=0-63"}))
+    raise ValueError("bd2 roster has no portrait skeleton")
+
+
 def update_bd2() -> tuple[Path, str]:
-    return BD2_CATALOG, dump(validate_bd2(get_json(BD2_ROSTER)))
+    roster = validate_bd2(get_json(BD2_ROSTER))
+    previous = json.loads(BD2_CATALOG.read_text(encoding="utf-8")) if BD2_CATALOG.exists() else {}
+    # The game exports every skeleton anew with each Spine upgrade (4.1 to 4.2
+    # on 2026-11-20). Each part names the runtime that plays it. A roster the
+    # page cannot play would stop every Brown Dust 2 character, so the pinned
+    # one stays (its names still improve) until the page can.
+    version = bd2_spine_version(roster)
+    runtime = runtime_for(version)
+    if not version.startswith(runtime + ".") or runtime not in BD2_RUNTIMES:
+        if not previous.get("characters"):
+            raise ValueError(f"bd2: {roster['source']} is Spine {version}, which the page cannot play")
+        print(f"bd2: {roster['source']} is Spine {version}, the page plays Spine {' and '.join(BD2_RUNTIMES)}; "
+              f"keeping {previous.get('source')}")
+        roster = validate_bd2(json.loads(json.dumps(previous)))
+    else:
+        for character in roster["characters"]:
+            for costume in character["costumes"]:
+                for part in (costume.get("idle"), costume.get("cutscene")):
+                    if isinstance(part, dict):
+                        part["runtime"] = runtime
+    names_commit = get_json(f"https://api.github.com/repos/{BD2_NAMES_REPO}/commits/main")["sha"]
+    names = bd2_name_index(get_json(BD2_NAMES.format(commit=names_commit)))
+    presets = json.loads(BD2_PRESETS.read_text(encoding="utf-8")).get("costumes", {})
+    unnamed = name_bd2(roster, names, presets)
+    if unnamed:
+        print(f"bd2: {len(unnamed)} costumes without a name in the roster or {BD2_NAMES_REPO}: " + ", ".join(unnamed))
+    # The names source changes often; the catalog only when what it shows does.
+    if previous.get("commit") == roster.get("commit") and previous.get("characters") == roster["characters"]:
+        return BD2_CATALOG, dump(previous)
+    return BD2_CATALOG, dump({**roster, "names": f"{BD2_NAMES_REPO}@{names_commit[:12]}"})
 
 
 def parse_js_literal(text: str, position: int = 0):
@@ -397,7 +503,11 @@ def read_spine_version(header: bytes) -> str:
 
 
 def runtime_for(version: str) -> str:
-    return "4.1" if version.startswith("4.1") else "4.0"
+    """The runtime (companion-runtimes.js) that plays a skeleton of this version."""
+    for runtime in ("4.2", "4.1"):
+        if version.startswith(runtime + "."):
+            return runtime
+    return "4.0"
 
 
 def parse_id(value: str):

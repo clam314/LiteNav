@@ -167,7 +167,7 @@ python3 tests/companion_ui_browser.py
 python3 scripts/update_companion.py
 ```
 
-NIKKE 的中文名随 Nikke-db 官方索引自动更新；上游暂无中文名的编号会被列出，需要时可在 `scripts/nikke-names.json` 中手工补充后重新运行。碧蓝航线的舰船与皮肤名取自每小时同步国服数据的 Pelom777/AzurLaneData，暂未收录的新模型同样会被列出，待数据更新后自动补上。
+棕色尘埃 2 的名册尚未命名的新服装与人物，中文名取自 BD2ModManager 维护的角色数据，同样自动更新。NIKKE 的中文名随 Nikke-db 官方索引自动更新；上游暂无中文名的编号会被列出，需要时可在 `scripts/nikke-names.json` 中手工补充后重新运行。碧蓝航线的舰船与皮肤名取自每小时同步国服数据的 Pelom777/AzurLaneData，暂未收录的新模型同样会被列出，待数据更新后自动补上。
 
 更多验证细节见 [验证记录](docs/VERIFICATION.md)。
 

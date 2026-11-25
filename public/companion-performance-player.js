@@ -1,6 +1,7 @@
 // Plays a Brown Dust 2 full skill performance inside a SpinePlayer: each
 // layer poses its own copy of a skeleton at the performance time and is drawn
 // in the player's draw pass, and the camera moves to the current shot.
+import { PHYSICS } from './companion-model.js';
 import { performanceActions, compilePerformance, schedulePerformance, performanceLayers, layerPoseAt, shotAt }
   from './companion-performance.js';
 
@@ -197,17 +198,21 @@ export function createPerformance({ spine, player, definitions, name, externals 
     };
   });
   const events = [];
-  const pose = time => {
+  // physics: how Spine 4.2 moves physics constraints (hair, cloth). Shots are
+  // sampled without them, so a frame depends on its time alone; playing steps
+  // them with the clock, and starts them afresh when the performance jumps.
+  const pose = (time, physics = PHYSICS.none, delta = 0) => {
     for (const layer of layers) {
       const at = layerPoseAt(layer, time);
       layer.visible = Boolean(at);
       if (!at) continue;
       const skeleton = layer.skeleton;
+      if (delta > 0) skeleton.update?.(delta);
       skeleton.setToSetupPose();
       events.length = 0;
       skeleton.data.findAnimation(at.name).apply(skeleton, at.time, at.time, false, events, 1,
         spine.MixBlend.setup, spine.MixDirection.mixIn);
-      skeleton.updateWorldTransform();
+      skeleton.updateWorldTransform(physics);
     }
   };
 
@@ -233,7 +238,7 @@ export function createPerformance({ spine, player, definitions, name, externals 
   player.animationState.clearTracks();
   base.color.a = 0;
   let time = 0;
-  pose(time);
+  pose(time, PHYSICS.reset);
   return {
     duration: plan.duration,
     get time() { return time; },
@@ -243,12 +248,12 @@ export function createPerformance({ spine, player, definitions, name, externals 
       time += delta;
       const wrapped = time >= plan.duration;
       if (wrapped) time %= plan.duration;
-      pose(time);
+      pose(time, wrapped ? PHYSICS.reset : PHYSICS.update, delta);
       return wrapped;
     },
     seek(seconds) {
       time = ((seconds % plan.duration) + plan.duration) % plan.duration;
-      pose(time);
+      pose(time, PHYSICS.reset);
     },
     view() { return shotAt(shots, time).view; },
     draw(renderer) {

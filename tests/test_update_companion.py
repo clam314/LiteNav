@@ -1,6 +1,11 @@
 import importlib.util
+import io
+import json
+import tempfile
 import unittest
+from contextlib import redirect_stdout
 from pathlib import Path
+from unittest import mock
 
 SCRIPT = Path(__file__).resolve().parents[1] / "scripts" / "update_companion.py"
 spec = importlib.util.spec_from_file_location("update_companion", SCRIPT)
@@ -408,6 +413,78 @@ class Bd2PerformanceTests(unittest.TestCase):
 
 
 class Bd2RosterTests(unittest.TestCase):
+    def test_unknown_names_come_from_the_mod_manager_data_and_the_rest_are_listed(self):
+        def costume(skeleton, label):
+            return {"label": label, "idle": {"skeleton": f"spine/char/{skeleton}/{skeleton}.skel"}}
+        roster = {"commit": "1f7de92e96f0", "characters": [
+            {"id": "0672", "name": "贝那卡", "costumes": [costume("char067201", "DJ"), costume("char067202", "风之舞姬"),
+                                                        costume("char067203", "服装 03")]},
+            {"id": "0679", "name": "Char 0679", "costumes": [costume("char067901", "服装 01")]},
+            {"id": "1103", "name": "Celia", "costumes": [costume("char110301", "The Curse")]},
+            {"id": "0613", "name": "达菲", "costumes": [
+                {"label": "服装 03", "cutscene": {"skeleton": "spine/cutscenes/cutscene_char061303.skel"}},
+                costume("char061306", "服装 06"), costume("char061399", "服装 99")]}]}
+        names = update.bd2_name_index({"characters": [
+            {"costume_id": "067201", "character_name": {"cn": "贝那卡"}, "costume_name": {"cn": "DJ"}},
+            {"costume_id": "067202", "character_name": {"cn": "贝那卡"}, "costume_name": {"cn": "别的名字"}},
+            {"costume_id": "067203", "character_name": {"cn": "贝那卡"}, "costume_name": {"cn": "折桂之姿"}},
+            {"costume_id": "067901", "character_name": {"cn": "阿奇拉"}, "costume_name": {"cn": "战场猛兽"}},
+            {"costume_id": "110301", "character_name": {"cn": "西利亚"}, "costume_name": {"cn": "诅咒之星"}},
+            {"costume_id": "bad", "character_name": {"cn": "x"}, "costume_name": {"cn": "y"}}]})
+        self.assertNotIn("bad", names)
+        unnamed = update.name_bd2(roster, names, {"char061306": {}, "char061303": {}})
+        self.assertEqual([(person["name"], [costume["label"] for costume in person["costumes"]]) for person in roster["characters"]],
+                         [("贝那卡", ["DJ", "风之舞姬", "折桂之姿"]), ("阿奇拉", ["战场猛兽"]), ("西利亚", ["诅咒之星"]),
+                          ("达菲", ["服装 03", "服装 06", "服装 99"])],
+                         "only unknown names are replaced; the roster's own Chinese names stay")
+        self.assertEqual(unnamed, ["char067201 (贝那卡)", "char061399 (达菲)"],
+                         "an English-only name nobody translates is listed; a GameKee preset names the rest on the page")
+
+    def test_a_roster_the_page_cannot_play_is_held_back_and_still_named(self):
+        old = {"generatedAt": "2026-11-14T01:15:41+00:00", "source": "Brown-Dust-2-Asset@424622b8c4fd", "commit": "424622b8c4fd",
+               "characters": [{"id": "0679", "name": "Char 0679", "costumes": [
+                   {"label": "服装 01", "idle": {"skeleton": "spine/char/char067901/char067901.skel"}}]}]}
+        new = {"generatedAt": "2026-11-21T01:57:23+00:00", "source": "Brown-Dust-2-Asset@1f7de92e96f0", "commit": "1f7de92e96f0",
+               "characters": old["characters"] + [{"id": "0672", "name": "贝那卡", "costumes": [
+                   {"label": "服装 03", "idle": {"skeleton": "spine/char/char067203/char067203.skel"}}]}]}
+        names = {"characters": [
+            {"costume_id": "067901", "character_name": {"cn": "阿奇拉"}, "costume_name": {"cn": "战场猛兽"}},
+            {"costume_id": "067203", "character_name": {"cn": "贝那卡"}, "costume_name": {"cn": "折桂之姿"}}]}
+
+        def get_json(url):
+            if url == update.BD2_ROSTER:
+                return json.loads(json.dumps(new))
+            return {"sha": "d65f370065b6" + "0" * 28} if "/commits/" in url else names
+
+        def run(version):
+            with tempfile.TemporaryDirectory() as folder:
+                catalog = Path(folder) / "catalog.json"
+                catalog.write_text(json.dumps(old, ensure_ascii=False), encoding="utf-8")
+                with mock.patch.object(update, "BD2_CATALOG", catalog), mock.patch.object(update, "get_json", get_json), \
+                        mock.patch.object(update, "request", lambda url, headers=None: header(version)), \
+                        redirect_stdout(io.StringIO()):
+                    return json.loads(update.update_bd2()[1])
+
+        held = run("4.3.13")
+        self.assertEqual(held["commit"], "424622b8c4fd", "assets of a Spine the page lacks would stop every character")
+        self.assertEqual([(person["name"], [costume["label"] for costume in person["costumes"]]) for person in held["characters"]],
+                         [("阿奇拉", ["战场猛兽"])])
+        self.assertEqual(held["names"], "bruhnn/BD2ModManager@d65f370065b6")
+        taken = run("4.2.43")
+        self.assertEqual(taken["commit"], "1f7de92e96f0")
+        self.assertEqual([person["name"] for person in taken["characters"]], ["阿奇拉", "贝那卡"])
+        self.assertEqual({costume["idle"]["runtime"] for person in taken["characters"] for costume in person["costumes"]}, {"4.2"},
+                         "each part names the runtime that plays it")
+        self.assertEqual(run("4.1.11")["characters"][0]["costumes"][0]["idle"]["runtime"], "4.1")
+
+    def test_runtime_follows_the_spine_version(self):
+        self.assertEqual([update.runtime_for(v) for v in ("4.2.43", "4.1.11", "4.0.64", "4.3.13")], ["4.2", "4.1", "4.0", "4.0"])
+
+    def test_mod_manager_data_needs_characters(self):
+        for data in ({}, {"characters": []}, []):
+            with self.assertRaises(ValueError):
+                update.bd2_name_index(data)
+
     def test_accepts_a_pinned_roster(self):
         roster = {"commit": "424622b8c4fd", "characters": [{"id": "0002", "costumes": [{}]}]}
         self.assertIs(update.validate_bd2(roster), roster)

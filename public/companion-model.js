@@ -195,6 +195,11 @@ export function selectSkillAnimation(animations, savedName, presentation) {
 // percentile of each frame's lowest point): artwork cut off at the thighs
 // has a hem that swings, and its single lowest moment would leave the cut
 // edge hanging above the rail for the rest of the loop.
+// How Spine 4.2 moves physics constraints while computing a pose: none leaves
+// the bones where the animation puts them, update steps the simulation (the
+// player's own loop does that). Earlier runtimes take no argument and ignore it.
+export const PHYSICS = { none: 0, reset: 1, update: 2, pose: 3 };
+
 export function visibleArtBounds(skeleton, animations, steps = 60) {
   const bounds = { minX: Infinity, maxX: -Infinity, minY: Infinity };
   const lowest = [];
@@ -206,7 +211,7 @@ export function visibleArtBounds(skeleton, animations, steps = 60) {
     for (let i = 0; i <= (stepTime ? steps : 0); i++) {
       const time = i * stepTime;
       animation.apply(skeleton, time, time, false, [], 1, 0 /* setup */, 0 /* mixIn */);
-      skeleton.updateWorldTransform();
+      skeleton.updateWorldTransform(PHYSICS.none);
       let frameLowest = Infinity;
       for (const slot of skeleton.drawOrder) {
         const attachment = slot.bone.active ? slot.getAttachment() : null;

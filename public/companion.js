@@ -1,7 +1,7 @@
 import { PREFERENCES_KEY, LEGACY_KEY, ROTATION_CHOICES, displayOf, withDisplay, costumeKey, gameOf, displayChanged,
   availableCharacters, paddedView,
   chooseCharacter, playableAnimations, configureViewports, presentationForCostume,
-  isLoopingSkill, selectSkillAnimation, completeSkin } from './companion-model.js';
+  isLoopingSkill, selectSkillAnimation, completeSkin, PHYSICS } from './companion-model.js';
 import { createCompanionStage } from './companion-stage.js';
 import { LOCAL_FALLBACK_CHARACTER, LOCAL_FALLBACK_COMMIT } from './companion-fallback.js';
 import { isExcludedCharacter } from './companion-exclusions.js';
@@ -684,7 +684,7 @@ export function initCompanion() {
               }
               if (!motionAllowed && record.mode === 'skill') loadedPlayer.animationState.update(record.animation.duration * .35);
               loadedPlayer.animationState.apply(loadedPlayer.skeleton);
-              loadedPlayer.skeleton.updateWorldTransform();
+              loadedPlayer.skeleton.updateWorldTransform(PHYSICS.pose);
               record.configured = true;
               for (const player of [loadedPlayer, record.partner]) {
                 if (!player) continue;
@@ -1010,7 +1010,10 @@ export function initCompanion() {
       // A costume's 有缘之客 scene, keyed like the presets by its portrait skeleton.
       const scene = costume => {
         const found = performances?.dating?.[costumeKey(costume).match(/(?:^|\/)(char\d{6})\.skel$/i)?.[1]?.toLowerCase()];
-        return found ? { dating: { skeleton: found.skeleton + '.skel', atlas: found.skeleton + '.atlas', tracks: found.tracks } } : {};
+        // Exported with the rest of the game's skeletons, so it takes the costume's runtime.
+        const runtime = costume.cutscene?.runtime || costume.idle?.runtime;
+        return found ? { dating: { skeleton: found.skeleton + '.skel', atlas: found.skeleton + '.atlas', tracks: found.tracks,
+          ...(runtime ? { runtime } : {}) } } : {};
       };
       characters.push(...data.characters.map(character => {
         if (!reference) return { ...character, game: game.id };

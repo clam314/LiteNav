@@ -63,6 +63,12 @@ Spine 运行时由 Esoteric Software 提供，受 **Spine Runtimes License Agree
 
 参考站 README 原文保存于 `/vendor/spine/README.bd2web.md`，其中说明这是非官方学习展示项目，并要求不要公开传播游戏素材。
 
+2026-11-20 起游戏改用 Spine 4.2 导出全部骨骼（4.2.43），棕色尘埃 2 因此改由 `/vendor/spine/spine-player-4.2.120.js` 播放。该文件下载自官方 npm 包 [`@esotericsoftware/spine-player@4.2.120`](https://www.npmjs.com/package/@esotericsoftware/spine-player/v/4.2.120)（`v4.2-latest`，`dist/iife/spine-player.js`），保持原始字节；包内样式与 4.1.56 版完全相同，共用同一份 CSS。许可证原文（2025-04-05 版）保存为 `/vendor/spine/LICENSE-4.2`。索引的每个部件都写明所需运行时（`runtime`）；本地后备立绘仍是 4.1.11 导出，用 4.1 运行时播放。4.2 计算骨骼姿势时须说明物理约束如何处理：取景采样与静止画面不推进物理，技能演出随动画时钟推进，循环或跳转时重置；抽查的 4.2 骨骼都没有物理约束，画面与 4.1 时一致。
+
+| 文件 | SHA-256 |
+| --- | --- |
+| `spine-player-4.2.120.js` | `e99f790261993a85eb1436508da23b88e69943db8466806e9693533fe96166b1` |
+
 ## 本地验证
 
 - 使用上述下载的 4.1.56 运行时解析二进制骨架成功；骨架导出版本为 **4.1.11**。
@@ -86,7 +92,9 @@ SHA-256：
 
 `scripts/update_companion.py` 只使用 Python 标准库，可在本地运行，也由 GitHub Actions 每周一自动运行；有变化时提交到 `main` 并重新构建镜像。
 
-- 棕色尘埃 2：读取 [clam314/bd2web](https://github.com/clam314/bd2web) 的 `data/roster.json`。该名册由作者随上游素材仓库同步，本项目原样使用并校验其固定提交与角色列表。
+- 棕色尘埃 2：读取 [clam314/bd2web](https://github.com/clam314/bd2web) 的 `data/roster.json`。该名册由作者随上游素材仓库同步，本项目校验其固定提交与角色列表后使用。
+  - 名册尚未命名的（服装「服装 NN」、人物「Char NNNN」或只有英文名），按服装编号取 [bruhnn/BD2ModManager](https://github.com/bruhnn/BD2ModManager)（GPL-3.0）`src-tauri/data/characters.json` 中的简体中文名，目录记录所用提交（`names`）。该数据随游戏版本维护，新服装通常上线一两天内就有；只读取其中的名字，不使用其代码。两处都没有名字的服装会在更新时列出。页面上 GameKee 取景预设里的名字仍然优先。
+  - 更新时读取一个立绘骨骼的文件头，按版本为每个部件写明运行时（2026-11-20 起为 4.2）。遇到本页还没有的 Spine 版本时，保留原固定提交、只更新名字，避免全部角色无法播放。
 - NIKKE：见下一节。
 - 碧蓝航线、天命之子：见文末各节。
 

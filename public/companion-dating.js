@@ -7,6 +7,7 @@
 // the transition, and from the last stage back to the first.
 
 import { drawnBounds, drawnParts, withoutBackdrops, shotBox, EFFECT_SLOT } from './companion-performance-player.js';
+import { PHYSICS } from './companion-model.js';
 
 const IDLE = /^idle(\d+)$/;
 const REACTION = /^mix(\d+)_(\d+)_(\w+)$/;
@@ -178,7 +179,7 @@ export function createDatingTour({ spine, player, tracks = true, random = Math.r
     probe.setSkin(skins[index]);
     probe.setToSetupPose();
     animation.apply(probe, middle, middle, false, [], 1, spine.MixBlend.setup, spine.MixDirection.mixIn);
-    probe.updateWorldTransform();
+    probe.updateWorldTransform(PHYSICS.none);
     // Backdrops found in an earlier stage are hidden in every stage, so a
     // later stage is framed without them: 安洁莉卡「霓虹救星」's second stage
     // keeps two of them, and the smaller would pass for its picture.
@@ -190,7 +191,7 @@ export function createDatingTour({ spine, player, tracks = true, random = Math.r
       const time = animation.duration * i / SAMPLES;
       probe.setToSetupPose();
       animation.apply(probe, time, time, false, [], 1, spine.MixBlend.setup, spine.MixDirection.mixIn);
-      probe.updateWorldTransform();
+      probe.updateWorldTransform(PHYSICS.none);
       const figure = drawnBounds([probe], EFFECT_SLOT);
       frames.push(Number.isFinite(figure.minX) ? figure : drawnBounds([probe]));
     }

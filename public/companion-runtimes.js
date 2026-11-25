@@ -3,7 +3,12 @@ import { separateShaderContexts } from './companion-live2d-player.js';
 // Spine binaries only load in the runtime version that exported them, and
 // each build declares the same global. Load builds one at a time, keep each
 // one, and leave window.spine on 4.1 for code that looks for it there.
-const RUNTIMES = { '4.1': '/vendor/spine/spine-player-4.1.56.js', '4.0': '/vendor/spine/spine-player-4.0.30.js' };
+// Brown Dust 2 moved to Spine 4.2 on 2026-11-20; NIKKE ships 4.0 and 4.1.
+const RUNTIMES = {
+  '4.2': '/vendor/spine/spine-player-4.2.120.js',
+  '4.1': '/vendor/spine/spine-player-4.1.56.js',
+  '4.0': '/vendor/spine/spine-player-4.0.30.js',
+};
 const RUNTIME_CSS = '/vendor/spine/spine-player-4.1.56.css';
 
 const runtimePromises = {};

@@ -294,11 +294,13 @@ test('bundled GameKee profile retains the reported costume actions and exact cam
 test('all numbered prestige costumes have their own portrait camera and compatible skill presets', () => {
   const presets = JSON.parse(readFileSync(new URL('../public/companion/gamekee-presets.json', import.meta.url)));
   const roster = JSON.parse(readFileSync(new URL('../public/companion/catalog.json', import.meta.url)));
-  const variants = roster.characters.flatMap(character => character.costumes).filter(costume => /^服装 9\d$/.test(costume.label));
+  // Prestige costumes are numbered 9x (char000296); the roster may name them now.
+  const number = costume => costumeKey(costume).match(/char\d{4}(9\d)\.skel$/)?.[1];
+  const variants = roster.characters.flatMap(character => character.costumes).filter(costume => number(costume));
   assert.equal(variants.length, 17);
   for (const costume of variants) {
     const preset = presentationForCostume(presets, costume);
-    assert.ok(preset.label.includes(costume.label));
+    assert.ok(preset.label.includes(`服装 ${number(costume)}`));
     assert.equal(preset.portrait.animation, 'idle');
     assert.ok(preset.portrait.viewport.height > 0);
     if (preset.skills) assert.ok(costume.cutscene);
@@ -331,15 +333,18 @@ const expectedMaleIds = ['0001', '0004', '0006', '0206', '0603', '0620', '0658',
 
 test('the supplied male roster is excluded from every display mode', () => {
   const real = readCatalog();
+  // The weekly catalog refresh adds characters and costumes, so the counts
+  // come from the catalog itself: every listed man is in it and taken out.
+  const ids = real.characters.map(character => character.id);
+  assert.deepEqual(expectedMaleIds.filter(id => !ids.includes(id)), [], 'each listed man is in the catalog');
   const retained = real.characters.filter(character => !expectedMaleIds.includes(character.id));
-  assert.equal(retained.length, 75);
-  assert.equal(retained.reduce((count, character) => count + character.costumes.length, 0), 181);
+  assert.equal(retained.length, real.characters.length - expectedMaleIds.length);
+  assert.ok(retained.length >= 75, 'the catalog only grows');
   for (const modes of [{ portraits: true, skills: false }, { portraits: false, skills: true }, { portraits: true, skills: true }, { portraits: false, skills: false }]) {
     const allowed = availableCharacters(real, preferences(modes));
     assert.ok(allowed.length > 0);
     assert.equal(allowed.some(character => expectedMaleIds.includes(character.id) || isExcludedCharacter(character)), false);
   }
-    assert.equal(real.characters.length, 89);
 });
 
 test('male IDs and provided multilingual names stay excluded after a rename', () => {
