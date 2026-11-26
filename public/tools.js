@@ -2,6 +2,7 @@
 // Everything runs in the browser; nothing typed here is sent to the server.
 import { icon } from './icons.js';
 import * as core from './tools-core.js';
+import * as gw from './gongwen-core.js';
 
 const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const STORAGE_KEY = 'litenav.tools.v1';
@@ -15,6 +16,7 @@ export const TOOLS = [
   { id: 'time', group: 'util', name: '时间戳转换', title: '时间戳与日期转换', icon: 'clock', desc: '输入时间戳或日期，自动识别秒、毫秒、微秒级时间戳，并按所选时区换算。' },
   { id: 'url', group: 'util', name: 'URL 编解码', title: 'URL 编码与解码', icon: 'link', desc: '转换链接中的中文与特殊字符，并拆解查询参数，告别乱码。' },
   { id: 'text', group: 'util', name: '文本去重', title: '文本去重与空行清理', icon: 'filter', desc: '粘贴一批文本、IP 或 ID，一键去除重复项、首尾空格与空行，还可以排序。' },
+  { id: 'gongwen', group: 'util', name: '汇报排版', title: '汇报文档格式排版', icon: 'gongwen', desc: '上传 Word（.docx）文档或粘贴文稿，统一 A4 版心、标题层级、仿宋/楷体/小标宋与表格样式，支持“一是”至“十是”加粗、Times 西文中文标点保护与未闭合引号检测。' },
 ];
 const GROUPS = [['data', '数据处理'], ['util', '实用工具']];
 
@@ -26,6 +28,7 @@ const DEFAULTS = {
   time: { zone: 'local' },
   url: { mode: 'decode', scope: 'component', plus: true, charset: 'utf-8' },
   text: { trim: true, removeEmpty: true, dedupe: true, ignoreCase: false, sort: 'none', split: 'line' },
+  gongwen: { ...gw.DEFAULT_GONGWEN_OPTIONS },
 };
 
 const SAMPLES = {
@@ -54,6 +57,18 @@ let clockTimer;
 let lastOutput = '';
 let treeValues = [];
 let notify = () => {};
+let gwLoadSeq = 0;
+const gwState = {
+  mode: 'structure',
+  sourceKind: null,
+  session: null,
+  overrides: {},
+  formatted: null,
+  error: null,
+  busy: false,
+  showGuides: true,
+  activeBlockId: null,
+};
 
 function loadState() {
   const fresh = { last: 'json', inputs: {}, options: structuredClone(DEFAULTS) };
@@ -68,6 +83,7 @@ function loadState() {
     }
     for (const [key, value] of Object.entries(saved.inputs || {})) if (typeof value === 'string') fresh.inputs[key] = value;
     if (TOOLS.some((tool) => tool.id === saved.last)) fresh.last = saved.last;
+    if (fresh.options.gongwen.tableFormat === 'tidy') fresh.options.gongwen.tableFormat = 'elegant';
   } catch {
     // Storage may be unavailable (private mode); the toolbox still works.
   }
@@ -160,6 +176,51 @@ function bodyMarkup(id) {
         '<span class="tool-controls-spacer"></span>' + smallButton('now', '填入当前时间', 'clock') + smallButton('clear', '清空') + '</div>' +
         '<label class="sr-only" for="time-input">时间戳或日期</label><input id="time-input" class="form-input time-input" data-input spellcheck="false" autocomplete="off" placeholder="输入时间戳（如 1773028800）或日期（如 2026-03-09 12:00:00）">' +
         '<div class="time-results" data-output></div><div class="tool-status" data-status role="status" aria-live="polite"></div>';
+    case 'gongwen': {
+      const chip = (name, value, label) => '<label class="gw-chip' + (value ? ' is-on' : '') + '"><input type="checkbox" data-opt="' + name + '"' + (value ? ' checked' : '') + '>' + icon('check', 13) + '<span>' + label + '</span></label>';
+      return '<input type="file" accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" data-gw-file hidden>' +
+        '<div class="gw-toolbar">' +
+        '<div class="tool-controls gw-controls-main">' +
+        select('fontPreset', o.fontPreset, [
+          ['standard', '标准公文（方正小标宋 / 仿宋 / 楷体）'],
+          ['gb2312', '传统 GB2312（小标宋 / 仿宋_GB2312）'],
+          ['universal', '免装字库（华文中宋 / 仿宋 / 楷体）'],
+        ], '字体') +
+        select('latinFont', o.latinFont, [
+          ['times', 'Times New Roman（保护中文标点）'],
+          ['match', '跟随中文字体'],
+        ], '西文数字') +
+        select('lineSpacing', o.lineSpacing, [['28', '固定值 28 磅'], ['29', '固定值 29 磅'], ['30', '固定值 30 磅']], '行距') +
+        select('tableFormat', o.tableFormat, [
+          ['elegant', '雅灰表头（去深色填充）'],
+          ['three', '公文三线表'],
+          ['clean', '纯白细框表'],
+          ['keep', '保持原表样'],
+        ], '表格') +
+        select('pageNumber', o.pageNumber, [['center', '底端居中（— 1 —）'], ['mirror', '奇偶页（国标双面）'], ['keep', '保持原样']], '页码') +
+        '<span class="tool-controls-spacer"></span>' +
+        smallButton('gw-upload', '上传 .docx', 'upload') + smallButton('sample', '示例') + smallButton('clear', '清空') + '</div>' +
+        '<div class="gw-chip-bar" role="group" aria-label="细节优化开关">' +
+        chip('h3Bold', o.h3Bold, '三级标题加粗') +
+        chip('boldSeq', o.boldSeq, '“一是”至“十是”加粗') +
+        chip('smartQuotes', o.smartQuotes, '直引号转弯引号 & 闭合检测') +
+        chip('cleanText', o.cleanText, '清理空格、空行与序号') +
+        '<span class="tool-controls-spacer"></span>' +
+        '<button type="button" class="gw-guide-btn' + (gwState.showGuides ? ' is-on' : '') + '" data-cmd="gw-guides" aria-pressed="' + gwState.showGuides + '">版心参考线</button>' +
+        '</div></div>' +
+        '<div data-gw-banner></div>' +
+        '<div class="tool-panes">' +
+        '<div class="tool-pane"><div class="pane-head"><span class="pane-title">文档与段落角色</span><span class="pane-tools">' +
+        '<span data-gw-reset-slot></span>' +
+        '<div class="seg" role="group" aria-label="输入方式">' +
+        [['structure', '结构微调'], ['text', '粘贴文稿']].map(([key, label]) => '<button type="button" class="seg-btn' + (gwState.mode === key ? ' is-active' : '') + '" data-cmd="gw-mode" data-mode="' + key + '" aria-pressed="' + (gwState.mode === key) + '">' + label + '</button>').join('') +
+        '</div></span></div><div class="pane-output" data-gw-left></div></div>' +
+        '<div class="tool-pane"><div class="pane-head"><span class="pane-title">A4 版式预览</span><span class="pane-tools">' +
+        smallButton('copy', '复制文本', 'copy') +
+        '<button type="button" class="btn btn-primary btn-small" data-cmd="gw-download" disabled>' + icon('download', 14) + '下载 .docx</button>' +
+        '</span></div><div class="pane-output" data-output></div></div></div>' +
+        '<div class="tool-status" data-status role="status" aria-live="polite"></div>';
+    }
     default:
       return '';
   }
@@ -181,10 +242,8 @@ export function toolsMarkup(id) {
 // ---------------------------------------------------------------------------
 
 const indentText = (value) => (value === 'tab' ? '\t' : ' '.repeat(Number(value) || 2));
-const formatBytes = (text) => {
-  const bytes = new TextEncoder().encode(text).length;
-  return bytes < 1024 ? bytes + ' B' : bytes < 1048576 ? (bytes / 1024).toFixed(1) + ' KB' : (bytes / 1048576).toFixed(2) + ' MB';
-};
+const formatSize = (bytes) => (bytes < 1024 ? bytes + ' B' : bytes < 1048576 ? (bytes / 1024).toFixed(1) + ' KB' : (bytes / 1048576).toFixed(2) + ' MB');
+const formatBytes = (text) => formatSize(new TextEncoder().encode(text).length);
 const describe = (value) => {
   if (Array.isArray(value)) return '数组（' + value.length + ' 项）';
   if (core.isMap(value)) return '对象（' + value.size + ' 个键）';
@@ -313,10 +372,427 @@ function updateMeta(root, source) {
   if (meta) meta.textContent = source ? source.length.toLocaleString('zh-CN') + ' 字符 · ' + source.split('\n').length.toLocaleString('zh-CN') + ' 行' : '';
 }
 
+function renderTokensHtml(tokens, fallbackText) {
+  if (!tokens || !tokens.length) return esc(fallbackText ?? '').replace(/\n/g, '<br>');
+  return tokens.map((token) => (
+    token.seq
+      ? '<strong class="gw-seq-bold">' + esc(token.text) + '</strong>'
+      : esc(token.text).replace(/\n/g, '<br>')
+  )).join('');
+}
+
+function gongwenBannerMarkup(formatted) {
+  const { stats, warnings, fonts, options } = formatted;
+  const pills = [
+    '<span class="gw-pill"><b>' + stats.paragraphs + '</b> 段正文' + (stats.headings ? ' · <b>' + stats.headings + '</b> 处标题' : '') + '</span>',
+    '<span class="gw-pill">字体：' + esc(fonts.title + ' / ' + fonts.body) + (options.latinFont === 'times' ? ' + Times' : '') + '</span>',
+  ];
+  if (stats.replacedFonts) pills.push('<span class="gw-pill is-accent">替换旧字库 <b>' + stats.replacedFonts + '</b> 处</span>');
+  if (stats.boldedSeqWords) pills.push('<span class="gw-pill is-accent">“一是”类加粗 <b>' + stats.boldedSeqWords + '</b> 处</span>');
+  if (stats.replacedQuotes) pills.push('<span class="gw-pill is-accent">直引号转换 <b>' + stats.replacedQuotes + '</b> 个</span>');
+  if (stats.protectedPunct) pills.push('<span class="gw-pill is-ok">保护中文标点 <b>' + stats.protectedPunct + '</b> 处</span>');
+  const cleanups = stats.trimmedSpaces + stats.removedBlankLines + stats.normalizedPunct + stats.normalizedDates;
+  if (cleanups) pills.push('<span class="gw-pill is-ok">排版净化 <b>' + cleanups + '</b> 处</span>');
+
+  const warnHtml = warnings.length
+    ? '<div class="gw-warn-banner" role="alert">' + icon('alert', 16) + '<div class="gw-warn-copy">' +
+      warnings.map((w) => {
+        const jumpBtns = (w.blockIds || []).slice(0, 4).map((bid) => {
+          const idx = formatted.blocks.findIndex((b) => b.id === bid);
+          return idx >= 0
+            ? '<button type="button" class="gw-jump-btn" data-cmd="gw-focus-block" data-block="' + esc(bid) + '">定位第 ' + (idx + 1) + ' 项</button>'
+            : '';
+        }).join('');
+        return '<div class="gw-warn-line"><span>' + esc(w.message) + '</span>' + jumpBtns + '</div>';
+      }).join('') + '</div></div>'
+    : '';
+
+  return '<div class="gw-summary-strip">' + pills.join('') + '</div>' + warnHtml;
+}
+
+function focusGongwenBlock(view, blockId, { scrollLeft = true } = {}) {
+  if (!blockId) return;
+  gwState.activeBlockId = blockId;
+  view.querySelectorAll('.gw-block.is-active, .gw-p.is-active, .gw-p-box.is-active, .gw-table-wrap.is-active').forEach((node) => node.classList.remove('is-active'));
+  const leftItem = view.querySelector('.gw-block[data-block-id="' + blockId + '"]');
+  if (leftItem) {
+    leftItem.classList.add('is-active');
+    if (scrollLeft) leftItem.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+  const previewItem = view.querySelector('[data-preview-block="' + blockId + '"]');
+  if (previewItem) {
+    previewItem.classList.add('is-active');
+    previewItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }
+}
+
+function runGongwen(view, { keepLeftText = false } = {}) {
+  const left = view.querySelector('[data-gw-left]');
+  const output = view.querySelector('[data-output]');
+  const banner = view.querySelector('[data-gw-banner]');
+  const downloadBtn = view.querySelector('[data-cmd="gw-download"]');
+  const resetSlot = view.querySelector('[data-gw-reset-slot]');
+  const options = state.options.gongwen;
+
+  if (gwState.busy) {
+    if (downloadBtn) downloadBtn.disabled = true;
+    if (banner) banner.innerHTML = '';
+    setStatus(view, { text: '正在解析 Word 文档…' });
+    return;
+  }
+
+  if (gwState.error) {
+    gwState.formatted = null;
+    lastOutput = '';
+    if (downloadBtn) downloadBtn.disabled = true;
+    if (resetSlot) resetSlot.innerHTML = '';
+    if (banner) banner.innerHTML = '';
+    left.innerHTML = '<div class="gw-empty is-error">' + icon('alert', 28) +
+      '<h3>文档无法解析</h3><p>' + esc(gwState.error) + '</p>' +
+      '<div class="gw-empty-actions"><button type="button" class="btn btn-secondary btn-small" data-cmd="gw-upload">' + icon('upload', 14) + '重新选择 .docx</button>' +
+      '<button type="button" class="btn btn-ghost btn-small" data-cmd="sample">加载示例公文</button></div></div>';
+    output.innerHTML = '<div class="pane-empty">修复或更换文档后将在此显示 A4 版式预览</div>';
+    setStatus(view, { kind: 'error', text: gwState.error });
+    return;
+  }
+
+  if (!gwState.session) {
+    gwState.formatted = null;
+    lastOutput = '';
+    if (downloadBtn) downloadBtn.disabled = true;
+    if (resetSlot) resetSlot.innerHTML = '';
+    if (banner) banner.innerHTML = '';
+    if (gwState.mode === 'text') {
+      if (!keepLeftText || !left.querySelector('[data-gw-text]')) {
+        left.innerHTML = '<div class="gw-text-wrap"><div class="gw-source-bar"><span class="gw-source-meta">直接粘贴文稿即可自动识别公文要素并导出标准 .docx</span>' +
+          '<button type="button" class="btn btn-ghost btn-small" data-cmd="gw-upload">' + icon('upload', 14) + '改传 .docx</button></div>' +
+          '<textarea class="code-area gw-textarea" data-gw-text spellcheck="false" aria-label="公文文稿" placeholder="粘贴公文草稿（支持发文字号、标题、主送机关、一至四级标题、“一是”至“十是”、附件与落款）…"></textarea></div>';
+        left.querySelector('[data-gw-text]').value = state.inputs.gongwen ?? '';
+      }
+    } else {
+      left.innerHTML = '<div class="gw-dropzone" data-gw-drop-card>' +
+        '<div class="gw-mini-sheet" aria-hidden="true"><span></span><i></i><b></b><b></b><b></b><em></em></div>' +
+        '<h3>拖入 .docx Word 文档，或点击选择文件</h3>' +
+        '<p>自动完成国标版心排版、GB2312 字库归一、“一是”至“十是”加粗、直引号配对转换及 Times 西文标点保护。</p>' +
+        '<div class="gw-feature-tags">' +
+        '<span>仿宋_GB2312 → 仿宋</span><span>“一是”自动加粗</span><span>保护 “ ” —— …… ·</span><span>未闭合引号检测</span></div>' +
+        '<div class="gw-empty-actions">' +
+        '<button type="button" class="btn btn-primary btn-small" data-cmd="gw-upload">' + icon('upload', 14) + '选择 .docx 文件</button>' +
+        '<button type="button" class="btn btn-secondary btn-small" data-cmd="gw-mode" data-mode="text">粘贴纯文本文稿</button>' +
+        '<button type="button" class="btn btn-ghost btn-small" data-cmd="sample">加载示例</button></div></div>';
+    }
+    output.innerHTML = '<div class="gw-spec-empty"><h4>GB/T 9704-2012 公文排版与字体精修规则</h4>' +
+      '<dl class="gw-spec-grid">' +
+      '<div><dt>版心与页边距</dt><dd>A4 纸 · 天头 37mm、订口 28mm、下 35mm、右 26mm，四号宋体页码</dd></div>' +
+      '<div><dt>标题与四级序号</dt><dd>标题二号方正小标宋简体居中；一至四级依次为黑体、楷体、仿宋' + (options.h3Bold ? '加粗' : '') + '、仿宋</dd></div>' +
+      '<div><dt>字库归一与序词加粗</dt><dd>统一正文、样式表、页眉页脚与批注字库；自动加粗正文“一是”至“十是”</dd></div>' +
+      '<div><dt>西文与中文标点保护</dt><dd>数字与英文设为 Times New Roman，同时锁定 “ ” ‘ ’ —— …… · 保持中文全角字体</dd></div>' +
+      '<div><dt>智能引号与闭合诊断</dt><dd>英文直引号自动转为成对中文弯引号，分区域检测奇数或未闭合引号并定位提示</dd></div>' +
+      '<div><dt>附件、落款与图表</dt><dd>多附件悬挂对齐首字；署名与日期右空四字居中对齐；保护表格与图片行距</dd></div>' +
+      '</dl></div>';
+    setStatus(view, { text: '支持上传 .docx（Word 2007 及以上）或直接粘贴文稿，全部在浏览器本地完成' });
+    return;
+  }
+
+  const formatted = gw.applyGongwenFormatting(gwState.session, options, gwState.overrides);
+  gwState.formatted = formatted;
+  const overrideCount = formatted.blocks.filter((b) => b.overridden).length;
+  if (resetSlot) {
+    resetSlot.innerHTML = overrideCount ? smallButton('gw-reset-roles', '恢复自动识别（' + overrideCount + '）', 'refresh') : '';
+  }
+  if (downloadBtn) downloadBtn.disabled = false;
+  if (banner) banner.innerHTML = gongwenBannerMarkup(formatted);
+
+  lastOutput = formatted.blocks.filter((b) => b.kind === 'paragraph').map((b) => b.text).join('\n');
+
+  if (gwState.mode === 'text') {
+    if (!keepLeftText || !left.querySelector('[data-gw-text]')) {
+      const textVal = gwState.sourceKind === 'text' ? (state.inputs.gongwen ?? '') : lastOutput;
+      left.innerHTML = '<div class="gw-text-wrap"><div class="gw-source-bar"><span class="gw-source-meta">' +
+        (gwState.sourceKind === 'file' ? '编辑下方文本将以纯文本重建文档（原 .docx 表格/图片可点「更换文件」保留）' : '修改文稿后右侧实时刷新 A4 版式预览') + '</span>' +
+        '<button type="button" class="btn btn-ghost btn-small" data-cmd="gw-upload">' + icon('upload', 14) + '上传 .docx</button></div>' +
+        '<textarea class="code-area gw-textarea" data-gw-text spellcheck="false" aria-label="公文文稿" placeholder="粘贴公文草稿…"></textarea></div>';
+      left.querySelector('[data-gw-text]').value = textVal;
+    }
+  } else {
+    const prevScroll = left.querySelector('.gw-block-list')?.scrollTop ?? 0;
+    const metaParts = [
+      gwState.sourceKind === 'file' ? formatSize(gwState.session.byteLength) : '文稿生成',
+      formatted.stats.paragraphs + ' 段',
+    ];
+    if (formatted.stats.tables) metaParts.push(formatted.stats.tables + ' 个表格');
+    if (formatted.stats.images) metaParts.push(formatted.stats.images + ' 处图片');
+
+    left.innerHTML = '<div class="gw-inspector">' +
+      '<div class="gw-source-bar"><div class="gw-source-file">' + icon('gongwen', 16) +
+      '<strong>' + esc(gwState.session.fileName) + '</strong><span>' + esc(metaParts.join(' · ')) + '</span></div>' +
+      '<button type="button" class="btn btn-ghost btn-small" data-cmd="gw-upload">' + icon('upload', 14) + '更换文件</button></div>' +
+      '<div class="gw-block-list" role="list" aria-label="段落角色列表">' +
+      formatted.blocks.map((block, index) => {
+        const activeCls = gwState.activeBlockId === block.id ? ' is-active' : '';
+        if (block.kind !== 'paragraph') {
+          return '<div class="gw-block is-special' + activeCls + '" data-block-id="' + esc(block.id) + '" role="listitem"><span class="gw-block-num">' + (index + 1) + '</span>' +
+            '<span class="gw-fixed-badge">' + (block.kind === 'table' ? '表格保护' : '图片保护') + '</span>' +
+            '<span class="gw-block-text">' + esc(block.text) + '</span></div>';
+        }
+        const changed = block.rawText !== block.text;
+        const hasSeq = (block.tokens || block.restTokens || []).some((t) => t.seq);
+        const cls = 'gw-block' + (block.overridden ? ' is-overridden' : '') + (block.quoteWarning ? ' is-quote-warn' : '') + activeCls;
+        return '<div class="' + cls + '" data-block-id="' + esc(block.id) + '" data-role="' + esc(block.role) + '" role="listitem">' +
+          '<span class="gw-block-num">' + (index + 1) + '</span>' +
+          '<select class="form-select gw-role-select" data-gw-role="' + esc(block.id) + '" aria-label="第 ' + (index + 1) + ' 段角色">' +
+          gw.ROLES.map(([roleKey, roleLabel]) => '<option value="' + esc(roleKey) + '"' + (roleKey === block.role ? ' selected' : '') + '>' + esc(roleLabel) + '</option>').join('') +
+          '</select>' +
+          '<span class="gw-block-text" title="' + esc(block.rawText) + '">' + esc(block.text) + '</span>' +
+          '<span class="gw-block-badges">' +
+          (block.quoteWarning ? '<em class="gw-warn-tag">引号未闭合</em>' : '') +
+          (hasSeq ? '<em class="gw-seq-tag">序词加粗</em>' : '') +
+          (changed && !block.quoteWarning ? '<em class="gw-fix-tag">已规范</em>' : '') +
+          '</span></div>';
+      }).join('') + '</div></div>';
+    const listEl = left.querySelector('.gw-block-list');
+    if (listEl && prevScroll) listEl.scrollTop = prevScroll;
+  }
+
+  output.innerHTML = gongwenPaperMarkup(formatted);
+
+  const fixes = [];
+  if (formatted.stats.boldedSeqWords) fixes.push('“一是”类加粗 ' + formatted.stats.boldedSeqWords + ' 处');
+  if (formatted.stats.replacedQuotes) fixes.push('直引号转换 ' + formatted.stats.replacedQuotes + ' 个');
+  if (formatted.stats.protectedPunct) fixes.push('保护特殊标点 ' + formatted.stats.protectedPunct + ' 处');
+  if (formatted.stats.trimmedSpaces + formatted.stats.removedBlankLines) {
+    fixes.push('清理空格/空行 ' + (formatted.stats.trimmedSpaces + formatted.stats.removedBlankLines) + ' 处');
+  }
+  if (formatted.stats.normalizedPunct + formatted.stats.normalizedDates) {
+    fixes.push('规范序号与日期 ' + (formatted.stats.normalizedPunct + formatted.stats.normalizedDates) + ' 处');
+  }
+  if (formatted.warnings.length) {
+    setStatus(view, { kind: 'warn', text: formatted.warnings[0].message + ' · 其余公文版式已完成排版' });
+  } else {
+    const summary = '已按 GB/T 9704 完成排版 · 共 ' + formatted.stats.paragraphs + ' 段';
+    setStatus(view, { kind: 'ok', text: [summary, ...fixes].join(' · ') });
+  }
+}
+
+function gongwenTableMarkup(block, tableFormat, activeCls, idAttr) {
+  const rows = block.previewRows || [];
+  if (!rows.length) {
+    return '<div class="gw-p-box' + activeCls + '"' + idAttr + '>表格（' + block.rows + ' 行 × ' + block.cols + ' 列）</div>';
+  }
+  const styleKey = tableFormat === 'tidy' ? 'elegant' : (tableFormat || 'elegant');
+  const hasHeader = rows.length > 1;
+  const thead = hasHeader
+    ? '<thead><tr>' + rows[0].map((cell) => '<th' + (cell.colspan > 1 ? ' colspan="' + cell.colspan + '"' : '') + '>' + esc(cell.text).replace(/\n/g, '<br>') + '</th>').join('') + '</tr></thead>'
+    : '';
+  const bodyRows = hasHeader ? rows.slice(1) : rows;
+  const tbody = '<tbody>' + bodyRows.map((row) => '<tr>' + row.map((cell) => {
+    const alignAttr = cell.align === 'center' || cell.align === 'right' ? ' class="is-' + cell.align + '"' : '';
+    const spanAttr = cell.colspan > 1 ? ' colspan="' + cell.colspan + '"' : '';
+    return '<td' + spanAttr + alignAttr + '>' + renderTokensHtml(cell.tokens, cell.text) + '</td>';
+  }).join('') + '</tr>').join('') + '</tbody>';
+  const more = block.rows > rows.length ? '<div class="gw-table-more">已预览前 ' + rows.length + ' 行（共 ' + block.rows + ' 行）</div>' : '';
+  return '<div class="gw-table-wrap' + activeCls + '"' + idAttr + '><table class="gw-table is-' + esc(styleKey) + '">' + thead + tbody + '</table>' + more + '</div>';
+}
+
+function gongwenPaperMarkup(formatted) {
+  const { options, blocks } = formatted;
+  const lineEm = (Number(options.lineSpacing) / 16).toFixed(3);
+  const paraBlocks = blocks;
+  let prevParaRole = null;
+  const findNextParaRole = (from) => {
+    for (let i = from + 1; i < paraBlocks.length; i++) {
+      if (paraBlocks[i].kind === 'paragraph') return paraBlocks[i].role;
+    }
+    return null;
+  };
+
+  const inner = paraBlocks.map((block, idx) => {
+    const activeCls = gwState.activeBlockId === block.id ? ' is-active' : '';
+    const idAttr = ' data-preview-block="' + esc(block.id) + '"';
+    if (block.kind === 'table') {
+      return gongwenTableMarkup(block, options.tableFormat, activeCls, idAttr);
+    }
+    if (block.kind === 'media') {
+      return '<div class="gw-p-box' + activeCls + '"' + idAttr + '>内嵌图片 / 图形 · 单倍行距居中保护，防止固定行距裁切</div>';
+    }
+    const role = block.role;
+    const nextRole = findNextParaRole(idx);
+    const warnCls = block.quoteWarning ? ' is-quote-warn' : '';
+    const extraCls = warnCls + activeCls;
+    let html = '';
+
+    switch (role) {
+      case 'secret_urgent':
+        html = '<p class="gw-p is-secret' + extraCls + '"' + idAttr + '>' + esc(block.text) + '</p>';
+        break;
+      case 'doc_no':
+        html = '<p class="gw-p is-doc-no' + extraCls + '"' + idAttr + '>' + esc(block.text) + '</p><div class="gw-red-rule" aria-hidden="true"><span>★</span></div>';
+        break;
+      case 'title':
+      case 'attachment_title':
+        html = '<p class="gw-p is-title' + (nextRole === role || nextRole === 'subtitle' ? ' is-tight' : '') + extraCls + '"' + idAttr + '>' + esc(block.text).replace(/\n/g, '<br>') + '</p>';
+        break;
+      case 'subtitle':
+        html = '<p class="gw-p is-subtitle' + (nextRole === 'subtitle' ? ' is-tight' : '') + extraCls + '"' + idAttr + '>' + esc(block.text) + '</p>';
+        break;
+      case 'salutation':
+        html = '<p class="gw-p is-salutation' + extraCls + '"' + idAttr + '>' + esc(block.text) + '</p>';
+        break;
+      case 'h1':
+        html = '<p class="gw-p is-h1' + extraCls + '"' + idAttr + '>' + (block.lead && block.rest
+          ? '<span class="gw-inline-h1">' + esc(block.lead) + '</span><span class="gw-inline-body">' + renderTokensHtml(block.restTokens, block.rest) + '</span>'
+          : esc(block.text)) + '</p>';
+        break;
+      case 'h2':
+        html = '<p class="gw-p is-h2' + extraCls + '"' + idAttr + '>' + (block.lead && block.rest
+          ? '<span class="gw-inline-h2">' + esc(block.lead) + '</span><span class="gw-inline-body">' + renderTokensHtml(block.restTokens, block.rest) + '</span>'
+          : esc(block.text)) + '</p>';
+        break;
+      case 'h3':
+        html = '<p class="gw-p is-h3' + (options.h3Bold ? ' is-bold' : '') + extraCls + '"' + idAttr + '>' + (block.lead && block.rest
+          ? '<span class="gw-inline-h3">' + esc(block.lead) + '</span><span class="gw-inline-body">' + renderTokensHtml(block.restTokens, block.rest) + '</span>'
+          : esc(block.text)) + '</p>';
+        break;
+      case 'attachment_list': {
+        const multi = /^附件：\d+\./.test(block.text);
+        html = '<p class="gw-p is-att-list' + (multi ? ' is-multi' : '') + (prevParaRole === 'attachment_list' ? ' is-cont' : '') + extraCls + '"' + idAttr + '>' + esc(block.text) + '</p>';
+        break;
+      }
+      case 'attachment_item':
+        html = '<p class="gw-p is-att-item' + extraCls + '"' + idAttr + '>' + esc(block.text) + '</p>';
+        break;
+      case 'signature':
+        html = '<p class="gw-p is-signature' + (prevParaRole === 'signature' ? ' is-cont' : '') + extraCls + '"' + idAttr + ' style="--gw-right:' + (block.rightChars || 4) + 'em">' + esc(block.text) + '</p>';
+        break;
+      case 'date':
+        html = '<p class="gw-p is-date' + (prevParaRole === 'signature' ? ' is-under-sig' : '') + extraCls + '"' + idAttr + ' style="--gw-right:' + (block.rightChars || 4) + 'em">' + esc(block.text) + '</p>';
+        break;
+      case 'cc':
+        html = '<p class="gw-p is-cc' + (prevParaRole === 'cc' ? ' is-cont' : '') + extraCls + '"' + idAttr + '>' + renderTokensHtml(block.tokens, block.text) + '</p>';
+        break;
+      case 'attachment_marker':
+        html = (idx > 0 ? '<div class="gw-page-break" aria-hidden="true"><span>附件另起页</span></div>' : '') +
+          '<p class="gw-p is-att-marker' + extraCls + '"' + idAttr + '>' + esc(block.text) + '</p>';
+        break;
+      default:
+        html = '<p class="gw-p is-body' + extraCls + '"' + idAttr + '>' + renderTokensHtml(block.tokens, block.text) + '</p>';
+    }
+    prevParaRole = role;
+    return html;
+  }).join('');
+
+  const footer = options.pageNumber === 'keep'
+    ? ''
+    : '<footer class="gw-footer is-' + esc(options.pageNumber) + '" aria-label="页码预览">— 1 —</footer>';
+
+  const guidesCls = gwState.showGuides ? ' show-guides' : '';
+  return '<div class="gw-preview-stage">' +
+    '<div class="gw-stage-caption"><span>A4 · 210 × 297 mm</span><span>版心 156 × 225 mm（天头 37mm · 订口 28mm）</span></div>' +
+    '<article class="gw-paper' + guidesCls + '" data-latin="' + esc(options.latinFont) + '" style="--gw-line:' + lineEm + 'em" aria-label="A4 公文版式预览">' +
+    '<div class="gw-paper-body">' +
+    '<span class="gw-guide-label is-top" aria-hidden="true">天头 37mm</span><span class="gw-guide-label is-left" aria-hidden="true">订口 28mm</span>' +
+    '<span class="gw-corner is-tl"></span><span class="gw-corner is-tr"></span><span class="gw-corner is-bl"></span><span class="gw-corner is-br"></span>' +
+    inner + '</div>' + footer + '</article></div>';
+}
+
+async function loadGongwenFile(file, view) {
+  if (!file) return;
+  const seq = ++gwLoadSeq;
+  if (file.size > 50 * 1024 * 1024) {
+    gwState.error = '文档超过 50 MB，请检查是否包含未压缩的超大媒体后再试';
+    gwState.session = null;
+    runGongwen(view);
+    return;
+  }
+  gwState.busy = true;
+  gwState.error = null;
+  runGongwen(view);
+  try {
+    const buffer = await file.arrayBuffer();
+    const session = await gw.parseGongwenDocx(buffer, file.name);
+    if (seq !== gwLoadSeq) return;
+    gwState.busy = false;
+    gwState.mode = 'structure';
+    gwState.sourceKind = 'file';
+    gwState.session = session;
+    gwState.overrides = {};
+    gwState.error = null;
+    if (view.isConnected) rerenderBody(view);
+  } catch (error) {
+    if (seq !== gwLoadSeq) return;
+    gwState.busy = false;
+    gwState.session = null;
+    gwState.error = error instanceof core.ToolError ? error.message : '读取 Word 文档失败，请确认文件为未损坏的 .docx 格式';
+    if (view.isConnected) runGongwen(view);
+  }
+}
+
+async function loadGongwenText(text, view, { keepLeftText = false, switchToStructure = false, fileName = '公文文稿.docx' } = {}) {
+  const seq = ++gwLoadSeq;
+  state.inputs.gongwen = text;
+  saveState();
+  if (!text.trim()) {
+    gwState.session = null;
+    gwState.sourceKind = null;
+    gwState.overrides = {};
+    gwState.error = null;
+    gwState.busy = false;
+    if (view.isConnected) runGongwen(view, { keepLeftText });
+    return;
+  }
+  try {
+    const session = await gw.buildSessionFromText(text, fileName);
+    if (seq !== gwLoadSeq) return;
+    gwState.busy = false;
+    gwState.sourceKind = 'text';
+    gwState.session = session;
+    gwState.overrides = {};
+    gwState.error = null;
+    if (switchToStructure) {
+      gwState.mode = 'structure';
+      if (view.isConnected) rerenderBody(view);
+    } else if (view.isConnected) {
+      runGongwen(view, { keepLeftText });
+    }
+  } catch (error) {
+    if (seq !== gwLoadSeq) return;
+    gwState.error = error instanceof core.ToolError ? error.message : '处理文稿时出错';
+    if (view.isConnected) runGongwen(view, { keepLeftText });
+  }
+}
+
+async function downloadGongwenDocx(view) {
+  if (!gwState.session || !gwState.formatted) return;
+  const btn = view.querySelector('[data-cmd="gw-download"]');
+  if (btn) btn.disabled = true;
+  try {
+    const bytes = await gw.exportGongwenDocx(gwState.session, gwState.formatted);
+    const outName = gw.outputFileName(gwState.session.fileName);
+    const blob = new Blob([bytes], { type: 'application/vnd.openxmlformats-officedocument.wordprocessingml.document' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = outName;
+    document.body.append(link);
+    link.click();
+    link.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 2000);
+    notify('已导出 ' + outName);
+  } catch {
+    notify('导出 .docx 失败，请重试');
+  } finally {
+    if (btn && view.isConnected && gwState.formatted) btn.disabled = false;
+  }
+}
+
 function run(root) {
   const view = root.querySelector('.tools-view');
   if (!view) return;
   const id = view.dataset.tool;
+  if (id === 'gongwen') {
+    runGongwen(view);
+    return;
+  }
   const source = state.inputs[id] ?? '';
   const options = state.options[id];
   const output = view.querySelector('[data-output]');
@@ -488,6 +964,58 @@ function locate(view, line, column) {
 
 function handleCommand(view, button) {
   const id = view.dataset.tool;
+  if (id === 'gongwen') {
+    switch (button.dataset.cmd) {
+      case 'gw-upload':
+        view.querySelector('[data-gw-file]')?.click();
+        return;
+      case 'gw-mode':
+        gwState.mode = button.dataset.mode === 'text' ? 'text' : 'structure';
+        rerenderBody(view);
+        if (gwState.mode === 'text') view.querySelector('[data-gw-text]')?.focus();
+        return;
+      case 'gw-reset-roles':
+        gwState.overrides = {};
+        runGongwen(view);
+        return;
+      case 'gw-guides':
+        gwState.showGuides = !gwState.showGuides;
+        button.classList.toggle('is-on', gwState.showGuides);
+        button.setAttribute('aria-pressed', String(gwState.showGuides));
+        view.querySelector('.gw-paper')?.classList.toggle('show-guides', gwState.showGuides);
+        return;
+      case 'gw-focus-block':
+        if (gwState.mode !== 'structure') {
+          gwState.mode = 'structure';
+          rerenderBody(view);
+        }
+        focusGongwenBlock(view, button.dataset.block, { scrollLeft: true });
+        return;
+      case 'gw-download':
+        downloadGongwenDocx(view);
+        return;
+      case 'sample':
+        gwState.activeBlockId = null;
+        loadGongwenText(gw.SAMPLE_GONGWEN_TEXT, view, { switchToStructure: true, fileName: '政务服务标准化通知.docx' });
+        return;
+      case 'clear':
+        ++gwLoadSeq;
+        gwState.sourceKind = null;
+        gwState.session = null;
+        gwState.overrides = {};
+        gwState.formatted = null;
+        gwState.error = null;
+        gwState.busy = false;
+        gwState.activeBlockId = null;
+        state.inputs.gongwen = '';
+        saveState();
+        rerenderBody(view);
+        return;
+      case 'copy':
+        copyText(lastOutput);
+        return;
+    }
+  }
   switch (button.dataset.cmd) {
     case 'sample': setInput(view, sampleFor(id)); break;
     case 'clear': setInput(view, ''); view.querySelector('[data-input]')?.focus(); break;
@@ -518,6 +1046,14 @@ function bindEvents() {
   if (bound) return;
   bound = true;
   document.addEventListener('input', (event) => {
+    const gwArea = event.target.closest?.('.tools-view [data-gw-text]');
+    if (gwArea) {
+      if (event.isComposing) return;
+      const view = gwArea.closest('.tools-view');
+      clearTimeout(runTimer);
+      runTimer = setTimeout(() => loadGongwenText(gwArea.value, view, { keepLeftText: true }), 120);
+      return;
+    }
     const input = event.target.closest?.('.tools-view [data-input]');
     if (!input) return;
     const view = input.closest('.tools-view');
@@ -526,18 +1062,67 @@ function bindEvents() {
     clearTimeout(runTimer);
     runTimer = setTimeout(() => run(view.parentElement), input.value.length > 50_000 ? 350 : 80);
   });
+  document.addEventListener('compositionend', (event) => {
+    const gwArea = event.target.closest?.('.tools-view [data-gw-text]');
+    if (!gwArea) return;
+    const view = gwArea.closest('.tools-view');
+    clearTimeout(runTimer);
+    runTimer = setTimeout(() => loadGongwenText(gwArea.value, view, { keepLeftText: true }), 80);
+  });
   document.addEventListener('click', (event) => {
     const view = event.target.closest?.('.tools-view');
     if (!view) return;
     const option = event.target.closest('button[data-opt]');
     if (option) { setOption(view, option.dataset.opt, option.dataset.value); return; }
     const command = event.target.closest('[data-cmd]');
-    if (command) handleCommand(view, command);
+    if (command) { handleCommand(view, command); return; }
+    if (event.target.closest('[data-gw-drop-card]')) { view.querySelector('[data-gw-file]')?.click(); return; }
+    const blockRow = event.target.closest('.gw-block[data-block-id]');
+    if (blockRow && !event.target.closest('select')) {
+      focusGongwenBlock(view, blockRow.dataset.blockId, { scrollLeft: false });
+    }
   });
   document.addEventListener('change', (event) => {
+    const fileInput = event.target.closest?.('.tools-view [data-gw-file]');
+    if (fileInput) {
+      const file = fileInput.files?.[0];
+      fileInput.value = '';
+      if (file) loadGongwenFile(file, fileInput.closest('.tools-view'));
+      return;
+    }
+    const roleSelect = event.target.closest?.('.tools-view [data-gw-role]');
+    if (roleSelect) {
+      const view = roleSelect.closest('.tools-view');
+      const blockId = roleSelect.dataset.gwRole;
+      const block = gwState.formatted?.blocks.find((item) => item.id === blockId);
+      if (block && roleSelect.value === block.autoRole) delete gwState.overrides[blockId];
+      else gwState.overrides[blockId] = roleSelect.value;
+      runGongwen(view);
+      return;
+    }
     const control = event.target.closest?.('.tools-view [data-opt]');
     if (!control || control.tagName === 'BUTTON') return;
     setOption(control.closest('.tools-view'), control.dataset.opt, control.type === 'checkbox' ? control.checked : control.value);
+  });
+  document.addEventListener('dragover', (event) => {
+    const view = event.target.closest?.('.tools-view[data-tool="gongwen"]');
+    if (!view || !event.dataTransfer?.types?.includes('Files')) return;
+    event.preventDefault();
+    view.classList.add('is-file-drag');
+  });
+  document.addEventListener('dragleave', (event) => {
+    const view = event.target.closest?.('.tools-view[data-tool="gongwen"]');
+    if (!view) return;
+    if (!view.contains(event.relatedTarget)) view.classList.remove('is-file-drag');
+  });
+  document.addEventListener('drop', (event) => {
+    const view = event.target.closest?.('.tools-view[data-tool="gongwen"]');
+    if (!view) return;
+    view.classList.remove('is-file-drag');
+    const file = event.dataTransfer?.files?.[0];
+    if (!file) return;
+    event.preventDefault();
+    loadGongwenFile(file, view);
   });
   // `toggle` does not bubble, so listen in the capture phase.
   document.addEventListener('toggle', (event) => {
@@ -567,6 +1152,10 @@ function hydrate(root) {
       if (!view.isConnected) { clearInterval(clockTimer); return; }
       tickClock(view);
     }, 250);
+  }
+  if (id === 'gongwen' && !gwState.session && !gwState.busy && !gwState.error && state.inputs.gongwen?.trim()) {
+    loadGongwenText(state.inputs.gongwen, view);
+    return;
   }
   run(root);
 }
