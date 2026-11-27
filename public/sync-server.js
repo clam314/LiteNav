@@ -48,7 +48,8 @@ export function createServerSyncChannel({ url, password = '', fetchImpl = global
 
   const shape = (state) => ({
     document: { categories: state.categories, links: state.links, settings: state.settings, prefs: state.prefs ?? null },
-    editedAt: state.updatedAt || null, writtenAt: state.updatedAt || null, deviceId: null, bytes: 0,
+    // A server's copy counts as edited once anything saved it.
+    editedAt: state.updatedAt || null, configEditedAt: state.updatedAt || null, writtenAt: state.updatedAt || null, deviceId: null, bytes: 0,
   });
 
   return {

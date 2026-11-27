@@ -200,8 +200,11 @@ test('companion preferences sync key by key', async () => {
   const cloud = fakeArea();
   const one = device(cloud);
   const two = device(cloud, clock('2026-11-26T09:00:00Z'));
+  await one.edit((state) => { state.settings.timeout = 6; });
   await one.store.setPrefs({ enabled: true, games: ['bd2'], rotation: 5 });
   await one.engine.enable();
+  // The companion writes its own preferences at startup on a fresh browser.
+  await two.store.setPrefs({ enabled: false, games: ['bd2'], rotation: 5 });
   await two.engine.enable();
   assert.deepEqual((await two.store.prefs()).value, { enabled: true, games: ['bd2'], rotation: 5 });
   assert.equal((await two.store.prefs()).origin, 'sync');
@@ -240,6 +243,7 @@ test('turning sync on with data on both sides can replace either one', async () 
 test('a failed write is reported in the status and retried by the next run', async () => {
   const cloud = fakeArea();
   const one = device(cloud);
+  await one.edit((state) => { state.settings.timeout = 6; });
   const set = cloud.set;
   cloud.set = async () => { throw new Error('MAX_WRITE_OPERATIONS_PER_MINUTE quota exceeded'); };
   const failed = await one.engine.enable();
@@ -275,4 +279,50 @@ test('the local backend answers the page\'s API like the server', async () => {
   assert.equal((await backend.request('/api/sync')).status.enabled, false);
   assert.equal((await backend.request('/api/sync', { method: 'POST', body: JSON.stringify({ action: 'enable' }) })).status.enabled, true);
   assert.ok(one.area.data[STATE_KEY]);
+});
+
+test('a fresh browser shares nothing while the cloud is empty, then takes the other device\'s copy', async () => {
+  const cloud = fakeArea();
+  const laptop = device(cloud);
+  const fresh = device(cloud, clock('2026-11-27T09:00:00Z'));
+  // Its companion wrote preferences at startup; that is not data of its own.
+  await fresh.store.setPrefs({ enabled: false });
+  // Turned on before the laptop's copy arrived (Chrome sync takes a while).
+  const waiting = await fresh.engine.enable();
+  assert.equal(waiting.state, 'empty');
+  assert.deepEqual(Object.keys(cloud.data), [], 'starter sites are not shared');
+  await laptop.edit((state) => { state.links = state.links.filter((link) => link.id !== 'chatgpt'); state.links.push(site('laptop', 'https://laptop.example')); });
+  await laptop.store.setPrefs({ enabled: true });
+  await laptop.engine.enable();
+  // The laptop's copy arrives: the fresh browser takes it as it is.
+  const status = await fresh.engine.run();
+  assert.equal(status.state, 'idle');
+  assert.equal(status.remote.thisDevice, false);
+  const ids_ = ids(await fresh.store.state());
+  assert.ok(ids_.includes('laptop') && !ids_.includes('chatgpt'), 'a starter site deleted elsewhere stays deleted');
+  assert.deepEqual((await fresh.store.prefs()).value, { enabled: true }, 'and the companion preferences with it');
+  assert.equal((await laptop.engine.status()).remote.thisDevice, true);
+});
+
+test('starter sites that reached the cloud first never remove edited data', async () => {
+  const cloud = fakeArea();
+  const laptop = device(cloud);
+  await laptop.edit((state) => { state.links = state.links.filter((link) => link.id !== 'chatgpt'); state.links.push(site('laptop', 'https://laptop.example')); });
+  await laptop.engine.enable();
+  const mine = ids(await laptop.store.state());
+  // An older build on another device wrote its unedited starter copy over it.
+  const channel = createChromeSyncChannel({ area: cloud });
+  const starter = { ...structuredClone(seed), prefs: null };
+  delete starter.revision;
+  await channel.write({ categories: starter.categories, links: starter.links, settings: starter.settings, prefs: null }, { editedAt: null, configEditedAt: null, deviceId: 'old-build' });
+  await laptop.engine.run();
+  assert.deepEqual(ids(await laptop.store.state()), mine, 'the laptop keeps its sites');
+  assert.ok(ids((await channel.read()).document).includes('laptop'), 'and puts them back in the cloud');
+  // Turning sync on with edits against such a copy keeps them too, without asking.
+  const desk = device(cloud, clock('2026-11-27T10:00:00Z'));
+  await channel.write({ categories: starter.categories, links: starter.links, settings: starter.settings, prefs: null }, { configEditedAt: null, deviceId: 'old-build' });
+  await desk.edit((state) => { state.links.push(site('desk', 'https://desk.example')); });
+  assert.equal((await desk.engine.inspect()).remote.editedAt, null, 'the page skips the choice for an unedited copy');
+  await desk.engine.enable();
+  assert.ok(ids(await desk.store.state()).includes('desk'));
 });

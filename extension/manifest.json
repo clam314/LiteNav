@@ -2,6 +2,7 @@
   "manifest_version": 3,
   "name": "轻航 LiteNav",
   "version": "0.0.0",
+  "key": "MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAtYD8Bm9Zty0QZ8kbbUi50pRrLb9g9z3RxPqExd+5t+gnvEgC3ehvKUeeDeTwR+IQhzCPEjEFvoP+MF61bZ3n8X3SiF9fTmWPY5Wc9BC/5LEzFGAJTO35tZsHcNai5oybsJ580nC9eYSuq1FeG+/Drm7eCfXFe5JjpPZZuQDhsXLdQTZVmbIt9HoqUao/COBj9PnUV+1yuUEtkcDyqqyxVyegIi8LlupMa3Ys/Q479f4zYsi7KM1LtEdKnjt0MSe1aZA34gMRlBm3bfDO9uu0s5QPRsZbB/rvyCCWcBSlNKVG2B+45+KaSlHQMR8thyfZ5L0cyveyS8QERo8QfPM6/QIDAQAB",
   "description": "轻量的个人网址与服务导航：新标签页即工作台，离线可用，通过 Chrome 账号在多台电脑间同步。",
   "homepage_url": "https://github.com/clam314/LiteNav",
   "minimum_chrome_version": "120",

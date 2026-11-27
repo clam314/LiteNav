@@ -68,15 +68,17 @@ export function createChromeSyncChannel({ area }) {
       try { document = await decodeDocument(chunks, meta.hash); }
       catch { return { incomplete: true, meta }; }
       if (!document) return { incomplete: true, meta };
-      return { document, hash: meta.hash, editedAt: meta.editedAt || null, writtenAt: meta.writtenAt || null, deviceId: meta.deviceId || null, bytes: meta.bytes || 0 };
+      return { document, hash: meta.hash, editedAt: meta.editedAt || null, writtenAt: meta.writtenAt || null, deviceId: meta.deviceId || null, bytes: meta.bytes || 0,
+        // Copies written before the field: their editedAt says the same.
+        configEditedAt: 'configEditedAt' in meta ? meta.configEditedAt : meta.editedAt || null };
     },
 
-    async write(document, { editedAt, deviceId, writtenAt = new Date().toISOString() } = {}) {
+    async write(document, { editedAt, configEditedAt = editedAt ?? null, deviceId, writtenAt = new Date().toISOString() } = {}) {
       const encoded = await encodeDocument(document);
       if (encoded.bytes > SYNC_LIMIT_BYTES) {
         throw new SyncQuotaError('配置压缩后约 ' + Math.ceil(encoded.bytes / 1024) + ' KB，超过 Chrome 同步的容量（约 ' + Math.floor(SYNC_LIMIT_BYTES / 1024) + ' KB）');
       }
-      const meta = { version: 1, generation: encoded.generation, chunks: encoded.chunks.length, hash: encoded.hash, bytes: encoded.bytes, editedAt, writtenAt, deviceId };
+      const meta = { version: 1, generation: encoded.generation, chunks: encoded.chunks.length, hash: encoded.hash, bytes: encoded.bytes, editedAt, configEditedAt, writtenAt, deviceId };
       const items = { [META_KEY]: meta };
       encoded.chunks.forEach((chunk, index) => { items[PREFIX + encoded.generation + '.' + index] = chunk; });
       const existing = Object.keys(await area.get(null));

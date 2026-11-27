@@ -1554,11 +1554,16 @@ function syncCardMarkup() {
   const facts = [];
   if (syncStatus.state === 'waiting') facts.push('正在等待其他设备的数据传完');
   else if (syncStatus.lastSyncedAt) facts.push('上次同步于 ' + esc(shortTime(syncStatus.lastSyncedAt)));
+  // Who wrote the synced copy, so it is clear whether another device's data arrived.
+  const writer = syncStatus.remote;
+  if (writer?.writtenAt) facts.push((writer.thisDevice ? '云端数据由本机写入于 ' : '云端数据由另一台设备更新于 ') + esc(shortTime(writer.writtenAt)));
   if (!viaServer && syncStatus.bytes) facts.push('云端占用 ' + Math.max(1, Math.round(syncStatus.bytes / 1024)) + ' KB / 96 KB');
   return '<div class="sync-head"><div><p class="sync-state"><span class="sync-dot' + (syncStatus.state === 'error' ? ' is-error' : '') + '"></span>' + (syncStatus.state === 'error' ? '同步出错' : viaServer ? '通过自建服务器 ' + esc(serverLabel(syncStatus.server)) + ' 同步' : '通过 Chrome 账号同步') + '</p>' +
     '<p class="settings-description">' + (facts.join(' · ') || '尚未同步') + '</p></div>' +
     '<div class="settings-actions"><button class="btn btn-ghost" data-action="sync-disable">关闭同步</button><button class="btn btn-secondary" data-action="sync-now">' + icon('refresh', 16) + '立即同步</button></div></div>' +
     (syncStatus.state === 'error' ? '<p class="sync-error">' + esc(syncStatus.lastError) + '</p>' : '') +
+    (syncStatus.state === 'empty' ? '<p class="field-hint">' + (viaServer ? '服务器上还没有数据。' : '云端还没有数据。') + '本机还没有改动过网址和设置，所以先不上传，以免初始网址盖过其他设备的数据；另一台电脑的数据一到就会自动载入，本机做了修改后也会上传。</p>' : '') +
+    (!viaServer && (syncStatus.state === 'empty' || writer?.thisDevice) ? '<p class="field-hint">看不到另一台电脑的数据时，请确认两台电脑的 Chrome 登录了同一个 Google 账号，并在 Chrome 的同步设置里开启了“扩展程序”。Chrome 同步通常要几十秒到几分钟，之后点“立即同步”。</p>' : '') +
     (syncStatus.conflicts ? '<p class="field-hint">上次同步时有 ' + syncStatus.conflicts + ' 处内容在两台设备上都改过，已采用较新的修改；需要时可以在下方自动备份里恢复。</p>' : '') +
     '<p class="field-hint">' + (viaServer ? '本机的修改几秒后同步到服务器；服务器上的修改在打开轻航时和每 5 分钟同步过来。' : '本机的修改几秒后自动同步，其他设备的修改会自动同步过来。') + '</p>';
 }
@@ -1617,7 +1622,9 @@ async function enableSync(button, provider, info = null) {
     if (info.remote?.incomplete) { toast('其他设备的数据还在传输中，请稍后再试'); return false; }
     let mode = 'merge';
     // A browser that only has the starter sites simply takes the synced copy.
-    if (info.remote && !info.remote.same && info.local.editedAt) {
+    // Asked only when both sides hold edited data; a copy that is only the
+    // starter sites gives way on its own (see sync-engine.js).
+    if (info.remote && !info.remote.same && info.local.editedAt && info.remote.editedAt) {
       mode = await chooseSyncMode(info, provider === 'server' ? '服务器上' : '云端');
       if (!mode) return false;
     }
@@ -1625,7 +1632,7 @@ async function enableSync(button, provider, info = null) {
     config = await api('/api/state');
     render();
     const where = provider === 'server' ? '服务器' : '云端';
-    toast(syncStatus.state === 'error' ? '同步失败：' + syncStatus.lastError : !info.remote ? '已开启同步，本机数据已上传' : mode === 'local' ? '已开启同步，' + where + '已更新为本机数据' : mode === 'remote' || info.remote.same || !info.local.editedAt ? '已开启同步，已载入' + where + '数据' : '已开启同步，已和' + where + '数据合并');
+    toast(syncStatus.state === 'error' ? '同步失败：' + syncStatus.lastError : syncStatus.state === 'empty' ? '已开启同步。' + where + '还没有数据，另一台电脑的数据到达后会自动载入' : !info.remote ? '已开启同步，本机数据已上传' : mode === 'local' ? '已开启同步，' + where + '已更新为本机数据' : mode === 'remote' || info.remote.same || !info.local.editedAt ? '已开启同步，已载入' + where + '数据' : '已开启同步，已和' + where + '数据合并');
     return true;
   } finally { if (button?.isConnected) button.disabled = false; }
 }

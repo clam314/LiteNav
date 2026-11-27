@@ -24,16 +24,26 @@ export function createSyncEngine({ store, channel, channelFor, area, withLock = 
 
   const channelOf = async (provider) => channelFor ? channelFor(provider) : channel;
 
+  // remote says who wrote the synced copy last (this device or another) and
+  // when, so the page can tell whether another device's data has arrived.
   const status = (meta) => ({
     enabled: Boolean(meta.enabled), provider: meta.provider || 'chrome', server: meta.server || null, state: meta.state || (meta.enabled ? 'idle' : 'off'),
     lastSyncedAt: meta.lastSyncedAt || null, lastError: meta.lastError || null, conflicts: meta.conflicts || 0,
-    bytes: meta.bytes || 0, deviceId: meta.deviceId,
+    bytes: meta.bytes || 0, deviceId: meta.deviceId, remote: meta.remote || null,
   });
 
+  // configEditedAt is when someone last changed the sites, categories or
+  // settings here: whether this copy holds data of its own. The companion
+  // writes its preferences on its own at startup, so they do not count.
   async function localDocument(record) {
     const prefs = await store.prefs();
-    return { document: { ...documentOf(record), prefs: prefs?.value ?? null }, editedAt: latest(record.editedAt, prefs?.editedAt), prefs };
+    return { document: { ...documentOf(record), prefs: prefs?.value ?? null }, editedAt: latest(record.editedAt, prefs?.editedAt),
+      configEditedAt: record.editedAt || null, prefs };
   }
+
+  // Whether the synced copy's configuration was ever edited (channels from
+  // before the field say so through editedAt).
+  const remoteConfigEdited = (remote) => remote ? (remote.configEditedAt !== undefined ? remote.configEditedAt : remote.editedAt) || null : null;
 
   // mode decides the first run after sync is turned on with data on both
   // sides: merge them, or let one replace the other. Later runs always merge.
@@ -44,13 +54,23 @@ export function createSyncEngine({ store, channel, channelFor, area, withLock = 
     const remote = await channel.read();
     if (remote?.incomplete) return writeMeta({ ...meta, state: 'waiting' });
     const deviceId = meta.deviceId || newDeviceId();
+    const remoteEdited = remoteConfigEdited(remote);
     let pushed = null;
     let conflicts = 0;
+    let holding = false;
     const { record } = await store.transact(async (current) => {
       const local = await localDocument(current);
+      const ownData = Boolean(local.configEditedAt);
+      // Nothing synced yet and nothing of its own: a browser shares nothing.
+      // Another device's copy may still be on its way (Chrome account sync
+      // takes a while), and its starter sites must not get there first.
+      if (!remote && !ownData) { holding = true; return {}; }
       // A browser that only has the starter sites takes the synced copy as it
       // is: merging would bring back starter sites deleted elsewhere.
-      if (remote && !meta.base && mode === 'merge' && !local.editedAt) mode = 'remote';
+      if (remote && mode === 'merge' && !ownData && !meta.base) mode = 'remote';
+      // A synced copy nobody ever edited (starter sites a fresh browser shared
+      // before this one's data reached it) never removes edited data here.
+      if (remote && mode === 'merge' && ownData && !remoteEdited) mode = 'local';
       let merged;
       if (!remote || mode === 'local') merged = local.document;
       else if (mode === 'remote') merged = { ...remote.document, prefs: remote.document.prefs ?? local.document.prefs };
@@ -64,19 +84,25 @@ export function createSyncEngine({ store, channel, channelFor, area, withLock = 
         catch { merged = later(local.editedAt, remote.editedAt) ? local.document : remote.document; }
       }
       const config = documentOf(merged);
-      pushed = { merged, editedAt: latest(local.editedAt, remote?.editedAt) };
+      pushed = { merged, editedAt: latest(local.editedAt, remote?.editedAt), configEditedAt: latest(local.configEditedAt, remoteEdited) };
       if (merged.prefs && !sameDocument(merged.prefs, local.document.prefs)) await store.setPrefs(merged.prefs, { origin: 'sync' });
       if (sameDocument(config, documentOf(local.document))) return {};
       // Replacing this copy wholesale is always backed up first.
       return { document: config, options: { origin: 'sync', backupAs: mode === 'remote' ? 'sync' : null } };
     });
+    if (holding) {
+      return writeMeta({ ...meta, enabled: true, deviceId, state: 'empty', lastSyncedAt: now().toISOString(), lastError: null, conflicts: 0, remote: null });
+    }
     // The stored copy is the cleaned one; send exactly that.
     const document = { ...documentOf(record), prefs: pushed.merged.prefs ?? null };
     let bytes = meta.bytes || remote?.bytes || 0;
+    let writer = remote ? { thisDevice: Boolean(remote.deviceId) && remote.deviceId === deviceId, writtenAt: remote.writtenAt || null } : null;
     if (!remote || !sameDocument(document, remote.document)) {
-      ({ bytes } = await channel.write(document, { editedAt: pushed.editedAt, deviceId, writtenAt: now().toISOString() }));
+      const writtenAt = now().toISOString();
+      ({ bytes } = await channel.write(document, { editedAt: pushed.editedAt, configEditedAt: pushed.configEditedAt, deviceId, writtenAt }));
+      writer = { thisDevice: true, writtenAt };
     }
-    return writeMeta({ ...meta, enabled: true, deviceId, base: document, pendingMode: null, state: 'idle', lastSyncedAt: now().toISOString(), lastError: null, conflicts, bytes });
+    return writeMeta({ ...meta, enabled: true, deviceId, base: document, pendingMode: null, state: 'idle', lastSyncedAt: now().toISOString(), lastError: null, conflicts, bytes, remote: writer });
   }
 
   // A server refuses a write when its copy changed after the read (409):
@@ -108,8 +134,9 @@ export function createSyncEngine({ store, channel, channelFor, area, withLock = 
       if (!remote) return { remote: null };
       if (remote.incomplete) return { remote: { incomplete: true } };
       const local = await localDocument(await store.record());
-      return { remote: { ...summary(remote.document), editedAt: remote.editedAt, writtenAt: remote.writtenAt, same: sameDocument(documentOf(remote.document), documentOf(local.document)) },
-        local: { ...summary(local.document), editedAt: local.editedAt } };
+      // editedAt is the configuration's: whether either side has data of its own to choose from.
+      return { remote: { ...summary(remote.document), editedAt: remoteConfigEdited(remote), writtenAt: remote.writtenAt, same: sameDocument(documentOf(remote.document), documentOf(local.document)) },
+        local: { ...summary(local.document), editedAt: local.configEditedAt } };
     },
 
     // Sync stays on even if this first run fails (offline, quota): later runs retry it.
