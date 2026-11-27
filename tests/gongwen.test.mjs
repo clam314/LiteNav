@@ -301,7 +301,7 @@ test('materializes Word automatic numbering, protects images/tables/media bytes 
 });
 
 test('toolbox registers gongwen tool and renders controls, upload input and export button', () => {
-  assert.ok(TOOLS.some((item) => item.id === 'gongwen' && item.group === 'util'));
+  assert.ok(TOOLS.some((item) => item.id === 'gongwen' && item.group === 'text'));
   assert.equal(resolveTool('gongwen'), 'gongwen');
   const html = toolsMarkup('gongwen');
   assert.match(html, /href="#tools\/gongwen" class="tool-tab active" aria-current="page"/);

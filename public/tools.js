@@ -3,22 +3,26 @@
 import { icon } from './icons.js';
 import * as core from './tools-core.js';
 import * as gw from './gongwen-core.js';
+import * as tt from './text-tools.js';
 
 const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const STORAGE_KEY = 'litenav.tools.v1';
 const MAX_SAVED_INPUT = 200_000;
 
 export const TOOLS = [
+  { id: 'clean', group: 'text', name: '文本清洗', title: '文本清洗与格式规范', icon: 'wand', desc: '清理从 AI 回答、PDF 或网页复制来的文字：去掉 Markdown 符号和不可见字符，合并 PDF 断行，统一中文标点，删除多余空格（不会添加空格）。' },
+  { id: 'count', group: 'text', name: '字数统计', title: '字数统计', icon: 'hash', desc: '按 Word 的口径统计字数，并给出汉字、标点、英文、段落和阅读时长；在文本里选中一段，可以单独看这一段的字数。' },
+  { id: 'diff', group: 'text', name: '文本对比', title: '文本对比', icon: 'columns', desc: '对比两版文稿，中文逐字、英文逐词标出增删；可以忽略空格、标点或大小写，只看改动处。' },
   { id: 'json', group: 'data', name: 'JSON 格式化', title: 'JSON 格式化与校验', icon: 'braces', desc: '美化或压缩 JSON，定位语法错误，树形视图可折叠浏览；超长整数不会丢失精度。' },
   { id: 'yaml', group: 'data', name: 'YAML 格式化', title: 'YAML 格式化与校验', icon: 'file', desc: '统一缩进并检查语法错误，注释、引号和原有写法保持不变，支持多文档。' },
   { id: 'sql', group: 'data', name: 'SQL 格式化', title: 'SQL 格式化与美化', icon: 'database', desc: '把日志里复制的单行 SQL 排成关键字大写、层次清晰的格式，也能压缩回一行。' },
   { id: 'convert', group: 'data', name: 'JSON ⇄ YAML', title: 'JSON ⇄ YAML 互转', icon: 'swap', desc: '双向转换 Kubernetes、Docker Compose 等配置；多文档 YAML 会转换为 JSON 数组。' },
   { id: 'time', group: 'util', name: '时间戳转换', title: '时间戳与日期转换', icon: 'clock', desc: '输入时间戳或日期，自动识别秒、毫秒、微秒级时间戳，并按所选时区换算。' },
   { id: 'url', group: 'util', name: 'URL 编解码', title: 'URL 编码与解码', icon: 'link', desc: '转换链接中的中文与特殊字符，并拆解查询参数，告别乱码。' },
-  { id: 'text', group: 'util', name: '文本去重', title: '文本去重与空行清理', icon: 'filter', desc: '粘贴一批文本、IP 或 ID，一键去除重复项、首尾空格与空行，还可以排序。' },
-  { id: 'gongwen', group: 'util', name: '汇报排版', title: '汇报文档格式排版', icon: 'gongwen', desc: '上传 Word（.docx）文档或粘贴文稿，统一 A4 版心、标题层级、仿宋/楷体/小标宋与表格样式，支持“一是”至“十是”加粗、Times 西文中文标点保护与未闭合引号检测。' },
+  { id: 'text', group: 'text', name: '文本去重', title: '文本去重与空行清理', icon: 'filter', desc: '粘贴一批文本、IP 或 ID，一键去除重复项、首尾空格与空行，还可以排序。' },
+  { id: 'gongwen', group: 'text', name: '汇报排版', title: '汇报文档格式排版', icon: 'gongwen', desc: '上传 Word（.docx）文档或粘贴文稿，统一 A4 版心、标题层级、仿宋/楷体/小标宋与表格样式，支持“一是”至“十是”加粗、Times 西文中文标点保护与未闭合引号检测。' },
 ];
-const GROUPS = [['data', '数据处理'], ['util', '实用工具']];
+const GROUPS = [['text', '文本与文档'], ['data', '数据处理'], ['util', '实用工具']];
 
 const DEFAULTS = {
   json: { mode: 'pretty', indent: '2', view: 'text' },
@@ -28,6 +32,9 @@ const DEFAULTS = {
   time: { zone: 'local' },
   url: { mode: 'decode', scope: 'component', plus: true, charset: 'utf-8' },
   text: { trim: true, removeEmpty: true, dedupe: true, ignoreCase: false, sort: 'none', split: 'line' },
+  clean: { ...tt.CLEAN_DEFAULTS },
+  count: {},
+  diff: { view: 'merged', ignoreWhitespace: false, ignorePunct: false, ignoreCase: false, changedOnly: false },
   gongwen: { ...gw.DEFAULT_GONGWEN_OPTIONS },
 };
 
@@ -39,6 +46,10 @@ const SAMPLES = {
   yaml2json: 'services:\n  web:\n    image: nginx:1.27\n    ports:\n      - "8080:80"\n    restart: unless-stopped\n    healthcheck:\n      test: ["CMD", "curl", "-f", "http://localhost"]\n      interval: 30s\n',
   urlDecode: 'https://www.example.com/search?q=%E8%BD%BB%E8%88%AA%20LiteNav&lang=zh-CN&tags=%E5%AF%BC%E8%88%AA%2C%E5%B7%A5%E5%85%B7',
   urlEncode: 'https://www.example.com/search?q=轻航 LiteNav&tags=导航,工具',
+  clean: '## 关于 2026 年工作计划的说明\n\n**一、总体目标**\n\n今年要 完成 30 个项目,覆盖 5 个城市;重点推进 AI 应用落地.\n- 提升服务效率（目标:提高 20%）\n- 建设 统一平台 ,实现数据共享。。\n\n\n(注:具体安排以"正式通知"为准)\u200b\n',
+  count: '轻航 LiteNav 是一个轻量的个人导航页。2026 年发布的 v1.5 版本，新增了回收站、最近使用和文本处理工具。\n\n所有处理都在浏览器本地完成，内容不会上传到服务器。',
+  diffA: '各单位要高度重视，认真组织实施，确保各项任务落到实处。\n请于11月30日前将工作总结报送办公室。\n联系人：张三，电话：12345678。',
+  diffB: '各单位要高度重视，精心组织实施，确保各项任务按期落实。\n请于12月5日前将书面工作总结报送办公室。\n联系人：张三，电话：12345678。',
   text: '192.168.1.10\n  192.168.1.2\n\n192.168.1.10\n10.0.0.8 \n\n192.168.1.2\n10.0.0.12\n',
 };
 
@@ -162,6 +173,21 @@ function bodyMarkup(id) {
         panes({ inputLabel: decode ? '输入编码后的文本' : '输入原始文本', outputLabel: decode ? '解码结果' : '编码结果', placeholder: decode ? '粘贴含 %E4%B8%AD 之类编码的链接或参数' : '输入含中文或特殊字符的链接或参数' }) +
         '<div data-after></div>';
     }
+    case 'clean':
+      return controls(tt.CLEAN_RULES.map(([key, label]) => check(key, o[key], label)).join('')) +
+        panes({ inputLabel: '原文', outputLabel: '清洗结果', placeholder: '粘贴从 AI 回答、PDF 或网页复制的文字，自动清洗' });
+    case 'count':
+      return controls('<span class="tool-hint">在左侧选中一段文字，可以单独统计这一段</span>') +
+        panes({ inputLabel: '文本', outputLabel: '统计结果', placeholder: '粘贴或输入文字，实时统计字数' });
+    case 'diff': {
+      const area = (side, label, placeholder) => '<div class="tool-pane"><div class="pane-head"><span class="pane-title">' + label + '</span><span class="pane-meta" data-input-meta="' + side + '"></span></div>' +
+        '<textarea class="code-area" data-input="' + side + '" spellcheck="false" autocomplete="off" aria-label="' + label + '" placeholder="' + placeholder + '"></textarea></div>';
+      return controls(seg('view', o.view, [['merged', '合并显示'], ['split', '左右对照']], '显示方式') + check('ignoreWhitespace', o.ignoreWhitespace, '忽略空格') +
+        check('ignorePunct', o.ignorePunct, '忽略标点') + check('ignoreCase', o.ignoreCase, '忽略大小写') + check('changedOnly', o.changedOnly, '只看改动处') + smallButton('diff-swap', '交换', 'swap')) +
+        '<div class="tool-panes diff-inputs">' + area('a', '原文', '粘贴修改前的文字') + area('b', '修改后', '粘贴修改后的文字') + '</div>' +
+        '<div class="tool-pane diff-result"><div class="pane-head"><span class="pane-title">对比结果</span><span class="pane-tools">' + smallButton('copy', '复制', 'copy') + '</span></div><div class="diff-output" data-output></div></div>' +
+        '<div class="tool-status" data-status role="status" aria-live="polite"></div>';
+    }
     case 'text':
       return controls(check('trim', o.trim, '去除首尾空格') + check('removeEmpty', o.removeEmpty, '删除空行') + check('dedupe', o.dedupe, '去除重复') +
         check('ignoreCase', o.ignoreCase, '忽略大小写') +
@@ -250,7 +276,46 @@ const describe = (value) => {
   return value instanceof core.Num ? '数字' : value === null ? 'null' : typeof value === 'string' ? '字符串' : '布尔值';
 };
 
+const CLEAN_NOTES = { invisible: '不可见字符', markdown: 'Markdown 符号', mergeLines: '断行', punctuation: '标点', fullwidthAlnum: '全角字母数字', hanSpaces: '空格', mixedSpaces: '空格', repeatedPunct: '重复标点', blankLines: '空行' };
+const minutes = (value) => (value < 0.5 ? '不到 1 分钟' : '约 ' + Math.max(1, Math.round(value)) + ' 分钟');
+const segmentsHtml = (segments) => segments.map((segment) => segment.type === 'gap'
+  ? '<span class="diff-gap">…… ' + segment.lines + ' 行未改动 ……</span>'
+  : segment.type === 'equal' ? esc(segment.text) : '<' + segment.type + '>' + esc(segment.text) + '</' + segment.type + '>').join('');
+
 const runners = {
+  clean(source, o) {
+    if (!source) return { idle: '粘贴文字后会按勾选的规则自动清洗' };
+    const { text, counts } = tt.cleanText(source, o);
+    const notes = new Map();
+    for (const [rule, times] of Object.entries(counts)) notes.set(CLEAN_NOTES[rule], (notes.get(CLEAN_NOTES[rule]) || 0) + times);
+    return { text, status: notes.size ? { kind: 'ok', text: '已清洗：' + [...notes].map(([label, times]) => label + ' ' + times + ' 处').join(' · ') } : { kind: 'ok', text: '没有需要清洗的内容' } };
+  },
+  count(source) {
+    if (!source) return { idle: '输入文字后实时统计' };
+    const c = tt.countText(source);
+    const items = [
+      ['字数', c.words, '按 Word 的口径：汉字和中文标点各算一个，英文单词、数字各算一个', true],
+      ['汉字', c.han, '不含标点'], ['中文标点', c.cjkPunct], ['英文单词和数字', c.latin],
+      ['字符（不含空格）', c.nonSpace], ['字符（含空格）', c.chars], ['段落', c.paragraphs], ['行数', c.lines],
+    ];
+    const html = '<div class="count-results"><div class="count-grid">' + items.map(([label, value, hint, main]) => '<div class="count-item' + (main ? ' is-main' : '') + '"' + (hint ? ' title="' + esc(hint) + '"' : '') + '><span class="count-label">' + label + '</span><span class="count-value">' + value.toLocaleString('zh-CN') + '</span></div>').join('') + '</div>' +
+      '<p class="count-note">阅读' + minutes(c.readMinutes) + '，朗读或发言' + minutes(c.speakMinutes) + ' · ' + formatSize(c.bytes) + '（UTF-8）</p></div>';
+    return { html, copy: items.map(([label, value]) => label + '：' + value).join('\n'), status: { kind: 'ok', text: '字数按 Word 的口径统计；征文、公文要求的“字数”通常就是这个数' } };
+  },
+  diff(source, o) {
+    if (!source.a && !source.b) return { idle: '在上面两栏分别粘贴修改前后的文字，自动标出差异' };
+    const result = tt.diffText(source.a, source.b, o);
+    const ignored = [o.ignoreWhitespace && '空格', o.ignorePunct && '标点', o.ignoreCase && '大小写'].filter(Boolean);
+    if (result.stats.same) {
+      return { html: '<div class="pane-empty">' + (ignored.length ? '忽略' + ignored.join('、') + '后，两段文字相同' : '两段文字完全相同') + '</div>', copy: '', status: { kind: 'ok', text: '没有差异' } };
+    }
+    const merged = o.changedOnly ? tt.foldUnchanged(result.merged) : result.merged;
+    const html = o.view === 'split'
+      ? '<div class="diff-split"><div class="diff-text">' + segmentsHtml(result.left) + '</div><div class="diff-text">' + segmentsHtml(result.right) + '</div></div>'
+      : '<div class="diff-text">' + segmentsHtml(merged) + '</div>';
+    const { inserted, deleted, changes } = result.stats;
+    return { html, copy: tt.diffReport(merged), status: { kind: 'ok', text: changes + ' 处改动 · 新增 ' + inserted + ' 字 · 删除 ' + deleted + ' 字' + (ignored.length ? ' · 已忽略' + ignored.join('、') : '') } };
+  },
   json(source, o) {
     if (!source.trim()) return { idle: '粘贴 JSON 后会自动校验并格式化' };
     let parsed = core.parseJson(source);
@@ -367,8 +432,8 @@ function outputTextarea(container, text) {
   area.value = text;
 }
 
-function updateMeta(root, source) {
-  const meta = root.querySelector('[data-input-meta]');
+function updateMeta(root, source, side = '') {
+  const meta = root.querySelector(side ? '[data-input-meta="' + side + '"]' : '[data-input-meta]');
   if (meta) meta.textContent = source ? source.length.toLocaleString('zh-CN') + ' 字符 · ' + source.split('\n').length.toLocaleString('zh-CN') + ' 行' : '';
 }
 
@@ -793,10 +858,11 @@ function run(root) {
     runGongwen(view);
     return;
   }
-  const source = state.inputs[id] ?? '';
+  const source = id === 'diff' ? { a: state.inputs['diff:a'] ?? '', b: state.inputs['diff:b'] ?? '' } : state.inputs[id] ?? '';
   const options = state.options[id];
   const output = view.querySelector('[data-output]');
-  updateMeta(view, source);
+  if (id === 'diff') { updateMeta(view, source.a, 'a'); updateMeta(view, source.b, 'b'); }
+  else updateMeta(view, source);
   let result;
   try {
     result = runners[id](source, options);
@@ -820,6 +886,9 @@ function run(root) {
     lastOutput = result.rows.map(([label, value]) => label + '：' + value).join('\n');
     output.innerHTML = result.rows.map(([label, value]) => '<div class="result-row"><span class="now-label">' + esc(label) + '</span><code class="result-value">' + esc(value) + '</code>' +
       '<button type="button" class="icon-button" data-cmd="copy-value" data-value="' + esc(value) + '" aria-label="复制' + esc(label) + '" title="复制">' + icon('copy', 15) + '</button></div>').join('');
+  } else if (result.html !== undefined) {
+    lastOutput = result.copy ?? '';
+    output.innerHTML = result.html;
   } else if (result.tree !== undefined) {
     lastOutput = result.text;
     output.innerHTML = treeMarkup(result.tree);
@@ -937,6 +1006,18 @@ function setOption(view, name, value) {
   rerenderBody(view);
 }
 
+// 文本对比 has two inputs (data-input="a" and "b"), kept as diff:a and diff:b.
+const inputKey = (view, input) => (input.dataset.input ? view.dataset.tool + ':' + input.dataset.input : view.dataset.tool);
+
+function setDiffInputs(view, a, b) {
+  state.inputs['diff:a'] = a;
+  state.inputs['diff:b'] = b;
+  view.querySelector('[data-input="a"]').value = a;
+  view.querySelector('[data-input="b"]').value = b;
+  saveState();
+  run(view.parentElement);
+}
+
 function setInput(view, value) {
   state.inputs[view.dataset.tool] = value;
   const input = view.querySelector('[data-input]');
@@ -1016,6 +1097,12 @@ function handleCommand(view, button) {
         return;
     }
   }
+  if (id === 'diff' && ['sample', 'clear', 'diff-swap'].includes(button.dataset.cmd)) {
+    if (button.dataset.cmd === 'sample') setDiffInputs(view, SAMPLES.diffA, SAMPLES.diffB);
+    else if (button.dataset.cmd === 'clear') { setDiffInputs(view, '', ''); view.querySelector('[data-input="a"]').focus(); }
+    else setDiffInputs(view, state.inputs['diff:b'] ?? '', state.inputs['diff:a'] ?? '');
+    return;
+  }
   switch (button.dataset.cmd) {
     case 'sample': setInput(view, sampleFor(id)); break;
     case 'clear': setInput(view, ''); view.querySelector('[data-input]')?.focus(); break;
@@ -1057,10 +1144,22 @@ function bindEvents() {
     const input = event.target.closest?.('.tools-view [data-input]');
     if (!input) return;
     const view = input.closest('.tools-view');
-    state.inputs[view.dataset.tool] = input.value;
+    state.inputs[inputKey(view, input)] = input.value;
     saveState();
     clearTimeout(runTimer);
     runTimer = setTimeout(() => run(view.parentElement), input.value.length > 50_000 ? 350 : 80);
+  });
+  // 字数统计: a selection in the text is counted on its own.
+  document.addEventListener('selectionchange', () => {
+    const input = document.activeElement;
+    if (!input?.matches?.('.tools-view[data-tool="count"] [data-input]')) return;
+    const view = input.closest('.tools-view');
+    const selected = input.value.slice(input.selectionStart, input.selectionEnd);
+    const meta = view.querySelector('[data-input-meta]');
+    if (!selected.trim()) { updateMeta(view, input.value); meta?.classList.remove('is-selection'); return; }
+    const c = tt.countText(selected);
+    meta.textContent = '选中 ' + c.words.toLocaleString('zh-CN') + ' 字（汉字 ' + c.han.toLocaleString('zh-CN') + '）';
+    meta.classList.add('is-selection');
   });
   document.addEventListener('compositionend', (event) => {
     const gwArea = event.target.closest?.('.tools-view [data-gw-text]');
@@ -1143,8 +1242,7 @@ function hydrate(root) {
   const view = root.querySelector('.tools-view');
   if (!view) return;
   const id = view.dataset.tool;
-  const input = view.querySelector('[data-input]');
-  if (input) input.value = state.inputs[id] ?? '';
+  for (const input of view.querySelectorAll('[data-input]')) input.value = state.inputs[inputKey(view, input)] ?? '';
   clearInterval(clockTimer);
   if (id === 'time') {
     tickClock(view);

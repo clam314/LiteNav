@@ -440,3 +440,26 @@
   .tool-controls { gap: 8px 10px; }
   .tool-controls-spacer { display: none; }
 }
+
+/* 文本与文档: prose wraps; 字数统计 and 文本对比 results */
+.tools-view:is([data-tool="clean"], [data-tool="count"], [data-tool="diff"]) .code-area { white-space: pre-wrap; overflow-wrap: anywhere; font-family: inherit; font-size: 13.5px; line-height: 1.75; }
+.tool-hint { color: var(--muted); font-size: 12.5px; }
+.pane-meta.is-selection { color: var(--blue); }
+.count-results { height: var(--pane-height); padding: 14px; overflow: auto; display: flex; flex-direction: column; gap: 12px; }
+.count-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; }
+.count-item { padding: 11px 13px; display: grid; gap: 3px; background: rgb(255 255 255 / 3%); border: 1px solid var(--line); border-radius: 9px; }
+.count-item.is-main { grid-column: 1 / -1; border-color: var(--blue-line); background: var(--blue-soft); }
+.count-label { color: var(--muted); font-size: 12px; }
+.count-value { color: var(--ink); font-size: 20px; font-weight: 650; font-variant-numeric: tabular-nums; }
+.count-item.is-main .count-value { color: var(--blue); font-size: 30px; }
+.count-note { color: var(--muted); font-size: 12.5px; line-height: 1.7; }
+.diff-inputs .code-area { height: 180px; }
+.diff-result { margin-top: 14px; }
+.diff-output { min-height: 120px; max-height: 60vh; overflow: auto; }
+.diff-output .pane-empty { height: 120px; }
+.diff-text { padding: 12px 14px; color: var(--text); font-size: 13.5px; line-height: 1.85; white-space: pre-wrap; overflow-wrap: anywhere; }
+.diff-text ins { color: #8fe0a8; background: rgb(64 190 110 / 18%); text-decoration: none; border-radius: 3px; padding: 0 1px; }
+.diff-text del { color: #ff9c9c; background: rgb(229 90 90 / 18%); text-decoration: line-through; text-decoration-color: rgb(255 156 156 / 60%); border-radius: 3px; padding: 0 1px; }
+.diff-gap { display: block; margin: 6px 0; padding: 3px 0; color: var(--subtle); font-size: 12px; text-align: center; background: rgb(255 255 255 / 3%); border-radius: 6px; }
+.diff-split { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.diff-split .diff-text + .diff-text { border-left: 1px solid var(--line); }
