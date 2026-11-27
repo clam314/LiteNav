@@ -49,3 +49,4 @@ node_modules
 venv
 .codex
 .agents
+dist

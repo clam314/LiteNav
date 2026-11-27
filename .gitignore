@@ -28,3 +28,6 @@ litenav-backup-*.json
 *.db
 # Local Claude Code settings (launch configs and the like)
 .claude/
+
+# Built Chrome extension (scripts/build_extension.py)
+dist/

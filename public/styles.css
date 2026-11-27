@@ -569,3 +569,15 @@ input, select, textarea { min-width: 0; }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation-duration: .001ms !important; animation-iteration-count: 1 !important; transition-duration: .001ms !important; scroll-behavior: auto !important; }
 }
+
+/* 云同步 (Chrome extension) */
+.sync-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+.sync-head .settings-description { max-width: 620px; line-height: 1.7; }
+.sync-head .settings-actions { margin-top: 0; flex: 0 0 auto; }
+.sync-head + .field-hint, .sync-error + .field-hint, .sync-head ~ .field-hint { margin-top: 10px; }
+.sync-state { display: flex; align-items: center; gap: 8px; margin-bottom: 4px; color: var(--text); font-size: 14px; font-weight: 600; }
+.sync-dot { width: 8px; height: 8px; border-radius: 50%; background: #5fd08f; box-shadow: 0 0 0 3px rgb(95 208 143 / 15%); }
+.sync-dot.is-error { background: var(--danger); box-shadow: 0 0 0 3px var(--danger-soft); }
+.sync-error { margin-top: 10px; padding: 9px 12px; border: 1px solid var(--danger-line); border-radius: 10px; color: var(--danger); background: var(--danger-soft); font-size: 13px; }
+.sync-choice { padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; }
+.sync-choice strong { display: block; font-weight: 600; }

@@ -907,5 +907,26 @@ class LinkCheckCase(DataFixture):
                 checker.start(ids)
 
 
+
+class SharedStateCases(unittest.TestCase):
+    """The Chrome extension validates with public/state-model.js; both must agree on these cases."""
+
+    def test_validate_state_matches_shared_fixture(self):
+        cases = json.loads((Path(__file__).parent / "fixtures" / "state-cases.json").read_text("utf-8"))["cases"]
+        for case in cases:
+            with self.subTest(case["name"]):
+                if "error" in case:
+                    with self.assertRaises(server.APIError) as caught:
+                        server.validate_state(case["input"])
+                    self.assertEqual(str(caught.exception), case["error"])
+                else:
+                    self.assertEqual(server.validate_state(case["input"]), case["expect"])
+
+    def test_known_sites_come_from_the_shared_table(self):
+        shared = json.loads((Path(server.ROOT) / "public" / "known-sites.json").read_text("utf-8"))
+        self.assertEqual(server.KNOWN_SITES["github.com"], tuple(shared["sites"]["github.com"]))
+        self.assertEqual(server.CATEGORY_ALIASES["办公"], tuple(shared["categoryAliases"]["办公"]))
+
+
 if __name__ == "__main__":
     unittest.main()

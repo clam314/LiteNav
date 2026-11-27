@@ -73,6 +73,11 @@ export function loadSpine38() {
 // runtime it builds on. Both builds add their classes to PIXI.live2d, so each
 // loads into a namespace of its own (see loadLive2DBuild).
 const PIXI_RUNTIME = '/vendor/live2d/pixi-6.5.10.min.js';
+// PixiJS 6 compiles uniform setters with new Function and refuses to start
+// where pages may not (the Chrome extension's CSP). Its official patch swaps
+// in plain setters; it is only loaded there.
+const PIXI_UNSAFE_EVAL = '/vendor/live2d/pixi-unsafe-eval-6.5.10.min.js';
+const evalAllowed = () => { try { return new Function('return true')(); } catch { return false; } };
 const LIVE2D_GENERATIONS = {
   4: { runtime: '/vendor/live2d/live2dcubismcore.min.js', ready: () => window.Live2DCubismCore,
     build: '/vendor/live2d/pixi-live2d-display-0.4.0-cubism4.min.js', settings: 'Cubism4ModelSettings' },
@@ -88,6 +93,7 @@ export function loadLive2DRuntime(generation = 4) {
   live2dRuntimes[generation] ||= (async () => {
     await loadRuntimeFile('script', spec.runtime, 'live2d-core-' + generation);
     await loadRuntimeFile('script', PIXI_RUNTIME, 'live2d-pixi');
+    if (!evalAllowed()) await loadRuntimeFile('script', PIXI_UNSAFE_EVAL, 'live2d-pixi-unsafe-eval');
     const PIXI = window.PIXI;
     const live2d = await loadLive2DBuild(PIXI, spec.build, generation);
     if (!spec.ready() || !live2d?.Live2DModel || !live2d[spec.settings]) throw new Error('角色播放器未能载入');

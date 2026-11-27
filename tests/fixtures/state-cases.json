@@ -1,0 +1,1868 @@
+{
+ "_comment": "validate_state cases; tests/test_server.py and tests/state-model.test.mjs both check them. Regenerate expectations from server.py when the rules change.",
+ "cases": [
+  {
+   "name": "seed",
+   "input": {
+    "categories": [
+     {
+      "id": "ai",
+      "name": "AI 工具",
+      "icon": "sparkles",
+      "column": 0,
+      "order": 0
+     },
+     {
+      "id": "development",
+      "name": "开发工具",
+      "icon": "code",
+      "column": 1,
+      "order": 1
+     },
+     {
+      "id": "work",
+      "name": "效率办公",
+      "icon": "layers",
+      "column": 2,
+      "order": 2
+     }
+    ],
+    "links": [
+     {
+      "id": "chatgpt",
+      "name": "ChatGPT",
+      "url": "https://chatgpt.com",
+      "icon": "chatgpt",
+      "kind": "website",
+      "categoryId": "ai",
+      "pinned": true,
+      "order": 0,
+      "pinnedOrder": 0,
+      "monitorEnabled": false
+     },
+     {
+      "id": "claude",
+      "name": "Claude",
+      "url": "https://claude.ai",
+      "icon": "claude",
+      "kind": "website",
+      "categoryId": "ai",
+      "pinned": false,
+      "order": 1,
+      "pinnedOrder": 1,
+      "monitorEnabled": false
+     },
+     {
+      "id": "deepseek",
+      "name": "DeepSeek",
+      "url": "https://chat.deepseek.com",
+      "icon": "deepseek",
+      "kind": "website",
+      "categoryId": "ai",
+      "pinned": false,
+      "order": 2,
+      "pinnedOrder": 2,
+      "monitorEnabled": false
+     },
+     {
+      "id": "github",
+      "name": "GitHub",
+      "url": "https://github.com",
+      "icon": "github",
+      "kind": "website",
+      "categoryId": "development",
+      "pinned": true,
+      "order": 3,
+      "pinnedOrder": 1,
+      "monitorEnabled": false
+     },
+     {
+      "id": "mdn",
+      "name": "MDN",
+      "url": "https://developer.mozilla.org",
+      "icon": "mdn",
+      "kind": "website",
+      "categoryId": "development",
+      "pinned": true,
+      "order": 4,
+      "pinnedOrder": 2,
+      "monitorEnabled": false
+     },
+     {
+      "id": "stackoverflow",
+      "name": "Stack Overflow",
+      "url": "https://stackoverflow.com",
+      "icon": "stackoverflow",
+      "kind": "website",
+      "categoryId": "development",
+      "pinned": false,
+      "order": 5,
+      "pinnedOrder": 5,
+      "monitorEnabled": false
+     },
+     {
+      "id": "notion",
+      "name": "Notion",
+      "url": "https://www.notion.so",
+      "icon": "notion",
+      "kind": "website",
+      "categoryId": "work",
+      "pinned": true,
+      "order": 6,
+      "pinnedOrder": 3,
+      "monitorEnabled": false
+     },
+     {
+      "id": "figma",
+      "name": "Figma",
+      "url": "https://www.figma.com",
+      "icon": "figma",
+      "kind": "website",
+      "categoryId": "work",
+      "pinned": true,
+      "order": 7,
+      "pinnedOrder": 4,
+      "monitorEnabled": false
+     },
+     {
+      "id": "gmail",
+      "name": "Gmail",
+      "url": "https://mail.google.com",
+      "icon": "gmail",
+      "kind": "website",
+      "categoryId": "work",
+      "pinned": true,
+      "order": 8,
+      "pinnedOrder": 5,
+      "monitorEnabled": false
+     }
+    ],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5
+    }
+   },
+   "expect": {
+    "categories": [
+     {
+      "id": "ai",
+      "name": "AI 工具",
+      "icon": "sparkles",
+      "column": 0,
+      "order": 0
+     },
+     {
+      "id": "development",
+      "name": "开发工具",
+      "icon": "code",
+      "column": 1,
+      "order": 1
+     },
+     {
+      "id": "work",
+      "name": "效率办公",
+      "icon": "layers",
+      "column": 2,
+      "order": 2
+     }
+    ],
+    "links": [
+     {
+      "id": "chatgpt",
+      "name": "ChatGPT",
+      "url": "https://chatgpt.com",
+      "icon": "chatgpt",
+      "kind": "website",
+      "categoryId": "ai",
+      "pinned": true,
+      "order": 0,
+      "pinnedOrder": 0,
+      "monitorEnabled": false
+     },
+     {
+      "id": "claude",
+      "name": "Claude",
+      "url": "https://claude.ai",
+      "icon": "claude",
+      "kind": "website",
+      "categoryId": "ai",
+      "pinned": false,
+      "order": 1,
+      "pinnedOrder": 1,
+      "monitorEnabled": false
+     },
+     {
+      "id": "deepseek",
+      "name": "DeepSeek",
+      "url": "https://chat.deepseek.com",
+      "icon": "deepseek",
+      "kind": "website",
+      "categoryId": "ai",
+      "pinned": false,
+      "order": 2,
+      "pinnedOrder": 2,
+      "monitorEnabled": false
+     },
+     {
+      "id": "github",
+      "name": "GitHub",
+      "url": "https://github.com",
+      "icon": "github",
+      "kind": "website",
+      "categoryId": "development",
+      "pinned": true,
+      "order": 3,
+      "pinnedOrder": 1,
+      "monitorEnabled": false
+     },
+     {
+      "id": "mdn",
+      "name": "MDN",
+      "url": "https://developer.mozilla.org",
+      "icon": "mdn",
+      "kind": "website",
+      "categoryId": "development",
+      "pinned": true,
+      "order": 4,
+      "pinnedOrder": 2,
+      "monitorEnabled": false
+     },
+     {
+      "id": "stackoverflow",
+      "name": "Stack Overflow",
+      "url": "https://stackoverflow.com",
+      "icon": "stackoverflow",
+      "kind": "website",
+      "categoryId": "development",
+      "pinned": false,
+      "order": 5,
+      "pinnedOrder": 5,
+      "monitorEnabled": false
+     },
+     {
+      "id": "notion",
+      "name": "Notion",
+      "url": "https://www.notion.so",
+      "icon": "notion",
+      "kind": "website",
+      "categoryId": "work",
+      "pinned": true,
+      "order": 6,
+      "pinnedOrder": 3,
+      "monitorEnabled": false
+     },
+     {
+      "id": "figma",
+      "name": "Figma",
+      "url": "https://www.figma.com",
+      "icon": "figma",
+      "kind": "website",
+      "categoryId": "work",
+      "pinned": true,
+      "order": 7,
+      "pinnedOrder": 4,
+      "monitorEnabled": false
+     },
+     {
+      "id": "gmail",
+      "name": "Gmail",
+      "url": "https://mail.google.com",
+      "icon": "gmail",
+      "kind": "website",
+      "categoryId": "work",
+      "pinned": true,
+      "order": 8,
+      "pinnedOrder": 5,
+      "monitorEnabled": false
+     }
+    ],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "empty object",
+   "input": {},
+   "expect": {
+    "categories": [],
+    "links": [],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "not object",
+   "input": [],
+   "error": "配置必须是 JSON 对象"
+  },
+  {
+   "name": "url example.com",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "example.com",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "expect": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发",
+      "icon": "folder",
+      "column": 0,
+      "order": 0
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://example.com",
+      "icon": "",
+      "kind": "website",
+      "categoryId": "c1",
+      "pinned": false,
+      "order": 0,
+      "pinnedOrder": 0,
+      "monitorEnabled": false
+     }
+    ],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "url Example.COM/Path?q=1#x",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "Example.COM/Path?q=1#x",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "expect": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发",
+      "icon": "folder",
+      "column": 0,
+      "order": 0
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://example.com/Path?q=1#x",
+      "icon": "",
+      "kind": "website",
+      "categoryId": "c1",
+      "pinned": false,
+      "order": 0,
+      "pinnedOrder": 0,
+      "monitorEnabled": false
+     }
+    ],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "url HTTP://Example.com:8080/ab",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "HTTP://Example.com:8080/ab",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "expect": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发",
+      "icon": "folder",
+      "column": 0,
+      "order": 0
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "http://example.com:8080/ab",
+      "icon": "",
+      "kind": "website",
+      "categoryId": "c1",
+      "pinned": false,
+      "order": 0,
+      "pinnedOrder": 0,
+      "monitorEnabled": false
+     }
+    ],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "url 192.168.1.10:8096",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "192.168.1.10:8096",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "expect": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发",
+      "icon": "folder",
+      "column": 0,
+      "order": 0
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "http://192.168.1.10:8096",
+      "icon": "",
+      "kind": "website",
+      "categoryId": "c1",
+      "pinned": false,
+      "order": 0,
+      "pinnedOrder": 0,
+      "monitorEnabled": false
+     }
+    ],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "url localhost:3000/web",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "localhost:3000/web",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "expect": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发",
+      "icon": "folder",
+      "column": 0,
+      "order": 0
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "http://localhost:3000/web",
+      "icon": "",
+      "kind": "website",
+      "categoryId": "c1",
+      "pinned": false,
+      "order": 0,
+      "pinnedOrder": 0,
+      "monitorEnabled": false
+     }
+    ],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "url nas.lan",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "nas.lan",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "expect": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发",
+      "icon": "folder",
+      "column": 0,
+      "order": 0
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "http://nas.lan",
+      "icon": "",
+      "kind": "website",
+      "categoryId": "c1",
+      "pinned": false,
+      "order": 0,
+      "pinnedOrder": 0,
+      "monitorEnabled": false
+     }
+    ],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "url [::1]:8080/x",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "[::1]:8080/x",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "expect": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发",
+      "icon": "folder",
+      "column": 0,
+      "order": 0
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://[::1]:8080/x",
+      "icon": "",
+      "kind": "website",
+      "categoryId": "c1",
+      "pinned": false,
+      "order": 0,
+      "pinnedOrder": 0,
+      "monitorEnabled": false
+     }
+    ],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "url https://例子.测试/路径",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://例子.测试/路径",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "expect": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发",
+      "icon": "folder",
+      "column": 0,
+      "order": 0
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://xn--fsqu00a.xn--0zwm56d/路径",
+      "icon": "",
+      "kind": "website",
+      "categoryId": "c1",
+      "pinned": false,
+      "order": 0,
+      "pinnedOrder": 0,
+      "monitorEnabled": false
+     }
+    ],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "url https://a.com/?",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://a.com/?",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "expect": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发",
+      "icon": "folder",
+      "column": 0,
+      "order": 0
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://a.com/",
+      "icon": "",
+      "kind": "website",
+      "categoryId": "c1",
+      "pinned": false,
+      "order": 0,
+      "pinnedOrder": 0,
+      "monitorEnabled": false
+     }
+    ],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "url https://a.com/#",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://a.com/#",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "expect": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发",
+      "icon": "folder",
+      "column": 0,
+      "order": 0
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://a.com/",
+      "icon": "",
+      "kind": "website",
+      "categoryId": "c1",
+      "pinned": false,
+      "order": 0,
+      "pinnedOrder": 0,
+      "monitorEnabled": false
+     }
+    ],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "url https://a.com:443/",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://a.com:443/",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "expect": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发",
+      "icon": "folder",
+      "column": 0,
+      "order": 0
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://a.com:443/",
+      "icon": "",
+      "kind": "website",
+      "categoryId": "c1",
+      "pinned": false,
+      "order": 0,
+      "pinnedOrder": 0,
+      "monitorEnabled": false
+     }
+    ],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "url https://a.com:0/",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://a.com:0/",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "expect": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发",
+      "icon": "folder",
+      "column": 0,
+      "order": 0
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://a.com/",
+      "icon": "",
+      "kind": "website",
+      "categoryId": "c1",
+      "pinned": false,
+      "order": 0,
+      "pinnedOrder": 0,
+      "monitorEnabled": false
+     }
+    ],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "url https://a.com:/x",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://a.com:/x",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "expect": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发",
+      "icon": "folder",
+      "column": 0,
+      "order": 0
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://a.com/x",
+      "icon": "",
+      "kind": "website",
+      "categoryId": "c1",
+      "pinned": false,
+      "order": 0,
+      "pinnedOrder": 0,
+      "monitorEnabled": false
+     }
+    ],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "url ftp://a.com",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "ftp://a.com",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "error": "网址格式不正确"
+  },
+  {
+   "name": "url mailto:x@y.com",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "mailto:x@y.com",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "error": "仅支持 http 和 https 网址"
+  },
+  {
+   "name": "url https://user:pw@a.com",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://user:pw@a.com",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "error": "网址格式不正确"
+  },
+  {
+   "name": "url https://a.com:99999",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://a.com:99999",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "error": "网址格式不正确"
+  },
+  {
+   "name": "url https://a.com:abc",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://a.com:abc",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "error": "网址格式不正确"
+  },
+  {
+   "name": "url   https://trim.com  ",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "  https://trim.com  ",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "expect": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发",
+      "icon": "folder",
+      "column": 0,
+      "order": 0
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://trim.com",
+      "icon": "",
+      "kind": "website",
+      "categoryId": "c1",
+      "pinned": false,
+      "order": 0,
+      "pinnedOrder": 0,
+      "monitorEnabled": false
+     }
+    ],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "url https://a .com",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://a .com",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "error": "网址格式不正确"
+  },
+  {
+   "name": "url ",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "error": "请填写网址"
+  },
+  {
+   "name": "url https://",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "error": "网址格式不正确"
+  },
+  {
+   "name": "url 10.0.0.5",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "10.0.0.5",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "expect": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发",
+      "icon": "folder",
+      "column": 0,
+      "order": 0
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "http://10.0.0.5",
+      "icon": "",
+      "kind": "website",
+      "categoryId": "c1",
+      "pinned": false,
+      "order": 0,
+      "pinnedOrder": 0,
+      "monitorEnabled": false
+     }
+    ],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "url 172.20.1.1:9000",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "172.20.1.1:9000",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "expect": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发",
+      "icon": "folder",
+      "column": 0,
+      "order": 0
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "http://172.20.1.1:9000",
+      "icon": "",
+      "kind": "website",
+      "categoryId": "c1",
+      "pinned": false,
+      "order": 0,
+      "pinnedOrder": 0,
+      "monitorEnabled": false
+     }
+    ],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "url 172.32.1.1",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "172.32.1.1",
+      "categoryId": "c1",
+      "kind": "website"
+     }
+    ]
+   },
+   "expect": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发",
+      "icon": "folder",
+      "column": 0,
+      "order": 0
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://172.32.1.1",
+      "icon": "",
+      "kind": "website",
+      "categoryId": "c1",
+      "pinned": false,
+      "order": 0,
+      "pinnedOrder": 0,
+      "monitorEnabled": false
+     }
+    ],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "service without category",
+   "input": {
+    "categories": [],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "http://nas.lan:5000",
+      "categoryId": null,
+      "kind": "service",
+      "monitorEnabled": true
+     }
+    ]
+   },
+   "expect": {
+    "categories": [],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "http://nas.lan:5000",
+      "icon": "",
+      "kind": "service",
+      "categoryId": null,
+      "pinned": false,
+      "order": 0,
+      "pinnedOrder": 0,
+      "monitorEnabled": true
+     }
+    ],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "website without category",
+   "input": {
+    "categories": [],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://example.com",
+      "categoryId": null
+     }
+    ]
+   },
+   "error": "请为网址选择分类"
+  },
+  {
+   "name": "duplicate url with slash",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://example.com",
+      "categoryId": "c1"
+     },
+     {
+      "id": "l2",
+      "name": "站点",
+      "url": "https://example.com/",
+      "categoryId": "c1"
+     }
+    ]
+   },
+   "error": "该网址已存在，请编辑已有入口"
+  },
+  {
+   "name": "duplicate id",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://example.com",
+      "categoryId": "c1"
+     },
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://b.com",
+      "categoryId": "c1"
+     }
+    ]
+   },
+   "error": "网址名称和 ID 不能为空，ID 不能重复"
+  },
+  {
+   "name": "unknown category",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://example.com",
+      "categoryId": "nope"
+     }
+    ]
+   },
+   "error": "网址所属分类不存在"
+  },
+  {
+   "name": "archive area",
+   "input": {
+    "categories": [
+     {
+      "id": "a",
+      "name": "杂物",
+      "area": "archive",
+      "column": 2,
+      "order": 7
+     }
+    ],
+    "links": []
+   },
+   "expect": {
+    "categories": [
+     {
+      "id": "a",
+      "name": "杂物",
+      "icon": "folder",
+      "column": 2,
+      "order": 7,
+      "area": "archive"
+     }
+    ],
+    "links": [],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "bad area",
+   "input": {
+    "categories": [
+     {
+      "id": "a",
+      "name": "杂物",
+      "area": "x"
+     }
+    ],
+    "links": []
+   },
+   "error": "分类位置不正确"
+  },
+  {
+   "name": "bool column",
+   "input": {
+    "categories": [
+     {
+      "id": "a",
+      "name": "x",
+      "column": true
+     }
+    ],
+    "links": []
+   },
+   "error": "分类所在列超出范围"
+  },
+  {
+   "name": "column out of range",
+   "input": {
+    "categories": [
+     {
+      "id": "a",
+      "name": "x",
+      "column": 3
+     }
+    ],
+    "links": []
+   },
+   "error": "分类所在列超出范围"
+  },
+  {
+   "name": "float order",
+   "input": {
+    "categories": [
+     {
+      "id": "a",
+      "name": "x",
+      "order": 1.5
+     }
+    ],
+    "links": []
+   },
+   "error": "分类顺序超出范围"
+  },
+  {
+   "name": "icons",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://example.com",
+      "categoryId": "c1",
+      "icon": "github"
+     },
+     {
+      "id": "l2",
+      "name": "站点",
+      "url": "https://b.com",
+      "categoryId": "c1",
+      "icon": "/icons/web/a.png"
+     },
+     {
+      "id": "l3",
+      "name": "站点",
+      "url": "https://c.com",
+      "categoryId": "c1",
+      "icon": "HTTPS://C.com/f.ico",
+      "iconManual": true
+     }
+    ]
+   },
+   "error": "图标格式不正确"
+  },
+  {
+   "name": "bad icon",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://example.com",
+      "categoryId": "c1",
+      "icon": "<svg>"
+     }
+    ]
+   },
+   "error": "图标格式不正确"
+  },
+  {
+   "name": "optional fields",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://example.com",
+      "categoryId": "c1",
+      "kind": "service",
+      "checkUrl": "nas.lan/health",
+      "description": " d ",
+      "server": "NAS",
+      "container": "jelly",
+      "serviceGroup": "g",
+      "monitorEnabled": 1,
+      "pinned": "yes",
+      "pinnedOrder": 4
+     }
+    ]
+   },
+   "expect": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发",
+      "icon": "folder",
+      "column": 0,
+      "order": 0
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://example.com",
+      "icon": "",
+      "kind": "service",
+      "categoryId": "c1",
+      "pinned": true,
+      "order": 0,
+      "pinnedOrder": 4,
+      "monitorEnabled": true,
+      "checkUrl": "http://nas.lan/health",
+      "description": "d",
+      "server": "NAS",
+      "container": "jelly",
+      "serviceGroup": "g"
+     }
+    ],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "website monitor ignored",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://example.com",
+      "categoryId": "c1",
+      "monitorEnabled": true,
+      "pinned": 0
+     }
+    ]
+   },
+   "expect": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发",
+      "icon": "folder",
+      "column": 0,
+      "order": 0
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://example.com",
+      "icon": "",
+      "kind": "website",
+      "categoryId": "c1",
+      "pinned": false,
+      "order": 0,
+      "pinnedOrder": 0,
+      "monitorEnabled": false
+     }
+    ],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "settings",
+   "input": {
+    "settings": {
+     "checkInterval": 30,
+     "failureThreshold": 2,
+     "timeout": 9,
+     "openInNewTab": false,
+     "showCompanionButton": false
+    }
+   },
+   "expect": {
+    "categories": [],
+    "links": [],
+    "settings": {
+     "checkInterval": 30,
+     "failureThreshold": 2,
+     "timeout": 9,
+     "openInNewTab": false,
+     "showCompanionButton": false
+    }
+   }
+  },
+  {
+   "name": "settings bad switch",
+   "input": {
+    "settings": {
+     "openInNewTab": 1
+    }
+   },
+   "error": "在新标签页打开网站必须是开或关"
+  },
+  {
+   "name": "settings out of range",
+   "input": {
+    "settings": {
+     "checkInterval": 5
+    }
+   },
+   "error": "检测间隔超出范围"
+  },
+  {
+   "name": "settings not object",
+   "input": {
+    "settings": []
+   },
+   "error": "检测设置格式不正确"
+  },
+  {
+   "name": "name too long",
+   "input": {
+    "categories": [
+     {
+      "id": "a",
+      "name": "xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+     }
+    ],
+    "links": []
+   },
+   "error": "分类名称格式不正确"
+  },
+  {
+   "name": "name trimmed",
+   "input": {
+    "categories": [
+     {
+      "id": " a ",
+      "name": " 名 "
+     }
+    ],
+    "links": []
+   },
+   "expect": {
+    "categories": [
+     {
+      "id": "a",
+      "name": "名",
+      "icon": "folder",
+      "column": 0,
+      "order": 0
+     }
+    ],
+    "links": [],
+    "settings": {
+     "checkInterval": 60,
+     "failureThreshold": 3,
+     "timeout": 5,
+     "openInNewTab": true,
+     "showCompanionButton": true
+    }
+   }
+  },
+  {
+   "name": "kind invalid",
+   "input": {
+    "categories": [
+     {
+      "id": "c1",
+      "name": "开发"
+     }
+    ],
+    "links": [
+     {
+      "id": "l1",
+      "name": "站点",
+      "url": "https://example.com",
+      "categoryId": "c1",
+      "kind": "app"
+     }
+    ]
+   },
+   "error": "入口类型不正确"
+  }
+ ]
+}
