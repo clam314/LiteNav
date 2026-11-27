@@ -104,9 +104,13 @@ export function mergeDocuments(base, local, remote, { preferLocal = false } = {}
   const [settings, settingsClash] = mergeFields(base.settings, local.settings, remote.settings, preferLocal);
   if (settingsClash) conflicts.push({ id: 'settings', kind: 'both-edited' });
 
+  // A copy without preferences (an older server, a browser that never set
+  // any) changed nothing: it must not delete them everywhere.
   let prefs = null;
-  if (local.prefs || remote.prefs) {
-    const [value, prefsClash] = mergeFields(base.prefs || {}, local.prefs || {}, remote.prefs || {}, preferLocal);
+  const localPrefs = local.prefs ?? base.prefs;
+  const remotePrefs = remote.prefs ?? base.prefs;
+  if (localPrefs || remotePrefs) {
+    const [value, prefsClash] = mergeFields(base.prefs || {}, localPrefs || {}, remotePrefs || {}, preferLocal);
     if (prefsClash) conflicts.push({ id: 'prefs', kind: 'both-edited' });
     prefs = value;
   }

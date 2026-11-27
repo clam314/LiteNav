@@ -2,8 +2,9 @@ import { icon, brandIcon } from './icons.js';
 import { initCompanion } from './companion.js';
 import { toolsMarkup, mountTools, resolveTool } from './tools.js';
 import { searchLinks, googleSearchUrl } from './search.js';
-import { parseBookmarks } from './bookmarks.js';
-import { api, capabilities, backendMode, onBackendChange } from './backend.js';
+import { parseBookmarks, bookmarksFromTree } from './bookmarks.js';
+import { api, capabilities, backendMode, onBackendChange, hasPermission, requestPermission, dropPermission, browserSearch, browserBookmarks } from './backend.js';
+import { serverOrigin } from './sync-server.js';
 
 initCompanion();
 
@@ -29,6 +30,9 @@ let searchResults = [];
 let linkCheck = { job: null, results: {} };
 let linkCheckTimer = null;
 let syncStatus = null;
+let networkAllowed = null;
+// Where checks are made from, for the texts that explain them.
+const checkSource = backendMode === 'extension' ? '这台电脑的浏览器' : '运行轻航的服务器';
 
 const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const uid = () => globalThis.crypto?.randomUUID?.() || 'item-' + Date.now() + '-' + Math.random().toString(36).slice(2, 9);
@@ -219,24 +223,19 @@ function serviceMarkup(link) {
   const lastChecked = state.lastChecked ? new Date(typeof state.lastChecked === 'number' && state.lastChecked < 1e12 ? state.lastChecked * 1000 : state.lastChecked).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '尚未检测';
   return '<article class="service-card ' + (status === 'offline' ? 'has-error' : '') + (editMode ? ' is-sortable' : '') + '" data-service="' + esc(link.id) + '"' + (editMode ? ' draggable="true" data-drag-kind="service" data-resource="' + esc(link.id) + '"' : '') + '><header class="service-card-header">' +
     '<a class="service-identity"' + (editMode ? ' draggable="false"' : '') + ' href="' + esc(link.url) + '"' + linkTarget() + '>' + linkIcon(link) + '<span class="service-copy"><h3>' + esc(link.name) + '</h3><span class="site-domain">' + esc(domain(link.url)) + '</span></span></a>' +
-    (capabilities.monitor ? '<span class="status-badge ' + status + '">' + statusLabels[status] + '</span>' : '') + '</header>' +
+    '<span class="status-badge ' + status + '">' + statusLabels[status] + '</span></header>' +
     (link.description ? '<p class="service-description">' + esc(link.description) + '</p>' : '') +
-    '<div class="service-details">' + (capabilities.monitor ? '<p>' + esc(detail) + '</p><div class="service-meta">最近检测：' + esc(lastChecked) + '</div>' : '') +
+    '<div class="service-details"><p>' + esc(detail) + '</p><div class="service-meta">最近检测：' + esc(lastChecked) + '</div>' +
     (link.container ? '<div class="service-meta container-meta" title="' + esc((link.server ? link.server + ' / ' : '') + link.container) + '"><span>容器</span><span>' + esc((link.server ? link.server + ' / ' : '') + link.container) + '</span></div>' : '') +
     '</div>' +
     '<div class="service-actions"><button class="btn btn-ghost" data-action="edit-link" data-id="' + esc(link.id) + '">' + icon('settings', 15) + '配置</button>' +
-    (!capabilities.monitor ? '' : link.monitorEnabled ? '<button class="btn btn-secondary" data-action="check-service" data-id="' + esc(link.id) + '">' + icon('refresh', 15) + '检测</button>' : '<button class="btn btn-secondary" data-action="enable-monitor" data-id="' + esc(link.id) + '">' + icon('play', 14) + '启用监控</button>') +
+    (link.monitorEnabled ? '<button class="btn btn-secondary" data-action="check-service" data-id="' + esc(link.id) + '">' + icon('refresh', 15) + '检测</button>' : '<button class="btn btn-secondary" data-action="enable-monitor" data-id="' + esc(link.id) + '">' + icon('play', 14) + '启用监控</button>') +
     '<button class="icon-button danger" data-action="delete-link" data-id="' + esc(link.id) + '" aria-label="删除服务 ' + esc(link.name) + '" title="删除服务">' + icon('trash', 15) + '</button></div></article>';
 }
 
 function servicesMarkup() {
   const services = ordered(config.links.filter((link) => link.kind === 'service'));
   const monitored = services.filter((link) => link.monitorEnabled).length;
-  if (!capabilities.monitor) {
-    return '<div class="page-intro"><p>插件版暂不检测服务在线状态，这里先集中存放 NAS、软路由等自建服务的入口；掉线检测会在后续版本加入。</p></div>' +
-      '<div class="service-toolbar"><span class="section-hint">' + (editMode ? '拖动卡片调整服务顺序' : services.length + ' 个服务') + '</span></div>' +
-      '<div class="service-grid">' + (services.map(serviceMarkup).join('') || '<div class="empty-state">' + icon('server', 30) + '<h2>添加你的第一个服务</h2><p>NAS、影音库或智能家居，都可以放在这里。</p><button class="btn btn-primary" data-action="add-service">添加服务</button></div>') + '</div>';
-  }
   return '<div class="page-intro"><p>' + (monitored ? '后台每 ' + config.settings.checkInterval + ' 秒检测一次；连续 ' + config.settings.failureThreshold + ' 次异常后提醒。' : '先将示例地址改为你的服务地址，再开启掉线检测。') + '</p></div>' +
     '<div class="service-toolbar"><span class="section-hint">' + (editMode ? '拖动卡片调整服务顺序' : services.length + ' 个服务 · ' + monitored + ' 个已开启监控') + '</span><button class="btn btn-secondary" data-action="check-all" ' + (!monitored ? 'disabled' : '') + '>' + icon('refresh', 16) + '立即检测</button></div>' +
     '<div class="service-grid">' + (services.map(serviceMarkup).join('') || '<div class="empty-state">' + icon('server', 30) + '<h2>添加你的第一个服务</h2><p>NAS、影音库或智能家居，都可以放在这里。</p><button class="btn btn-primary" data-action="add-service">添加服务</button></div>') + '</div>';
@@ -260,11 +259,11 @@ function categorySettingsRow(category) {
 function settingsMarkup() {
   const categories = directoryCategories();
   const shelved = archiveCategories();
-  return displaySettingsMarkup() + (capabilities.sync ? syncSectionMarkup() : '') + (!capabilities.monitor ? '' : '<section class="settings-section"><div class="section-heading">' + icon('settings', 22) + '<h2>检测设置</h2></div><form class="settings-card settings-form" id="settings-form"><div class="field-row">' +
+  return displaySettingsMarkup() + (capabilities.sync ? syncSectionMarkup() : '') + (capabilities.permissions ? networkSectionMarkup() : '') + (!capabilities.monitor ? '' : '<section class="settings-section"><div class="section-heading">' + icon('settings', 22) + '<h2>检测设置</h2></div><form class="settings-card settings-form" id="settings-form"><div class="field-row">' +
     '<label class="field"><span class="field-label">检测间隔（秒）</span><input class="form-input" type="number" name="checkInterval" min="10" max="86400" value="' + esc(config.settings.checkInterval) + '" required></label>' +
     '<label class="field"><span class="field-label">连续异常次数</span><input class="form-input" type="number" name="failureThreshold" min="1" max="10" value="' + esc(config.settings.failureThreshold) + '" required></label>' +
     '<label class="field"><span class="field-label">请求超时（秒）</span><input class="form-input" type="number" name="timeout" min="1" max="30" value="' + esc(config.settings.timeout) + '" required></label></div>' +
-    '<p class="field-hint">后台会持续检测已开启监控的服务，关闭页面后也会继续。</p><div class="settings-actions"><button class="btn btn-primary" type="submit">保存设置</button></div></form></section>') +
+    '<p class="field-hint">' + (backendMode === 'extension' ? 'Chrome 运行时会在后台持续检测已开启监控的服务，关闭页面后也会继续；最短每 30 秒一次，有服务离线时工具栏图标上会显示数量。' : '后台会持续检测已开启监控的服务，关闭页面后也会继续。') + '</p><div class="settings-actions"><button class="btn btn-primary" type="submit">保存设置</button></div></form></section>') +
     '<section class="settings-section"><div class="section-heading">' + icon('folder', 22) + '<h2>网址分类</h2><button class="btn btn-secondary" data-action="add-category">' + icon('plus', 16) + '新建分类</button></div><div class="settings-card category-settings-list"><p class="settings-description">拖动左侧把手调整分类顺序，首页和侧边栏会同步更新。</p>' +
     categories.map(categorySettingsRow).join('') + '</div></section>' +
     '<section class="settings-section"><div class="section-heading">' + icon('archive', 22) + '<h2>杂物库分类</h2><button class="btn btn-secondary" data-action="add-category" data-area="archive">' + icon('plus', 16) + '新建分类</button></div><div class="settings-card category-settings-list"><p class="settings-description">' +
@@ -274,7 +273,7 @@ function settingsMarkup() {
     '<section class="settings-section"><div class="section-heading">' + icon('download', 22) + '<h2>数据备份</h2></div><div class="settings-card"><p class="settings-description">导出网址、分类与服务配置，方便备份或迁移。</p><div class="settings-actions"><button class="btn btn-secondary" data-action="export">' + icon('upload', 16) + '导出备份</button><button class="btn btn-secondary" data-action="import">' + icon('download', 16) + '导入备份</button></div>' +
     '<div class="backup-auto"><div class="backup-auto-head"><div><h3>自动备份</h3><p class="settings-description">每天第一次修改前，以及一次删除 5 个以上入口或删除分类前，' + (backendMode === 'extension' ? '轻航会在本机' : '服务器会') + '自动保存修改前的配置' + (capabilities.sync ? '（云同步大量改动本机数据前也会）' : '') + '，保留最近 30 份。</p></div>' +
     '<button class="btn btn-secondary" data-action="backup-now">' + icon('download', 16) + '立即备份</button></div><div id="backup-list">' + backupsMarkup() + '</div></div></div></section>' +
-    '<section class="settings-section"><div class="section-heading">' + icon('bookmark', 22) + '<h2>导入浏览器书签</h2></div><div class="settings-card"><p class="settings-description">在 Chrome、Edge、Firefox 或 Safari 中把书签导出为 HTML 文件，再在这里导入。每个顶层文件夹会成为一个分类，已添加过的网址会自动跳过，导入前可以先预览。</p><div class="settings-actions"><button class="btn btn-secondary" data-action="import-bookmarks">' + icon('bookmark', 16) + '选择书签文件</button></div></div></section>';
+    '<section class="settings-section"><div class="section-heading">' + icon('bookmark', 22) + '<h2>导入浏览器书签</h2></div><div class="settings-card"><p class="settings-description">在 Chrome、Edge、Firefox 或 Safari 中把书签导出为 HTML 文件，再在这里导入。每个顶层文件夹会成为一个分类，已添加过的网址会自动跳过，导入前可以先预览。</p><div class="settings-actions">' + (capabilities.browserBookmarks ? '<button class="btn btn-secondary" data-action="import-chrome-bookmarks">' + icon('bookmark', 16) + '读取 Chrome 书签</button>' : '') + '<button class="btn btn-secondary" data-action="import-bookmarks">' + icon('bookmark', 16) + '选择书签文件</button></div></div></section>';
 }
 
 function searchMarkup() {
@@ -287,7 +286,7 @@ function searchMarkup() {
 function searchOptionMarkup(entry, index) {
   const selected = index === searchIndex;
   const attributes = ' id="quick-search-option-' + index + '" role="option" aria-selected="' + selected + '" class="quick-search-option' + (selected ? ' is-selected' : '') + '" data-search-index="' + index + '" href="' + esc(entry.url) + '"' + linkTarget() + ' tabindex="-1"';
-  if (entry.google) return '<a' + attributes + '><span class="quick-search-google">' + icon('search', 16) + '</span><span class="quick-search-copy"><span class="quick-search-name">用 Google 搜索“' + esc(searchQuery.trim()) + '”</span><span class="quick-search-meta">google.com</span></span></a>';
+  if (entry.google) return '<a' + attributes + '><span class="quick-search-google">' + icon('search', 16) + '</span><span class="quick-search-copy"><span class="quick-search-name">' + (capabilities.browserSearch ? '搜索' : '用 Google 搜索') + '“' + esc(searchQuery.trim()) + '”</span><span class="quick-search-meta">' + (capabilities.browserSearch ? '浏览器默认搜索引擎' : 'google.com') + '</span></span></a>';
   const link = entry.link;
   const place = placeName(link);
   return '<a' + attributes + '>' + linkIcon(link) + '<span class="quick-search-copy"><span class="quick-search-name">' + esc(link.name) + '</span><span class="quick-search-meta">' + esc(domain(link.url)) + '</span></span>' +
@@ -324,6 +323,7 @@ function resetSearch() {
 function openSearchResult(index, open = true) {
   const entry = searchResults[index];
   if (entry && open) {
+    if (entry.google && capabilities.browserSearch) { browserSearch(searchQuery.trim(), opensNewTab()); resetSearch(); return; }
     if (!opensNewTab()) { location.assign(entry.url); return; }
     window.open(entry.url, '_blank', 'noopener,noreferrer');
   } else if (open) return;
@@ -333,7 +333,7 @@ function openSearchResult(index, open = true) {
 const LINK_CHECK_GROUPS = [
   { status: 'broken', title: '疑似失效', note: '域名已无法解析，或页面已不存在。', bulk: 'delete-broken', bulkLabel: '全部删除' },
   { status: 'redirected', title: '已跳转到其他网站', note: '网站可能已经换了地址，可以把入口更新为新地址。', bulk: 'apply-all-redirects', bulkLabel: '全部更新为新地址' },
-  { status: 'unreachable', title: '暂时无法访问', note: '可能是网站临时故障，也可能是运行轻航的服务器无法访问它（例如需要代理）。请先在浏览器中打开确认。' },
+  { status: 'unreachable', title: '暂时无法访问', note: '可能是网站临时故障，也可能是' + checkSource + '无法访问它（例如需要代理）。请先在浏览器中打开确认。' },
 ];
 
 const shortTime = (value) => value ? new Date(value).toLocaleString('zh-CN', { month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }) : '';
@@ -363,7 +363,7 @@ function linkCheckMarkup() {
   const total = config.links.filter((link) => link.kind === 'website').length;
   const running = Boolean(job?.running);
   const button = '<button class="btn btn-primary" data-action="start-link-check" ' + (running || !total ? 'disabled' : '') + '>' + icon('refresh', 16) + (running ? '检测中…' : '检测全部网址') + '</button>';
-  const intro = '<p class="settings-description">检查目录里的网址是否还能打开。检测从运行轻航的服务器发出，一般需要几十秒；离开本页也会继续。</p>';
+  const intro = '<p class="settings-description">检查目录里的网址是否还能打开。检测从' + checkSource + '发出，一般需要几十秒；离开本页也会继续。</p>';
   if (running) {
     const percent = job.total ? Math.round((job.done / job.total) * 100) : 0;
     return '<div class="link-check-head">' + intro + button + '</div><div class="link-check-progress" role="progressbar" aria-valuemin="0" aria-valuemax="' + job.total + '" aria-valuenow="' + job.done + '" aria-label="检测进度"><span style="width:' + percent + '%"></span></div><p class="field-hint">正在检测 ' + job.done + ' / ' + job.total + '</p>';
@@ -458,6 +458,7 @@ function render() {
   // A save may just have made an automatic backup.
   if (view === 'settings') refreshBackups();
   if (view === 'settings' && capabilities.sync) refreshSync();
+  if (view === 'settings' && capabilities.permissions) refreshNetwork();
   if (searchFocus) {
     const input = document.querySelector('#quick-search-input');
     input.focus({ preventScroll: true });
@@ -547,7 +548,7 @@ function openLinkDialog({ id, kind = 'website', categoryId = '', pinned = false,
     '<label class="field" id="link-category-field"><span class="field-label">分类</span><select class="form-select" id="link-category" name="categoryId">' + categoryNames + '</select></label>',
     '<label class="checkbox-row"><input type="checkbox" id="link-pinned" name="pinned" ' + (draft.pinned ? 'checked' : '') + '>加入常用</label>',
     existing && existing.pinned ? '<label class="field"><span class="field-label">常用排序</span><input class="form-input" id="link-position" type="number" min="1" max="' + favorites().length + '" value="' + (favorites().findIndex((link) => link.id === draft.id) + 1) + '"><span class="field-hint">也可以在首页整理模式下拖动排序</span></label>' : '',
-    '<div class="monitor-options" id="link-monitor-options"><label class="checkbox-row"><input type="checkbox" id="link-monitor" name="monitorEnabled" ' + (draft.monitorEnabled ? 'checked' : '') + '>启用掉线检测</label><label class="field" id="link-check-url-field"><span class="field-label">检测地址 <span class="optional">可选</span></span><input class="form-input" id="link-check-url" name="checkUrl" inputmode="url" placeholder="默认检测上方服务地址" value="' + esc(draft.checkUrl || '') + '"><span class="field-hint">' + (capabilities.monitor ? '检测从运行轻航的服务器发出，需要能访问该服务。' : '插件版暂不检测服务状态，这项设置会随同步保存，留待检测功能加入后使用。') + '</span></label></div>',
+    '<div class="monitor-options" id="link-monitor-options"><label class="checkbox-row"><input type="checkbox" id="link-monitor" name="monitorEnabled" ' + (draft.monitorEnabled ? 'checked' : '') + '>启用掉线检测</label><label class="field" id="link-check-url-field"><span class="field-label">检测地址 <span class="optional">可选</span></span><input class="form-input" id="link-check-url" name="checkUrl" inputmode="url" placeholder="默认检测上方服务地址" value="' + esc(draft.checkUrl || '') + '"><span class="field-hint">检测从' + checkSource + '发出，需要能访问该服务。</span></label></div>',
     '<div class="service-config-fields" id="link-service-fields"><label class="field"><span class="field-label">描述 <span class="optional">可选</span></span><input class="form-input" id="link-description" maxlength="500" placeholder="例如 NAS 管理、影音库" value="' + esc(draft.description || '') + '"></label><details class="service-advanced"><summary>容器备注</summary><div class="field-row"><label class="field"><span class="field-label">服务器</span><input class="form-input" id="link-server" maxlength="100" placeholder="例如 local" value="' + esc(draft.server || '') + '"></label><label class="field"><span class="field-label">容器名称</span><input class="form-input" id="link-container" maxlength="100" placeholder="例如 jellyfin" value="' + esc(draft.container || '') + '"></label></div></details></div>',
     '<p class="form-error" id="link-error" role="alert" hidden></p></div>',
     '<footer class="dialog-footer"><span class="keyboard-hint">Enter ' + (existing ? '保存' : '添加') + '</span><div><button class="btn btn-ghost" type="button" data-action="close-dialog">取消</button><button class="btn btn-primary" type="submit">' + (existing ? '保存' : '添加') + '</button></div></footer></form>',
@@ -929,6 +930,8 @@ async function handleAction(button) {
     case 'check-service': await checkServices(id); break;
     case 'check-all': await checkServices(); break;
     case 'enable-monitor':
+      // Status codes need access to the service's site; without it the check still tells up from down.
+      requestPermission('network').then(() => refreshNetwork());
       await mutate((state) => { const link = state.links.find((link) => link.id === id); if (link) link.monitorEnabled = true; });
       await checkServices(id);
       break;
@@ -953,7 +956,8 @@ async function handleAction(button) {
     }
     case 'restore-backup': await restoreBackup(id); break;
     case 'download-backup': await downloadBackup(id); break;
-    case 'sync-enable': await enableSync(button); break;
+    case 'sync-enable': await enableSync(button, 'chrome'); break;
+    case 'sync-server': openServerDialog(); break;
     case 'sync-now': {
       button.disabled = true;
       try {
@@ -970,7 +974,33 @@ async function handleAction(button) {
       toast('已关闭云同步');
       break;
     }
-    case 'start-link-check': button.disabled = true; await startLinkCheck(); break;
+    case 'start-link-check': {
+      const allowed = requestPermission('network');
+      button.disabled = true;
+      if (!await allowed) { button.disabled = false; toast('需要允许轻航访问网站，才能检测网址'); break; }
+      refreshNetwork();
+      await startLinkCheck();
+      break;
+    }
+    case 'grant-network': {
+      const allowed = await requestPermission('network');
+      await refreshNetwork();
+      toast(allowed ? '已允许访问网站' : '没有获得访问网站的权限');
+      break;
+    }
+    case 'revoke-network':
+      await dropPermission('network');
+      await refreshNetwork();
+      toast('已撤销访问网站的权限');
+      break;
+    case 'import-chrome-bookmarks': {
+      const allowed = requestPermission('bookmarks');
+      if (!await allowed) { toast('需要允许读取书签，才能直接导入'); break; }
+      const { groups, skipped } = bookmarksFromTree(await browserBookmarks());
+      if (!groups.length) throw new Error(skipped ? 'Chrome 书签里没有可导入的网页地址' : 'Chrome 里还没有书签');
+      previewBookmarks(groups, skipped, '书签里的网址都已经添加过了');
+      break;
+    }
     case 'apply-redirect': await applyRedirects([id]); break;
     case 'apply-all-redirects': {
       const ids = currentLinkChecks().filter((entry) => entry.result.status === 'redirected').map((entry) => entry.link.id);
@@ -992,6 +1022,7 @@ async function handleAction(button) {
       const link = config.links.find((item) => item.id === button.dataset.id);
       if (!link) return;
       const enabled = !link.monitorEnabled;
+      if (enabled) requestPermission('network').then(() => refreshNetwork());
       await mutate((state) => {
         const target = state.links.find((item) => item.id === link.id);
         if (target) target.monitorEnabled = enabled;
@@ -1199,6 +1230,13 @@ function openBookmarkDialog({ plan, duplicates, invalid }) {
   });
 }
 
+function previewBookmarks(groups, skipped, emptyMessage) {
+  const result = planBookmarkImport(groups);
+  result.invalid += skipped;
+  if (!result.plan.length) throw new Error(emptyMessage);
+  openBookmarkDialog(result);
+}
+
 document.querySelector('#bookmark-file').addEventListener('change', async (event) => {
   const file = event.target.files[0];
   event.target.value = '';
@@ -1207,10 +1245,7 @@ document.querySelector('#bookmark-file').addEventListener('change', async (event
     if (file.size > 30 * 1024 * 1024) throw new Error('书签文件不能超过 30 MB');
     const { groups, skipped } = parseBookmarks(await file.text());
     if (!groups.length) throw new Error(skipped ? '书签文件里没有可导入的网页地址' : '没有在文件中找到书签，请选择浏览器导出的书签 HTML 文件');
-    const result = planBookmarkImport(groups);
-    result.invalid += skipped;
-    if (!result.plan.length) throw new Error('书签里的网址都已经添加过了');
-    openBookmarkDialog(result);
+    previewBookmarks(groups, skipped, '书签里的网址都已经添加过了');
   } catch (error) { toast(error.message); }
 });
 
@@ -1392,40 +1427,72 @@ document.addEventListener('mousemove', (event) => {
   document.querySelector('#quick-search-input')?.setAttribute('aria-activedescendant', option.id);
 });
 document.addEventListener('click', (event) => {
+  const option = event.target.closest('.quick-search-option');
+  // The extension searches with the browser's default engine instead.
+  if (option && capabilities.browserSearch && searchResults[Number(option.dataset.searchIndex)]?.google) {
+    event.preventDefault();
+    openSearchResult(Number(option.dataset.searchIndex));
+    return;
+  }
   // The link opens itself; only clear the box afterwards.
-  if (event.target.closest('.quick-search-option')) setTimeout(() => openSearchResult(-1, false), 0);
+  if (option) setTimeout(() => openSearchResult(-1, false), 0);
 });
 
 window.addEventListener('hashchange', route);
 window.addEventListener('focus', () => {
+  pullSync();
   if (!config || currentDialog || editMode) return;
   api('/api/state').then((latest) => { if (latest.revision !== config.revision) { config = latest; applyDisplaySettings(); if (view !== 'tools') render(); } }).catch(() => {});
   refreshHealth().catch(() => {});
 });
 
+// 网站访问 (Chrome extension): the optional permission behind service
+// status codes, 网址体检 and reading a pasted site's name and icon.
+function networkCardMarkup() {
+  return networkAllowed === null ? '<p class="field-hint">正在读取权限…</p>' : networkAllowed
+    ? '<div class="sync-head"><div><p class="sync-state"><span class="sync-dot"></span>已允许访问网站</p><p class="settings-description">服务掉线检测、网址体检和粘贴网址后自动识别名称与图标都可以使用。请求从这台电脑发出，只用于这些检测。</p></div>' +
+      '<div class="settings-actions"><button class="btn btn-ghost" data-action="revoke-network">撤销权限</button></div></div>'
+    : '<div class="sync-head"><p class="settings-description">允许轻航访问网站后，才能检测服务的在线状态与响应、为网址做体检，并在粘贴网址时自动识别网站名称和图标（常见网站不需要）。请求从这台电脑发出，只用于这些检测。</p>' +
+      '<button class="btn btn-primary" data-action="grant-network">允许访问网站</button></div>';
+}
+
+function networkSectionMarkup() {
+  return '<section class="settings-section" id="network"><div class="section-heading">' + icon('network', 22) + '<h2>网站访问</h2></div><div class="settings-card" id="network-card">' + networkCardMarkup() + '</div></section>';
+}
+
+async function refreshNetwork() {
+  networkAllowed = await hasPermission('network');
+  const card = document.querySelector('#network-card');
+  if (card) card.innerHTML = networkCardMarkup();
+}
+
 // 云同步 (Chrome extension): the configuration and companion preferences,
-// through Chrome account sync, merged with what other devices changed.
+// through Chrome account sync or a self-hosted 轻航 server, merged with what
+// other devices changed.
 function syncSectionMarkup() {
   return '<section class="settings-section" id="sync"><div class="section-heading">' + icon('cloud', 22) + '<h2>云同步</h2></div><div class="settings-card" id="sync-card">' + syncCardMarkup() + '</div></section>';
 }
 
+const serverLabel = (url) => { try { return new URL(url).host; } catch { return url || ''; } };
+
 function syncCardMarkup() {
-  const intro = '<p class="settings-description">通过 Chrome 账号，在登录同一 Google 账号的电脑之间同步网址、分类、服务、设置和角色偏好。每台设备都可以离线修改，联网后自动合并。</p>';
+  const intro = '<p class="settings-description">在多台电脑之间同步网址、分类、服务、设置和角色偏好。每台设备都可以离线修改，联网后自动合并。</p>';
   if (!syncStatus) return '<div class="sync-head">' + intro + '</div><p class="field-hint">正在读取同步状态…</p>';
   if (!syncStatus.enabled) {
-    return '<div class="sync-head">' + intro + '<button class="btn btn-primary" data-action="sync-enable">' + icon('cloud', 16) + '开启同步</button></div>' +
-      '<p class="field-hint">需要在 Chrome 中登录 Google 账号并开启同步（包括“扩展程序”），没有登录时数据只保存在本机。服务的在线状态和工具箱里的内容不会同步。</p>';
+    return '<div class="sync-head">' + intro + '<div class="settings-actions"><button class="btn btn-secondary" data-action="sync-server">' + icon('server', 16) + '连接自建服务器</button><button class="btn btn-primary" data-action="sync-enable">' + icon('cloud', 16) + '用 Chrome 账号同步</button></div></div>' +
+      '<p class="field-hint">Chrome 账号同步需要在 Chrome 中登录 Google 账号并开启同步（包括“扩展程序”）。自建服务器即 Docker 运行的轻航，插件和网页版共用同一份数据。服务的在线状态和工具箱里的内容不会同步。</p>';
   }
+  const viaServer = syncStatus.provider === 'server';
   const facts = [];
   if (syncStatus.state === 'waiting') facts.push('正在等待其他设备的数据传完');
   else if (syncStatus.lastSyncedAt) facts.push('上次同步于 ' + esc(shortTime(syncStatus.lastSyncedAt)));
-  if (syncStatus.bytes) facts.push('云端占用 ' + Math.max(1, Math.round(syncStatus.bytes / 1024)) + ' KB / 96 KB');
-  return '<div class="sync-head"><div><p class="sync-state"><span class="sync-dot' + (syncStatus.state === 'error' ? ' is-error' : '') + '"></span>' + (syncStatus.state === 'error' ? '同步出错' : '已开启同步') + '</p>' +
+  if (!viaServer && syncStatus.bytes) facts.push('云端占用 ' + Math.max(1, Math.round(syncStatus.bytes / 1024)) + ' KB / 96 KB');
+  return '<div class="sync-head"><div><p class="sync-state"><span class="sync-dot' + (syncStatus.state === 'error' ? ' is-error' : '') + '"></span>' + (syncStatus.state === 'error' ? '同步出错' : viaServer ? '通过自建服务器 ' + esc(serverLabel(syncStatus.server)) + ' 同步' : '通过 Chrome 账号同步') + '</p>' +
     '<p class="settings-description">' + (facts.join(' · ') || '尚未同步') + '</p></div>' +
     '<div class="settings-actions"><button class="btn btn-ghost" data-action="sync-disable">关闭同步</button><button class="btn btn-secondary" data-action="sync-now">' + icon('refresh', 16) + '立即同步</button></div></div>' +
     (syncStatus.state === 'error' ? '<p class="sync-error">' + esc(syncStatus.lastError) + '</p>' : '') +
     (syncStatus.conflicts ? '<p class="field-hint">上次同步时有 ' + syncStatus.conflicts + ' 处内容在两台设备上都改过，已采用较新的修改；需要时可以在下方自动备份里恢复。</p>' : '') +
-    '<p class="field-hint">本机的修改几秒后自动同步，其他设备的修改会自动同步过来。</p>';
+    '<p class="field-hint">' + (viaServer ? '本机的修改几秒后同步到服务器；服务器上的修改在打开轻航时和每 5 分钟同步过来。' : '本机的修改几秒后自动同步，其他设备的修改会自动同步过来。') + '</p>';
 }
 
 function updateSyncCard() {
@@ -1438,49 +1505,99 @@ async function refreshSync() {
   updateSyncCard();
 }
 
+// Pull what changed elsewhere when 轻航 is opened or comes back into view;
+// a server has no way to tell the extension itself.
+let lastPull = 0;
+function pullSync() {
+  if (!capabilities.sync || Date.now() - lastPull < 30000) return;
+  lastPull = Date.now();
+  api('/api/sync', { method: 'POST', body: JSON.stringify({ action: 'now' }) }).then((result) => {
+    syncStatus = result.status;
+    if (view === 'settings') updateSyncCard();
+  }).catch(() => {});
+}
+
 // Both sides hold different data: let the person choose how to start.
-function chooseSyncMode(info) {
+function chooseSyncMode(info, where) {
   return new Promise((resolve) => {
     let chosen = null;
     const count = (side) => side.links + ' 个入口、' + side.categories + ' 个分类';
     const option = (value, title, hint, checked) => '<label class="checkbox-row sync-choice"><input type="radio" name="sync-mode" value="' + value + '"' + (checked ? ' checked' : '') + '><span><strong>' + title + '</strong><span class="field-hint">' + hint + '</span></span></label>';
     const dialog = makeDialog('<form class="dialog-form" id="sync-mode-form"><header class="dialog-header"><h2>开启云同步</h2><button type="button" class="icon-button" data-action="close-dialog" aria-label="关闭">' + icon('x') + '</button></header><div class="dialog-body">' +
-      '<p class="confirm-message">云端已有其他设备同步的数据（' + count(info.remote) + (info.remote.editedAt ? '，最后修改于 ' + esc(shortTime(info.remote.editedAt)) : '') + '），和本机（' + count(info.local) + '）不同。要怎样开始？</p>' +
+      '<p class="confirm-message">' + where + '已有数据（' + count(info.remote) + (info.remote.editedAt ? '，最后修改于 ' + esc(shortTime(info.remote.editedAt)) : '') + '），和本机（' + count(info.local) + '）不同。要怎样开始？</p>' +
       option('merge', '合并两边（推荐）', '两边的网址和分类都保留；同一项两边都改过时，采用较新的修改。', true) +
-      option('remote', '使用云端数据', '用云端数据替换本机，替换前会自动备份本机数据。', false) +
-      option('local', '使用本机数据', '用本机数据覆盖云端，其他设备下次同步后也会变成这份。', false) +
+      option('remote', '使用' + where + '数据', '用' + where + '数据替换本机，替换前会自动备份本机数据。', false) +
+      option('local', '使用本机数据', '用本机数据覆盖' + where + '，其他设备下次同步后也会变成这份。', false) +
       '</div><footer class="dialog-footer"><span></span><div><button class="btn btn-ghost" type="button" data-action="close-dialog">取消</button><button class="btn btn-primary" type="submit">开启同步</button></div></footer></form>');
     dialog.querySelector('#sync-mode-form').addEventListener('submit', (event) => {
       event.preventDefault();
       chosen = new FormData(event.target).get('sync-mode');
+      // Answer at once rather than on the close event, which Chrome holds back in a hidden tab.
+      resolve(chosen);
       dialog.close();
     });
     dialog.addEventListener('close', () => resolve(chosen), { once: true });
   });
 }
 
-async function enableSync(button) {
-  button.disabled = true;
+// info: what inspect found on the channel (asked for here when missing).
+async function enableSync(button, provider, info = null) {
+  if (button) button.disabled = true;
   try {
     await mutationQueue.catch(() => {});
-    const info = await api('/api/sync', { method: 'POST', body: JSON.stringify({ action: 'inspect' }) });
-    if (info.remote?.incomplete) { toast('其他设备的数据还在传输中，请稍后再试'); return; }
+    info ||= await api('/api/sync', { method: 'POST', body: JSON.stringify({ action: 'inspect', provider }) });
+    if (info.remote?.incomplete) { toast('其他设备的数据还在传输中，请稍后再试'); return false; }
     let mode = 'merge';
     // A browser that only has the starter sites simply takes the synced copy.
     if (info.remote && !info.remote.same && info.local.editedAt) {
-      mode = await chooseSyncMode(info);
-      if (!mode) return;
+      mode = await chooseSyncMode(info, provider === 'server' ? '服务器上' : '云端');
+      if (!mode) return false;
     }
-    syncStatus = (await api('/api/sync', { method: 'POST', body: JSON.stringify({ action: 'enable', mode }) })).status;
+    syncStatus = (await api('/api/sync', { method: 'POST', body: JSON.stringify({ action: 'enable', mode, provider }) })).status;
     config = await api('/api/state');
     render();
-    toast(syncStatus.state === 'error' ? '同步失败：' + syncStatus.lastError : !info.remote ? '已开启同步，本机数据已上传' : mode === 'local' ? '已开启同步，云端已更新为本机数据' : '已开启同步，已载入云端数据');
-  } finally { button.disabled = false; }
+    const where = provider === 'server' ? '服务器' : '云端';
+    toast(syncStatus.state === 'error' ? '同步失败：' + syncStatus.lastError : !info.remote ? '已开启同步，本机数据已上传' : mode === 'local' ? '已开启同步，' + where + '已更新为本机数据' : mode === 'remote' || info.remote.same || !info.local.editedAt ? '已开启同步，已载入' + where + '数据' : '已开启同步，已和' + where + '数据合并');
+    return true;
+  } finally { if (button?.isConnected) button.disabled = false; }
 }
 
-// Another tab saved, or the background worker applied a sync.
+// A self-hosted 轻航 (server.py, usually in Docker) as the sync hub.
+function openServerDialog() {
+  const dialog = makeDialog('<form class="dialog-form" id="sync-server-form"><header class="dialog-header"><h2>连接自建服务器</h2><button type="button" class="icon-button" data-action="close-dialog" aria-label="关闭">' + icon('x') + '</button></header><div class="dialog-body">' +
+    '<label class="field"><span class="field-label">服务器地址</span><input class="form-input" name="url" inputmode="url" autocomplete="url" spellcheck="false" placeholder="https://nav.example.com 或 192.168.1.10:8765" required></label>' +
+    '<label class="field"><span class="field-label">访问口令 <span class="optional">没有设置可不填</span></span><input class="form-input" name="password" type="password" autocomplete="current-password"></label>' +
+    '<p class="field-hint">即服务器上的 LITENAV_PASSWORD，只保存在这台电脑。经公网访问时请使用 https 地址，口令才不会明文传输。</p><p class="field-hint" id="sync-server-status" role="status"></p>' +
+    '</div><footer class="dialog-footer"><span></span><div><button class="btn btn-ghost" type="button" data-action="close-dialog">取消</button><button class="btn btn-primary" type="submit">连接</button></div></footer></form>');
+  const form = dialog.querySelector('#sync-server-form');
+  const status = dialog.querySelector('#sync-server-status');
+  form.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const data = new FormData(form);
+    let origin;
+    try { origin = serverOrigin(data.get('url')); }
+    catch (error) { status.textContent = error.message; return; }
+    // Asked while the click still counts: access to this one server.
+    const allowed = requestPermission('server', { origins: [new URL(origin).origin + '/*'] });
+    const submit = form.querySelector('[type="submit"]');
+    submit.disabled = true;
+    try {
+      if (!await allowed) { status.textContent = '需要允许轻航访问这个服务器'; return; }
+      status.textContent = '正在连接…';
+      const info = await api('/api/sync', { method: 'POST', body: JSON.stringify({ action: 'connect-server', url: origin, password: data.get('password') || '' }) });
+      dialog.close();
+      await enableSync(null, 'server', info);
+    } catch (error) {
+      status.textContent = error.message;
+    } finally { if (submit.isConnected) submit.disabled = false; }
+  });
+  form.querySelector('input[name="url"]').focus();
+}
+
+// Another tab saved, the background worker applied a sync or checked services.
 onBackendChange((what) => {
   if (what === 'sync') { if (view === 'settings') refreshSync(); return; }
+  if (what === 'health') { refreshHealth().catch(() => {}); return; }
   if (!config || currentDialog || editMode) return;
   api('/api/state').then((latest) => { if (latest.revision !== config.revision) { config = latest; applyDisplaySettings(); if (view !== 'tools') render(); } }).catch(() => {});
 });
@@ -1492,6 +1609,7 @@ async function boot() {
     linkCheck = await api('/api/link-check').catch(() => linkCheck);
     route();
     if (linkCheck.job?.running) refreshLinkCheck().catch(() => {});
+    pullSync();
     if (capabilities.monitor) setInterval(() => { if (!document.hidden) refreshHealth().catch(() => {}); }, 10000);
   } catch (error) {
     app.innerHTML = '<main class="boot-error">' + icon('alert', 32) + '<h1>' + (backendMode === 'extension' ? '轻航数据读取失败' : '暂时无法连接轻航') + '</h1><p>' + esc(error.message) + '</p><button class="btn btn-primary" data-action="reload">重新连接</button></main>';

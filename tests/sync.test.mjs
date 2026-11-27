@@ -254,7 +254,8 @@ test('a failed write is reported in the status and retried by the next run', asy
 test('the local backend answers the page\'s API like the server', async () => {
   const cloud = fakeArea();
   const one = device(cloud);
-  const backend = createLocalBackend({ store: one.store, knownSites, sync: one.engine });
+  const backend = createLocalBackend({ store: one.store, knownSites, sync: one.engine, area: one.area,
+    linkCheck: { status: async () => ({ job: null, results: {} }), start: async () => ({ job: { running: true }, results: {} }) } });
   const state = await backend.request('/api/state');
   assert.equal(state.revision, 1);
   const saved = await backend.request('/api/state', { method: 'PUT', body: JSON.stringify({ ...state, settings: { ...state.settings, timeout: 3 } }) });
@@ -268,7 +269,8 @@ test('the local backend answers the page\'s API like the server', async () => {
   assert.ok(backups.length >= 1);
   assert.equal((await backend.request('/api/backups/' + backups[0].id)).version, 1);
   assert.deepEqual(await backend.request('/api/link-check'), { job: null, results: {} });
-  await assert.rejects(backend.request('/api/link-check', { method: 'POST', body: '{}' }), (error) => error.status === 501);
+  // Without permission to reach websites, the link check is refused.
+  await assert.rejects(backend.request('/api/link-check', { method: 'POST', body: '{}' }), (error) => error.status === 403);
   await assert.rejects(backend.request('/api/nope'), (error) => error.status === 404);
   assert.equal((await backend.request('/api/sync')).status.enabled, false);
   assert.equal((await backend.request('/api/sync', { method: 'POST', body: JSON.stringify({ action: 'enable' }) })).status.enabled, true);

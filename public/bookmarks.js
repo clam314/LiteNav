@@ -73,3 +73,32 @@ export function parseBookmarks(html) {
   }
   return { groups: [...groups].map(([groupName, links]) => ({ name: groupName, links })), skipped };
 }
+
+/**
+ * The same groups as parseBookmarks, from chrome.bookmarks.getTree() in the
+ * Chrome extension: the bookmarks bar and the other roots are containers.
+ */
+export function bookmarksFromTree(tree) {
+  const groups = new Map();
+  let skipped = 0;
+  const add = (groupName, link) => {
+    if (!groups.has(groupName)) groups.set(groupName, []);
+    groups.get(groupName).push(link);
+  };
+  const walk = (node, folders) => {
+    for (const child of node.children || []) {
+      if (child.children) {
+        walk(child, [...folders, { title: String(child.title || '').slice(0, 80) || '未命名文件夹', container: folders.length === 0 }]);
+        continue;
+      }
+      const href = String(child.url || '').trim();
+      if (!/^https?:\/\//i.test(href)) { skipped += 1; continue; }
+      const topic = folders.find((folder) => !folder.container);
+      const holder = folders[folders.length - 1];
+      add(topic ? topic.title : holder ? holder.title : UNSORTED_GROUP, { name: String(child.title || '').slice(0, 120), url: href });
+    }
+  };
+  // The tree's root has no title; its children are the bar, other and mobile bookmarks.
+  for (const root of [].concat(tree || [])) walk(root, []);
+  return { groups: [...groups].map(([groupName, links]) => ({ name: groupName, links })), skipped };
+}
