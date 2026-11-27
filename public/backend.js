@@ -7,8 +7,8 @@ export const backendMode = extension ? 'extension' : 'server';
 // What this backend can do; the page hides what it cannot. In the extension,
 // network checks ask for permission to reach websites first (permissions).
 export const capabilities = Object.freeze(extension
-  ? { monitor: true, linkCheck: true, sync: true, permissions: true, browserBookmarks: true, browserSearch: true }
-  : { monitor: true, linkCheck: true, sync: false, permissions: false, browserBookmarks: false, browserSearch: false });
+  ? { monitor: true, linkCheck: true, sync: true, permissions: true, browserBookmarks: true, browserSearch: true, update: true }
+  : { monitor: true, linkCheck: true, sync: false, permissions: false, browserBookmarks: false, browserSearch: false, update: false });
 
 // Optional extension permissions, by the feature that needs them.
 const PERMISSIONS = {
@@ -43,6 +43,10 @@ export function browserSearch(text, newTab) {
 }
 
 export const browserBookmarks = () => chrome.bookmarks.getTree();
+
+// Reads the extension's files again (after a new build was unpacked over
+// them). Chrome closes the extension's pages, this one too.
+export const reloadExtension = () => chrome.runtime.reload();
 
 let localBackend;
 const local = () => (localBackend ||= import('./extension-runtime.js').then((module) => module.createPageBackend()));
@@ -79,5 +83,6 @@ export function onBackendChange(callback) {
     if (changes['litenav.state']) callback('state');
     if (changes['litenav.sync']) callback('sync');
     if (changes['litenav.health']) callback('health');
+    if (changes['litenav.update']) callback('update');
   });
 }

@@ -140,7 +140,9 @@ docker run -d --name litenav -p 8765:8765 -e LITENAV_PASSWORD='换成你的口�
 
 不想跑服务器，也可以把轻航装成 Chrome 插件：打开新标签页就是轻航，数据保存在浏览器里，断网也能用；导航和设置可以在多台电脑之间同步。
 
-**安装**：下载 [litenav-extension.zip](https://github.com/clam314/LiteNav/releases/download/extension-latest/litenav-extension.zip) 并解压，在 Chrome 打开 `chrome://extensions`，开启右上角“开发者模式”，点“加载已解压的扩展程序”，选择解压出的文件夹。`main` 分支每次更新后，GitHub Actions 会测试并重新构建这个压缩包（见 [Releases](https://github.com/clam314/LiteNav/releases/tag/extension-latest)）；更新时下载新的压缩包，解压覆盖原文件夹，再在扩展程序页面点“重新加载”，数据不会丢失。
+**安装**：下载 [litenav-extension.zip](https://github.com/clam314/LiteNav/releases/download/extension-latest/litenav-extension.zip) 并解压，在 Chrome 打开 `chrome://extensions`，开启右上角“开发者模式”，点“加载已解压的扩展程序”，选择解压出的文件夹。`main` 分支每次更新后，GitHub Actions 会测试并重新构建这个压缩包（见 [Releases](https://github.com/clam314/LiteNav/releases/tag/extension-latest)）。
+
+**更新**：插件每天自动检查一次新版本，有更新时工具栏图标显示“↑”，页面顶部也会提示。在“设置 → 插件版本”点“下载更新”，把解压出的文件覆盖原来的插件文件夹，再点“重新加载插件”即可，网址、设置和同步数据都不受影响。Chrome 不会自动更新从文件夹加载的插件，所以覆盖文件这一步需要手动完成；自行从源码构建的版本不检查更新。
 
 也可以从源码构建，产物在 `dist/extension`：
 

@@ -581,3 +581,12 @@ input, select, textarea { min-width: 0; }
 .sync-error { margin-top: 10px; padding: 9px 12px; border: 1px solid var(--danger-line); border-radius: 10px; color: var(--danger); background: var(--danger-soft); font-size: 13px; }
 .sync-choice { padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; }
 .sync-choice strong { display: block; font-weight: 600; }
+
+/* 插件版本 (Chrome extension) */
+.update-pill {
+  min-height: 34px; margin-right: 12px; padding: 7px 12px; display: inline-flex; align-items: center; gap: 7px; cursor: pointer;
+  color: var(--blue); background: var(--blue-soft, rgb(53 100 237 / 12%)); border: 1px solid var(--blue-line, rgb(53 100 237 / 35%)); border-radius: 999px; font: inherit; font-size: 12px; font-weight: 500; white-space: nowrap;
+}
+.update-pill svg { width: 15px; height: 15px; }
+.sync-dot.is-update { background: var(--blue, #5b8cff); box-shadow: 0 0 0 3px rgb(53 100 237 / 18%); }
+.update-steps { margin: 12px 0 0; padding-left: 20px; color: var(--muted); font-size: 13px; line-height: 1.8; }

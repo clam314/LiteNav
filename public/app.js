@@ -3,7 +3,7 @@ import { initCompanion } from './companion.js';
 import { toolsMarkup, mountTools, resolveTool } from './tools.js';
 import { searchLinks, googleSearchUrl } from './search.js';
 import { parseBookmarks, bookmarksFromTree } from './bookmarks.js';
-import { api, capabilities, backendMode, onBackendChange, hasPermission, requestPermission, dropPermission, browserSearch, browserBookmarks } from './backend.js';
+import { api, capabilities, backendMode, onBackendChange, hasPermission, requestPermission, dropPermission, browserSearch, browserBookmarks, reloadExtension } from './backend.js';
 import { serverOrigin } from './sync-server.js';
 
 initCompanion();
@@ -31,6 +31,7 @@ let linkCheck = { job: null, results: {} };
 let linkCheckTimer = null;
 let syncStatus = null;
 let networkAllowed = null;
+let updateStatus = null;
 // Where checks are made from, for the texts that explain them.
 const checkSource = backendMode === 'extension' ? '这台电脑的浏览器' : '运行轻航的服务器';
 
@@ -121,6 +122,11 @@ function offlineServices() {
 function alertMarkup() {
   const count = offlineServices().length;
   return count ? '<a href="#services" class="alert-pill" aria-label="' + count + ' 项服务异常，查看详情">' + icon('alert', 17) + '<span>' + count + ' 项服务异常</span>' + icon('chevron-right', 14) + '</a>' : '';
+}
+
+// A newer build of the extension, announced once it is known.
+function updateAlertMarkup() {
+  return updateStatus?.available ? '<button class="update-pill" data-action="show-update" aria-label="有新版本 ' + esc(updateStatus.latest.version) + '，查看">' + icon('download', 15) + '<span>新版本 ' + esc(updateStatus.latest.version) + '</span></button>' : '';
 }
 
 function sidebarMarkup() {
@@ -259,7 +265,7 @@ function categorySettingsRow(category) {
 function settingsMarkup() {
   const categories = directoryCategories();
   const shelved = archiveCategories();
-  return displaySettingsMarkup() + (capabilities.sync ? syncSectionMarkup() : '') + (capabilities.permissions ? networkSectionMarkup() : '') + (!capabilities.monitor ? '' : '<section class="settings-section"><div class="section-heading">' + icon('settings', 22) + '<h2>检测设置</h2></div><form class="settings-card settings-form" id="settings-form"><div class="field-row">' +
+  return displaySettingsMarkup() + (capabilities.sync ? syncSectionMarkup() : '') + (capabilities.permissions ? networkSectionMarkup() : '') + (capabilities.update ? updateSectionMarkup() : '') + (!capabilities.monitor ? '' : '<section class="settings-section"><div class="section-heading">' + icon('settings', 22) + '<h2>检测设置</h2></div><form class="settings-card settings-form" id="settings-form"><div class="field-row">' +
     '<label class="field"><span class="field-label">检测间隔（秒）</span><input class="form-input" type="number" name="checkInterval" min="10" max="86400" value="' + esc(config.settings.checkInterval) + '" required></label>' +
     '<label class="field"><span class="field-label">连续异常次数</span><input class="form-input" type="number" name="failureThreshold" min="1" max="10" value="' + esc(config.settings.failureThreshold) + '" required></label>' +
     '<label class="field"><span class="field-label">请求超时（秒）</span><input class="form-input" type="number" name="timeout" min="1" max="30" value="' + esc(config.settings.timeout) + '" required></label></div>' +
@@ -450,7 +456,7 @@ function render() {
   const titles = { home: '我的导航', services: '服务集', settings: '设置', tools: '工具箱', archive: '杂物库' };
   const previousScroll = window.scrollY;
   app.innerHTML = '<div class="app-shell ' + (editMode ? 'edit-mode' : '') + '">' + sidebarMarkup() +
-    '<main class="workspace"><header class="topbar"><h1 class="page-title">' + titles[view] + '</h1>' + searchMarkup() + '<div class="topbar-actions"><span id="service-alert">' + alertMarkup() + '</span>' +
+    '<main class="workspace"><header class="topbar"><h1 class="page-title">' + titles[view] + '</h1>' + searchMarkup() + '<div class="topbar-actions"><span id="update-alert">' + updateAlertMarkup() + '</span><span id="service-alert">' + alertMarkup() + '</span>' +
     (view === 'home' || view === 'services' || (view === 'archive' && archiveCategories().length) ? '<button class="btn ' + (editMode ? 'btn-secondary is-editing' : 'btn-secondary') + '" data-action="toggle-edit">' + (editMode ? icon('check', 16) + '完成整理' : '整理') + '</button>' : '') +
     (view === 'tools' ? '' : '<button class="btn btn-primary" data-action="' + (view === 'services' ? 'add-service' : 'add-link') + '"' + (view === 'archive' ? ' data-area="archive"' : '') + '>' + icon('plus', 18) + '添加' + (view === 'services' ? '服务' : '') + '</button>') + '</div></header>' +
     '<div class="page-content">' + (view === 'services' ? servicesMarkup() : view === 'settings' ? settingsMarkup() : view === 'tools' ? toolsMarkup(activeTool) : view === 'archive' ? archiveMarkup() : homeMarkup()) + '</div></main></div>';
@@ -459,6 +465,7 @@ function render() {
   if (view === 'settings') refreshBackups();
   if (view === 'settings' && capabilities.sync) refreshSync();
   if (view === 'settings' && capabilities.permissions) refreshNetwork();
+  if (view === 'settings' && capabilities.update) refreshUpdate();
   if (searchFocus) {
     const input = document.querySelector('#quick-search-input');
     input.focus({ preventScroll: true });
@@ -958,6 +965,20 @@ async function handleAction(button) {
     case 'download-backup': await downloadBackup(id); break;
     case 'sync-enable': await enableSync(button, 'chrome'); break;
     case 'sync-server': openServerDialog(); break;
+    case 'show-update':
+      if (view !== 'settings') location.hash = '#settings';
+      requestAnimationFrame(() => document.querySelector('#update')?.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+      break;
+    case 'update-check': {
+      button.disabled = true;
+      try {
+        updateStatus = await api('/api/update', { method: 'POST', body: JSON.stringify({ action: 'check' }) });
+        showUpdate();
+        toast(updateStatus.error ? '检查失败：' + updateStatus.error : updateStatus.available ? '有新版本 ' + updateStatus.latest.version : '已是最新版本');
+      } finally { if (button.isConnected) button.disabled = false; }
+      break;
+    }
+    case 'update-reload': reloadExtension(); break;
     case 'sync-now': {
       button.disabled = true;
       try {
@@ -1446,6 +1467,53 @@ window.addEventListener('focus', () => {
   refreshHealth().catch(() => {});
 });
 
+// 插件版本 (Chrome extension): the version, 检查更新, and reloading after a
+// newer build was unpacked over the extension's folder.
+function updateCardMarkup() {
+  const status = updateStatus;
+  if (!status) return '<p class="field-hint">正在读取版本…</p>';
+  const checked = status.checkedAt ? '上次检查于 ' + esc(shortTime(status.checkedAt)) : '尚未检查';
+  const check = '<button class="btn btn-secondary" data-action="update-check">' + icon('refresh', 16) + '检查更新</button>';
+  if (!status.releaseBuild) {
+    return '<div class="sync-head"><div><p class="sync-state">当前版本 ' + esc(status.current) + '（自行构建）</p><p class="settings-description">从源码构建的版本不检查更新。GitHub 上自动构建的最新版本' +
+      (status.latest ? '是 ' + esc(status.latest.version) : '可在 Releases 页面下载') + '。</p></div><div class="settings-actions"><a class="btn btn-ghost" href="' + esc(status.latest?.pageUrl || 'https://github.com/clam314/LiteNav/releases/tag/extension-latest') + '" target="_blank" rel="noopener noreferrer">打开 Releases</a>' + check + '</div></div>';
+  }
+  if (status.available) {
+    return '<div class="sync-head"><div><p class="sync-state"><span class="sync-dot is-update"></span>有新版本 ' + esc(status.latest.version) + '</p><p class="settings-description">当前版本 ' + esc(status.current) +
+      (status.latest.publishedAt ? '，新版本发布于 ' + esc(shortTime(status.latest.publishedAt)) : '') + '。</p></div>' +
+      '<div class="settings-actions"><a class="btn btn-ghost" href="' + esc(status.latest.pageUrl) + '" target="_blank" rel="noopener noreferrer">更新说明</a><a class="btn btn-primary" href="' + esc(status.latest.zipUrl) + '">' + icon('download', 16) + '下载更新</a></div></div>' +
+      '<ol class="update-steps"><li>下载压缩包并解压。</li><li>用解压出的文件覆盖原来加载的插件文件夹（' + esc('chrome://extensions') + ' 里可以看到它的位置）。</li><li>点“重新加载插件”。轻航的页面会关闭一次，Chrome 随后打开新版本；网址、设置和同步数据都不受影响。</li></ol>' +
+      '<div class="settings-actions"><button class="btn btn-secondary" data-action="update-reload">重新加载插件</button></div>' + (status.error ? '<p class="field-hint">' + esc(status.error) + '</p>' : '');
+  }
+  return '<div class="sync-head"><div><p class="sync-state"><span class="sync-dot"></span>已是最新版本 ' + esc(status.current) + '</p><p class="settings-description">' + checked + '，每天自动检查一次。有新版本时，工具栏图标和页面顶部会提示。</p></div><div class="settings-actions">' + check + '</div></div>' +
+    (status.error ? '<p class="sync-error">' + esc(status.error) + '</p>' : '');
+}
+
+function updateSectionMarkup() {
+  return '<section class="settings-section" id="update"><div class="section-heading">' + icon('download', 22) + '<h2>插件版本</h2></div><div class="settings-card" id="update-card">' + updateCardMarkup() + '</div></section>';
+}
+
+function showUpdate() {
+  const card = document.querySelector('#update-card');
+  if (card) card.innerHTML = updateCardMarkup();
+  const chip = document.querySelector('#update-alert');
+  if (chip) chip.innerHTML = updateAlertMarkup();
+}
+
+let updateAnnounced = false;
+async function refreshUpdate() {
+  try { updateStatus = await api('/api/update'); } catch { return; }
+  showUpdate();
+  // The worker opened this tab after the files were replaced with a newer build.
+  // Booting and rendering 设置 both ask: say it once.
+  if (updateStatus.justUpdated && !updateAnnounced) {
+    updateAnnounced = true;
+    toast('轻航已更新到 ' + updateStatus.justUpdated.to);
+    api('/api/update', { method: 'POST', body: JSON.stringify({ action: 'seen' }) }).catch(() => {});
+    updateStatus.justUpdated = null;
+  }
+}
+
 // 网站访问 (Chrome extension): the optional permission behind service
 // status codes, 网址体检 and reading a pasted site's name and icon.
 function networkCardMarkup() {
@@ -1598,6 +1666,7 @@ function openServerDialog() {
 onBackendChange((what) => {
   if (what === 'sync') { if (view === 'settings') refreshSync(); return; }
   if (what === 'health') { refreshHealth().catch(() => {}); return; }
+  if (what === 'update') { refreshUpdate(); return; }
   if (!config || currentDialog || editMode) return;
   api('/api/state').then((latest) => { if (latest.revision !== config.revision) { config = latest; applyDisplaySettings(); if (view !== 'tools') render(); } }).catch(() => {});
 });
@@ -1610,6 +1679,7 @@ async function boot() {
     route();
     if (linkCheck.job?.running) refreshLinkCheck().catch(() => {});
     pullSync();
+    if (capabilities.update) refreshUpdate();
     if (capabilities.monitor) setInterval(() => { if (!document.hidden) refreshHealth().catch(() => {}); }, 10000);
   } catch (error) {
     app.innerHTML = '<main class="boot-error">' + icon('alert', 32) + '<h1>' + (backendMode === 'extension' ? '轻航数据读取失败' : '暂时无法连接轻航') + '</h1><p>' + esc(error.message) + '</p><button class="btn btn-primary" data-action="reload">重新连接</button></main>';

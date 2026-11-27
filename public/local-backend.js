@@ -12,7 +12,9 @@ const parse = (body) => {
 
 const PROVIDERS = ['chrome', 'server'];
 
-export function createLocalBackend({ store, knownSites, sync, monitor, linkCheck, area, hostAccess = async () => false, fetchPageImpl = fetchPage }) {
+export const JUST_UPDATED_KEY = 'litenav.justUpdated';
+
+export function createLocalBackend({ store, knownSites, sync, monitor, linkCheck, area, update, hostAccess = async () => false, fetchPageImpl = fetchPage }) {
   // Like server.py: the built-in table first; otherwise read the page, when
   // the extension may (host access), keeping /favicon.ico if it says nothing.
   async function metadata(url, categories, remote) {
@@ -70,6 +72,13 @@ export function createLocalBackend({ store, knownSites, sync, monitor, linkCheck
     'GET /api/backups': async () => ({ backups: await store.backups() }),
     'POST /api/backups': async () => { await store.backupNow(); return { backups: await store.backups() }; },
     'POST /api/backups/restore': (body) => store.restoreBackup(body.id),
+    // 检查更新; justUpdated is set by the worker after the extension's files were replaced.
+    'GET /api/update': async () => ({ ...await update.status(), justUpdated: (await area.get(JUST_UPDATED_KEY))[JUST_UPDATED_KEY] || null }),
+    'POST /api/update': async (body) => {
+      if (body.action === 'check') return { ...await update.check({ force: true }), justUpdated: null };
+      if (body.action === 'seen') { await area.remove(JUST_UPDATED_KEY); return { ok: true }; }
+      throw new StateError('更新操作不正确');
+    },
     'GET /api/sync': async () => ({ status: await sync.status() }),
     'POST /api/sync': async (body) => {
       if (body.action === 'inspect') return { status: await sync.status(), ...await sync.inspect(provider(body.provider)) };

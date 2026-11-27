@@ -10,6 +10,7 @@ import { createMonitor } from './monitor.js';
 import { createLinkChecker, checkLink } from './link-check.js';
 import { netErrorFor } from './net-errors.js';
 import { PREFERENCES_KEY } from './companion-model.js';
+import { createUpdateChecker } from './extension-update.js';
 
 // Optional permissions, asked for when a feature first needs them.
 export const NETWORK_PERMISSIONS = Object.freeze({ permissions: ['webRequest'], origins: ['http://*/*', 'https://*/*'] });
@@ -31,7 +32,8 @@ function createParts() {
   };
   const sync = createSyncEngine({ store, channelFor, area });
   const monitor = createMonitor({ store, area });
-  return { area, store, sync, monitor };
+  const update = createUpdateChecker({ area, currentVersion: chrome.runtime.getManifest().version });
+  return { area, store, sync, monitor, update };
 }
 
 // The companion keeps its preferences in localStorage, which the worker
@@ -71,12 +73,12 @@ async function startLinkCheck(ids) {
 }
 
 export async function createPageBackend() {
-  const { area, store, sync, monitor } = createParts();
+  const { area, store, sync, monitor, update } = createParts();
   const knownSites = await json('/known-sites.json');
   await bridgePreferences(store).catch(() => {});
   const linkChecker = createLinkChecker({ store, area });
   return createLocalBackend({
-    store, knownSites, sync, monitor, area, hostAccess,
+    store, knownSites, sync, monitor, area, hostAccess, update,
     linkCheck: { status: () => linkChecker.status(), start: startLinkCheck },
   });
 }

@@ -3,14 +3,19 @@
 //   arrives, Chrome starts, and every 5 minutes (how a server's changes arrive);
 // - service monitoring on an alarm, with the offline count on the toolbar icon;
 // - 网址体检 jobs, so leaving the page does not stop them;
+// - 检查更新 once a day, also shown on the toolbar icon, and a tab that says so
+//   after the extension's files were replaced with a newer build;
 // - the toolbar button opens 轻航.
 import { createWorkerParts } from './extension-runtime.js';
 import { STATE_KEY, PREFS_KEY } from './local-store.js';
 import { META_KEY } from './sync-chrome.js';
 import { HEALTH_KEY } from './monitor.js';
 import { watchNetErrors } from './net-errors.js';
+import { UPDATE_KEY } from './extension-update.js';
+import { JUST_UPDATED_KEY } from './local-backend.js';
 
-const { store, sync, monitor, linkChecker } = createWorkerParts();
+const { area, store, sync, monitor, linkChecker, update } = createWorkerParts();
+const UPDATE_ALARM = 'litenav-update';
 const SYNC_ALARM = 'litenav-sync';
 const MONITOR_ALARM = 'litenav-monitor';
 
@@ -38,11 +43,13 @@ async function scheduleMonitor() {
   await ensureAlarm(MONITOR_ALARM, watched ? Math.max(0.5, state.settings.checkInterval / 60) : 0);
 }
 
+// Offline services come first; otherwise a newer build is announced.
 async function updateBadge() {
   const offline = await monitor.offline();
-  await chrome.action.setBadgeBackgroundColor({ color: '#e5484d' });
-  await chrome.action.setBadgeText({ text: offline ? String(offline) : '' });
-  await chrome.action.setTitle({ title: offline ? '轻航 · ' + offline + ' 个服务离线' : '打开轻航' });
+  const newer = offline ? null : await update.status();
+  await chrome.action.setBadgeBackgroundColor({ color: offline ? '#e5484d' : '#3564ed' });
+  await chrome.action.setBadgeText({ text: offline ? String(offline) : newer?.available ? '↑' : '' });
+  await chrome.action.setTitle({ title: offline ? '轻航 · ' + offline + ' 个服务离线' : newer?.available ? '轻航 · 有新版本 ' + newer.latest.version : '打开轻航' });
 }
 
 chrome.storage.onChanged.addListener((changes, area) => {
@@ -50,12 +57,13 @@ chrome.storage.onChanged.addListener((changes, area) => {
   if (area !== 'local') return;
   if ([changes[STATE_KEY]?.newValue, changes[PREFS_KEY]?.newValue].some((record) => record?.origin === 'local')) scheduleSync(3000);
   if (changes[STATE_KEY]) scheduleMonitor().then(updateBadge).catch(() => {});
-  if (changes[HEALTH_KEY]) updateBadge().catch(() => {});
+  if (changes[HEALTH_KEY] || changes[UPDATE_KEY]) updateBadge().catch(() => {});
 });
 
 chrome.alarms.onAlarm.addListener((alarm) => {
   if (alarm.name === SYNC_ALARM) sync.run().catch(() => {});
   if (alarm.name === MONITOR_ALARM) monitor.due().then(updateBadge).catch(() => {});
+  if (alarm.name === UPDATE_ALARM) update.check().catch(() => {});
 });
 
 chrome.runtime.onMessage.addListener((message, _sender, reply) => {
@@ -73,9 +81,20 @@ chrome.permissions.onAdded.addListener(() => { watchNetErrors(); });
 
 function setUp() {
   ensureAlarm(SYNC_ALARM, 5).catch(() => {});
+  // Hourly, so a computer asleep at the time still checks soon; GitHub is asked once a day.
+  ensureAlarm(UPDATE_ALARM, 60).catch(() => {});
   scheduleMonitor().then(updateBadge).catch(() => {});
+  update.check().catch(() => {});
 }
-chrome.runtime.onInstalled.addListener(setUp);
+chrome.runtime.onInstalled.addListener((details) => {
+  setUp();
+  // A newer build unpacked over the folder and reloaded: say so in a tab.
+  const current = chrome.runtime.getManifest().version;
+  if (details.reason === 'update' && details.previousVersion && details.previousVersion !== current) {
+    area.set({ [JUST_UPDATED_KEY]: { from: details.previousVersion, to: current } })
+      .then(() => chrome.tabs.create({ url: chrome.runtime.getURL('index.html#settings') })).catch(() => {});
+  }
+});
 chrome.runtime.onStartup.addListener(() => {
   setUp();
   scheduleSync(1500);
