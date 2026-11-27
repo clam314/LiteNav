@@ -11,6 +11,7 @@
 ![Python](https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white)
 ![零依赖](https://img.shields.io/badge/依赖-零-2ea44f)
 ![Docker](https://img.shields.io/badge/Docker-amd64%20%7C%20arm64-2496ED?logo=docker&logoColor=white)
+![许可](https://img.shields.io/badge/许可-PolyForm%20Noncommercial-8a63d2)
 
 </div>
 
@@ -139,11 +140,13 @@ docker run -d --name litenav -p 8765:8765 -e LITENAV_PASSWORD='换成你的口�
 
 不想跑服务器，也可以把轻航装成 Chrome 插件：打开新标签页就是轻航，数据保存在浏览器里，断网也能用；导航和设置可以在多台电脑之间同步。
 
+**安装**：下载 [litenav-extension.zip](https://github.com/clam314/LiteNav/releases/download/extension-latest/litenav-extension.zip) 并解压，在 Chrome 打开 `chrome://extensions`，开启右上角“开发者模式”，点“加载已解压的扩展程序”，选择解压出的文件夹。`main` 分支每次更新后，GitHub Actions 会测试并重新构建这个压缩包（见 [Releases](https://github.com/clam314/LiteNav/releases/tag/extension-latest)）；更新时下载新的压缩包，解压覆盖原文件夹，再在扩展程序页面点“重新加载”，数据不会丢失。
+
+也可以从源码构建，产物在 `dist/extension`：
+
 ```sh
 python3 scripts/build_extension.py
 ```
-
-在 Chrome 打开 `chrome://extensions`，开启右上角“开发者模式”，点“加载已解压的扩展程序”，选择 `dist/extension` 文件夹即可。同时生成的 `dist/litenav-extension-<版本>.zip` 可用于上架 Chrome 应用商店。
 
 - **离线可用**：网址导航、杂物库、搜索、工具箱、书签导入、备份与恢复都在本机运行；常见网站离线也能识别名称和图标，网站图标加载不到时使用 Chrome 自己缓存的图标。角色陪伴可以把喜欢的服装“保存到本机”，离线时照常显示。
 - **角色目录自动更新**：插件每天最多一次从本仓库读取最新的角色目录（GitHub Actions 每周刷新），新角色和新服装下次打开时出现，不必等插件发新版；需要更新版本播放器的目录不会被采用。
@@ -193,6 +196,14 @@ python3 scripts/update_companion.py
 
 更多验证细节见 [验证记录](docs/VERIFICATION.md)。
 
-## 声明
+## 许可与声明
+
+轻航的代码以 [PolyForm Noncommercial License 1.0.0](LICENSE) 发布：
+
+- 可以免费用于个人、学习、研究及其他非商业用途，也可以修改。
+- 不得用于任何商业用途。
+- 转发或分发（包括修改后的版本）时，必须同时附上这份许可协议，以及 [LICENSE](LICENSE) 开头的 `Required Notice` 原作者信息。
+
+这是“源码可见”的非商业许可，不属于 OSI 定义的开源许可。打包进来的第三方运行时（PixiJS、pixi-live2d-display、Spine、Live2D 等）仍按各自的许可使用，见下方资源声明。
 
 角色动画素材来自《棕色尘埃 2》《NIKKE：胜利女神》《碧蓝航线》与《天命之子》，相关权利归原权利人所有。本项目仅作个人学习与展示，不用于商业用途。素材来源、取景预设、叠播编排（BD2-L2D-Viewer，MIT）以及 Spine、Live2D 运行时许可见 [资源声明](public/companion/NOTICE.md)。

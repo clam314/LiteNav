@@ -2,8 +2,8 @@ name: Companion catalogs
 
 # Refresh the Brown Dust 2, NIKKE, Azur Lane and Destiny Child character
 # catalogs from their upstream sources once a week. Changes are committed to
-# main and the image workflow is started, since pushes made with the workflow
-# token start no other workflows.
+# main and the image and extension workflows are started, since pushes made
+# with the workflow token start no other workflows.
 on:
   schedule:
     - cron: '23 3 * * 1'
@@ -64,3 +64,4 @@ jobs:
           git commit -m 'Update companion catalogs from upstream sources'
           git push
           gh workflow run docker.yml --ref "$GITHUB_REF_NAME"
+          gh workflow run extension.yml --ref "$GITHUB_REF_NAME"

@@ -4,7 +4,7 @@ LABEL org.opencontainers.image.title="轻航 LiteNav" \
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1
 WORKDIR /app
-COPY server.py seed.json ./
+COPY server.py seed.json LICENSE ./
 COPY public ./public
 RUN useradd --system --uid 10001 --create-home litenav \
     && mkdir -p /app/data \
