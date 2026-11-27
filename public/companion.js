@@ -379,16 +379,39 @@ export function initCompanion() {
     updateUI();
   }
 
-  function updatePlayback() {
-    const paused = document.hidden || !motionAllowed;
-    if (paused) voice.stop();
+  // While the page scrolls the character rests: updating a model every frame
+  // (Live2D above all, whose Cubism core recomputes the whole model) competes
+  // with scrolling for the CPU and GPU, and on a slower computer the scroll
+  // stutters. It moves on a moment after the scrolling stops; nobody watches
+  // the artwork mid-scroll, and the voice and the paused state are untouched.
+  const SCROLL_REST_MS = 250;
+  let scrolling = false;
+  let scrollTimer;
+  const resting = () => document.hidden || !motionAllowed || scrolling;
+
+  function runPlayers() {
+    const rest = resting();
     for (const record of [stage.active, stage.pending, stage.outgoing]) {
       for (const player of [record?.player, record?.partner]) {
         if (!player) continue;
-        if (paused) player.pause();
+        if (rest) player.pause();
         else player.play();
       }
     }
+  }
+
+  function onScroll() {
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => { scrolling = false; runPlayers(); }, SCROLL_REST_MS);
+    if (scrolling) return;
+    scrolling = true;
+    runPlayers();
+  }
+
+  function updatePlayback() {
+    const paused = document.hidden || !motionAllowed;
+    if (paused) voice.stop();
+    runPlayers();
     if (stage.active) root.dataset.paused = String(paused);
     updateUI();
   }
@@ -720,7 +743,7 @@ export function initCompanion() {
                 record.loopSeconds = record.performance.duration;
                 record.view = loadedPlayer.companionView = record.performance.view();
                 record.configured = true;
-                if (document.hidden || !motionAllowed) loadedPlayer.pause();
+                if (resting()) loadedPlayer.pause();
                 else loadedPlayer.play();
                 return;
               }
@@ -765,7 +788,7 @@ export function initCompanion() {
                 // The camera follows the performance from shot to shot.
                 record.view = loadedPlayer.companionView = record.performance.view();
                 record.configured = true;
-                if (document.hidden || !motionAllowed) loadedPlayer.pause();
+                if (resting()) loadedPlayer.pause();
                 else loadedPlayer.play();
                 return;
               }
@@ -806,7 +829,7 @@ export function initCompanion() {
               record.configured = true;
               for (const player of [loadedPlayer, record.partner]) {
                 if (!player) continue;
-                if (document.hidden || !motionAllowed) player.pause();
+                if (resting()) player.pause();
                 else player.play();
               }
             } catch (error) { finish(() => reject(error)); }
@@ -1099,6 +1122,10 @@ export function initCompanion() {
   window.addEventListener('storage', onKeptChange);
   skillPicker.addEventListener('change', onSkillPick);
   document.addEventListener('visibilitychange', onVisibility);
+  // Any scroll on the page (captured, as scroll does not bubble), and the
+  // wheel, which arrives before the scrolling starts.
+  document.addEventListener('scroll', onScroll, { capture: true, passive: true });
+  window.addEventListener('wheel', onScroll, { passive: true });
   if (document.hidden) hiddenTimer = setTimeout(releaseHidden, HIDDEN_RELEASE_MS);
   reducedMotion.addEventListener('change', onMotionChange);
   desktop.addEventListener('change', onDesktopChange);
@@ -1198,6 +1225,9 @@ export function initCompanion() {
       voice.dispose();
       picker.removeEventListener('change', onPick);
       offlineButton.removeEventListener('click', onOffline);
+      document.removeEventListener('scroll', onScroll, { capture: true });
+      window.removeEventListener('wheel', onScroll);
+      clearTimeout(scrollTimer);
       window.removeEventListener('storage', onKeptChange);
       skillPicker.removeEventListener('change', onSkillPick);
       document.removeEventListener('pointerdown', onOutside);

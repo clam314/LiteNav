@@ -54,6 +54,7 @@ RENDERER = """(() => {
   window.spine = { SpinePlayer: class {
     constructor(parent, config) {
       this.config = config;
+      (window.testPlayers ||= []).push(this);
       this.dom = document.createElement('div'); this.dom.className = 'spine-player';
       this.dom.append(document.createElement('canvas')); parent.append(this.dom);
       this.context = { gl: { getExtension: () => ({ loseContext() {} }) } };
@@ -228,6 +229,19 @@ def run_cases(browser, origin, case_filter=None):
         expect(page.locator("#companion-root")).to_have_attribute("data-mode", "portrait")
 
     case("a page hidden for three minutes lets its player go and loads it again when shown", hidden_release)
+
+    def scroll_rest(page):
+        page.wait_for_function("document.querySelector('#companion-root').dataset.state === 'ready'")
+        live = "window.testPlayers.filter((player) => !player.disposed)"
+        page.wait_for_function(f"{live}.length && {live}.every((player) => player.paused === false)")
+        page.mouse.move(400, 400)
+        page.mouse.wheel(0, 300)
+        page.wait_for_function(f"{live}.every((player) => player.paused === true)", timeout=2000)
+        assert page.evaluate("document.querySelector('#companion-root').dataset.paused") == "false", \
+            "resting while scrolling is not the paused state"
+        page.wait_for_function(f"{live}.every((player) => player.paused === false)", timeout=3000)
+
+    case("the character rests while the page scrolls and moves on after", scroll_rest)
 
     def saved_male(page):
         page.wait_for_function("document.querySelector('#companion-root').dataset.state === 'ready'")
