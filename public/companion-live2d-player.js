@@ -80,8 +80,10 @@ const GLIDE_SECONDS = 0.6;
 // live2d is the plugin build for the model's Cubism generation (see
 // loadLive2DRuntime). mode is the display it starts in; setMode() moves the
 // same model to the other one, as the companion does when both are on.
+// maxFps caps how often the model is updated and drawn (0: every display
+// frame); setMaxFps() changes it while playing.
 export async function createLive2DPlayer({ PIXI, live2d, layer, settings, plan, blobs, mode, space, frame,
-  progress = null, onProgress = () => {}, onReaction = () => {} }) {
+  progress = null, onProgress = () => {}, onReaction = () => {}, maxFps = 0 }) {
   const dom = document.createElement('div');
   dom.className = 'live2d-player';
   const canvas = document.createElement('canvas');
@@ -91,6 +93,9 @@ export async function createLive2DPlayer({ PIXI, live2d, layer, settings, plan, 
     view: canvas, resizeTo: dom, backgroundAlpha: 0, antialias: true, autoStart: false,
     resolution: Math.min(window.devicePixelRatio || 1, 2), autoDensity: true,
   });
+  // Updating a Live2D model is the costly part (the Cubism core recomputes it
+  // every frame); a lower rate spares a slower computer.
+  app.ticker.maxFPS = maxFps || 0;
   let model;
   let destroyed = false;
   // URLs of this player alone, so destroying its textures touches no other player.
@@ -101,6 +106,7 @@ export async function createLive2DPlayer({ PIXI, live2d, layer, settings, plan, 
     pause() { app.ticker.stop(); },
     play() { if (!destroyed) app.ticker.start(); },
     stopRendering() { app.ticker.stop(); },
+    setMaxFps(fps) { if (!destroyed) app.ticker.maxFPS = fps || 0; },
     dispose() {
       if (destroyed) return;
       destroyed = true;

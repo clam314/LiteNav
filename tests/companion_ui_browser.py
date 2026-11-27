@@ -243,6 +243,26 @@ def run_cases(browser, origin, case_filter=None):
 
     case("the character rests while the page scrolls and moves on after", scroll_rest)
 
+    def live2d_fps(page):
+        page.wait_for_function("document.querySelector('#companion-root').dataset.state === 'ready'")
+        open_menu(page)
+        switch = page.get_by_role("switch", name="Live2D 每秒 30 帧")
+        expect(switch).not_to_be_checked()
+        switch.check()
+        assert page.evaluate("localStorage.getItem('litenav.companion.live2dFps')") == "30"
+        saved = page.evaluate(f"localStorage.getItem({json.dumps(PREFERENCE_KEY)})")
+        assert "live2d" not in saved.lower() and "fps" not in saved.lower(), "a setting of this computer, outside the synced preferences"
+        page.reload()
+        open_menu(page)
+        expect(page.get_by_role("switch", name="Live2D 每秒 30 帧")).to_be_checked()
+        # Without a game that shows Live2D models it is not offered.
+        page.evaluate(f"""localStorage.setItem({json.dumps(PREFERENCE_KEY)}, JSON.stringify({{ ...JSON.parse(localStorage.getItem({json.dumps(PREFERENCE_KEY)})), games: ['bd2', 'nikke'], knownGames: ['bd2', 'nikke', 'azurlane', 'destinychild'] }}))""")
+        page.reload()
+        open_menu(page)
+        expect(page.get_by_role("switch", name="Live2D 每秒 30 帧")).to_have_count(0)
+
+    case("the Live2D frame cap is a switch of this computer", live2d_fps)
+
     def saved_male(page):
         page.wait_for_function("document.querySelector('#companion-root').dataset.state === 'ready'")
         open_menu(page)
@@ -252,7 +272,7 @@ def run_cases(browser, origin, case_filter=None):
         assert saved["characterId"] == "0002"
         assert saved["costumeKey"] == "spine/char/char000201/char000201.skel"
         names = [switch.get_attribute("aria-label") for switch in page.get_by_role("switch").all()]
-        assert names.count("角色陪伴") == 1 and set(names) <= {"角色陪伴", "碧蓝航线语音"}, \
+        assert names.count("角色陪伴") == 1 and set(names) <= {"角色陪伴", "碧蓝航线语音", "Live2D 每秒 30 帧"}, \
             f"one master switch, and per-display switches stay gone: {names}"
 
     case("a saved male is removed from selection and replaced before rendering", saved_male,

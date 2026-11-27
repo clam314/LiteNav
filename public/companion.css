@@ -100,18 +100,18 @@ body[data-companion] .toast-root { bottom: 82px; }
   border: 0; border-radius: 7px; color: #94a2bb; background: transparent; font-size: 19px; line-height: 1;
 }
 .companion-menu-close:hover { color: #e2eaff; background: #263248; }
-:is(.companion-power, .companion-voice-switch) {
+:is(.companion-power, .companion-voice-switch, .companion-fps-switch) {
   appearance: none; position: relative; flex: 0 0 34px; width: 34px; height: 20px; margin: 0;
   border: 1px solid #49546a; border-radius: 12px; background: #333f53; cursor: pointer;
   transition: background-color .15s, border-color .15s;
 }
-:is(.companion-power, .companion-voice-switch)::after {
+:is(.companion-power, .companion-voice-switch, .companion-fps-switch)::after {
   content: ''; position: absolute; top: 3px; left: 3px; width: 12px; height: 12px;
   border-radius: 50%; background: #b7c0d0; transition: transform .15s, background-color .15s;
 }
-:is(.companion-power, .companion-voice-switch):checked { border-color: #638de0; background: #5078c3; }
-:is(.companion-power, .companion-voice-switch):checked::after { transform: translateX(14px); background: #f5f8ff; }
-.companion-voice-switch:disabled { opacity: .45; cursor: not-allowed; }
+:is(.companion-power, .companion-voice-switch, .companion-fps-switch):checked { border-color: #638de0; background: #5078c3; }
+:is(.companion-power, .companion-voice-switch, .companion-fps-switch):checked::after { transform: translateX(14px); background: #f5f8ff; }
+:is(.companion-voice-switch, .companion-fps-switch):disabled { opacity: .45; cursor: not-allowed; }
 
 /* While off, the choices show what the switch would restore; picking one turns it on. */
 #companion-root[data-enabled="false"] .companion-menu :is(.companion-now, .companion-field) { opacity: .55; }
@@ -176,7 +176,7 @@ body[data-companion] .toast-root { bottom: 82px; }
 .companion-menu-recovery button:hover { color: #e1eaff; border-color: #627cae; background: #293d5c; }
 .companion-menu-foot { display: block; padding-top: 10px; border-top: 1px solid #ffffff0a; color: #74829b; font-size: 11px; line-height: 1.6; }
 .companion-toggle:focus-visible,
-.companion-menu :is(button, select, .companion-power, .companion-voice-switch, .companion-voice-volume):focus-visible,
+.companion-menu :is(button, select, .companion-power, .companion-voice-switch, .companion-fps-switch, .companion-voice-volume):focus-visible,
 .companion-status button:focus-visible,
 .companion-motion button:focus-visible { outline: 2px solid #93b3ff; outline-offset: 3px; }
 
@@ -191,6 +191,8 @@ body[data-companion] .toast-root { bottom: 82px; }
 
 .companion-voice { display: grid; gap: 6px; }
 .companion-voice[hidden] { display: none; }
+.companion-fps { display: grid; gap: 6px; }
+.companion-fps[hidden] { display: none; }
 .companion-voice-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: #c8d2e4; font-size: 12px; cursor: pointer; }
 .companion-voice-volume { width: 100%; margin: 0; accent-color: #5078c3; }
 .companion-voice-volume:disabled { opacity: .45; }

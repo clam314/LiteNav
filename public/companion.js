@@ -17,7 +17,7 @@ import { createDatingTour } from './companion-dating.js';
 import { createPaintingPlayer } from './companion-painting-player.js';
 import { loadRuntime, loadSpine38, loadLive2DRuntime } from './companion-runtimes.js';
 import { readPreferences, writePreferences, readSceneProgress, writeSceneProgress, readReactionProgress, writeReactionProgress,
-  mediaQuery, disposePlayer, supportsWebGL } from './companion-browser.js';
+  mediaQuery, disposePlayer, supportsWebGL, readLive2DFps, writeLive2DFps, LIVE2D_FPS_KEY } from './companion-browser.js';
 import { fetchResource, fetchAsset, withAbort, partFor, loadCharacter } from './companion-loaders.js';
 import { createVoice, voiceSupported, voiceUrl } from './companion-voice.js';
 import { railSpace, alignedViews, spawnPartner, layoutCamera } from './companion-camera.js';
@@ -100,6 +100,10 @@ export function initCompanion() {
         <input class="companion-voice-volume" type="range" min="0" max="100" step="5" aria-label="语音音量">
         <small class="companion-voice-note">互动时随反应播放；在页面上点击或按键后才会出声。</small>
       </div>
+      <div class="companion-field companion-fps" hidden>
+        <label class="companion-voice-row"><span>Live2D 每秒 30 帧</span><input class="companion-fps-switch" type="checkbox" role="switch" aria-label="Live2D 每秒 30 帧"></label>
+        <small class="companion-voice-note">碧蓝航线、天命之子的 Live2D 角色少画一半的帧，更省电，配置较低的电脑上操作更流畅。只对这台电脑生效。</small>
+      </div>
       <p class="companion-menu-note" role="status" aria-live="polite" hidden></p>
       <div class="companion-menu-recovery" hidden><button class="companion-menu-retry" type="button">重试切换</button><button class="companion-menu-fallback" type="button">使用本地立绘</button></div>
       <small class="companion-menu-foot">设置仅保存在此浏览器，新角色首次加载需要联网；保存到本机的服装离线也能显示。</small>
@@ -124,6 +128,9 @@ export function initCompanion() {
   const voiceSwitch = root.querySelector('.companion-voice-switch');
   const voiceVolume = root.querySelector('.companion-voice-volume');
   const voiceNote = root.querySelector('.companion-voice-note');
+  const fpsField = root.querySelector('.companion-fps');
+  const fpsSwitch = root.querySelector('.companion-fps-switch');
+  let live2dFps = readLive2DFps();
   const canSpeak = voiceSupported();
   const voice = createVoice({ fetchAsset });
   const rotationField = root.querySelector('.companion-rotation');
@@ -267,6 +274,9 @@ export function initCompanion() {
       input.disabled = input.checked && preferences.games.length === 1;
     });
     voiceField.hidden = !preferences.games.includes('azurlane');
+    // The games that show Live2D models.
+    fpsField.hidden = !preferences.games.some(game => game === 'azurlane' || game === 'destinychild');
+    fpsSwitch.checked = live2dFps === 30;
     voiceSwitch.checked = canSpeak && preferences.voice;
     voiceSwitch.disabled = !canSpeak;
     voiceVolume.value = String(Math.round(preferences.voiceVolume * 100));
@@ -907,7 +917,7 @@ export function initCompanion() {
     const player = await createLive2DPlayer({
       PIXI, live2d, layer, settings: assets.settings, plan: assets.plan, blobs: assets.blobs, mode: record.mode,
       space: () => railSpace(layer), frame: delta => ownCanvasFrame(record, delta), ...reactionResume(record),
-      onReaction: motion => speak(record, motion),
+      onReaction: motion => speak(record, motion), maxFps: live2dFps,
     });
     record.player = player;
     // The model kept loading after this record was replaced or released.
@@ -1042,6 +1052,22 @@ export function initCompanion() {
     updatePreference({ voice: voiceSwitch.checked });
     if (!preferences.voice) voice.stop();
   };
+  // Applies to the models on stage at once, and to every model loaded after.
+  const applyLive2DFps = () => {
+    for (const record of [stage.active, stage.pending, stage.outgoing]) record?.player?.setMaxFps?.(live2dFps);
+    updateUI();
+  };
+  const onFps = () => {
+    live2dFps = fpsSwitch.checked ? 30 : 0;
+    writeLive2DFps(live2dFps);
+    applyLive2DFps();
+  };
+  // Another tab of this browser changed it.
+  const onFpsStorage = event => {
+    if (event.key !== null && event.key !== LIVE2D_FPS_KEY) return;
+    live2dFps = readLive2DFps();
+    applyLive2DFps();
+  };
   const onVolume = () => {
     updatePreference({ voiceVolume: Number(voiceVolume.value) / 100 });
     voice.setVolume(preferences.voiceVolume);
@@ -1116,6 +1142,8 @@ export function initCompanion() {
   rotationPicker.addEventListener('change', onRotation);
   gameInputs.forEach(input => input.addEventListener('change', onGame));
   voiceSwitch.addEventListener('change', onVoice);
+  fpsSwitch.addEventListener('change', onFps);
+  window.addEventListener('storage', onFpsStorage);
   voiceVolume.addEventListener('input', onVolume);
   picker.addEventListener('change', onPick);
   offlineButton.addEventListener('click', onOffline);
@@ -1221,6 +1249,8 @@ export function initCompanion() {
       rotationPicker.removeEventListener('change', onRotation);
       gameInputs.forEach(input => input.removeEventListener('change', onGame));
       voiceSwitch.removeEventListener('change', onVoice);
+      fpsSwitch.removeEventListener('change', onFps);
+      window.removeEventListener('storage', onFpsStorage);
       voiceVolume.removeEventListener('input', onVolume);
       voice.dispose();
       picker.removeEventListener('change', onPick);

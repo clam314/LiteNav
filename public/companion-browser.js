@@ -38,6 +38,22 @@ export function writePreferences(preferences) {
   catch { /* The controls still work when browser storage is blocked. */ }
 }
 
+// Live2D's frame rate cap: a setting of this computer (it suits its CPU), so it
+// lives outside the preferences that 云同步 shares. 0 means no cap.
+export const LIVE2D_FPS_KEY = 'litenav.companion.live2dFps';
+
+export function readLive2DFps() {
+  try { return localStorage.getItem(LIVE2D_FPS_KEY) === '30' ? 30 : 0; }
+  catch { return 0; }
+}
+
+export function writeLive2DFps(fps) {
+  try {
+    if (fps) localStorage.setItem(LIVE2D_FPS_KEY, String(fps));
+    else localStorage.removeItem(LIVE2D_FPS_KEY);
+  } catch { /* Lasts while the page is open. */ }
+}
+
 // Progress kept per costume under storageKey, cleaned by normalize.
 function readProgress(storageKey, normalize) {
   try { return normalize(JSON.parse(localStorage.getItem(storageKey))); }
