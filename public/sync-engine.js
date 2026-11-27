@@ -1,5 +1,5 @@
 // Keeps this browser's configuration and companion preferences in step with
-// the copy on a sync channel (Chrome account sync for now). Each run reads the
+// the copy on a sync channel: Chrome account sync or a self-hosted server. Each run reads the
 // channel, merges it with the local copy against the copy both had after the
 // previous run (the base), stores the result here and sends it back when the
 // channel lacks any of it. Extension pages and the background worker both run
@@ -15,13 +15,17 @@ const later = (a, b) => Boolean(a) && (!b || a > b);
 
 const summary = (document) => ({ links: document?.links?.length || 0, categories: document?.categories?.length || 0 });
 
-export function createSyncEngine({ store, channel, area, withLock = globalThis.navigator?.locks ? webLock('litenav-sync') : memoryLock(), now = () => new Date() }) {
+// channel is a fixed channel (tests); channelFor(provider) picks one by the
+// provider sync was turned on with ('chrome' or 'server').
+export function createSyncEngine({ store, channel, channelFor, area, withLock = globalThis.navigator?.locks ? webLock('litenav-sync') : memoryLock(), now = () => new Date() }) {
   const readMeta = async () => ({ enabled: false, base: null, deviceId: null, ...((await area.get(SYNC_KEY))[SYNC_KEY] || {}) });
   const writeMeta = async (meta) => { await area.set({ [SYNC_KEY]: meta }); return meta; };
   const newDeviceId = () => globalThis.crypto?.randomUUID?.() || 'device-' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
 
+  const channelOf = async (provider) => channelFor ? channelFor(provider) : channel;
+
   const status = (meta) => ({
-    enabled: Boolean(meta.enabled), provider: channel.id, state: meta.state || (meta.enabled ? 'idle' : 'off'),
+    enabled: Boolean(meta.enabled), provider: meta.provider || 'chrome', server: meta.server || null, state: meta.state || (meta.enabled ? 'idle' : 'off'),
     lastSyncedAt: meta.lastSyncedAt || null, lastError: meta.lastError || null, conflicts: meta.conflicts || 0,
     bytes: meta.bytes || 0, deviceId: meta.deviceId,
   });
@@ -33,7 +37,8 @@ export function createSyncEngine({ store, channel, area, withLock = globalThis.n
 
   // mode decides the first run after sync is turned on with data on both
   // sides: merge them, or let one replace the other. Later runs always merge.
-  async function runLocked(meta) {
+  async function runOnce(meta) {
+    const channel = await channelOf(meta.provider || 'chrome');
     // Until a first run succeeds, the choice made when turning sync on holds.
     let mode = meta.base ? 'merge' : meta.pendingMode || 'merge';
     const remote = await channel.read();
@@ -52,7 +57,8 @@ export function createSyncEngine({ store, channel, area, withLock = globalThis.n
       else {
         const result = mergeDocuments(meta.base, local.document, remote.document, { preferLocal: later(local.editedAt, remote.editedAt) });
         merged = result.document;
-        conflicts = result.conflicts.filter((item) => item.kind !== 'duplicate-url').length;
+        // Without a base (the first sync) differences are not edits made on both sides.
+        conflicts = meta.base ? result.conflicts.filter((item) => item.kind !== 'duplicate-url').length : 0;
         // A merge the rules reject (it should not happen) falls back to the copy edited last.
         try { validateState(merged); }
         catch { merged = later(local.editedAt, remote.editedAt) ? local.document : remote.document; }
@@ -73,6 +79,15 @@ export function createSyncEngine({ store, channel, area, withLock = globalThis.n
     return writeMeta({ ...meta, enabled: true, deviceId, base: document, pendingMode: null, state: 'idle', lastSyncedAt: now().toISOString(), lastError: null, conflicts, bytes });
   }
 
+  // A server refuses a write when its copy changed after the read (409):
+  // read and merge again.
+  async function runLocked(meta) {
+    for (let attempt = 0; ; attempt += 1) {
+      try { return await runOnce(meta); }
+      catch (error) { if (!error?.conflict || attempt >= 2) throw error; }
+    }
+  }
+
   async function guarded(task) {
     return withLock(async () => {
       const meta = await readMeta();
@@ -88,8 +103,8 @@ export function createSyncEngine({ store, channel, area, withLock = globalThis.n
 
     // What a device turning sync on would meet: nothing yet, or a copy from
     // another device, and whether it differs from this one.
-    async inspect() {
-      const remote = await channel.read();
+    async inspect(provider = 'chrome') {
+      const remote = await (await channelOf(provider)).read();
       if (!remote) return { remote: null };
       if (remote.incomplete) return { remote: { incomplete: true } };
       const local = await localDocument(await store.record());
@@ -98,7 +113,9 @@ export function createSyncEngine({ store, channel, area, withLock = globalThis.n
     },
 
     // Sync stays on even if this first run fails (offline, quota): later runs retry it.
-    enable(mode = 'merge') { return guarded(async (meta) => runLocked(await writeMeta({ ...meta, enabled: true, base: null, pendingMode: mode, state: 'idle', lastError: null }))); },
+    enable(mode = 'merge', { provider = 'chrome', server = null } = {}) {
+      return guarded(async (meta) => runLocked(await writeMeta({ ...meta, enabled: true, provider, server, base: null, pendingMode: mode, state: 'idle', lastError: null })));
+    },
 
     // Turning sync off keeps both copies; the base is forgotten so turning it
     // on again starts with a fresh choice.

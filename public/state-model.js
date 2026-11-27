@@ -172,7 +172,14 @@ export function validateState(value) {
     openInNewTab: switchField(pick(supplied, 'openInNewTab', true), '在新标签页打开网站'),
     showCompanionButton: switchField(pick(supplied, 'showCompanionButton', true), '显示角色按钮'),
   };
-  return { categories: cleanedCategories, links: cleanedLinks, settings };
+  const cleaned = { categories: cleanedCategories, links: cleanedLinks, settings };
+  // Companion preferences, which server.py keeps for the extension's 云同步.
+  const prefs = value.prefs;
+  if (prefs !== null && prefs !== undefined) {
+    if (!isObject(prefs) || JSON.stringify(prefs).length > 65536) throw new StateError('角色偏好格式不正确');
+    cleaned.prefs = prefs;
+  }
+  return cleaned;
 }
 
 // What server.py's metadata(remote=False) answers: the built-in site table

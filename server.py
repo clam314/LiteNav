@@ -202,7 +202,15 @@ def validate_state(value: object) -> dict:
         "openInNewTab": switch(supplied_settings.get("openInNewTab", True), "在新标签页打开网站"),
         "showCompanionButton": switch(supplied_settings.get("showCompanionButton", True), "显示角色按钮"),
     }
-    return {"categories": cleaned_categories, "links": cleaned_links, "settings": settings}
+    cleaned = {"categories": cleaned_categories, "links": cleaned_links, "settings": settings}
+    # Companion preferences, kept here for the Chrome extension's 云同步; the
+    # server version's own pages keep theirs in the browser.
+    prefs = value.get("prefs")
+    if prefs is not None:
+        if not isinstance(prefs, dict) or len(json.dumps(prefs, ensure_ascii=False, separators=(",", ":"))) > 65536:
+            raise APIError("角色偏好格式不正确")
+        cleaned["prefs"] = prefs
+    return cleaned
 
 
 # Automatic backups: copies of the configuration in the export format, in
@@ -263,6 +271,12 @@ class Store:
             reason = self.backup_reason(previous, cleaned) if backup else None
             if reason:
                 self.write_backup(previous, current_revision, reason)
+            # Pages that do not know about prefs (an older page, a restored
+            # backup) leave the synced ones as they are.
+            if "prefs" not in value and "prefs" in previous:
+                cleaned["prefs"] = previous["prefs"]
+            # When it last changed, for sync to order edits made elsewhere.
+            cleaned["updatedAt"] = datetime.now(timezone.utc).isoformat(timespec="milliseconds")
             old_links = {link["id"]: link for link in previous["links"]}
             db.execute("UPDATE config SET revision=?,document=? WHERE id=1",
                        (current_revision + 1, json.dumps(cleaned, ensure_ascii=False)))
@@ -897,7 +911,9 @@ class Handler(BaseHTTPRequestHandler):
         if self.headers.get("Transfer-Encoding"):
             raise APIError("不支持分块请求", 400)
         origin = self.headers.get("Origin")
-        if origin and urlsplit(origin).netloc != self.headers.get("Host"):
+        # Web pages may not write here; the 轻航 Chrome extension (云同步) may,
+        # still with the access password. No web page can send that origin.
+        if origin and urlsplit(origin).scheme != "chrome-extension" and urlsplit(origin).netloc != self.headers.get("Host"):
             raise APIError("不允许跨站修改", 403)
         try:
             size = int(self.headers.get("Content-Length", "0"))

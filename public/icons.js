@@ -113,6 +113,9 @@ export function brandIcon(slug, name = '', className = '', siteUrl = '') {
       const rootIcon = new URL('/favicon.ico', site).href;
       if (url === '/icons/link.svg') url = rootIcon;
       else if (url !== rootIcon) fallback = ` data-site-icon="${escapeAttribute(rootIcon)}"`;
+      // In the Chrome extension, the browser's own copy of the site's icon
+      // comes last: it is there offline for sites visited before.
+      if (browserFavicons) fallback += ` data-browser-icon="${escapeAttribute('/_favicon/?pageUrl=' + encodeURIComponent(site.href) + '&size=64')}"`;
     }
   }
   const lightBackplate = ['github', 'midjourney', 'docker hub'].includes(String(name).trim().toLowerCase()) ? 'on-light' : '';
@@ -120,13 +123,17 @@ export function brandIcon(slug, name = '', className = '', siteUrl = '') {
   return `<img src="${escapeAttribute(url)}"${fallback} alt="" class="${classes}" loading="lazy">`;
 }
 
-// Consume the site's fallback once, then use the bundled generic icon.
+const browserFavicons = globalThis.location?.protocol === 'chrome-extension:';
+
+// Consume the site's fallbacks once each, then use the bundled generic icon.
 if (typeof document !== 'undefined') {
   document.addEventListener('error', (event) => {
     const target = event.target;
     if (target?.tagName !== 'IMG' || !target.classList.contains('brand-icon')) return;
     if (target.getAttribute('src') === '/icons/link.svg') return;
-    target.src = target.dataset.siteIcon || '/icons/link.svg';
-    delete target.dataset.siteIcon;
+    const next = target.dataset.siteIcon || target.dataset.browserIcon || '/icons/link.svg';
+    if (next === target.dataset.siteIcon) delete target.dataset.siteIcon;
+    else delete target.dataset.browserIcon;
+    target.src = next;
   }, true);
 }

@@ -34,7 +34,7 @@ def copy_tree(source: Path, target: Path):
             shutil.copy2(path, destination)
 
 
-def build(out_dir: Path, make_zip: bool = True) -> Path:
+def build(out_dir: Path, make_zip: bool = True, grant_optional: bool = False) -> Path:
     version = json.loads((ROOT / "package.json").read_text("utf-8"))["version"]
     if out_dir.exists():
         shutil.rmtree(out_dir)
@@ -44,6 +44,10 @@ def build(out_dir: Path, make_zip: bool = True) -> Path:
     copy_tree(ROOT / "extension", out_dir)
     manifest = json.loads((ROOT / "extension" / "manifest.json").read_text("utf-8"))
     manifest["version"] = version
+    if grant_optional:
+        # For automated browser checks only: nobody is there to click Allow.
+        manifest["permissions"] += manifest.pop("optional_permissions", [])
+        manifest["host_permissions"] = manifest.pop("optional_host_permissions", [])
     (out_dir / "manifest.json").write_text(json.dumps(manifest, ensure_ascii=False, indent=2) + "\n", "utf-8")
     if make_zip:
         archive = out_dir.parent / f"litenav-extension-{version}.zip"
@@ -60,8 +64,12 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--out", type=Path, default=ROOT / "dist" / "extension", help="output folder (default: dist/extension)")
     parser.add_argument("--no-zip", action="store_true", help="skip the zip archive")
+    parser.add_argument("--grant-optional", action="store_true",
+                        help="grant the optional permissions at install, for automated browser checks (implies --no-zip)")
     args = parser.parse_args()
-    result = build(args.out.resolve(), make_zip=not args.no_zip)
+    if args.grant_optional:
+        args.no_zip = True
+    result = build(args.out.resolve(), make_zip=not args.no_zip, grant_optional=args.grant_optional)
     print("Built", args.out.resolve())
     if not args.no_zip:
         print("Packed", result)

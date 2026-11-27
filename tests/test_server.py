@@ -655,6 +655,33 @@ class HTTPCase(DataFixture):
         self.assertEqual(status, 403)
         self.assertIn("不允许跨站", json.loads(body)["error"])
 
+    def test_chrome_extension_may_write_for_sync(self):
+        """The 轻航 extension syncs through this API; no web page can claim its origin."""
+        state = self.store.state()
+        state["prefs"] = {"enabled": True, "games": ["bd2"]}
+        # With an access password (AuthCase), the extension sends it like any client.
+        password = getattr(self, "password", None)
+        auth = {"Authorization": "Basic " + base64.b64encode(f"x:{password}".encode()).decode()} if password else {}
+        status, body = self.request("/api/state", state, "PUT", {"Origin": "chrome-extension://abcdefghijklmnop", **auth})
+        self.assertEqual(status, 200)
+        saved = json.loads(body)
+        self.assertEqual(saved["prefs"], {"enabled": True, "games": ["bd2"]})
+        self.assertRegex(saved["updatedAt"], r"^\d{4}-\d\d-\d\dT")
+        self.assertEqual(self.request("/api/state", self.store.state(), "PUT", {"Origin": "http://chrome-extension.evil", **auth})[0], 403)
+
+    def test_saves_without_prefs_keep_the_synced_ones(self):
+        state = self.store.state()
+        self.store.save({**state, "prefs": {"rotation": 5}})
+        page = self.store.state()
+        del page["prefs"]
+        self.assertEqual(self.store.save(page)["prefs"], {"rotation": 5})
+        # Restoring a backup (which holds no prefs) keeps them too.
+        backup_id = self.store.backup_now()
+        self.assertEqual(self.store.restore_backup(backup_id)["prefs"], {"rotation": 5})
+        # Sent as null on purpose, they go.
+        latest = self.store.state()
+        self.assertNotIn("prefs", self.store.save({**latest, "prefs": None}))
+
 
 
 
