@@ -1,18 +1,22 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { createAssetFetcher, ASSET_CACHE_NAME } from '../public/companion-assets.js';
+import { createAssetFetcher, ASSET_CACHE_NAME, KEPT_CACHE_NAME } from '../public/companion-assets.js';
 
 const BASE = 'https://assets.example/pinned/';
 const settle = () => new Promise(resolve => setTimeout(resolve, 0));
 
+// One map per store; entries is the asset cache's.
 function fakeCacheStorage({ failOpen = false, failPut = false } = {}) {
-  const entries = new Map();
+  const stores = new Map();
   const opened = [];
-  return {
-    entries, opened,
+  const storage = {
+    opened, stores,
+    get entries() { return stores.get(ASSET_CACHE_NAME) || new Map(); },
     async open(name) {
       opened.push(name);
       if (failOpen) throw new Error('SecurityError');
+      if (!stores.has(name)) stores.set(name, new Map());
+      const entries = stores.get(name);
       return {
         async match(url) { return entries.get(url); },
         async put(url, response) { if (failPut) throw new Error('QuotaExceededError'); entries.set(url, response); },
@@ -21,13 +25,15 @@ function fakeCacheStorage({ failOpen = false, failPut = false } = {}) {
       };
     },
   };
+  return storage;
 }
 
 function network() {
   const calls = [];
   const fetchResource = async (url, signal, cache = 'default') => {
     calls.push({ url, cache });
-    return { url, body: 'network', clone() { return { url, body: 'stored' }; } };
+    const stored = { url, body: 'stored', clone() { return stored; } };
+    return { url, body: 'network', clone() { return stored; } };
   };
   return { calls, fetchResource };
 }
@@ -43,7 +49,32 @@ test('pinned upstream assets download once and are served from the asset cache a
   assert.equal(second.body, 'stored');
   assert.deepEqual(calls, [{ url: BASE + 'a.png', cache: 'force-cache' }],
     'the first download may reuse a stale HTTP cache entry; later visits need no request');
-  assert.deepEqual(cacheStorage.opened, [ASSET_CACHE_NAME], 'the store is opened once');
+  assert.deepEqual(cacheStorage.opened.sort(), [ASSET_CACHE_NAME, KEPT_CACHE_NAME].sort(), 'each store is opened once');
+});
+
+test('kept assets move out of the trimmed store, survive trimming and are served first', async () => {
+  const cacheStorage = fakeCacheStorage();
+  const { calls, fetchResource } = network();
+  const fetchAsset = createAssetFetcher({ base: BASE, fetchResource, cacheStorage, limit: 1 });
+  const controller = new AbortController();
+  const urls = fetchAsset.collect(controller.signal);
+  await fetchAsset(BASE + 'a.png', controller.signal);
+  await fetchAsset('/local/b.png', controller.signal);
+  await settle();
+  assert.deepEqual([...urls], [BASE + 'a.png', '/local/b.png']);
+  await fetchAsset.keep([...urls, BASE + 'c.png']);
+  const kept = cacheStorage.stores.get(KEPT_CACHE_NAME);
+  assert.deepEqual([...kept.keys()].sort(), [BASE + 'a.png', BASE + 'c.png'], 'only upstream files are kept; missing ones are downloaded');
+  assert.equal(cacheStorage.entries.has(BASE + 'a.png'), false, 'one copy is enough');
+  // Filling the trimmed store does not touch kept files.
+  await fetchAsset(BASE + 'd.png');
+  await fetchAsset(BASE + 'e.png');
+  await settle();
+  const before = calls.length;
+  assert.equal((await fetchAsset(BASE + 'a.png')).body, 'stored');
+  assert.equal(calls.length, before);
+  await fetchAsset.release([BASE + 'a.png']);
+  assert.deepEqual([...kept.keys()], [BASE + 'c.png']);
 });
 
 test('same-origin files bypass the asset cache and keep normal HTTP revalidation', async () => {

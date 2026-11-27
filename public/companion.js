@@ -21,6 +21,8 @@ import { readPreferences, writePreferences, readSceneProgress, writeSceneProgres
 import { fetchResource, fetchAsset, withAbort, partFor, loadCharacter } from './companion-loaders.js';
 import { createVoice, voiceSupported, voiceUrl } from './companion-voice.js';
 import { railSpace, alignedViews, spawnPartner, layoutCamera } from './companion-camera.js';
+import { createCatalogSource } from './companion-catalogs.js';
+import { readKept, writeKept, keepModes, keptSource, keptEntry, catalogForKept, onlyKept, releasable, formatBytes, releaseAssets } from './companion-offline.js';
 
 let currentCompanion;
 
@@ -84,6 +86,10 @@ export function initCompanion() {
         ${ROTATION_CHOICES.map(minutes => `<option value="${minutes}">${minutes ? `每 ${minutes} 分钟` : '仅刷新页面时'}</option>`).join('')}
       </select></label>
       <label class="companion-field companion-fixed"><span>人物与服装</span><select aria-label="指定人物与服装" disabled><option>正在读取角色…</option></select></label>
+      <div class="companion-field companion-offline" hidden>
+        <div class="companion-offline-row"><span class="companion-offline-text"></span><button class="companion-offline-button" type="button"></button></div>
+        <small class="companion-offline-summary"></small>
+      </div>
       <label class="companion-field companion-skill-picker" hidden><span>技能动作</span><select aria-label="技能动作" disabled><option>载入技能后可选择</option></select></label>
       <fieldset class="companion-field">
         <legend>游戏</legend>
@@ -96,7 +102,7 @@ export function initCompanion() {
       </div>
       <p class="companion-menu-note" role="status" aria-live="polite" hidden></p>
       <div class="companion-menu-recovery" hidden><button class="companion-menu-retry" type="button">重试切换</button><button class="companion-menu-fallback" type="button">使用本地立绘</button></div>
-      <small class="companion-menu-foot">设置仅保存在此浏览器，新角色首次加载需要联网。</small>
+      <small class="companion-menu-foot">设置仅保存在此浏览器，新角色首次加载需要联网；保存到本机的服装离线也能显示。</small>
     </section></div>`;
 
   const rail = root.querySelector('.companion-rail');
@@ -132,6 +138,10 @@ export function initCompanion() {
   const recovery = root.querySelector('.companion-menu-recovery');
   const menuRetry = root.querySelector('.companion-menu-retry');
   const menuFallback = root.querySelector('.companion-menu-fallback');
+  const offlineField = root.querySelector('.companion-offline');
+  const offlineText = root.querySelector('.companion-offline-text');
+  const offlineButton = root.querySelector('.companion-offline-button');
+  const offlineSummary = root.querySelector('.companion-offline-summary');
 
   // Bind the menu before setting up rendering, media queries or asset loading.
   // A renderer setup failure must never leave a visible, unresponsive button.
@@ -168,6 +178,9 @@ export function initCompanion() {
   let catalog;
   let presentations;
   let selection;
+  // Costumes saved for offline use, and the one being saved or removed.
+  let kept = readKept();
+  let offlineTask = null;
   let skillAnimations = [];
   let skillPickerSignature;
   let disposed = false;
@@ -293,7 +306,7 @@ export function initCompanion() {
     }
     if (active) root.dataset.mode = active.mode;
     if (catalog) {
-      const signature = `${preferences.portraits}:${preferences.skills}:${preferences.games}`;
+      const signature = `${preferences.portraits}:${preferences.skills}:${preferences.games}:${kept.map(entry => entry.key).join('|')}`;
       if (signature !== pickerSignature) {
         pickerSignature = signature;
         picker.replaceChildren();
@@ -303,7 +316,7 @@ export function initCompanion() {
           for (const costume of character.costumes) {
             const option = document.createElement('option');
             option.value = costumeKey(costume);
-            option.textContent = `${character.name} · ${costume.label}`;
+            option.textContent = `${character.name} · ${costume.label}` + (keptEntry(kept, costume) ? ' · 已离线保存' : '');
             group.append(option);
           }
           picker.append(group);
@@ -312,6 +325,7 @@ export function initCompanion() {
       picker.disabled = false;
       if (selection) picker.value = costumeKey(selection.costume);
     }
+    updateOffline();
     recovery.hidden = !loadError;
     let message = '';
     if (!enabled()) {
@@ -395,7 +409,7 @@ export function initCompanion() {
     if (assetCache.has(key)) return assetCache.get(key).promise;
     const task = { controller: new AbortController() };
     const timeout = setTimeout(() => task.controller.abort(), 45000);
-    task.promise = loadCharacter(catalog, characterSelection, requestedMode, task.controller.signal)
+    task.promise = loadCharacter(catalogFor(characterSelection), characterSelection, requestedMode, task.controller.signal)
       .catch(error => {
         if (assetCache.get(key) === task) assetCache.delete(key);
         throw error;
@@ -485,12 +499,116 @@ export function initCompanion() {
     return true;
   }
 
+  // Offline, rotation draws from the saved costumes; a saved costume plays
+  // as it was saved (its parts and asset commits).
+  function choose(redraw) {
+    let chosen;
+    if (redraw && kept.length && globalThis.navigator?.onLine === false) {
+      try { chosen = chooseCharacter(onlyKept(catalog, kept), preferences, redraw); } catch { /* None fits the display options. */ }
+    }
+    chosen ||= chooseCharacter(catalog, preferences, redraw);
+    const entry = keptEntry(kept, chosen.costume);
+    return entry ? { ...chosen, costume: entry.costume } : chosen;
+  }
+  const catalogFor = characterSelection => {
+    const entry = keptEntry(kept, characterSelection.costume);
+    return entry ? catalogForKept(catalog, entry) : catalog;
+  };
+
+  function updateOffline() {
+    const canKeep = Boolean(globalThis.caches) && Boolean(selection) && Boolean(catalog) &&
+      costumeKey(selection.costume) !== costumeKey(LOCAL_FALLBACK_CHARACTER.costumes[0]);
+    offlineField.hidden = !canKeep && !kept.length;
+    const entry = selection ? keptEntry(kept, selection.costume) : null;
+    const busy = offlineTask && selection && offlineTask.key === costumeKey(selection.costume);
+    offlineButton.hidden = !canKeep;
+    offlineButton.disabled = Boolean(offlineTask);
+    if (busy) {
+      offlineText.textContent = offlineTask.removing ? '正在移除…' : `正在保存（${offlineTask.done}/${offlineTask.total}）…`;
+      offlineButton.textContent = offlineTask.removing ? '移除' : '保存中';
+    } else if (entry) {
+      offlineText.textContent = `已保存到本机 · ${formatBytes(entry.bytes || 0)}`;
+      offlineButton.textContent = '移除';
+    } else {
+      offlineText.textContent = canKeep ? '保存这套服装，离线时也能显示' : '';
+      offlineButton.textContent = '保存到本机';
+    }
+    const total = kept.reduce((sum, item) => sum + (item.bytes || 0), 0);
+    offlineSummary.textContent = kept.length ? `已离线保存 ${kept.length} 套服装，共 ${formatBytes(total)}；离线时随机轮换只在其中挑选。` : '';
+    offlineSummary.hidden = !kept.length;
+  }
+
+  // Downloads every file of the costume on show into the kept store.
+  async function keepCurrent() {
+    const characterSelection = selection;
+    const key = costumeKey(characterSelection.costume);
+    const game = gameOf(characterSelection.character);
+    const source = keptSource(catalog, game, characterSelection.costume);
+    const modes = keepModes(characterSelection.costume);
+    const voices = Object.values(characterSelection.costume.voices || {});
+    offlineTask = { key, done: 0, total: modes.length + (voices.length ? 1 : 0) };
+    updateUI();
+    const controller = new AbortController();
+    const urls = fetchAsset.collect(controller.signal);
+    const saving = catalogForKept(catalog, { game, source });
+    try {
+      for (const nextMode of modes) {
+        releaseAssets(await loadCharacter(saving, characterSelection, nextMode, controller.signal));
+        offlineTask.done += 1;
+        updateUI();
+      }
+      if (voices.length) {
+        // A line that cannot be fetched is only missing its sound.
+        await Promise.all(voices.map(path => voiceUrl(gameById(game).voiceBase, source.voiceCommit, path)).filter(Boolean)
+          .map(url => fetchAsset(url, controller.signal).then(response => response.blob()).catch(() => null)));
+        offlineTask.done += 1;
+      }
+      const list = [...urls].filter(url => /^https:/.test(url));
+      const bytes = await fetchAsset.keep(list, controller.signal);
+      kept = [...readKept().filter(item => item.key !== key), {
+        key, game, characterId: characterSelection.character.id, name: characterSelection.character.name,
+        label: characterSelection.costume.label, costume: characterSelection.costume, source, urls: list, bytes, savedAt: new Date().toISOString(),
+      }];
+      writeKept(kept);
+      // Ask the browser not to clear them when space runs low.
+      void globalThis.navigator?.storage?.persist?.().catch?.(() => {});
+      showNote(`已保存${characterSelection.character.name} · ${characterSelection.costume.label}，离线时也能显示。`);
+    } catch (error) {
+      showNote(error instanceof TypeError ? '无法连接角色素材，保存未完成。' : `${error.message}，保存未完成。`);
+    } finally {
+      offlineTask = null;
+      updateUI();
+    }
+  }
+
+  async function removeKept() {
+    const key = costumeKey(selection.costume);
+    offlineTask = { key, removing: true, done: 0, total: 0 };
+    updateUI();
+    try {
+      const latest = readKept();
+      await fetchAsset.release(releasable(latest, key));
+      kept = latest.filter(item => item.key !== key);
+      writeKept(kept);
+      showNote('已从本机移除这套服装的离线文件。');
+    } finally {
+      offlineTask = null;
+      updateUI();
+    }
+  }
+
+  function showNote(text) {
+    noteHold = true;
+    note.textContent = text;
+    note.hidden = false;
+  }
+
   // persist is false when following another page's change: writing it back
   // would wake that page in turn.
   function selectCharacter(redraw = false, preserveSkillAction = false, persist = true) {
     if (!catalog) return;
     const previous = selection ? costumeKey(selection.costume) : preferences.costumeKey;
-    selection = chooseCharacter(catalog, preferences, redraw);
+    selection = choose(redraw);
     if (previous !== costumeKey(selection.costume)) {
       if (!preserveSkillAction) preferences.skillAction = '';
       skillAnimations = [];
@@ -747,7 +865,8 @@ export function initCompanion() {
       });
     } catch (error) {
       if (disposed || stage.pending !== record || signal.aborted) return;
-      showError(record, error instanceof TypeError ? '无法连接角色素材' : error.message);
+      showError(record, error instanceof TypeError ? (globalThis.navigator?.onLine === false && !keptEntry(kept, record.selection.costume)
+        ? '离线中，这套服装还没有保存到本机' : '无法连接角色素材') : error.message);
     } finally {
       clearTimeout(record.timeout);
       clearTimeout(record.loadingTimer);
@@ -822,7 +941,7 @@ export function initCompanion() {
     if (!canSpeak || !preferences.voice || record.mode !== 'skill' || stage.active !== record || stage.pending) return;
     if (document.hidden || !motionAllowed) return;
     const game = gameOf(record.selection.character);
-    const url = voiceUrl(gameById(game).voiceBase, catalog?.games?.[game]?.voiceCommit, record.selection.costume.voices?.[motion]);
+    const url = voiceUrl(gameById(game).voiceBase, catalog && catalogFor(record.selection).games?.[game]?.voiceCommit, record.selection.costume.voices?.[motion]);
     if (url) void voice.play(url, preferences.voiceVolume, record);
     else voice.stop();
   }
@@ -915,6 +1034,16 @@ export function initCompanion() {
     void start();
   };
   const onRetry = () => { void start(mode); };
+  const onOffline = () => {
+    if (!selection || offlineTask) return;
+    void (keptEntry(kept, selection.costume) ? removeKept() : keepCurrent());
+  };
+  // Another tab saved or removed a costume.
+  const onKeptChange = event => {
+    if (event.key !== null && event.key !== 'litenav.companion.offline') return;
+    kept = readKept();
+    updateUI();
+  };
   const onSkillPick = () => {
     preferences.skillAction = skillPicker.value;
     writePreferences(preferences);
@@ -966,6 +1095,8 @@ export function initCompanion() {
   voiceSwitch.addEventListener('change', onVoice);
   voiceVolume.addEventListener('input', onVolume);
   picker.addEventListener('change', onPick);
+  offlineButton.addEventListener('click', onOffline);
+  window.addEventListener('storage', onKeptChange);
   skillPicker.addEventListener('change', onSkillPick);
   document.addEventListener('visibilitychange', onVisibility);
   if (document.hidden) hiddenTimer = setTimeout(releaseHidden, HIDDEN_RELEASE_MS);
@@ -977,15 +1108,13 @@ export function initCompanion() {
   const catalogTimeout = setTimeout(() => catalogController.abort(), 15000);
   // Every registered game loads its own catalog and fails on its own. Brown
   // Dust 2 falls back to the bundled portrait when its catalog is unreachable.
+  // The Chrome extension also plays newer catalogs kept from this repository.
+  const catalogs = createCatalogSource({
+    enabled: globalThis.location?.protocol === 'chrome-extension:',
+    fetchJson: (url, signal, cache) => fetchResource(url, signal, cache).then(response => response.json()),
+  });
   const loadGame = async game => {
-    const [data, reference, performances] = await Promise.all([
-      fetchResource(game.catalogUrl, catalogController.signal).then(response => response.json()),
-      game.presentationsUrl ? fetchResource(game.presentationsUrl, catalogController.signal, 'no-cache')
-        .then(response => response.json()).catch(() => ({})) : null,
-      // Without its performances a skill still plays its own animations.
-      game.performancesUrl ? fetchResource(game.performancesUrl, catalogController.signal, 'no-cache')
-        .then(response => response.json()).catch(() => undefined) : undefined,
-    ]);
+    const { data, reference, performances } = await catalogs.read(game, catalogController.signal);
     if (!/^[a-f0-9]{12,40}$/.test(data.commit) || !Array.isArray(data.characters) || !data.characters.length) {
       throw new Error('角色索引不完整');
     }
@@ -1040,6 +1169,8 @@ export function initCompanion() {
       selectCharacter(preferences.random);
     }
     void start();
+    // New characters and costumes show up from the next visit on.
+    void catalogs.refresh().catch(() => {});
   }).finally(() => clearTimeout(catalogTimeout));
 
   currentCompanion = {
@@ -1066,6 +1197,8 @@ export function initCompanion() {
       voiceVolume.removeEventListener('input', onVolume);
       voice.dispose();
       picker.removeEventListener('change', onPick);
+      offlineButton.removeEventListener('click', onOffline);
+      window.removeEventListener('storage', onKeptChange);
       skillPicker.removeEventListener('change', onSkillPick);
       document.removeEventListener('pointerdown', onOutside);
       document.removeEventListener('keydown', onKeydown, true);
