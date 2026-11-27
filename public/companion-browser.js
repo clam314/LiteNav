@@ -29,7 +29,11 @@ export function writePreferences(preferences) {
       same = Boolean(saved) && typeof saved === 'object' && !Array.isArray(saved) &&
         JSON.stringify(normalizePreferences(saved)) === JSON.stringify(normalizePreferences(preferences));
     } catch { /* Unreadable: write ours. */ }
-    if (!same) localStorage.setItem(PREFERENCES_KEY, value);
+    if (!same) {
+      localStorage.setItem(PREFERENCES_KEY, value);
+      // The Chrome extension syncs the preferences between devices.
+      globalThis.dispatchEvent?.(new CustomEvent('litenav-preferences', { detail: preferences }));
+    }
   }
   catch { /* The controls still work when browser storage is blocked. */ }
 }

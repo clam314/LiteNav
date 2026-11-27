@@ -3,6 +3,7 @@ import { initCompanion } from './companion.js';
 import { toolsMarkup, mountTools, resolveTool } from './tools.js';
 import { searchLinks, googleSearchUrl } from './search.js';
 import { parseBookmarks } from './bookmarks.js';
+import { api, capabilities, backendMode, onBackendChange } from './backend.js';
 
 initCompanion();
 
@@ -27,6 +28,7 @@ let searchIndex = 0;
 let searchResults = [];
 let linkCheck = { job: null, results: {} };
 let linkCheckTimer = null;
+let syncStatus = null;
 
 const esc = (value) => String(value ?? '').replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]);
 const uid = () => globalThis.crypto?.randomUUID?.() || 'item-' + Date.now() + '-' + Math.random().toString(36).slice(2, 9);
@@ -58,20 +60,6 @@ const safeUrl = (input) => {
   if (!['http:', 'https:'].includes(parsed.protocol) || parsed.username || parsed.password || !parsed.hostname) throw new Error('请填写有效的 HTTP 或 HTTPS 网址');
   return parsed.href;
 };
-
-async function api(path, options = {}) {
-  const response = await fetch(path, {
-    ...options,
-    headers: { 'Content-Type': 'application/json', ...(options.headers || {}) },
-  });
-  const body = await response.json().catch(() => ({}));
-  if (!response.ok) {
-    const error = new Error(body.error || body.message || '请求失败，请稍后重试');
-    error.status = response.status;
-    throw error;
-  }
-  return body;
-}
 
 function toast(message, action) {
   const element = document.createElement('div');
@@ -231,19 +219,24 @@ function serviceMarkup(link) {
   const lastChecked = state.lastChecked ? new Date(typeof state.lastChecked === 'number' && state.lastChecked < 1e12 ? state.lastChecked * 1000 : state.lastChecked).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '尚未检测';
   return '<article class="service-card ' + (status === 'offline' ? 'has-error' : '') + (editMode ? ' is-sortable' : '') + '" data-service="' + esc(link.id) + '"' + (editMode ? ' draggable="true" data-drag-kind="service" data-resource="' + esc(link.id) + '"' : '') + '><header class="service-card-header">' +
     '<a class="service-identity"' + (editMode ? ' draggable="false"' : '') + ' href="' + esc(link.url) + '"' + linkTarget() + '>' + linkIcon(link) + '<span class="service-copy"><h3>' + esc(link.name) + '</h3><span class="site-domain">' + esc(domain(link.url)) + '</span></span></a>' +
-    '<span class="status-badge ' + status + '">' + statusLabels[status] + '</span></header>' +
+    (capabilities.monitor ? '<span class="status-badge ' + status + '">' + statusLabels[status] + '</span>' : '') + '</header>' +
     (link.description ? '<p class="service-description">' + esc(link.description) + '</p>' : '') +
-    '<div class="service-details"><p>' + esc(detail) + '</p><div class="service-meta">最近检测：' + esc(lastChecked) + '</div>' +
+    '<div class="service-details">' + (capabilities.monitor ? '<p>' + esc(detail) + '</p><div class="service-meta">最近检测：' + esc(lastChecked) + '</div>' : '') +
     (link.container ? '<div class="service-meta container-meta" title="' + esc((link.server ? link.server + ' / ' : '') + link.container) + '"><span>容器</span><span>' + esc((link.server ? link.server + ' / ' : '') + link.container) + '</span></div>' : '') +
     '</div>' +
     '<div class="service-actions"><button class="btn btn-ghost" data-action="edit-link" data-id="' + esc(link.id) + '">' + icon('settings', 15) + '配置</button>' +
-    (link.monitorEnabled ? '<button class="btn btn-secondary" data-action="check-service" data-id="' + esc(link.id) + '">' + icon('refresh', 15) + '检测</button>' : '<button class="btn btn-secondary" data-action="enable-monitor" data-id="' + esc(link.id) + '">' + icon('play', 14) + '启用监控</button>') +
+    (!capabilities.monitor ? '' : link.monitorEnabled ? '<button class="btn btn-secondary" data-action="check-service" data-id="' + esc(link.id) + '">' + icon('refresh', 15) + '检测</button>' : '<button class="btn btn-secondary" data-action="enable-monitor" data-id="' + esc(link.id) + '">' + icon('play', 14) + '启用监控</button>') +
     '<button class="icon-button danger" data-action="delete-link" data-id="' + esc(link.id) + '" aria-label="删除服务 ' + esc(link.name) + '" title="删除服务">' + icon('trash', 15) + '</button></div></article>';
 }
 
 function servicesMarkup() {
   const services = ordered(config.links.filter((link) => link.kind === 'service'));
   const monitored = services.filter((link) => link.monitorEnabled).length;
+  if (!capabilities.monitor) {
+    return '<div class="page-intro"><p>插件版暂不检测服务在线状态，这里先集中存放 NAS、软路由等自建服务的入口；掉线检测会在后续版本加入。</p></div>' +
+      '<div class="service-toolbar"><span class="section-hint">' + (editMode ? '拖动卡片调整服务顺序' : services.length + ' 个服务') + '</span></div>' +
+      '<div class="service-grid">' + (services.map(serviceMarkup).join('') || '<div class="empty-state">' + icon('server', 30) + '<h2>添加你的第一个服务</h2><p>NAS、影音库或智能家居，都可以放在这里。</p><button class="btn btn-primary" data-action="add-service">添加服务</button></div>') + '</div>';
+  }
   return '<div class="page-intro"><p>' + (monitored ? '后台每 ' + config.settings.checkInterval + ' 秒检测一次；连续 ' + config.settings.failureThreshold + ' 次异常后提醒。' : '先将示例地址改为你的服务地址，再开启掉线检测。') + '</p></div>' +
     '<div class="service-toolbar"><span class="section-hint">' + (editMode ? '拖动卡片调整服务顺序' : services.length + ' 个服务 · ' + monitored + ' 个已开启监控') + '</span><button class="btn btn-secondary" data-action="check-all" ' + (!monitored ? 'disabled' : '') + '>' + icon('refresh', 16) + '立即检测</button></div>' +
     '<div class="service-grid">' + (services.map(serviceMarkup).join('') || '<div class="empty-state">' + icon('server', 30) + '<h2>添加你的第一个服务</h2><p>NAS、影音库或智能家居，都可以放在这里。</p><button class="btn btn-primary" data-action="add-service">添加服务</button></div>') + '</div>';
@@ -267,19 +260,19 @@ function categorySettingsRow(category) {
 function settingsMarkup() {
   const categories = directoryCategories();
   const shelved = archiveCategories();
-  return displaySettingsMarkup() + '<section class="settings-section"><div class="section-heading">' + icon('settings', 22) + '<h2>检测设置</h2></div><form class="settings-card settings-form" id="settings-form"><div class="field-row">' +
+  return displaySettingsMarkup() + (capabilities.sync ? syncSectionMarkup() : '') + (!capabilities.monitor ? '' : '<section class="settings-section"><div class="section-heading">' + icon('settings', 22) + '<h2>检测设置</h2></div><form class="settings-card settings-form" id="settings-form"><div class="field-row">' +
     '<label class="field"><span class="field-label">检测间隔（秒）</span><input class="form-input" type="number" name="checkInterval" min="10" max="86400" value="' + esc(config.settings.checkInterval) + '" required></label>' +
     '<label class="field"><span class="field-label">连续异常次数</span><input class="form-input" type="number" name="failureThreshold" min="1" max="10" value="' + esc(config.settings.failureThreshold) + '" required></label>' +
     '<label class="field"><span class="field-label">请求超时（秒）</span><input class="form-input" type="number" name="timeout" min="1" max="30" value="' + esc(config.settings.timeout) + '" required></label></div>' +
-    '<p class="field-hint">后台会持续检测已开启监控的服务，关闭页面后也会继续。</p><div class="settings-actions"><button class="btn btn-primary" type="submit">保存设置</button></div></form></section>' +
+    '<p class="field-hint">后台会持续检测已开启监控的服务，关闭页面后也会继续。</p><div class="settings-actions"><button class="btn btn-primary" type="submit">保存设置</button></div></form></section>') +
     '<section class="settings-section"><div class="section-heading">' + icon('folder', 22) + '<h2>网址分类</h2><button class="btn btn-secondary" data-action="add-category">' + icon('plus', 16) + '新建分类</button></div><div class="settings-card category-settings-list"><p class="settings-description">拖动左侧把手调整分类顺序，首页和侧边栏会同步更新。</p>' +
     categories.map(categorySettingsRow).join('') + '</div></section>' +
     '<section class="settings-section"><div class="section-heading">' + icon('archive', 22) + '<h2>杂物库分类</h2><button class="btn btn-secondary" data-action="add-category" data-area="archive">' + icon('plus', 16) + '新建分类</button></div><div class="settings-card category-settings-list"><p class="settings-description">' +
     (shelved.length ? '杂物库里的分类，在杂物库页按列排布。编辑分类时可以把整个分类连同网址移回网址导航。' : '还没有杂物库分类。编辑网址分类时把位置改为“杂物库”，就能把整个分类收进去。') + '</p>' +
     shelved.map(categorySettingsRow).join('') + '</div></section>' +
-    '<section class="settings-section" id="link-check"><div class="section-heading">' + icon('check-circle', 22) + '<h2>网址体检</h2></div><div class="settings-card" id="link-check-card">' + linkCheckMarkup() + '</div></section>' +
+    (capabilities.linkCheck ? '<section class="settings-section" id="link-check"><div class="section-heading">' + icon('check-circle', 22) + '<h2>网址体检</h2></div><div class="settings-card" id="link-check-card">' + linkCheckMarkup() + '</div></section>' : '') +
     '<section class="settings-section"><div class="section-heading">' + icon('download', 22) + '<h2>数据备份</h2></div><div class="settings-card"><p class="settings-description">导出网址、分类与服务配置，方便备份或迁移。</p><div class="settings-actions"><button class="btn btn-secondary" data-action="export">' + icon('upload', 16) + '导出备份</button><button class="btn btn-secondary" data-action="import">' + icon('download', 16) + '导入备份</button></div>' +
-    '<div class="backup-auto"><div class="backup-auto-head"><div><h3>自动备份</h3><p class="settings-description">每天第一次修改前，以及一次删除 5 个以上入口或删除分类前，服务器会自动保存修改前的配置，保留最近 30 份。</p></div>' +
+    '<div class="backup-auto"><div class="backup-auto-head"><div><h3>自动备份</h3><p class="settings-description">每天第一次修改前，以及一次删除 5 个以上入口或删除分类前，' + (backendMode === 'extension' ? '轻航会在本机' : '服务器会') + '自动保存修改前的配置' + (capabilities.sync ? '（云同步大量改动本机数据前也会）' : '') + '，保留最近 30 份。</p></div>' +
     '<button class="btn btn-secondary" data-action="backup-now">' + icon('download', 16) + '立即备份</button></div><div id="backup-list">' + backupsMarkup() + '</div></div></div></section>' +
     '<section class="settings-section"><div class="section-heading">' + icon('bookmark', 22) + '<h2>导入浏览器书签</h2></div><div class="settings-card"><p class="settings-description">在 Chrome、Edge、Firefox 或 Safari 中把书签导出为 HTML 文件，再在这里导入。每个顶层文件夹会成为一个分类，已添加过的网址会自动跳过，导入前可以先预览。</p><div class="settings-actions"><button class="btn btn-secondary" data-action="import-bookmarks">' + icon('bookmark', 16) + '选择书签文件</button></div></div></section>';
 }
@@ -464,6 +457,7 @@ function render() {
   if (view === 'tools') mountTools(app, { toast });
   // A save may just have made an automatic backup.
   if (view === 'settings') refreshBackups();
+  if (view === 'settings' && capabilities.sync) refreshSync();
   if (searchFocus) {
     const input = document.querySelector('#quick-search-input');
     input.focus({ preventScroll: true });
@@ -553,7 +547,7 @@ function openLinkDialog({ id, kind = 'website', categoryId = '', pinned = false,
     '<label class="field" id="link-category-field"><span class="field-label">分类</span><select class="form-select" id="link-category" name="categoryId">' + categoryNames + '</select></label>',
     '<label class="checkbox-row"><input type="checkbox" id="link-pinned" name="pinned" ' + (draft.pinned ? 'checked' : '') + '>加入常用</label>',
     existing && existing.pinned ? '<label class="field"><span class="field-label">常用排序</span><input class="form-input" id="link-position" type="number" min="1" max="' + favorites().length + '" value="' + (favorites().findIndex((link) => link.id === draft.id) + 1) + '"><span class="field-hint">也可以在首页整理模式下拖动排序</span></label>' : '',
-    '<div class="monitor-options" id="link-monitor-options"><label class="checkbox-row"><input type="checkbox" id="link-monitor" name="monitorEnabled" ' + (draft.monitorEnabled ? 'checked' : '') + '>启用掉线检测</label><label class="field" id="link-check-url-field"><span class="field-label">检测地址 <span class="optional">可选</span></span><input class="form-input" id="link-check-url" name="checkUrl" inputmode="url" placeholder="默认检测上方服务地址" value="' + esc(draft.checkUrl || '') + '"><span class="field-hint">检测从运行轻航的服务器发出，需要能访问该服务。</span></label></div>',
+    '<div class="monitor-options" id="link-monitor-options"><label class="checkbox-row"><input type="checkbox" id="link-monitor" name="monitorEnabled" ' + (draft.monitorEnabled ? 'checked' : '') + '>启用掉线检测</label><label class="field" id="link-check-url-field"><span class="field-label">检测地址 <span class="optional">可选</span></span><input class="form-input" id="link-check-url" name="checkUrl" inputmode="url" placeholder="默认检测上方服务地址" value="' + esc(draft.checkUrl || '') + '"><span class="field-hint">' + (capabilities.monitor ? '检测从运行轻航的服务器发出，需要能访问该服务。' : '插件版暂不检测服务状态，这项设置会随同步保存，留待检测功能加入后使用。') + '</span></label></div>',
     '<div class="service-config-fields" id="link-service-fields"><label class="field"><span class="field-label">描述 <span class="optional">可选</span></span><input class="form-input" id="link-description" maxlength="500" placeholder="例如 NAS 管理、影音库" value="' + esc(draft.description || '') + '"></label><details class="service-advanced"><summary>容器备注</summary><div class="field-row"><label class="field"><span class="field-label">服务器</span><input class="form-input" id="link-server" maxlength="100" placeholder="例如 local" value="' + esc(draft.server || '') + '"></label><label class="field"><span class="field-label">容器名称</span><input class="form-input" id="link-container" maxlength="100" placeholder="例如 jellyfin" value="' + esc(draft.container || '') + '"></label></div></details></div>',
     '<p class="form-error" id="link-error" role="alert" hidden></p></div>',
     '<footer class="dialog-footer"><span class="keyboard-hint">Enter ' + (existing ? '保存' : '添加') + '</span><div><button class="btn btn-ghost" type="button" data-action="close-dialog">取消</button><button class="btn btn-primary" type="submit">' + (existing ? '保存' : '添加') + '</button></div></footer></form>',
@@ -822,7 +816,7 @@ async function checkServices(id, notify = true) {
   checkTimer = setTimeout(() => refreshHealth().catch(() => {}), (Number(config.settings.timeout) + 1) * 1000);
 }
 
-const BACKUP_REASONS = { daily: '每日自动', bulk: '大量删除前', 'before-restore': '恢复前', manual: '手动' };
+const BACKUP_REASONS = { daily: '每日自动', bulk: '大量删除前', 'before-restore': '恢复前', manual: '手动', sync: '同步前' };
 const backupTime = (value) => value ? new Date(value).toLocaleString('zh-CN', { year: 'numeric', month: '2-digit', day: '2-digit', hour: '2-digit', minute: '2-digit' }) : '';
 
 function backupsMarkup() {
@@ -830,7 +824,7 @@ function backupsMarkup() {
   if (!backups.length) return '<p class="settings-description">还没有自动备份，第一次修改配置前会自动生成。</p>';
   return '<div class="backup-list">' + backups.map((item) => '<div class="backup-row"><span class="backup-time">' + esc(backupTime(item.createdAt)) + '</span>' +
     '<span class="backup-reason">' + esc(BACKUP_REASONS[item.reason] || item.reason) + '</span><span class="backup-count">' + item.links + ' 个入口 · ' + item.categories + ' 个分类</span>' +
-    '<span class="backup-actions"><a class="btn btn-ghost btn-small" href="/api/backups/' + encodeURIComponent(item.id) + '" download>下载</a>' +
+    '<span class="backup-actions"><button class="btn btn-ghost btn-small" data-action="download-backup" data-id="' + esc(item.id) + '">下载</button>' +
     '<button class="btn btn-ghost btn-small" data-action="restore-backup" data-id="' + esc(item.id) + '">恢复</button></span></div>').join('') + '</div>';
 }
 
@@ -853,17 +847,24 @@ async function restoreBackup(id) {
   toast('已恢复为 ' + time + ' 的备份');
 }
 
-async function exportBackup() {
-  const latest = await api('/api/state');
-  const content = { version: 1, exportedAt: new Date().toISOString(), ...latest };
+function saveJson(content, filename) {
   const blob = new Blob([JSON.stringify(content, null, 2)], { type: 'application/json' });
   const url = URL.createObjectURL(blob);
   const anchor = document.createElement('a');
   anchor.href = url;
-  anchor.download = 'litenav-backup-' + new Date().toLocaleDateString('sv-SE') + '.json';
+  anchor.download = filename;
   anchor.click();
   setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
+async function exportBackup() {
+  const latest = await api('/api/state');
+  saveJson({ version: 1, exportedAt: new Date().toISOString(), ...latest }, 'litenav-backup-' + new Date().toLocaleDateString('sv-SE') + '.json');
   toast('备份已导出');
+}
+
+async function downloadBackup(id) {
+  saveJson(await api('/api/backups/' + encodeURIComponent(id)), 'litenav-backup-' + id + '.json');
 }
 
 // Moves a site between the home directory and 杂物库, into the category of the same name there (made if missing).
@@ -951,6 +952,24 @@ async function handleAction(button) {
       break;
     }
     case 'restore-backup': await restoreBackup(id); break;
+    case 'download-backup': await downloadBackup(id); break;
+    case 'sync-enable': await enableSync(button); break;
+    case 'sync-now': {
+      button.disabled = true;
+      try {
+        syncStatus = (await api('/api/sync', { method: 'POST', body: JSON.stringify({ action: 'now' }) })).status;
+        updateSyncCard();
+        toast(syncStatus.state === 'error' ? '同步失败：' + syncStatus.lastError : '已同步');
+      } finally { button.disabled = false; }
+      break;
+    }
+    case 'sync-disable': {
+      if (!await confirmDialog('关闭云同步', '关闭后，本机的修改不再同步到其他设备，其他设备的修改也不会再同步过来。本机和云端的数据都会保留。', '关闭同步')) break;
+      syncStatus = (await api('/api/sync', { method: 'POST', body: JSON.stringify({ action: 'disable' }) })).status;
+      updateSyncCard();
+      toast('已关闭云同步');
+      break;
+    }
     case 'start-link-check': button.disabled = true; await startLinkCheck(); break;
     case 'apply-redirect': await applyRedirects([id]); break;
     case 'apply-all-redirects': {
@@ -1384,6 +1403,88 @@ window.addEventListener('focus', () => {
   refreshHealth().catch(() => {});
 });
 
+// 云同步 (Chrome extension): the configuration and companion preferences,
+// through Chrome account sync, merged with what other devices changed.
+function syncSectionMarkup() {
+  return '<section class="settings-section" id="sync"><div class="section-heading">' + icon('cloud', 22) + '<h2>云同步</h2></div><div class="settings-card" id="sync-card">' + syncCardMarkup() + '</div></section>';
+}
+
+function syncCardMarkup() {
+  const intro = '<p class="settings-description">通过 Chrome 账号，在登录同一 Google 账号的电脑之间同步网址、分类、服务、设置和角色偏好。每台设备都可以离线修改，联网后自动合并。</p>';
+  if (!syncStatus) return '<div class="sync-head">' + intro + '</div><p class="field-hint">正在读取同步状态…</p>';
+  if (!syncStatus.enabled) {
+    return '<div class="sync-head">' + intro + '<button class="btn btn-primary" data-action="sync-enable">' + icon('cloud', 16) + '开启同步</button></div>' +
+      '<p class="field-hint">需要在 Chrome 中登录 Google 账号并开启同步（包括“扩展程序”），没有登录时数据只保存在本机。服务的在线状态和工具箱里的内容不会同步。</p>';
+  }
+  const facts = [];
+  if (syncStatus.state === 'waiting') facts.push('正在等待其他设备的数据传完');
+  else if (syncStatus.lastSyncedAt) facts.push('上次同步于 ' + esc(shortTime(syncStatus.lastSyncedAt)));
+  if (syncStatus.bytes) facts.push('云端占用 ' + Math.max(1, Math.round(syncStatus.bytes / 1024)) + ' KB / 96 KB');
+  return '<div class="sync-head"><div><p class="sync-state"><span class="sync-dot' + (syncStatus.state === 'error' ? ' is-error' : '') + '"></span>' + (syncStatus.state === 'error' ? '同步出错' : '已开启同步') + '</p>' +
+    '<p class="settings-description">' + (facts.join(' · ') || '尚未同步') + '</p></div>' +
+    '<div class="settings-actions"><button class="btn btn-ghost" data-action="sync-disable">关闭同步</button><button class="btn btn-secondary" data-action="sync-now">' + icon('refresh', 16) + '立即同步</button></div></div>' +
+    (syncStatus.state === 'error' ? '<p class="sync-error">' + esc(syncStatus.lastError) + '</p>' : '') +
+    (syncStatus.conflicts ? '<p class="field-hint">上次同步时有 ' + syncStatus.conflicts + ' 处内容在两台设备上都改过，已采用较新的修改；需要时可以在下方自动备份里恢复。</p>' : '') +
+    '<p class="field-hint">本机的修改几秒后自动同步，其他设备的修改会自动同步过来。</p>';
+}
+
+function updateSyncCard() {
+  const card = document.querySelector('#sync-card');
+  if (card) card.innerHTML = syncCardMarkup();
+}
+
+async function refreshSync() {
+  try { syncStatus = (await api('/api/sync')).status; } catch { /* Keep what is shown. */ }
+  updateSyncCard();
+}
+
+// Both sides hold different data: let the person choose how to start.
+function chooseSyncMode(info) {
+  return new Promise((resolve) => {
+    let chosen = null;
+    const count = (side) => side.links + ' 个入口、' + side.categories + ' 个分类';
+    const option = (value, title, hint, checked) => '<label class="checkbox-row sync-choice"><input type="radio" name="sync-mode" value="' + value + '"' + (checked ? ' checked' : '') + '><span><strong>' + title + '</strong><span class="field-hint">' + hint + '</span></span></label>';
+    const dialog = makeDialog('<form class="dialog-form" id="sync-mode-form"><header class="dialog-header"><h2>开启云同步</h2><button type="button" class="icon-button" data-action="close-dialog" aria-label="关闭">' + icon('x') + '</button></header><div class="dialog-body">' +
+      '<p class="confirm-message">云端已有其他设备同步的数据（' + count(info.remote) + (info.remote.editedAt ? '，最后修改于 ' + esc(shortTime(info.remote.editedAt)) : '') + '），和本机（' + count(info.local) + '）不同。要怎样开始？</p>' +
+      option('merge', '合并两边（推荐）', '两边的网址和分类都保留；同一项两边都改过时，采用较新的修改。', true) +
+      option('remote', '使用云端数据', '用云端数据替换本机，替换前会自动备份本机数据。', false) +
+      option('local', '使用本机数据', '用本机数据覆盖云端，其他设备下次同步后也会变成这份。', false) +
+      '</div><footer class="dialog-footer"><span></span><div><button class="btn btn-ghost" type="button" data-action="close-dialog">取消</button><button class="btn btn-primary" type="submit">开启同步</button></div></footer></form>');
+    dialog.querySelector('#sync-mode-form').addEventListener('submit', (event) => {
+      event.preventDefault();
+      chosen = new FormData(event.target).get('sync-mode');
+      dialog.close();
+    });
+    dialog.addEventListener('close', () => resolve(chosen), { once: true });
+  });
+}
+
+async function enableSync(button) {
+  button.disabled = true;
+  try {
+    await mutationQueue.catch(() => {});
+    const info = await api('/api/sync', { method: 'POST', body: JSON.stringify({ action: 'inspect' }) });
+    if (info.remote?.incomplete) { toast('其他设备的数据还在传输中，请稍后再试'); return; }
+    let mode = 'merge';
+    // A browser that only has the starter sites simply takes the synced copy.
+    if (info.remote && !info.remote.same && info.local.editedAt) {
+      mode = await chooseSyncMode(info);
+      if (!mode) return;
+    }
+    syncStatus = (await api('/api/sync', { method: 'POST', body: JSON.stringify({ action: 'enable', mode }) })).status;
+    config = await api('/api/state');
+    render();
+    toast(syncStatus.state === 'error' ? '同步失败：' + syncStatus.lastError : !info.remote ? '已开启同步，本机数据已上传' : mode === 'local' ? '已开启同步，云端已更新为本机数据' : '已开启同步，已载入云端数据');
+  } finally { button.disabled = false; }
+}
+
+// Another tab saved, or the background worker applied a sync.
+onBackendChange((what) => {
+  if (what === 'sync') { if (view === 'settings') refreshSync(); return; }
+  if (!config || currentDialog || editMode) return;
+  api('/api/state').then((latest) => { if (latest.revision !== config.revision) { config = latest; applyDisplaySettings(); if (view !== 'tools') render(); } }).catch(() => {});
+});
+
 async function boot() {
   try {
     config = await api('/api/state');
@@ -1391,9 +1492,9 @@ async function boot() {
     linkCheck = await api('/api/link-check').catch(() => linkCheck);
     route();
     if (linkCheck.job?.running) refreshLinkCheck().catch(() => {});
-    setInterval(() => { if (!document.hidden) refreshHealth().catch(() => {}); }, 10000);
+    if (capabilities.monitor) setInterval(() => { if (!document.hidden) refreshHealth().catch(() => {}); }, 10000);
   } catch (error) {
-    app.innerHTML = '<main class="boot-error">' + icon('alert', 32) + '<h1>暂时无法连接轻航</h1><p>' + esc(error.message) + '</p><button class="btn btn-primary" data-action="reload">重新连接</button></main>';
+    app.innerHTML = '<main class="boot-error">' + icon('alert', 32) + '<h1>' + (backendMode === 'extension' ? '轻航数据读取失败' : '暂时无法连接轻航') + '</h1><p>' + esc(error.message) + '</p><button class="btn btn-primary" data-action="reload">重新连接</button></main>';
   }
 }
 

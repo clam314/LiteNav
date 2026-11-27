@@ -666,51 +666,10 @@ class LinkChecker:
             self.thread.join(timeout=2)
 
 
-KNOWN_SITES = {
-    "github.com": ("GitHub", "github", "开发工具"), "gitlab.com": ("GitLab", "gitlab", "开发工具"),
-    "developer.mozilla.org": ("MDN", "mdn", "开发工具"), "vercel.com": ("Vercel", "vercel", "开发工具"),
-    "cloudflare.com": ("Cloudflare", "cloudflare", "开发工具"), "hub.docker.com": ("Docker Hub", "docker", "开发工具"),
-    "npmjs.com": ("npm", "npm", "开发工具"), "stackoverflow.com": ("Stack Overflow", "stackoverflow", "开发工具"),
-    "chatgpt.com": ("ChatGPT", "chatgpt", "AI 工具"), "claude.ai": ("Claude", "claude", "AI 工具"),
-    "deepseek.com": ("DeepSeek", "deepseek", "AI 工具"), "gemini.google.com": ("Gemini", "gemini", "AI 工具"),
-    "perplexity.ai": ("Perplexity", "perplexity", "AI 工具"), "doubao.com": ("豆包", "doubao", "AI 工具"),
-    "kimi.com": ("Kimi", "kimi", "AI 工具"), "tongyi.com": ("通义", "tongyi", "AI 工具"),
-    "qianwen.com": ("千问（通义）", "tongyi", "AI 工具"),
-    "cursor.com": ("Cursor", "cursor", "AI 工具"), "copilot.microsoft.com": ("Copilot", "copilot", "AI 工具"),
-    "copilot.com": ("Microsoft Copilot", "copilot", "AI 工具"),
-    "poe.com": ("Poe", "poe", "AI 工具"), "midjourney.com": ("Midjourney", "midjourney", "AI 工具"),
-    "grok.com": ("Grok", "grok", "AI 工具"),
-    "notion.so": ("Notion", "notion", "效率办公"), "notion.com": ("Notion", "notion", "效率办公"),
-    "figma.com": ("Figma", "figma", "效率办公"),
-    "docs.qq.com": ("腾讯文档", "tencent-docs", "办公"), "kdocs.cn": ("金山文档", "kdocs", "办公"),
-    "deepl.com": ("DeepL", "deepl", "办公"),
-    "mail.google.com": ("Gmail", "gmail", "邮箱"), "feishu.cn": ("飞书", "feishu", "效率办公"),
-    "outlook.live.com": ("Outlook", "/icons/outlook.svg", "邮箱"),
-    "outlook.office.com": ("Outlook", "/icons/outlook.svg", "邮箱"),
-    "outlook.office365.com": ("Outlook", "/icons/outlook.svg", "邮箱"),
-    "outlook.com": ("Outlook", "/icons/outlook.svg", "邮箱"),
-    "mail.163.com": ("163邮箱", "mdi-email", "邮箱"), "mail.10086.cn": ("139邮箱", "mdi-email", "办公"),
-    "linear.app": ("Linear", "linear", "效率办公"), "obsidian.md": ("Obsidian", "obsidian", "效率办公"),
-    "sspai.com": ("少数派", "sspai", "阅读资讯"), "zhihu.com": ("知乎", "zhihu", "阅读资讯"),
-    "news.ycombinator.com": ("Hacker News", "hacker-news", "阅读资讯"), "ruanyifeng.com": ("阮一峰周刊", "ruanyifeng", "阅读资讯"),
-    "bilibili.com": ("哔哩哔哩", "bilibili", "影音生活"), "youtube.com": ("YouTube", "youtube", "影音生活"),
-    "spotify.com": ("Spotify", "spotify", "影音生活"), "amap.com": ("高德地图", "amap", "生活工具"),
-    "douban.com": ("豆瓣", "douban", "生活工具"), "taobao.com": ("淘宝", "taobao", "购物"),
-    "jd.com": ("京东", "mdi-shopping", "购物"),
-    "linux.do": ("Linux.do", "linux-do", "科技社区"), "ithome.com": ("IT之家", "mdi-newspaper", "科技社区"),
-    "v2ex.com": ("V2EX", "mdi-forum", "科技社区"),
-    "komiic.cc": ("Komiic", "mdi-book-open-page-variant", "漫画"),
-    "mangacopy.com": ("拷贝漫画", "mdi-book-open-page-variant", "漫画"),
-}
-
-CATEGORY_ALIASES = {
-    "AI 工具": ("AI 工具", "AI"),
-    "效率办公": ("办公", "效率办公"),
-    "办公": ("办公", "效率办公", "邮箱"),
-    "邮箱": ("邮箱", "效率办公"),
-    "影音生活": ("影音娱乐", "影音生活"),
-    "购物": ("购物", "生活工具"),
-}
+# Shared with the Chrome extension, which recognizes the same sites offline.
+_KNOWN = json.loads((ROOT / "public" / "known-sites.json").read_text("utf-8"))
+KNOWN_SITES = {host: tuple(entry) for host, entry in _KNOWN["sites"].items()}
+CATEGORY_ALIASES = {name: tuple(names) for name, names in _KNOWN["categoryAliases"].items()}
 
 
 class MetadataParser(HTMLParser):
