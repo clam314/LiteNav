@@ -149,3 +149,23 @@ test('a page saving on the server between read and write is merged, not lost', a
   assert.ok(ids(remote).includes('mine') && ids(remote).includes('meanwhile'));
   assert.ok(ids(await laptop.store.state()).includes('meanwhile'));
 });
+
+test('回收站 travels through the server: deletions, restores and emptying', async (t) => {
+  const server = await startServer();
+  t.after(server.stop);
+  const laptop = device(server.url);
+  await laptop.edit((state) => { state.links.push(site('keep', 'https://keep.example')); });
+  await laptop.engine.enable();
+  // Deleted on the server's own page: the server puts it in 回收站, the laptop gets both.
+  await webEdit(server.url, (state) => { state.links = state.links.filter((link) => link.id !== 'keep'); });
+  await laptop.engine.run();
+  let mine = await laptop.store.state();
+  assert.ok(!ids(mine).includes('keep'));
+  assert.deepEqual(mine.trash.map((entry) => entry.id), ['keep']);
+  // Emptied on the laptop: empty on the server too, not recorded again.
+  await laptop.edit((state) => { state.trash = []; });
+  await laptop.engine.run();
+  const remote = await (await fetch(server.url + '/api/state', { headers: auth })).json();
+  assert.equal(remote.trash, undefined);
+  assert.ok(!ids(remote).includes('keep'));
+});

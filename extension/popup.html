@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <title>添加到轻航</title>
+    <link rel="stylesheet" href="/styles.css" />
+    <link rel="stylesheet" href="/popup.css" />
+  </head>
+  <body class="popup-body">
+    <main class="popup" aria-live="polite">
+      <header class="popup-header">
+        <span class="popup-icon"></span>
+        <span class="popup-title"><strong>添加到轻航</strong><span class="popup-domain"></span></span>
+      </header>
+      <form class="popup-form" hidden>
+        <label class="field"><span class="field-label">名称</span><input class="form-input" name="name" maxlength="120" required autocomplete="off" spellcheck="false" /></label>
+        <label class="field popup-place"><span class="field-label">放在</span><select class="form-select" name="category"></select></label>
+        <p class="field-hint popup-service" hidden>局域网地址，会放进“服务集”。</p>
+        <label class="checkbox-row"><input type="checkbox" name="pinned" />加入常用</label>
+        <div class="popup-actions">
+          <button class="btn btn-ghost" type="button" data-open>打开轻航</button>
+          <button class="btn btn-primary" type="submit">添加</button>
+        </div>
+      </form>
+      <div class="popup-message" hidden>
+        <p class="popup-text"></p>
+        <div class="popup-actions"><button class="btn btn-secondary" type="button" data-open>打开轻航</button></div>
+      </div>
+    </main>
+    <script type="module" src="/popup.js"></script>
+  </body>
+</html>

@@ -955,5 +955,41 @@ class SharedStateCases(unittest.TestCase):
         self.assertEqual(server.CATEGORY_ALIASES["办公"], tuple(shared["categoryAliases"]["办公"]))
 
 
+class TrashCase(DataFixture):
+    """回收站: what a save removes is kept 30 days, whoever removed it."""
+
+    def test_removed_sites_go_to_trash_with_their_category(self):
+        state = self.store.state()
+        gone = state["links"][0]
+        saved = self.store.save({**state, "links": state["links"][1:]})
+        self.assertEqual([entry["id"] for entry in saved["trash"]], [gone["id"]])
+        entry = saved["trash"][0]
+        self.assertEqual(entry["link"], gone)
+        self.assertEqual(entry["category"]["id"], gone["categoryId"])
+        self.assertRegex(entry["deletedAt"], r"^\d{4}-\d\d-\d\dT\d\d:\d\d:\d\d\.\d{3}Z$")
+        # A page that knows nothing of trash keeps it.
+        page = self.store.state()
+        del page["trash"]
+        self.assertEqual(len(self.store.save(page)["trash"]), 1)
+        # Restoring puts the site back and takes it out.
+        restored = self.store.state()
+        restored["links"].append(gone)
+        self.assertNotIn("trash", self.store.save(restored))
+
+    def test_undone_imports_skip_trash_and_old_entries_expire(self):
+        state = self.store.state()
+        saved = self.store.save({**state, "links": state["links"][1:], "trashRemoved": False})
+        self.assertNotIn("trash", saved)
+        old = {"id": "old", "deletedAt": "2000-01-01T00:00:00.000Z", "link": {"id": "old", "name": "旧", "url": "https://old.example"}}
+        latest = self.store.state()
+        self.assertNotIn("trash", self.store.save({**latest, "trash": [old]}), "entries older than 30 days go")
+        # Emptying it on purpose.
+        latest = self.store.state()
+        self.store.save({**latest, "links": latest["links"][1:]})
+        latest = self.store.state()
+        self.assertEqual(len(latest["trash"]), 1)
+        self.assertNotIn("trash", self.store.save({**latest, "trash": []}))
+
+
 if __name__ == "__main__":
     unittest.main()

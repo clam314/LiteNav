@@ -88,13 +88,17 @@ export function createSyncEngine({ store, channel, channelFor, area, withLock = 
       if (merged.prefs && !sameDocument(merged.prefs, local.document.prefs)) await store.setPrefs(merged.prefs, { origin: 'sync' });
       if (sameDocument(config, documentOf(local.document))) return {};
       // Replacing this copy wholesale is always backed up first.
-      return { document: config, options: { origin: 'sync', backupAs: mode === 'remote' ? 'sync' : null } };
+      // The device that deleted a site already put it in 回收站, or emptied
+      // that on purpose; only a copy from a build without one leaves it to us.
+      const recordRemoved = Boolean(remote) && !Array.isArray(remote.document.trash);
+      return { document: config, options: { origin: 'sync', backupAs: mode === 'remote' ? 'sync' : null, trash: { keepPrevious: false, recordRemoved } } };
     });
     if (holding) {
       return writeMeta({ ...meta, enabled: true, deviceId, state: 'empty', lastSyncedAt: now().toISOString(), lastError: null, conflicts: 0, remote: null });
     }
     // The stored copy is the cleaned one; send exactly that.
-    const document = { ...documentOf(record), prefs: pushed.merged.prefs ?? null };
+    // trash goes out even when empty: a server keeps the 回收站 a save leaves out.
+    const document = { ...documentOf(record), trash: record.trash || [], prefs: pushed.merged.prefs ?? null };
     let bytes = meta.bytes || remote?.bytes || 0;
     let writer = remote ? { thisDevice: Boolean(remote.deviceId) && remote.deviceId === deviceId, writtenAt: remote.writtenAt || null } : null;
     if (!remote || !sameDocument(document, remote.document)) {

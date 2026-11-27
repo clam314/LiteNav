@@ -47,7 +47,7 @@ export function createServerSyncChannel({ url, password = '', fetchImpl = global
   }
 
   const shape = (state) => ({
-    document: { categories: state.categories, links: state.links, settings: state.settings, prefs: state.prefs ?? null },
+    document: { categories: state.categories, links: state.links, settings: state.settings, trash: state.trash || [], prefs: state.prefs ?? null },
     // A server's copy counts as edited once anything saved it.
     editedAt: state.updatedAt || null, configEditedAt: state.updatedAt || null, writtenAt: state.updatedAt || null, deviceId: null, bytes: 0,
   });
@@ -66,7 +66,9 @@ export function createServerSyncChannel({ url, password = '', fetchImpl = global
     // between is refused (409) and the run merges again.
     async write(document) {
       if (revision === null) await this.read();
-      const state = await call('PUT', { revision, ...document });
+      // The document carries 回收站 as this device merged it; the server
+      // must not record the sites it lacks a second time.
+      const state = await call('PUT', { revision, ...document, trashRemoved: false });
       revision = state.revision;
       return { bytes: 0 };
     },

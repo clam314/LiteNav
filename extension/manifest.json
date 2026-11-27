@@ -13,11 +13,12 @@
     "128": "icons/icon-128.png"
   },
   "action": {
-    "default_title": "打开轻航",
+    "default_title": "添加到轻航",
     "default_icon": {
       "16": "icons/icon-16.png",
       "32": "icons/icon-32.png"
-    }
+    },
+    "default_popup": "popup.html"
   },
   "background": {
     "service_worker": "background.js",
@@ -26,12 +27,25 @@
   "chrome_url_overrides": {
     "newtab": "index.html"
   },
+  "omnibox": {
+    "keyword": "ln"
+  },
+  "commands": {
+    "_execute_action": {
+      "suggested_key": {
+        "default": "Alt+Shift+S"
+      },
+      "description": "添加当前网页到轻航"
+    }
+  },
   "permissions": [
     "storage",
     "unlimitedStorage",
     "alarms",
     "favicon",
-    "search"
+    "search",
+    "contextMenus",
+    "activeTab"
   ],
   "optional_permissions": [
     "webRequest",

@@ -5,6 +5,7 @@ import { searchLinks, googleSearchUrl } from './search.js';
 import { parseBookmarks, bookmarksFromTree } from './bookmarks.js';
 import { api, capabilities, backendMode, onBackendChange, hasPermission, requestPermission, dropPermission, browserSearch, browserBookmarks, reloadExtension } from './backend.js';
 import { serverOrigin } from './sync-server.js';
+import { createUsageStore, recentIds, byUse, USAGE_KEY } from './usage.js';
 
 initCompanion();
 
@@ -32,6 +33,9 @@ let linkCheckTimer = null;
 let syncStatus = null;
 let networkAllowed = null;
 let updateStatus = null;
+// Opens per site on this browser, for 最近使用 and ordering 常用 by use.
+const usageStore = createUsageStore();
+let usage = {};
 // Where checks are made from, for the texts that explain them.
 const checkSource = backendMode === 'extension' ? '这台电脑的浏览器' : '运行轻航的服务器';
 
@@ -57,7 +61,9 @@ const quietestColumn = (categories, area) => {
   const counts = [0, 1, 2].map((column) => categories.filter((item) => areaOf(item) === area && Number(item.column) === column).length);
   return counts.indexOf(Math.min(...counts));
 };
-const favorites = () => config.links.filter((link) => link.pinned).sort((a, b) => (a.pinnedOrder ?? a.order) - (b.pinnedOrder ?? b.order));
+const manualFavorites = () => config.links.filter((link) => link.pinned).sort((a, b) => (a.pinnedOrder ?? a.order) - (b.pinnedOrder ?? b.order));
+// Ordered by use when that is on; while 整理 the manual order shows, as dragging changes it.
+const favorites = () => config.settings?.sortFavoritesByUse && !editMode ? byUse(manualFavorites(), usage) : manualFavorites();
 const domain = (url) => { try { const parsed = new URL(url); return parsed.host.replace(/^www\./, ''); } catch { return url; } };
 const safeUrl = (input) => {
   const raw = String(input).trim();
@@ -138,7 +144,8 @@ function sidebarMarkup() {
     categories.map((category) => '<a href="#category-' + encodeURIComponent(category.id) + '" draggable="true" data-drag-kind="category" data-resource="' + esc(category.id) + '" title="拖动调整分类顺序" class="nav-item ' + (view === 'home' && activeCategory === category.id ? 'active' : '') + '">' + icon(category.icon || 'folder') + '<span>' + esc(category.name) + '</span></a>').join(''),
     '<div class="nav-divider"></div><a href="#services" class="nav-item ' + (view === 'services' ? 'active' : '') + '">' + icon('server') + '<span>服务集</span></a>',
     '<a href="#tools" class="nav-item ' + (view === 'tools' ? 'active' : '') + '">' + icon('toolbox') + '<span>工具箱</span></a>',
-    '<a href="#archive" class="nav-item ' + (view === 'archive' ? 'active' : '') + '">' + icon('archive') + '<span>杂物库</span></a></nav>',
+    '<a href="#archive" class="nav-item ' + (view === 'archive' ? 'active' : '') + '">' + icon('archive') + '<span>杂物库</span></a>',
+    '<a href="#trash" class="nav-item ' + (view === 'trash' ? 'active' : '') + '">' + icon('trash') + '<span>回收站</span>' + (config.trash?.length ? '<span class="nav-count">' + config.trash.length + '</span>' : '') + '</a></nav>',
     '<div class="sidebar-bottom"><a href="#settings" class="nav-item ' + (view === 'settings' ? 'active' : '') + '">' + icon('settings') + '<span>设置</span></a></div></aside>',
   ].join('');
 }
@@ -169,13 +176,13 @@ function linkIcon(link) {
 function shortcutMarkup(link) {
   const content = brokenFlag(link) + linkIcon(link) + '<span class="shortcut-name">' + esc(link.name).replace(/([a-z])([A-Z])/g, '$1<wbr>$2') + '</span>';
   if (editMode) return '<div class="shortcut editable-item" draggable="true" data-drag-kind="link" data-resource="' + esc(link.id) + '" data-scope="favorites" tabindex="0" aria-label="' + esc(link.name) + '，可拖动排序；按回车编辑">' + content + itemActions(link, 'favorites') + '</div>';
-  return '<a class="shortcut" href="' + esc(link.url) + '"' + linkTarget() + ' aria-label="打开 ' + esc(link.name) + '" title="' + esc(link.name) + '\n' + esc(link.url) + '">' + content + '</a>';
+  return '<a class="shortcut" data-link-id="' + esc(link.id) + '" href="' + esc(link.url) + '"' + linkTarget() + ' aria-label="打开 ' + esc(link.name) + '" title="' + esc(link.name) + '\n' + esc(link.url) + '">' + content + '</a>';
 }
 
 function siteMarkup(link, categoryId) {
   const content = brokenFlag(link) + linkIcon(link) + '<span class="site-copy"><span class="site-name">' + esc(link.name) + '</span><span class="site-domain">' + esc(domain(link.url)) + '</span></span>';
   if (editMode) return '<div class="site-link editable-item" draggable="true" data-drag-kind="link" data-resource="' + esc(link.id) + '" data-scope="category-' + esc(categoryId) + '" tabindex="0" aria-label="' + esc(link.name) + '，可拖动排序或拖到其他分类；按回车编辑">' + content + itemActions(link, 'category') + '</div>';
-  return '<a class="site-link" href="' + esc(link.url) + '"' + linkTarget() + ' title="' + esc(link.name) + '\n' + esc(link.url) + '">' + content + '<span class="link-arrow">' + icon('arrow-up-right', 13) + '</span></a>';
+  return '<a class="site-link" data-link-id="' + esc(link.id) + '" href="' + esc(link.url) + '"' + linkTarget() + ' title="' + esc(link.name) + '\n' + esc(link.url) + '">' + content + '<span class="link-arrow">' + icon('arrow-up-right', 13) + '</span></a>';
 }
 
 function categoryMarkup(category) {
@@ -196,9 +203,59 @@ const columnsMarkup = (categories) => '<div class="directory-columns">' +
 function homeMarkup() {
   const pinned = favorites();
   return '<section class="favorites-section" id="favorites"><div class="section-heading">' + icon('sparkles', 24) + '<h2>常用</h2>' +
-    (editMode ? '<span class="section-note">拖动调整顺序，网址可拖到其他分类，分类可拖动标题栏换位置</span>' : '') + '</div>' +
+    (editMode ? '<span class="section-note">拖动调整顺序，网址可拖到其他分类，分类可拖动标题栏换位置' + (config.settings.sortFavoritesByUse ? '；常用平时按使用频率排列，这里调整的是手动顺序' : '') + '</span>' : '') + '</div>' +
     '<div class="favorites-grid" data-sort-scope="favorites" data-link-drop="favorites">' + (pinned.map(shortcutMarkup).join('') || '<div class="empty-state">' + icon('star', 25) + '<p>把常用的网址或服务放在这里</p><button class="btn btn-secondary" data-action="add-link" data-pinned="true">添加常用</button></div>') + '</div></section>' +
+    recentMarkup() +
     '<section class="directory-section"><div class="section-heading">' + icon('link', 23) + '<h2>网址导航</h2></div>' + columnsMarkup(directoryCategories()) + '</section>';
+}
+
+// 最近使用: sites opened lately on this browser that are not in 常用.
+const RECENT_COUNT = 8;
+function recentMarkup() {
+  if (editMode || config.settings.showRecent === false) return '';
+  const byId = new Map(config.links.map((link) => [link.id, link]));
+  const recent = recentIds(usage).map((id) => byId.get(id)).filter((link) => link && !link.pinned).slice(0, RECENT_COUNT);
+  if (!recent.length) return '';
+  return '<section class="favorites-section recent-section" id="recent"><div class="section-heading">' + icon('clock', 22) + '<h2>最近使用</h2>' +
+    '<button class="btn btn-ghost btn-small section-action" data-action="clear-recent">清除记录</button></div>' +
+    '<div class="favorites-grid recent-grid">' + recent.map(shortcutMarkup).join('') + '</div></section>';
+}
+
+// 回收站: deleted sites and services, newest first, for 30 days.
+function trashMarkup() {
+  const entries = config.trash || [];
+  const intro = '<div class="page-intro"><p>删除的网址和服务会在这里保留 30 天（最多 200 个），可以恢复到原来的分类；开启云同步时各台设备共用一个回收站。</p></div>';
+  if (!entries.length) return intro + '<div class="empty-state">' + icon('trash', 30) + '<h2>回收站是空的</h2><p>删除的网址会先放在这里，误删也能找回。</p></div>';
+  const row = (entry) => {
+    const link = entry.link;
+    const place = link.kind === 'service' ? '服务集' : entry.category ? (entry.category.area === ARCHIVE ? '杂物库 · ' : '') + entry.category.name : '';
+    return '<div class="trash-row">' + linkIcon(link) + '<span class="trash-copy"><span class="site-name">' + esc(link.name) + '</span><span class="site-domain">' + esc(domain(link.url)) + (place ? ' · ' + esc(place) : '') + '</span></span>' +
+      '<span class="trash-time">' + esc(shortTime(entry.deletedAt)) + ' 删除</span>' +
+      '<span class="trash-actions"><button class="btn btn-secondary btn-small" data-action="restore-trash" data-id="' + esc(entry.id) + '">恢复</button>' +
+      '<button class="icon-button danger" data-action="purge-trash" data-id="' + esc(entry.id) + '" aria-label="彻底删除 ' + esc(link.name) + '" title="彻底删除">' + icon('x', 15) + '</button></span></div>';
+  };
+  return intro + '<div class="service-toolbar"><span class="section-hint">' + entries.length + ' 个项目</span><button class="btn btn-secondary btn-danger" data-action="empty-trash">' + icon('trash', 16) + '清空回收站</button></div>' +
+    '<div class="settings-card trash-list">' + entries.map(row).join('') + '</div>';
+}
+
+// Puts a 回收站 entry back: into its category, recreated if it was deleted
+// too (or one of the same name), else the first directory category.
+function restoreEntry(state, entry) {
+  state.trash = (state.trash || []).filter((item) => item.id !== entry.id);
+  if (state.links.some((link) => link.id === entry.id)) return null;
+  const link = structuredClone(entry.link);
+  const duplicate = state.links.find((item) => canonicalUrl(item.url) === canonicalUrl(link.url));
+  if (duplicate) return duplicate;
+  if (link.kind !== 'service' && !state.categories.some((item) => item.id === link.categoryId)) {
+    const saved = entry.category;
+    const area = saved?.area === ARCHIVE ? ARCHIVE : 'directory';
+    const sameName = saved && state.categories.find((item) => item.name === saved.name && areaOf(item) === area);
+    if (sameName) link.categoryId = sameName.id;
+    else if (saved) state.categories.push({ ...saved, order: Math.max(-1, ...state.categories.map((item) => item.order ?? 0)) + 1 });
+    else link.categoryId = state.categories.find((item) => areaOf(item) === 'directory')?.id || link.categoryId;
+  }
+  state.links.push(link);
+  return null;
 }
 
 function archiveMarkup() {
@@ -228,7 +285,7 @@ function serviceMarkup(link) {
   if (status === 'offline' || status === 'degraded') detail = '连续 ' + (state.consecutiveFailures || 1) + ' 次未响应' + (status === 'degraded' ? '，正在确认' : '');
   const lastChecked = state.lastChecked ? new Date(typeof state.lastChecked === 'number' && state.lastChecked < 1e12 ? state.lastChecked * 1000 : state.lastChecked).toLocaleTimeString('zh-CN', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) : '尚未检测';
   return '<article class="service-card ' + (status === 'offline' ? 'has-error' : '') + (editMode ? ' is-sortable' : '') + '" data-service="' + esc(link.id) + '"' + (editMode ? ' draggable="true" data-drag-kind="service" data-resource="' + esc(link.id) + '"' : '') + '><header class="service-card-header">' +
-    '<a class="service-identity"' + (editMode ? ' draggable="false"' : '') + ' href="' + esc(link.url) + '"' + linkTarget() + '>' + linkIcon(link) + '<span class="service-copy"><h3>' + esc(link.name) + '</h3><span class="site-domain">' + esc(domain(link.url)) + '</span></span></a>' +
+    '<a class="service-identity" data-link-id="' + esc(link.id) + '"' + (editMode ? ' draggable="false"' : '') + ' href="' + esc(link.url) + '"' + linkTarget() + '>' + linkIcon(link) + '<span class="service-copy"><h3>' + esc(link.name) + '</h3><span class="site-domain">' + esc(domain(link.url)) + '</span></span></a>' +
     '<span class="status-badge ' + status + '">' + statusLabels[status] + '</span></header>' +
     (link.description ? '<p class="service-description">' + esc(link.description) + '</p>' : '') +
     '<div class="service-details"><p>' + esc(detail) + '</p><div class="service-meta">最近检测：' + esc(lastChecked) + '</div>' +
@@ -248,11 +305,13 @@ function servicesMarkup() {
 }
 
 function displaySettingsMarkup() {
-  const row = (name, title, hint) => '<label class="setting-switch"><span class="setting-switch-copy"><span class="setting-switch-title">' + title + '</span><span class="field-hint">' + hint + '</span></span>' +
-    '<input class="switch-input" type="checkbox" role="switch" data-setting="' + name + '"' + (config.settings[name] !== false ? ' checked' : '') + '></label>';
+  const row = (name, title, hint, fallback = true) => '<label class="setting-switch"><span class="setting-switch-copy"><span class="setting-switch-title">' + title + '</span><span class="field-hint">' + hint + '</span></span>' +
+    '<input class="switch-input" type="checkbox" role="switch" data-setting="' + name + '"' + ((config.settings[name] ?? fallback) ? ' checked' : '') + '></label>';
   return '<section class="settings-section"><div class="section-heading">' + icon('grid', 22) + '<h2>显示</h2></div><div class="settings-card setting-switches">' +
     row('openInNewTab', '在新标签页打开网站', '关闭后，网址和服务在当前页面打开。') +
     row('showCompanionButton', '显示角色按钮', '关闭后右下角的角色设置按钮不再显示，角色本身按原有设置继续显示；需要调整角色时重新打开这里。') +
+    row('showRecent', '显示最近使用', '首页列出最近打开过的网址（不含常用）。打开记录只保存在这台电脑的浏览器里。') +
+    row('sortFavoritesByUse', '常用按使用频率排序', '最近一段时间打开得越多越靠前（两周前的打开只算一半）；点“整理”时仍可拖动调整手动顺序。', false) +
     '</div></section>';
 }
 
@@ -329,6 +388,7 @@ function resetSearch() {
 function openSearchResult(index, open = true) {
   const entry = searchResults[index];
   if (entry && open) {
+    if (entry.link) countOpen(entry.link.id);
     if (entry.google && capabilities.browserSearch) { browserSearch(searchQuery.trim(), opensNewTab()); resetSearch(); return; }
     if (!opensNewTab()) { location.assign(entry.url); return; }
     window.open(entry.url, '_blank', 'noopener,noreferrer');
@@ -453,13 +513,13 @@ function render() {
   applyDisplaySettings();
   const searchInput = document.querySelector('#quick-search-input');
   const searchFocus = searchInput && document.activeElement === searchInput ? [searchInput.selectionStart, searchInput.selectionEnd] : null;
-  const titles = { home: '我的导航', services: '服务集', settings: '设置', tools: '工具箱', archive: '杂物库' };
+  const titles = { home: '我的导航', services: '服务集', settings: '设置', tools: '工具箱', archive: '杂物库', trash: '回收站' };
   const previousScroll = window.scrollY;
   app.innerHTML = '<div class="app-shell ' + (editMode ? 'edit-mode' : '') + '">' + sidebarMarkup() +
     '<main class="workspace"><header class="topbar"><h1 class="page-title">' + titles[view] + '</h1>' + searchMarkup() + '<div class="topbar-actions"><span id="update-alert">' + updateAlertMarkup() + '</span><span id="service-alert">' + alertMarkup() + '</span>' +
     (view === 'home' || view === 'services' || (view === 'archive' && archiveCategories().length) ? '<button class="btn ' + (editMode ? 'btn-secondary is-editing' : 'btn-secondary') + '" data-action="toggle-edit">' + (editMode ? icon('check', 16) + '完成整理' : '整理') + '</button>' : '') +
-    (view === 'tools' ? '' : '<button class="btn btn-primary" data-action="' + (view === 'services' ? 'add-service' : 'add-link') + '"' + (view === 'archive' ? ' data-area="archive"' : '') + '>' + icon('plus', 18) + '添加' + (view === 'services' ? '服务' : '') + '</button>') + '</div></header>' +
-    '<div class="page-content">' + (view === 'services' ? servicesMarkup() : view === 'settings' ? settingsMarkup() : view === 'tools' ? toolsMarkup(activeTool) : view === 'archive' ? archiveMarkup() : homeMarkup()) + '</div></main></div>';
+    (view === 'tools' || view === 'trash' ? '' : '<button class="btn btn-primary" data-action="' + (view === 'services' ? 'add-service' : 'add-link') + '"' + (view === 'archive' ? ' data-area="archive"' : '') + '>' + icon('plus', 18) + '添加' + (view === 'services' ? '服务' : '') + '</button>') + '</div></header>' +
+    '<div class="page-content">' + (view === 'services' ? servicesMarkup() : view === 'settings' ? settingsMarkup() : view === 'tools' ? toolsMarkup(activeTool) : view === 'archive' ? archiveMarkup() : view === 'trash' ? trashMarkup() : homeMarkup()) + '</div></main></div>';
   if (view === 'tools') mountTools(app, { toast });
   // A save may just have made an automatic backup.
   if (view === 'settings') refreshBackups();
@@ -479,7 +539,7 @@ function render() {
 function route() {
   const hash = location.hash.slice(1);
   const oldView = view;
-  view = hash === 'services' ? 'services' : hash === 'settings' ? 'settings' : hash === 'archive' ? 'archive' : hash === 'tools' || hash.startsWith('tools/') ? 'tools' : 'home';
+  view = hash === 'services' ? 'services' : hash === 'settings' ? 'settings' : hash === 'archive' ? 'archive' : hash === 'trash' ? 'trash' : hash === 'tools' || hash.startsWith('tools/') ? 'tools' : 'home';
   if (view === 'tools') activeTool = resolveTool(hash.slice(6));
   try { activeCategory = hash.startsWith('category-') ? decodeURIComponent(hash.slice(9)) : ''; }
   catch { activeCategory = ''; }
@@ -931,7 +991,7 @@ async function handleAction(button) {
     case 'delete-link': {
       const removed = structuredClone(config.links.find((link) => link.id === id));
       await mutate((state) => { state.links = state.links.filter((link) => link.id !== id); });
-      toast('已删除「' + removed.name + '」', { label: '撤销', run: () => mutate((state) => { if (!state.links.some((link) => link.id === id)) state.links.push(removed); }) });
+      toast('已删除「' + removed.name + '」，可在回收站找回', { label: '撤销', run: () => mutate((state) => { if (!state.links.some((link) => link.id === id)) state.links.push(removed); }) });
       break;
     }
     case 'check-service': await checkServices(id); break;
@@ -963,6 +1023,28 @@ async function handleAction(button) {
     }
     case 'restore-backup': await restoreBackup(id); break;
     case 'download-backup': await downloadBackup(id); break;
+    case 'restore-trash': {
+      const entry = config.trash?.find((item) => item.id === id);
+      if (!entry) break;
+      let duplicate = null;
+      await mutate((state) => { duplicate = restoreEntry(state, entry); });
+      toast(duplicate ? '导航里已有相同的网址「' + duplicate.name + '」，已从回收站移除' : '已恢复「' + entry.link.name + '」');
+      break;
+    }
+    case 'purge-trash':
+      await mutate((state) => { state.trash = (state.trash || []).filter((item) => item.id !== id); });
+      toast('已彻底删除');
+      break;
+    case 'empty-trash':
+      if (!await confirmDialog('清空回收站', '彻底删除回收站里的 ' + (config.trash?.length || 0) + ' 个项目？清空后无法从回收站恢复（自动备份里仍有记录）。', '清空')) break;
+      await mutate((state) => { state.trash = []; });
+      toast('回收站已清空');
+      break;
+    case 'clear-recent':
+      usage = await usageStore.clear();
+      render();
+      toast('已清除最近使用记录');
+      break;
     case 'sync-enable': await enableSync(button, 'chrome'); break;
     case 'sync-server': openServerDialog(); break;
     case 'show-update':
@@ -1033,7 +1115,7 @@ async function handleAction(button) {
       if (!removed.length || !await confirmDialog('删除疑似失效的网址', '删除 ' + removed.length + ' 个疑似失效的网址？删除后可以撤销。', '全部删除')) break;
       const ids = new Set(removed.map((link) => link.id));
       await mutate((state) => { state.links = state.links.filter((link) => !ids.has(link.id)); });
-      toast('已删除 ' + removed.length + ' 个网址', { label: '撤销', run: () => mutate((state) => { for (const link of removed) if (!state.links.some((item) => item.id === link.id)) state.links.push(link); }) });
+      toast('已删除 ' + removed.length + ' 个网址，可在回收站找回', { label: '撤销', run: () => mutate((state) => { for (const link of removed) if (!state.links.some((item) => item.id === link.id)) state.links.push(link); }) });
       break;
     }
     case 'import': document.querySelector('#import-file').click(); break;
@@ -1114,6 +1196,8 @@ document.addEventListener('change', async (event) => {
   const notes = {
     openInNewTab: value ? '网站将在新标签页打开' : '网站将在当前页面打开',
     showCompanionButton: value ? '已显示角色按钮' : '已隐藏角色按钮',
+    showRecent: value ? '首页将显示最近使用' : '已隐藏最近使用',
+    sortFavoritesByUse: value ? '常用将按使用频率排序' : '常用将按手动顺序排列',
   };
   try {
     await mutate((state) => { state.settings = { ...state.settings, [name]: value }; }, { renderPage: false });
@@ -1205,9 +1289,11 @@ async function importBookmarks(plan) {
   const services = config.links.filter((link) => linkIds.has(link.id) && link.kind === 'service').length;
   toast('已导入 ' + linkIds.size + ' 个网址' + (categoryIds.size ? '，新建 ' + categoryIds.size + ' 个分类' : '') + (services ? '，其中 ' + services + ' 个放进了「服务集」' : ''), {
     label: '撤销',
+    // An import taken back is not a deletion: 回收站 stays as it was.
     run: () => mutate((state) => {
       state.links = state.links.filter((link) => !linkIds.has(link.id));
       state.categories = state.categories.filter((category) => !categoryIds.has(category.id) || state.links.some((link) => link.categoryId === category.id));
+      state.trashRemoved = false;
     }),
   });
 }
@@ -1459,6 +1545,25 @@ document.addEventListener('click', (event) => {
   if (option) setTimeout(() => openSearchResult(-1, false), 0);
 });
 
+// Each open counts toward 最近使用 and the order of 常用.
+function countOpen(id) {
+  if (!id) return;
+  usageStore.record(id).then((next) => { usage = next; if (view === 'home' && !editMode && !currentDialog && opensNewTab()) refreshRecent(); });
+}
+function refreshRecent() {
+  const section = document.querySelector('#recent');
+  const markup = recentMarkup();
+  if (section) section.outerHTML = markup || '';
+  else if (markup) document.querySelector('#favorites')?.insertAdjacentHTML('afterend', markup);
+}
+const onOpen = (event) => {
+  if (event.type === 'auxclick' && event.button !== 1) return;
+  const anchor = event.target.closest?.('a[data-link-id]');
+  if (anchor && !editMode) countOpen(anchor.dataset.linkId);
+};
+document.addEventListener('click', onOpen, true);
+document.addEventListener('auxclick', onOpen, true);
+
 window.addEventListener('hashchange', route);
 window.addEventListener('focus', () => {
   pullSync();
@@ -1674,6 +1779,8 @@ onBackendChange((what) => {
   if (what === 'sync') { if (view === 'settings') refreshSync(); return; }
   if (what === 'health') { refreshHealth().catch(() => {}); return; }
   if (what === 'update') { refreshUpdate(); return; }
+  // Opened from the address bar (the extension's worker counted it).
+  if (what === 'usage') { usageStore.load().then((next) => { usage = next; if (view === 'home' && !editMode && !currentDialog) refreshRecent(); }); return; }
   if (!config || currentDialog || editMode) return;
   api('/api/state').then((latest) => { if (latest.revision !== config.revision) { config = latest; applyDisplaySettings(); if (view !== 'tools') render(); } }).catch(() => {});
 });
@@ -1681,6 +1788,7 @@ onBackendChange((what) => {
 async function boot() {
   try {
     config = await api('/api/state');
+    usage = await usageStore.load().catch(() => ({}));
     health = await api('/api/health').catch(() => ({ services: {} }));
     linkCheck = await api('/api/link-check').catch(() => linkCheck);
     route();

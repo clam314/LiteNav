@@ -2,7 +2,7 @@
 // keeps in SQLite and data/backups, kept in chrome.storage.local instead.
 // Extension pages and the background worker share it; every change runs
 // under one Web Lock so a save and a sync never interleave.
-import { validateState, StateError } from './state-model.js';
+import { validateState, withTrash, StateError } from './state-model.js';
 
 export const STATE_KEY = 'litenav.state';
 export const PREFS_KEY = 'litenav.prefs';
@@ -37,7 +37,8 @@ export function memoryLock() {
   };
 }
 
-export const documentOf = (state) => ({ categories: state.categories, links: state.links, settings: state.settings });
+// The configuration of a stored record or state: its 回收站 travels with it.
+export const documentOf = (state) => ({ categories: state.categories, links: state.links, settings: state.settings, ...(state.trash?.length ? { trash: state.trash } : {}) });
 
 export function createLocalStore({ area, withLock = webLock(), seed, now = () => new Date() }) {
   let micro = 0;
@@ -83,7 +84,10 @@ export function createLocalStore({ area, withLock = webLock(), seed, now = () =>
 
   // Writes a cleaned document as the next revision, backing up the previous
   // one when server.py would (or always, with backupAs).
-  async function commit(current, cleaned, { backup = true, backupAs = null, origin = 'local' } = {}) {
+  // trash: keepPrevious keeps the 回收站 a save left out; recordRemoved puts
+  // the sites it removes there (see withTrash).
+  async function commit(current, cleaned, { backup = true, backupAs = null, origin = 'local', trash = { keepPrevious: true, recordRemoved: true } } = {}) {
+    cleaned = withTrash(current, cleaned, { ...trash, now: now() });
     const reason = backupAs || (backup ? await backupReason(current, cleaned) : null);
     if (reason) await writeBackup(current, reason);
     const stamp = now().toISOString();
@@ -107,7 +111,9 @@ export function createLocalStore({ area, withLock = webLock(), seed, now = () =>
         const current = await ensure();
         const revision = value?.revision;
         if (typeof revision !== 'number' || revision !== current.revision) throw new StateError('配置已在其他页面更新，请刷新后重试', 409);
-        return view(await commit(current, validateState(value), options));
+        // A page that never knew a 回收站 keeps it; undoing an import records nothing.
+        const trash = { keepPrevious: !('trash' in value), recordRemoved: value.trashRemoved !== false };
+        return view(await commit(current, validateState(value), { ...options, trash }));
       });
     },
 
@@ -118,7 +124,8 @@ export function createLocalStore({ area, withLock = webLock(), seed, now = () =>
         const current = await ensure();
         const result = await change(current);
         if (!result?.document) return { record: current, changed: false, ...result };
-        const record = await commit(current, validateState(result.document), result.options);
+        // A sync's merged document says what 回收站 holds, empty included.
+        const record = await commit(current, validateState(result.document), { trash: { keepPrevious: false, recordRemoved: true }, ...result.options });
         return { record, changed: true, ...result };
       });
     },
@@ -149,7 +156,7 @@ export function createLocalStore({ area, withLock = webLock(), seed, now = () =>
       const content = await this.readBackup(id);
       return withLock(async () => {
         const current = await ensure();
-        return view(await commit(current, validateState(content), { backupAs: 'before-restore' }));
+        return view(await commit(current, validateState(content), { backupAs: 'before-restore', trash: { keepPrevious: !('trash' in content), recordRemoved: true } }));
       });
     },
 

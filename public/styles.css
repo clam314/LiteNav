@@ -590,3 +590,16 @@ input, select, textarea { min-width: 0; }
 .update-pill svg { width: 15px; height: 15px; }
 .sync-dot.is-update { background: var(--blue, #5b8cff); box-shadow: 0 0 0 3px rgb(53 100 237 / 18%); }
 .update-steps { margin: 12px 0 0; padding-left: 20px; color: var(--muted); font-size: 13px; line-height: 1.8; }
+
+/* 回收站 and 最近使用 */
+.nav-count { margin-left: auto; min-width: 20px; padding: 0 6px; color: var(--muted); background: var(--surface-raised, var(--surface)); border: 1px solid var(--line); border-radius: 999px; font-size: 11px; line-height: 18px; text-align: center; }
+.trash-list { padding: 6px 0; }
+.trash-row { display: flex; align-items: center; gap: 12px; padding: 10px 20px; }
+.trash-row + .trash-row { border-top: 1px solid var(--line); }
+.trash-row .brand-icon { width: 22px; height: 22px; }
+.trash-copy { flex: 1; min-width: 0; display: grid; gap: 2px; }
+.trash-copy .site-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trash-time { flex: 0 0 auto; color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.trash-actions { flex: 0 0 auto; display: flex; align-items: center; gap: 6px; }
+.recent-section { margin-top: 18px; }
+.section-heading .section-action { margin-left: auto; }

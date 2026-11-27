@@ -84,5 +84,6 @@ export function onBackendChange(callback) {
     if (changes['litenav.sync']) callback('sync');
     if (changes['litenav.health']) callback('health');
     if (changes['litenav.update']) callback('update');
+    if (changes['litenav.usage']) callback('usage');
   });
 }

@@ -5,7 +5,8 @@
 // - 网址体检 jobs, so leaving the page does not stop them;
 // - 检查更新 once a day, also shown on the toolbar icon, and a tab that says so
 //   after the extension's files were replaced with a newer build;
-// - the toolbar button opens 轻航.
+// - 添加到轻航 from the right-click menu (the toolbar popup does the rest);
+// - the address bar: "ln" and a space searches 轻航's sites.
 import { createWorkerParts } from './extension-runtime.js';
 import { STATE_KEY, PREFS_KEY } from './local-store.js';
 import { META_KEY } from './sync-chrome.js';
@@ -13,9 +14,14 @@ import { HEALTH_KEY } from './monitor.js';
 import { watchNetErrors } from './net-errors.js';
 import { UPDATE_KEY } from './extension-update.js';
 import { JUST_UPDATED_KEY } from './local-backend.js';
+import { searchableLinks, omniboxSuggestions, omniboxTarget } from './omnibox.js';
+import { createUsageStore } from './usage.js';
 
 const { area, store, sync, monitor, linkChecker, update } = createWorkerParts();
 const UPDATE_ALARM = 'litenav-update';
+const usage = createUsageStore(area);
+// Where the popup finds a right-clicked page or link (popup.js reads it).
+const PENDING_KEY = 'litenav.pendingSave';
 const SYNC_ALARM = 'litenav-sync';
 const MONITOR_ALARM = 'litenav-monitor';
 
@@ -49,7 +55,7 @@ async function updateBadge() {
   const newer = offline ? null : await update.status();
   await chrome.action.setBadgeBackgroundColor({ color: offline ? '#e5484d' : '#3564ed' });
   await chrome.action.setBadgeText({ text: offline ? String(offline) : newer?.available ? '↑' : '' });
-  await chrome.action.setTitle({ title: offline ? '轻航 · ' + offline + ' 个服务离线' : newer?.available ? '轻航 · 有新版本 ' + newer.latest.version : '打开轻航' });
+  await chrome.action.setTitle({ title: offline ? '轻航 · ' + offline + ' 个服务离线' : newer?.available ? '轻航 · 有新版本 ' + newer.latest.version : '添加到轻航' });
 }
 
 chrome.storage.onChanged.addListener((changes, area) => {
@@ -86,8 +92,43 @@ function setUp() {
   scheduleMonitor().then(updateBadge).catch(() => {});
   update.check().catch(() => {});
 }
+function createMenus() {
+  chrome.contextMenus.removeAll(() => {
+    chrome.contextMenus.create({ id: 'litenav-save-page', title: '添加到轻航', contexts: ['page'] });
+    chrome.contextMenus.create({ id: 'litenav-save-link', title: '把链接添加到轻航', contexts: ['link'] });
+  });
+}
+
+// The popup shows what to add; when Chrome cannot open it from here (before
+// version 127), the same page opens in a small window.
+chrome.contextMenus.onClicked.addListener((info, tab) => {
+  const link = info.menuItemId === 'litenav-save-link';
+  const pending = { url: link ? info.linkUrl : info.pageUrl, title: link ? info.selectionText || '' : tab?.title || '', favIconUrl: link ? '' : tab?.favIconUrl || '', at: Date.now() };
+  chrome.storage.session.set({ [PENDING_KEY]: pending }).then(() => chrome.action.openPopup()).catch(() =>
+    chrome.windows.create({ url: chrome.runtime.getURL('popup.html'), type: 'popup', width: 380, height: 420 }));
+});
+
+// The address bar: "ln", a space, then words to find among 轻航's sites.
+const searchable = async () => searchableLinks(await store.state());
+chrome.omnibox.setDefaultSuggestion({ description: '在轻航中搜索：<match>%s</match>' });
+chrome.omnibox.onInputChanged.addListener((input, suggest) => {
+  searchable().then((links) => suggest(omniboxSuggestions(links, input))).catch(() => suggest([]));
+});
+chrome.omnibox.onInputEntered.addListener(async (input, disposition) => {
+  const links = await searchable().catch(() => []);
+  const link = omniboxTarget(links, input);
+  if (!link) {
+    chrome.search.query({ text: input, disposition: disposition === 'currentTab' ? 'CURRENT_TAB' : 'NEW_TAB' });
+    return;
+  }
+  usage.record(link.id);
+  if (disposition === 'currentTab') chrome.tabs.update({ url: link.url });
+  else chrome.tabs.create({ url: link.url, active: disposition !== 'newBackgroundTab' });
+});
+
 chrome.runtime.onInstalled.addListener((details) => {
   setUp();
+  createMenus();
   // A newer build unpacked over the folder and reloaded: say so in a tab.
   const current = chrome.runtime.getManifest().version;
   if (details.reason === 'update' && details.previousVersion && details.previousVersion !== current) {
@@ -101,4 +142,3 @@ chrome.runtime.onStartup.addListener(() => {
 });
 watchNetErrors();
 
-chrome.action.onClicked.addListener(() => { chrome.tabs.create({ url: chrome.runtime.getURL('index.html') }); });

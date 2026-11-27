@@ -5,7 +5,7 @@
 // same field differently does one side win: the copy saved more recently.
 
 // A synced document: the configuration plus the companion preferences.
-export const emptyDocument = () => ({ categories: [], links: [], settings: {}, prefs: null });
+export const emptyDocument = () => ({ categories: [], links: [], settings: {}, prefs: null, trash: [] });
 
 // JSON with sorted keys, so equal content compares equal.
 export function stableJson(value) {
@@ -101,6 +101,14 @@ export function mergeDocuments(base, local, remote, { preferLocal = false } = {}
     return true;
   });
 
+  // 回收站 merges entry by entry too (one device deleting, another restoring);
+  // a site that is back in the list is no longer in it. Its clashes are no
+  // one's work, so they are not counted.
+  const trashIds = new Set(links.map((link) => link.id));
+  const trash = mergeEntities(base.trash || [], local.trash || [], remote.trash || [], preferLocal, [])
+    .filter((entry) => !trashIds.has(entry.id))
+    .sort((a, b) => (a.deletedAt < b.deletedAt ? 1 : a.deletedAt > b.deletedAt ? -1 : 0));
+
   const [settings, settingsClash] = mergeFields(base.settings, local.settings, remote.settings, preferLocal);
   if (settingsClash) conflicts.push({ id: 'settings', kind: 'both-edited' });
 
@@ -114,7 +122,7 @@ export function mergeDocuments(base, local, remote, { preferLocal = false } = {}
     if (prefsClash) conflicts.push({ id: 'prefs', kind: 'both-edited' });
     prefs = value;
   }
-  return { document: { categories, links, settings, prefs }, conflicts };
+  return { document: { categories, links, settings, prefs, trash }, conflicts };
 }
 
 export const sameDocument = (a, b) => same(a, b);

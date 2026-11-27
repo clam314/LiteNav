@@ -1,0 +1,13 @@
+/* The toolbar popup: 添加到轻航. Builds on styles.css for colours and fields. */
+.popup-body { width: 340px; min-height: 0; margin: 0; }
+.popup { padding: 16px; display: grid; gap: 14px; }
+.popup-header { display: flex; align-items: center; gap: 11px; min-width: 0; }
+.popup-icon { flex: 0 0 auto; width: 34px; height: 34px; display: grid; place-items: center; border-radius: 9px; background: var(--surface-raised, var(--surface)); border: 1px solid var(--line); }
+.popup-icon .brand-icon { width: 22px; height: 22px; }
+.popup-title { min-width: 0; display: grid; gap: 2px; }
+.popup-title strong { color: var(--ink); font-size: 14px; }
+.popup-domain { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--muted); font-size: 12px; }
+.popup-form { display: grid; gap: 12px; }
+.popup-form[hidden], .popup-message[hidden] { display: none; }
+.popup-actions { display: flex; justify-content: flex-end; gap: 8px; }
+.popup-text { color: var(--text); font-size: 13px; line-height: 1.7; }

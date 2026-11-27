@@ -326,3 +326,47 @@ test('starter sites that reached the cloud first never remove edited data', asyn
   await desk.engine.enable();
   assert.ok(ids(await desk.store.state()).includes('desk'));
 });
+
+test('回收站 keeps what a save removes and syncs with deletions and restores', async () => {
+  const cloud = fakeArea();
+  const laptop = device(cloud);
+  const desk = device(cloud, clock('2026-11-27T09:00:00Z'));
+  await laptop.edit((state) => { state.links.push(site('keep', 'https://keep.example')); });
+  await laptop.engine.enable();
+  await desk.engine.enable();
+  // Deleted on the laptop: in its 回收站, with its category.
+  await laptop.edit((state) => { state.links = state.links.filter((link) => link.id !== 'keep'); });
+  const trash = (await laptop.store.state()).trash;
+  assert.deepEqual(trash.map((entry) => [entry.id, entry.category?.id]), [['keep', 'ai']]);
+  await laptop.engine.run();
+  await desk.engine.run();
+  let deskState = await desk.store.state();
+  assert.ok(!ids(deskState).includes('keep'));
+  assert.deepEqual(deskState.trash.map((entry) => entry.id), ['keep'], 'the desk sees it in 回收站 too');
+  // Restored on the desk: back everywhere, gone from 回收站.
+  await desk.edit((state) => { state.links.push(state.trash[0].link); });
+  await desk.engine.run();
+  await laptop.engine.run();
+  for (const side of [laptop, desk]) {
+    const state = await side.store.state();
+    assert.ok(ids(state).includes('keep'));
+    assert.equal(state.trash, undefined);
+  }
+  // Emptied on one device, empty on the other.
+  await desk.edit((state) => { state.links = state.links.filter((link) => link.id !== 'keep'); });
+  await desk.edit((state) => { state.trash = []; });
+  await desk.engine.run();
+  await laptop.engine.run();
+  assert.equal((await laptop.store.state()).trash, undefined);
+  assert.ok(!ids(await laptop.store.state()).includes('keep'));
+});
+
+test('undoing an import leaves 回收站 alone', async () => {
+  const one = device(fakeArea());
+  const state = await one.store.state();
+  state.links.push(site('imported', 'https://imported.example'));
+  await one.store.save(state);
+  const next = await one.store.state();
+  await one.store.save({ ...next, links: next.links.filter((link) => link.id !== 'imported'), trashRemoved: false });
+  assert.equal((await one.store.state()).trash, undefined);
+});

@@ -21,7 +21,7 @@ import threading
 import time
 from contextlib import contextmanager
 from concurrent.futures import ThreadPoolExecutor
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from email.utils import formatdate, parsedate_to_datetime
 from functools import lru_cache
 from html.parser import HTMLParser
@@ -41,7 +41,11 @@ AUTH_PAGE = (
 )
 # Text files at least this large are sent gzip-compressed when the browser accepts it.
 GZIP_MIN_SIZE = 1024
-DEFAULT_SETTINGS = {"checkInterval": 60, "failureThreshold": 3, "timeout": 5, "openInNewTab": True, "showCompanionButton": True}
+DEFAULT_SETTINGS = {"checkInterval": 60, "failureThreshold": 3, "timeout": 5, "openInNewTab": True, "showCompanionButton": True,
+                    "showRecent": True, "sortFavoritesByUse": False}
+# 回收站: deleted sites and services, kept this long and no more than this many.
+TRASH_DAYS = 30
+TRASH_LIMIT = 200
 LOG = logging.getLogger("litenav")
 
 
@@ -201,6 +205,9 @@ def validate_state(value: object) -> dict:
         # Display switches; configurations and backups from before them keep the old behaviour.
         "openInNewTab": switch(supplied_settings.get("openInNewTab", True), "在新标签页打开网站"),
         "showCompanionButton": switch(supplied_settings.get("showCompanionButton", True), "显示角色按钮"),
+        # 最近使用 on the home page, and 常用 ordered by how often each is opened.
+        "showRecent": switch(supplied_settings.get("showRecent", True), "显示最近使用"),
+        "sortFavoritesByUse": switch(supplied_settings.get("sortFavoritesByUse", False), "常用按使用频率排序"),
     }
     cleaned = {"categories": cleaned_categories, "links": cleaned_links, "settings": settings}
     # Companion preferences, kept here for the Chrome extension's 云同步; the
@@ -210,6 +217,71 @@ def validate_state(value: object) -> dict:
         if not isinstance(prefs, dict) or len(json.dumps(prefs, ensure_ascii=False, separators=(",", ":"))) > 65536:
             raise APIError("角色偏好格式不正确")
         cleaned["prefs"] = prefs
+    trash = value.get("trash")
+    if trash is not None:
+        entries = clean_trash(trash, {link["id"] for link in cleaned_links})
+        if entries:
+            cleaned["trash"] = entries
+    return cleaned
+
+
+def clean_trash(trash: object, link_ids: set) -> list:
+    """回收站 entries, newest first. Each keeps a deleted site as it was, and its
+    category for restoring; it is checked again when restored."""
+    if not isinstance(trash, list):
+        raise APIError("回收站格式不正确")
+    entries, seen = [], set()
+    for entry in trash:
+        if not isinstance(entry, dict):
+            raise APIError("回收站格式不正确")
+        entry_id = text_field(entry.get("id"), "回收站条目", 100)
+        deleted_at = text_field(entry.get("deletedAt"), "删除时间", 40)
+        link, category = entry.get("link"), entry.get("category")
+        if (not entry_id or not deleted_at or not isinstance(link, dict) or link.get("id") != entry_id
+                or not isinstance(link.get("name"), str) or not isinstance(link.get("url"), str)
+                or (category is not None and not isinstance(category, dict))
+                or len(json.dumps(entry, ensure_ascii=False, separators=(",", ":"))) > 8192):
+            raise APIError("回收站格式不正确")
+        # A site back in the list (restored, or kept by a sync merge) is no longer deleted.
+        if entry_id in link_ids or entry_id in seen:
+            continue
+        seen.add(entry_id)
+        entries.append({"id": entry_id, "deletedAt": deleted_at, "link": link, **({"category": category} if category is not None else {})})
+    entries.sort(key=lambda item: item["deletedAt"], reverse=True)
+    return entries[:TRASH_LIMIT]
+
+
+def utc_stamp(moment: datetime | None = None) -> str:
+    """UTC time as JavaScript's toISOString writes it, so both sort alike."""
+    return (moment or datetime.now(timezone.utc)).astimezone(timezone.utc).isoformat(timespec="milliseconds").replace("+00:00", "Z")
+
+
+def with_trash(previous: dict, cleaned: dict, keep_previous: bool, record_removed: bool, now: datetime | None = None) -> dict:
+    """Puts the sites a save removes into 回收站 (whatever removed them: a page,
+    a sync, a restore) and lets entries older than TRASH_DAYS go. Saves that
+    leave trash out keep the one there is; undoing an import records nothing."""
+    now = now or datetime.now(timezone.utc)
+    trash = list(cleaned.get("trash") or (previous.get("trash") or [] if keep_previous else []))
+    known = {entry["id"] for entry in trash}
+    link_ids = {link["id"] for link in cleaned["links"]}
+    if record_removed:
+        categories = {item["id"]: item for item in previous["categories"]}
+        stamp = utc_stamp(now)
+        for link in previous["links"]:
+            if link["id"] in link_ids or link["id"] in known:
+                continue
+            entry = {"id": link["id"], "deletedAt": stamp, "link": link}
+            category = categories.get(link.get("categoryId"))
+            if category:
+                entry["category"] = {key: category[key] for key in ("id", "name", "icon", "column", "area") if key in category}
+            trash.append(entry)
+    cutoff = utc_stamp(now - timedelta(days=TRASH_DAYS))
+    trash = [entry for entry in trash if entry["id"] not in link_ids and entry["deletedAt"] >= cutoff]
+    trash.sort(key=lambda item: item["deletedAt"], reverse=True)
+    if trash:
+        cleaned["trash"] = trash[:TRASH_LIMIT]
+    else:
+        cleaned.pop("trash", None)
     return cleaned
 
 
@@ -275,6 +347,7 @@ class Store:
             # backup) leave the synced ones as they are.
             if "prefs" not in value and "prefs" in previous:
                 cleaned["prefs"] = previous["prefs"]
+            with_trash(previous, cleaned, keep_previous="trash" not in value, record_removed=value.get("trashRemoved") is not False)
             # When it last changed, for sync to order edits made elsewhere.
             cleaned["updatedAt"] = datetime.now(timezone.utc).isoformat(timespec="milliseconds")
             old_links = {link["id"]: link for link in previous["links"]}

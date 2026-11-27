@@ -9,7 +9,11 @@ export class StateError extends Error {
   }
 }
 
-export const DEFAULT_SETTINGS = Object.freeze({ checkInterval: 60, failureThreshold: 3, timeout: 5, openInNewTab: true, showCompanionButton: true });
+export const DEFAULT_SETTINGS = Object.freeze({ checkInterval: 60, failureThreshold: 3, timeout: 5, openInNewTab: true, showCompanionButton: true,
+  showRecent: true, sortFavoritesByUse: false });
+// 回收站: deleted sites and services, kept this long and no more than this many.
+export const TRASH_DAYS = 30;
+export const TRASH_LIMIT = 200;
 
 const IPV4 = /^(\d{1,3})\.(\d{1,3})\.(\d{1,3})\.(\d{1,3})$/;
 
@@ -171,6 +175,9 @@ export function validateState(value) {
     timeout: integer(pick(supplied, 'timeout', 5), '检测超时', 1, 30),
     openInNewTab: switchField(pick(supplied, 'openInNewTab', true), '在新标签页打开网站'),
     showCompanionButton: switchField(pick(supplied, 'showCompanionButton', true), '显示角色按钮'),
+    // 最近使用 on the home page, and 常用 ordered by how often each is opened.
+    showRecent: switchField(pick(supplied, 'showRecent', true), '显示最近使用'),
+    sortFavoritesByUse: switchField(pick(supplied, 'sortFavoritesByUse', false), '常用按使用频率排序'),
   };
   const cleaned = { categories: cleanedCategories, links: cleanedLinks, settings };
   // Companion preferences, which server.py keeps for the extension's 云同步.
@@ -179,7 +186,62 @@ export function validateState(value) {
     if (!isObject(prefs) || JSON.stringify(prefs).length > 65536) throw new StateError('角色偏好格式不正确');
     cleaned.prefs = prefs;
   }
+  if (value.trash !== null && value.trash !== undefined) {
+    const entries = cleanTrash(value.trash, new Set(cleanedLinks.map((link) => link.id)));
+    if (entries.length) cleaned.trash = entries;
+  }
   return cleaned;
+}
+
+const newestFirst = (a, b) => (a.deletedAt < b.deletedAt ? 1 : a.deletedAt > b.deletedAt ? -1 : 0);
+
+// 回收站 entries, newest first. Each keeps a deleted site as it was, and its
+// category for restoring; it is checked again when restored.
+export function cleanTrash(trash, linkIds) {
+  if (!Array.isArray(trash)) throw new StateError('回收站格式不正确');
+  const entries = [];
+  const seen = new Set();
+  for (const entry of trash) {
+    if (!isObject(entry)) throw new StateError('回收站格式不正确');
+    const id = textField(entry.id, '回收站条目', 100);
+    const deletedAt = textField(entry.deletedAt, '删除时间', 40);
+    const { link, category } = entry;
+    if (!id || !deletedAt || !isObject(link) || link.id !== id || typeof link.name !== 'string' || typeof link.url !== 'string' ||
+      (category !== null && category !== undefined && !isObject(category)) || JSON.stringify(entry).length > 8192) {
+      throw new StateError('回收站格式不正确');
+    }
+    // A site back in the list (restored, or kept by a sync merge) is no longer deleted.
+    if (linkIds.has(id) || seen.has(id)) continue;
+    seen.add(id);
+    entries.push({ id, deletedAt, link, ...(category !== null && category !== undefined ? { category } : {}) });
+  }
+  return entries.sort(newestFirst).slice(0, TRASH_LIMIT);
+}
+
+// Puts the sites a save removes into 回收站 (whatever removed them: a page, a
+// sync, a restore) and lets entries older than TRASH_DAYS go. A save that
+// leaves trash out keeps the one there is; undoing an import records nothing.
+export function withTrash(previous, cleaned, { keepPrevious, recordRemoved, now = new Date() }) {
+  const trash = [...(cleaned.trash || (keepPrevious ? previous.trash || [] : []))];
+  const known = new Set(trash.map((entry) => entry.id));
+  const linkIds = new Set(cleaned.links.map((link) => link.id));
+  if (recordRemoved) {
+    const categories = new Map(previous.categories.map((item) => [item.id, item]));
+    const stamp = now.toISOString();
+    for (const link of previous.links) {
+      if (linkIds.has(link.id) || known.has(link.id)) continue;
+      const entry = { id: link.id, deletedAt: stamp, link };
+      const category = categories.get(link.categoryId);
+      if (category) entry.category = Object.fromEntries(['id', 'name', 'icon', 'column', 'area'].filter((key) => key in category).map((key) => [key, category[key]]));
+      trash.push(entry);
+    }
+  }
+  const cutoff = new Date(now.getTime() - TRASH_DAYS * 24 * 60 * 60 * 1000).toISOString();
+  const kept = trash.filter((entry) => !linkIds.has(entry.id) && entry.deletedAt >= cutoff).sort(newestFirst).slice(0, TRASH_LIMIT);
+  const result = { ...cleaned };
+  if (kept.length) result.trash = kept;
+  else delete result.trash;
+  return result;
 }
 
 // What server.py's metadata(remote=False) answers: the built-in site table
