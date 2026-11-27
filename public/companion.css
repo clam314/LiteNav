@@ -198,3 +198,12 @@ body[data-companion] .toast-root { bottom: 82px; }
 
 /* 设置 → 显示 → 显示角色按钮 off: the corner button and its menu go away. */
 body[data-hide-companion-button] .companion-controls { display: none; }
+
+/* Costumes saved for offline use */
+.companion-offline { display: grid; gap: 6px; }
+.companion-offline-row { display: flex; align-items: center; justify-content: space-between; gap: 10px; color: #c8d2e4; font-size: 12px; }
+.companion-offline-text { min-width: 0; }
+.companion-offline-button { flex: 0 0 auto; padding: 5px 10px; border: 1px solid #ffffff1f; border-radius: 8px; color: #dbe4f5; background: #ffffff0d; font: inherit; font-size: 12px; cursor: pointer; }
+.companion-offline-button:hover:not(:disabled) { background: #ffffff1a; }
+.companion-offline-button:disabled { opacity: .55; cursor: default; }
+.companion-offline-summary { color: #74829b; font-size: 11px; line-height: 1.6; }
