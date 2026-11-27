@@ -28,7 +28,9 @@ const filesOf = game => [game.catalogUrl, game.presentationsUrl, game.performanc
 // enabled: whether this page keeps remote copies (the extension). fetchJson(url,
 // signal, cache) reads a bundled file.
 export function createCatalogSource({ enabled = false, fetchJson, cacheStorage = globalThis.caches, remoteBase = CATALOG_REMOTE,
-  fetchImpl = (...args) => globalThis.fetch(...args), storage = globalThis.localStorage, now = () => Date.now() }) {
+  fetchImpl = (...args) => globalThis.fetch(...args), storage, now = () => Date.now() }) {
+  // Reading localStorage itself throws where the browser blocks storage.
+  if (storage === undefined) { try { storage = globalThis.localStorage; } catch { storage = null; } }
   const remote = path => remoteBase + path;
   let opening;
   const openStore = () => (opening ||= Promise.resolve(enabled ? cacheStorage?.open(CATALOG_CACHE_NAME) : null).catch(() => null));
@@ -68,7 +70,8 @@ export function createCatalogSource({ enabled = false, fetchJson, cacheStorage =
     async refresh({ force = false, games = GAMES } = {}) {
       const store = await openStore();
       if (!store) return [];
-      const checked = Number(storage?.getItem(CATALOG_CHECK_KEY)) || 0;
+      let checked = 0;
+      try { checked = Number(storage?.getItem(CATALOG_CHECK_KEY)) || 0; } catch { /* Blocked: check every visit. */ }
       if (!force && now() - checked < CATALOG_CHECK_MS) return [];
       const changed = [];
       let reached = false;

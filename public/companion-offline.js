@@ -8,15 +8,18 @@ import { performanceId } from './companion-performance-player.js';
 
 export const OFFLINE_KEY = 'litenav.companion.offline';
 
-export function readKept(storage = globalThis.localStorage) {
+// Reading localStorage itself throws where the browser blocks storage.
+const browserStorage = () => { try { return globalThis.localStorage; } catch { return null; } };
+
+export function readKept(storage) {
   try {
-    const list = JSON.parse(storage.getItem(OFFLINE_KEY));
+    const list = JSON.parse((storage ?? browserStorage()).getItem(OFFLINE_KEY));
     return Array.isArray(list) ? list.filter(entry => entry && typeof entry.key === 'string' && entry.costume && entry.source) : [];
   } catch { return []; }
 }
 
-export function writeKept(list, storage = globalThis.localStorage) {
-  try { storage.setItem(OFFLINE_KEY, JSON.stringify(list)); return true; }
+export function writeKept(list, storage) {
+  try { (storage ?? browserStorage()).setItem(OFFLINE_KEY, JSON.stringify(list)); return true; }
   catch { return false; }
 }
 
